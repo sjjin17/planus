@@ -1,0 +1,37 @@
+# 221011
+## 주제 기획
+### 하고 싶은 분야
+클라우드
+
+- 빅데이터? 데이터 연산?
+- AI학습?
+
+금융권(블록체인,AI,빅데이터,클라우드,메타버스) 
+
+- 오픈뱅킹api 사용하기? [https://www.openbanking.or.kr/apt/content/openapi](https://www.openbanking.or.kr/apt/content/openapi)
+### 사용하고 싶은 기술스택
+- MongoDB (NoSQL) - 나경
+- 무중단배포 - 나경
+- 쿠버네티스 (무중단배포?) - 승준
+- 스프링 시큐리티 (jwt or session 추후논의?) - 지건
+### 하기 싫은
+- 로그인(할 사람 있으면 노상관) - 나경
+- 게임 - 나경
+- OpenCV - 나경
+- 빅데이터(내가 안하면 상관없음) - 승준
+- IoT - 희경
+- 모바일App(디자인 내가 안하면 상관없음) - 나경
+- 아토믹디자인 - 나경
+- 메타버스 - 나경
+- 3D - 나경
+### 하고 싶은
+- 배포 - 승준
+- 시큐리티 - 지건
+### 신기한거
+- [https://github.com/features/copilot](https://github.com/features/copilot)
+- [https://gflix.kr/ai가-그림-그려주는-사이트-best8/](https://gflix.kr/ai%EA%B0%80-%EA%B7%B8%EB%A6%BC-%EA%B7%B8%EB%A0%A4%EC%A3%BC%EB%8A%94-%EC%82%AC%EC%9D%B4%ED%8A%B8-best8/)
+- [https://gflix.kr/ai가-소설-써주는-사이트-best-4/](https://gflix.kr/ai%ea%b0%80-%ec%86%8c%ec%84%a4-%ec%8d%a8%ec%a3%bc%eb%8a%94-%ec%82%ac%ec%9d%b4%ed%8a%b8-best-4/)
+### 주제
+- 사용자가 사용한 결과물이 실제로 나오거나 서비스 참여를 재밌게 할 수 있는 or 시연이 눈으로 보이는 서비스 - 나경 (아니어도 상관없습니다 ㅋㅋㅋ)
+    - 예시) 위 3개, 모여봐요웹캠으로, 오늘 라이브 (블록체인+AI 본인인증), RideUs? 영어이름 추천, 유튜버추천 등등등
+- 공동구매 플랫폼 - 희경
