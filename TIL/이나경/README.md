@@ -72,6 +72,7 @@ ai 그림그려주기 - 3
 유기동물 매칭 서비스 - 1
 
 ## 물품 빌려쓰기
+
 - 핵심기능
     - 당근마켓처럼 물건/돈/시간 등을 입력해 등록함 (빌릴 사람, 빌려줄 사람 둘 다 가능)
     - 채팅
@@ -87,6 +88,7 @@ ai 그림그려주기 - 3
     - 채팅 실시간 or 일반 댓글처럼? (구현 방법에따라 소켓서버 필요)
 
 ## ai 그림그려주기
+
 - 핵심기능
     - 사진업로드or사진촬영
     - 그림그려주기(이미지변환) → 그림체 선택 등의 설정
@@ -99,6 +101,7 @@ ai 그림그려주기 - 3
     - 이미지 서버, gpu 서버 따로 둘것인지
 
 ## 공동구매 플랫폼
+
 - 핵심기능
     - 공동구매 주최자가 게시글 작성(품목, 디자인, 가격 등)
     - 구매할 사람이 신청, 인원이 모집되면 모집 완료
@@ -118,3 +121,59 @@ ai 그림그려주기 - 3
 | --- | --- | --- | --- | --- | --- |
 | ai 그림그려주기 | 물품 빌려쓰기 | 물품 빌려쓰기 | 그림 | 물품 빌려쓰기 | ai 그림그려주기 |
 | ai 그림그려주기 | ai 그림그려주기 | ai 그림그려주기 | ai 그림그려주기 | ai 그림그려주기 | ai 그림그려주기 |
+
+# 10/13(목) - 기획 3일차
+## 추가 기능
+
+1. 사진→그림 변환할때 나이, 성별, 외형, 감정같은 text prompt를 적어야 결과물이 더 잘 나오는데 (ex:middle-aged woman, black hair, smile, cute, happy 등등) 사진에서 이를 자동으로 추출해서 옵션으로 입력해준다
+    - AI
+    - [https://github.com/oarriaga/face_classification](https://github.com/oarriaga/face_classification)
+2. 결과물로 나온 그림과 닮은 만화 캐릭터 알려주기
+    - AI
+    - [https://ani-char.netlify.app/](https://ani-char.netlify.app/)
+    - [https://salgoonews.tistory.com/entry/셀카-애니사진-selfie-2-waifu-사이트-접속방법링크첨부](https://salgoonews.tistory.com/entry/%EC%85%80%EC%B9%B4-%EC%95%A0%EB%8B%88%EC%82%AC%EC%A7%84-selfie-2-waifu-%EC%82%AC%EC%9D%B4%ED%8A%B8-%EC%A0%91%EC%86%8D%EB%B0%A9%EB%B2%95%EB%A7%81%ED%81%AC%EC%B2%A8%EB%B6%80)
+3. 5초정도 짧은 영상→프레임별로 그림으로 변환해서 애니메이션 만들어주기
+    - [https://www.youtube.com/shorts/xNx8gNnsc4g](https://www.youtube.com/shorts/xNx8gNnsc4g)
+4. 사람 말고 동물, 풍경도?
+5. 그림에 어울리는 문장 생성 (소설, 시, 영화 시나리오 등등)
+    - AI
+    - gpt-3
+    - [https://coding-food-court.tistory.com/151](https://coding-food-court.tistory.com/151)
+    - [https://github.com/kakaobrain/kogpt](https://github.com/kakaobrain/kogpt)
+6. 그림에 어울리는 문장 추천 (소설, 시, 노래가사, 명언, 대사 등등)
+    - 사진에서 추출한 나이, 성별, 감정 등과 연계해서?
+    - 추천
+7. 사진에 어울리는 그림체 추천?
+    - 사진에서 추출한 나이, 성별, 감정 등과 연계해서?
+    - 추천
+8. 그림 + 배경 합쳐주는, 사이 간격을 이어주는 기능
+    - [https://twitter.com/orbamsterdam/status/1568200010747068417](https://twitter.com/orbamsterdam/status/1568200010747068417)
+9. 다이어리 - 그룹 만들어서 공유 다이어리 기능
+
+## 기능 구체화
+
+- 핵심기능
+    - 사진업로드 (인물 사진만)
+    - 사진 업로드하면 사람 감지해서 누끼따고 사람 감지안되면 알림메시지같은거 띄워주기
+    - 배경 제거된 사진을 그림으로 변환 (사람+배경 따로)
+    - 자동 prompt - 넣고싶다
+        - 안되면 prompt, 그림체 추천
+    - 그림체 선택 - 넣고싶다
+    - 그림으로 변환(사람+배경 합치기)
+    - 그림 저장
+    - 그림 sns 공유하기
+- 부기능
+    - 마이페이지 (회원전용)
+        - 다이어리
+            - 감정 같이 기입
+            - 문장추천 같이 기입
+        - 앨범
+            - 폴라로이드 느낌 - 날짜,한줄메모
+    - 닮은 캐릭터 찾기
+    - 커뮤니티 (회원전용)
+        - 변환된 그림
+        - 선택한 프롬프트
+        - 선택한 그림체
+        - 해당 프롬프트로 변환할 수 있는 바로가기?
+        - 전시회 느낌
+    - 사진촬영
