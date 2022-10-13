@@ -125,3 +125,49 @@ ai그림 - 3
 | 그림 | 그림 | 그림      | 그림 | 그림          | 그림            |
 
 ---
+
+# 10.13.
+
+## 기능 구체화
+
+- 핵심기능
+  - 사진업로드 (인물 사진만)
+  - 사진 업로드하면 사람 감지해서 누끼따고 사람 감지안되면 알림메시지같은거 띄워주기
+  - 배경 제거된 사진을 그림으로 변환 (사람+배경 따로)
+  - 자동 prompt - 넣고싶다
+    - 안되면 prompt, 그림체 추천
+  - 그림체 선택 - 넣고싶다
+  - 그림으로 변환(사람+배경 합치기)
+  - 그림 저장
+  - 그림 sns 공유하기
+- 부기능
+  - 마이페이지 (회원전용)
+    - 다이어리
+      - 감정 같이 기입
+      - 문장추천 같이 기입
+    - 앨범
+      - 폴라로이드 느낌 - 날짜,한줄메모
+  - 닮은 캐릭터 찾기
+  - 커뮤니티 (회원전용)
+    - 변환된 그림
+    - 선택한 프롬프트
+    - 선택한 그림체
+    - 해당 프롬프트로 변환할 수 있는 바로가기?
+    - 전시회 느낌
+  - 사진촬영
+
+## stable diffusion 관련 링크
+
+- [(github)webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+
+- [가이드](https://www.reddit.com/r/StableDiffusion/wiki/guide/)
+
+- [EC2에서 돌리기](https://medium.com/@meadowrun/how-to-run-stable-diffusion-on-ec2-e447333d820)
+
+- [도커라이징 (FastAPI, tensordock )](https://towardsdatascience.com/launch-a-web-api-for-stable-diffusion-under-45-seconds-bbd88cfe41d8)
+
+- [(github)rest-api(mac, homebrew, Nodejs, python)](https://github.com/yuanqing/stable-diffusion-rest-api)
+
+- [(github)bentoml로 stable-diffusion 배포](https://github.com/bentoml/stable-diffusion-bentoml)
+
+- [cog 이용한 api (apachi license)](https://replicate.com/stability-ai/stable-diffusion)
