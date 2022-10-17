@@ -260,3 +260,66 @@ ai그림 - 3
 [https://api.visitkorea.or.kr/](https://api.visitkorea.or.kr/)
 
 ---
+
+# 10.17.
+
+## 기능명세서
+
+![기능명세서](/uploads/cedf77be211df92c76f07e3b07170a66/기능명세서.png)
+
+
+## 역할분담
+
+| 기능 | 담당자 | 희경 | 나경 | 세진 | 다은 |
+| --- | --- | --- | --- | --- | --- |
+| 회원 crud+시큐리티
+마이페이지(프로필수정) | 지건 |  |  |  |  |
+| 버킷리스트 웹소켓, crud(mysql, redis)
+데이터(공공데이터포털 관광지정보) | 세진 |  |  | 당첨 |  |
+| 일정 웹소켓, crud(mysql, redis)
+길찾기(대중교통/자가용/도보) 경로 api | 희경 | 당첨 |  |  |  |
+| 방 관리((메인페이지에서의) 날짜, 지역, 방(웹소켓) 생성, 초대, 참가자·접속자 표시)
+메인페이지(네이버 축제 정보) | 나경 |  | 당첨 |  |  |
+| 지도 api (마커, 선 연결, 검색, 지역선택)
+완료 페이지(저장,공유,복사)
+마이페이지 일정목록 | 다은 |  |  |  | 당첨 |
+| 배포 + CI/CD
+데이터(공공데이터포털 관광지정보) + 장소추천 | 승준 |  |  |  |  |
+
+
+## 기술스택
+
+### 백엔드
+
+- IDE : IntelliJ
+- JAVA : 11
+- Framework : Spring boot
+- Build : Gradle
+- WAS : Tomcat
+- DBMS : MySql 8, Redis
+- DB API : JPA
+- WebSocket : Stomp
+
+### 프론트엔드
+
+- IDE : VS Code
+- Framework :
+    - Vue2
+    - Vuetify
+- WebSocket : SockJS
+
+### Infra
+
+- AWS
+    - EC2
+    - S3
+- Kubernetes or Docker
+- Nginx
+- Jenkins
+
+### 협업
+
+- Git
+- Jira
+
+---
