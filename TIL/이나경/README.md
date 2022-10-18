@@ -342,3 +342,12 @@ Web(PC전용)
 ## 기능명세서
 
 ![기능명세서](/uploads/cedf77be211df92c76f07e3b07170a66/기능명세서.png)
+
+# 10/18(화) - 설계 2일차
+## 컬러팔레트
+
+<img src="/uploads/b13e19371d2690914c8f26a1482c716f/color.png" width="300"/>
+
+## 와이어프레임
+
+https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84
