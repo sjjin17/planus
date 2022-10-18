@@ -186,3 +186,13 @@
 마이페이지 일정목록 | 다은 |  |  |  | 당첨 |
 | 배포 + CI/CD
 데이터(공공데이터포털 관광지정보) + 장소추천 | 승준 |  |  |  |  |
+
+# 221018
+## 컬러팔레트
+
+<img src="/uploads/b13e19371d2690914c8f26a1482c716f/color.png" width="300"/>
+
+## 와이어프레임
+
+https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84
+
