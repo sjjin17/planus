@@ -323,3 +323,15 @@ ai그림 - 3
 - Jira
 
 ---
+
+# 10.18.
+
+## 와이어프레임
+
+[와이어프레임(figma)](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Untitled?node-id=9%3A113)
+
+### 컬러팔레트
+
+[컬러팔레트(figma)](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Untitled?node-id=0%3A1)
+
+---
