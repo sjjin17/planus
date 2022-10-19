@@ -354,4 +354,5 @@ https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%9
 
 # 10/19(수) - 설계 3일차
 ## ERD다이어그램
-https://www.erdcloud.com/d/XexJZpjgAF8gWuK43
+
+![erd](/uploads/b6e410c95065b1d274e7315901d24208/erd.png)
