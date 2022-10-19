@@ -315,3 +315,17 @@ https://api.visitkorea.or.kr/
 ### 10/18
 
 ![와이어프레임](README.assets/와이어프레임.PNG)
+
+
+
+
+
+### 10/19
+
+- 와이어프레임 최종
+
+  [와이어프레임](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=9%3A113)
+
+- ERD 
+
+  [ERD](https://www.erdcloud.com/d/XexJZpjgAF8gWuK43)
