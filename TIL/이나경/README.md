@@ -351,3 +351,7 @@ Web(PC전용)
 ## 와이어프레임
 
 https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84
+
+# 10/19(수) - 설계 3일차
+## ERD다이어그램
+https://www.erdcloud.com/d/XexJZpjgAF8gWuK43
