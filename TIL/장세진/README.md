@@ -329,3 +329,10 @@ https://api.visitkorea.or.kr/
 - ERD 
 
   [ERD](https://www.erdcloud.com/d/XexJZpjgAF8gWuK43)
+
+
+
+### 10/20
+
+- API 명세 작성
+
