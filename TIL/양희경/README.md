@@ -196,3 +196,7 @@
 
 https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84
 
+
+# 221020
+## API 명세서
+[API 명세서](https://www.notion.so/leenak0/de98d3ba6c4f42b7b8789d316e33f702?v=a55923e5504843f8b39602d50b68ab6f)
