@@ -194,9 +194,15 @@
 
 ## 와이어프레임
 
-https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84
+[와이어프레임](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84)
 
 
 # 221020
 ## API 명세서
 [API 명세서](https://www.notion.so/leenak0/de98d3ba6c4f42b7b8789d316e33f702?v=a55923e5504843f8b39602d50b68ab6f)
+
+# 221021
+## 중간발표 ppt 제작 및 대본 작성
+[중간발표 내용 정리](https://www.notion.so/leenak0/fda029043ac041a1a788e3dc56afdc93)
+
+[중간발표 ppt](https://www.miricanvas.com/v/11hj5kw)
