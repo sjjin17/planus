@@ -355,7 +355,7 @@ https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%9
 # 10/19(수) - 설계 3일차
 ## ERD다이어그램
 
-![erd](/uploads/b6e410c95065b1d274e7315901d24208/erd.png)
+![erd](/uploads/6cfa22d523722d06ddf2e56bac20a453/erd.png)
 
 # 10/20(목) - 설계 4일차
 ## API 명세서
@@ -398,3 +398,12 @@ https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Planus-%EC%99%80%EC%9D%B4%EC%9
 | 다은 | 마이페이지 | 내가만든&진행중 일정 삭제 | DELETE | /mypage/trip |
 | 다은 | 마이페이지 | 공유받은 일정 조회 | GET | /mypage/shared |
 | 다은 | 마이페이지 | 공유받은or완료 일정 목록에서 삭제 | DELETE | /mypage/list |
+
+# 10/21(금) - 설계 5일차
+## 행사/축제 정보 API
+
+한국관광공사 국문 관광정보 서비스 오픈API 사용<br>
+https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15101578#/API%20%EB%AA%A9%EB%A1%9D
+
+## 중간발표 ppt 제작
+https://www.miricanvas.com/v/11hj5kw
