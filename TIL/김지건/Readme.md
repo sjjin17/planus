@@ -323,3 +323,58 @@ ai그림 - 3
 - Jira
 
 ---
+
+# 10.18.
+
+## 와이어프레임
+
+[와이어프레임(figma)](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Untitled?node-id=9%3A113)
+
+### 컬러팔레트
+
+[컬러팔레트(figma)](https://www.figma.com/file/P5fOhSGIxv63ccy8UT4tpC/Untitled?node-id=0%3A1)
+
+---
+
+# 10.20.
+
+## API Docs
+
+| 담당자 | 화면 | 기능 | Method | Resource |
+| --- | --- | --- | --- | --- |
+| jigun kim | 메인페이지 | 소셜로그인/회원가입 | GET | /user |
+| jigun kim | 메인페이지 | 로그아웃 | POST | /user |
+| 나경 | 메인페이지 | 지역목록 조회 | GET | /trip/area |
+| 나경 | 메인페이지 | 여행 생성 | POST | /trip |
+| 나경 | 일정페이지 | 방 생성(접속) | WS | /topic/trip/{trip_no} |
+| 나경 | 일정페이지 | 여행 정보 조회 | GET | /trip |
+| 나경 | 일정페이지 | 참가자 정보 조회 | GET | /trip/member |
+| 나경 | 일정페이지 | 접속자 조회 | WS | /app/trip/member |
+| yhk, 장세진 | 일정페이지 | 일정짜기 임시저장 | PUT | /trip |
+| 정다은 | 일정페이지 | 일정짜기 완료 | PUT | /trip/complete |
+| 장세진 | 버킷리스트 | 버킷리스트 조회 | GET | /buckets/{tripId} |
+| 장세진 | 버킷리스트 | 버킷리스트 저장 | POST | /buckets/{tripId} |
+| 장세진 | 버킷리스트 | 버킷리스트 삭제 | WS | /app/buckets |
+| yhk, 장세진 | 버킷리스트 | 버킷리스트에서 일정으로 추가 | WS | /app/plans |
+| 승준 김 | 추천관광지 | 추천관광지 조회 | GET | /recommend/{areaId} |
+| 승준 김, 장세진 | 추천관광지 | 추천관광지에서 버킷으로 추가 | WS | /app/buckets |
+| 승준 김, yhk | 추천관광지 | 추천관광지에서 일정으로 추가 | WS | /app/plans |
+| 정다은, yhk | 장소 검색 | 일정으로 추가 | WS | /app/plans |
+| 정다은, 장세진 | 장소 검색 | 버킷리스트로 추가 | WS | /app/buckets |
+| yhk | 일정리스트 | 일정 조회 | GET | /plans |
+| yhk | 일정리스트 | 전체 일정 저장 | POST | /plans |
+| yhk | 일정리스트 | 출발시간 설정 | WS | /app/plans |
+| yhk | 일정리스트 | 소요시간 변경 | WS | /app/plans |
+| yhk | 일정리스트 | 이동시간 변경 | WS | /app/plans |
+| yhk | 일정리스트 | 일정 순서 변경 | WS | /app/plans |
+| yhk | 일정리스트 | 일정 삭제 | WS | /app/plans |
+| 정다은 | 완료페이지 | 완료일정조회 | GET | /complete |
+| 정다은 | 완료페이지 | 완료일정 이미지 저장(공유) | POST | /complete/image |
+| 정다은 | 완료페이지 | 완료일정 복사 | POST | /complete/copy |
+| jigun kim | 마이페이지 | 회원정보 조회 | GET | /mypage |
+| jigun kim | 마이페이지 | 회원정보 수정 | PUT | /mypage |
+| jigun kim | 마이페이지 | 회원탈퇴 | DELETE | /mypage |
+| 정다은 | 마이페이지 | 내가만든 일정 조회 | GET | /mypage/mytrip |
+| 정다은 | 마이페이지 | 내가만든&진행중 일정 삭제 | DELETE | /mypage/trip |
+| 정다은 | 마이페이지 | 공유받은 일정 조회 | GET | /mypage/shared |
+| 정다은 | 마이페이지 | 공유받은or완료 일정 목록에서 삭제 | DELETE | /mypage/list |
