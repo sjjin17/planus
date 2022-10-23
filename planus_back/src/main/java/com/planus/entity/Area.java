@@ -29,6 +29,4 @@ public class Area {
     @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
     private List<TripArea> tripAreaList;
 
-    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
-    private List<Recommend> recommendList;
 }
