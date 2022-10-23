@@ -23,10 +23,10 @@ def api():
     rowList = []
     nameList = []
     columnList = []
-    needColumnList = ["addr1", "areacode", "contenttypeid", "firstimage", "mapx", "mapy", "title"]
+    needColumnList = ["addr1", "contenttypeid", "firstimage", "mapx", "mapy", "title"]
     contentDic = {"12": "관광지", "14": "문화시설", "15": "15", "25": "여행코스", "28": "레포츠", "32": "숙박", "38": "쇼핑", "39": "음식점"}
     rowsLen = len(rows)
-    column = ["address", "areacode", "content_type", "img_url", "lng", "lat", "place"]
+    column = ["address", "content_type", "img_url", "lng", "lat", "place"]
     for i in range(0, rowsLen):
         columns = rows[i]
         for j in columns:
@@ -42,15 +42,20 @@ def api():
 
     result = pd.DataFrame(rowList, columns=column)
 
-    drop = result[result.lng != '0']
+    result['lng'] = pd.to_numeric(result['lng'])
+    result['lat'] = pd.to_numeric(result['lat'])
+
+    drop = result[result.lng < 132]
+    drop = drop[drop.lng > 124]
+    drop = drop[drop.lat < 43]
+    drop = drop[drop.lat > 33]
     drop = drop[drop.content_type != '15']
     drop = drop[drop.address != '']
     drop = drop[drop.img_url != '']
     drop = drop[drop.place != '']
-    drop = drop[drop.areacode != '']
 
     # areacode -> 지역(도)로 변환?
-    data = drop.drop(['areacode'], axis=1)
+    data = drop
     DB_USER_NAME=os.environ.get('DB_USER_NAME')
     DB_PASSWORD=os.environ.get('DB_PASSWORD')
     DB_URL=os.environ.get('DB_URL')
