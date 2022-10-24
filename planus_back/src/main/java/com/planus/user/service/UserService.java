@@ -8,6 +8,4 @@ public interface UserService {
     UserInfoResDTO findUserInfo(long userId);
     long updateUser(long userId, String nickname);
     long deleteUser(long userId);
-
-    long join();
 }
