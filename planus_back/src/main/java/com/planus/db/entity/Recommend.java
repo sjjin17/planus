@@ -1,4 +1,4 @@
-package com.planus.entity;
+package com.planus.db.entity;
 
 import javax.persistence.*;
 
