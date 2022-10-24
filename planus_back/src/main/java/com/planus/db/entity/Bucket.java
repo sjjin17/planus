@@ -1,8 +1,11 @@
 package com.planus.db.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class Bucket {
 
     @Id
