@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AreaRepository extends JpaRepository<Area, Long> {
     List<Area> findAll();
+
+    Area findByAreaId(long areaId);
 }

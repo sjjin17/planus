@@ -1,6 +1,6 @@
-package com.planus.area.service;
+package com.planus.trip.service;
 
-import com.planus.area.dto.AreaResDTO;
+import com.planus.trip.dto.AreaResDTO;
 
 import java.util.List;
 
