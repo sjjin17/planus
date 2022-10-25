@@ -1,11 +1,14 @@
 package com.planus.db.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Getter
 public class Trip {
 
     @Id

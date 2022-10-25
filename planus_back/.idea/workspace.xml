@@ -6,9 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="837d12ae-03be-41ef-9f52-f76459b75bf3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/Bucket/controller/BucketApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/controller/BucketApiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/Bucket/dto/BucketResDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/dto/BucketResDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/Bucket/service/BucketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/service/BucketService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/Bucket/service/BucketServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/service/BucketServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/PlanusApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/PlanusApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/config/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/config/RedisConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Bucket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Trip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Trip.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,8 +40,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -56,6 +61,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
@@ -85,6 +94,7 @@
       <updated>1666601580207</updated>
       <workItem from="1666601581725" duration="60000" />
       <workItem from="1666620815609" duration="3161000" />
+      <workItem from="1666655175049" duration="22054000" />
     </task>
     <servers />
   </component>
