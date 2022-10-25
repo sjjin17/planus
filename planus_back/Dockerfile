@@ -15,6 +15,6 @@ FROM openjdk:11
 
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-EXPOSE [8080,8090]
+EXPOSE 8080 8090
 
 ENTRYPOINT ["java","-jar","app.jar"]

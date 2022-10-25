@@ -13,6 +13,6 @@ FROM nginx:stable-alpine
 COPY --from=builder /app/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE [8081,8091]
+EXPOSE 8081 8091
 
 CMD ["nginx", "-g", "daemon off;"]
