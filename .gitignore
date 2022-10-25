@@ -352,11 +352,9 @@ gradle-app.setting
 *.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java,vuejs,gradle,windows,intellij+all,visualstudiocode,redis
-/planus_back/.idea/.gitignore
 /planus_back/.idea/.name
 /planus_back/.idea/compiler.xml
 /planus_back/.idea/gradle.xml
-/planus_back/gradle/wrapper/gradle-wrapper.jar
 /planus_back/.idea/jarRepositories.xml
 /planus_back/.idea/misc.xml
 /planus_back/.idea/vcs.xml
