@@ -1,6 +1,9 @@
 package com.planus.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Trip {
 
     @Id
@@ -37,16 +41,35 @@ public class Trip {
     @Column(name="image_url")
     private String imageUrl;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
     List<Member> memberList;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
     List<Bucket> bucketList;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
     List<TripArea> tripAreaList;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
     List<Plan> planList;
 
+    @Builder
+    public Trip(long tripId, String tripUrl, long admin, LocalDateTime createTime, LocalDate startDate, int period, boolean complete, String imageUrl, List<Member> memberList, List<Bucket> bucketList, List<TripArea> tripAreaList, List<Plan> planList) {
+        this.tripId = tripId;
+        this.tripUrl = tripUrl;
+        this.admin = admin;
+        this.createTime = createTime;
+        this.startDate = startDate;
+        this.period = period;
+        this.complete = complete;
+        this.imageUrl = imageUrl;
+        this.memberList = memberList;
+        this.bucketList = bucketList;
+        this.tripAreaList = tripAreaList;
+        this.planList = planList;
+    }
 }

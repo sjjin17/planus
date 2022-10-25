@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 import java.security.Security;
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
 @EnableCaching
 public class PlanusApplication {
 
