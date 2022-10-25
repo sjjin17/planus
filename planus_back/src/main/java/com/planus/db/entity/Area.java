@@ -37,7 +37,7 @@ public class Area {
 
 
     @Builder
-    public Area(long areaId, String doName, String siName, String imageUrl, double lat, double lng, List<TripArea> tripAreaList, List<Recommend> recommendList){
+    public Area(long areaId, String doName, String siName, String imageUrl, double lat, double lng, List<TripArea> tripAreaList){
         this.areaId = areaId;
         this.doName = doName;
         this.siName = siName;
@@ -45,6 +45,5 @@ public class Area {
         this. lat = lat;
         this.lng = lng;
         this.tripAreaList = tripAreaList;
-        this.recommendList = recommendList;
     }
 }

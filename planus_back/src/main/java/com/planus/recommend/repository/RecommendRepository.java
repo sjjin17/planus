@@ -1,6 +1,6 @@
 package com.planus.recommend.repository;
 
-import com.planus.entity.Recommend;
+import com.planus.db.entity.Recommend;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

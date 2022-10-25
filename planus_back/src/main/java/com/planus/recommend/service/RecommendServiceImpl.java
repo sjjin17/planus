@@ -1,6 +1,6 @@
 package com.planus.recommend.service;
 
-import com.planus.entity.Recommend;
+import com.planus.db.entity.Recommend;
 import com.planus.recommend.repository.RecommendRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
