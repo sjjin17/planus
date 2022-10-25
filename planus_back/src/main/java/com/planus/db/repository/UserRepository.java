@@ -11,6 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     void deleteById(long userId);
 
-    int countByKakaoId(long kakaoId);
+    User findOneByKakaoId(long kakaoId);
 
 }

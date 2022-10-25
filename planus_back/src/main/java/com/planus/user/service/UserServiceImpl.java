@@ -16,6 +16,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User join(String nickname, String email, Long kakaoId) {
+        User user = userRepository.findOneByKakaoId(kakaoId);
+        if(user==null){
+            user = User.builder()
+                    .name(nickname)
+                    .email(email)
+                    .kakaoId(kakaoId)
+                    .build();
+            userRepository.save(user);
+        }
+        return user;
+    }
+
+    @Override
     public UserInfoResDTO findUserInfo(long userId) {
         User user = userRepository.findByUserId(userId);
         return new UserInfoResDTO(user.getName(), user.getEmail());
