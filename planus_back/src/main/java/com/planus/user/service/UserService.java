@@ -1,5 +1,6 @@
 package com.planus.user.service;
 
+import com.planus.db.entity.User;
 import com.planus.user.dto.UserInfoResDTO;
 
 public interface UserService {
@@ -9,5 +10,5 @@ public interface UserService {
     long updateUser(long userId, String nickname);
     long deleteUser(long userId);
 
-    long join();
+    User join(String nickname, String email, Long kakaoId);
 }

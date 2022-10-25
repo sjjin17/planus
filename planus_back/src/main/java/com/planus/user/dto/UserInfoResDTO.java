@@ -1,5 +1,8 @@
 package com.planus.user.dto;
 
+import lombok.Getter;
+
+@Getter
 public class UserInfoResDTO {
 
     private String nickname;
