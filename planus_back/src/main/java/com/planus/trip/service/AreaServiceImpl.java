@@ -1,8 +1,8 @@
-package com.planus.area.service;
+package com.planus.trip.service;
 
-import com.planus.area.dto.AreaResDTO;
 import com.planus.db.entity.Area;
 import com.planus.db.repository.AreaRepository;
+import com.planus.trip.dto.AreaResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
