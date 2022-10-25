@@ -1,8 +1,14 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Member {
 
     @Id
@@ -18,4 +24,10 @@ public class Member {
     @JoinColumn(name="trip_id")
     private Trip trip;
 
+    @Builder
+    public Member(long memberId, User user, Trip trip) {
+        this.memberId = memberId;
+        this.user = user;
+        this.trip = trip;
+    }
 }
