@@ -1,7 +1,7 @@
 <template>
   <div>
     <a :href="loginLink">
-      <img src="src\assets\kakao_login_medium_wide.png" />
+      <img src="@/assets/kakao_login_medium_wide.png" />
     </a>
   </div>
 </template>

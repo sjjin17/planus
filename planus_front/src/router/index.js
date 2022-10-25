@@ -7,19 +7,11 @@ import MypageView from "../views/MypageView.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", name: "homeview", component: HomeView },
   {
     path: "/mypage",
     name: "mypage",
     component: MypageView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
     path: "/login/oauth2/kakao",
