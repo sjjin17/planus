@@ -34,6 +34,15 @@ dependencies {
 	//swagger 설정
 	implementation('io.springfox:springfox-swagger2:2.9.2')
 	implementation('io.springfox:springfox-swagger-ui:2.9.2')
+
+	//websocket 관련
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.7.2'
+//	// https://mvnrepository.com/artifact/org.webjars/sockjs-client
+//	implementation group: 'org.webjars', name: 'sockjs-client', version: '1.5.1'
+//	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+//	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.4'
+
 }
 
 tasks.named('test') {
