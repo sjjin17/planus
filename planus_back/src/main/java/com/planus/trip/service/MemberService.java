@@ -1,6 +1,6 @@
-package com.planus.member.service;
+package com.planus.trip.service;
 
-import com.planus.member.dto.MemberResDTO;
+import com.planus.trip.dto.MemberResDTO;
 
 import java.util.List;
 

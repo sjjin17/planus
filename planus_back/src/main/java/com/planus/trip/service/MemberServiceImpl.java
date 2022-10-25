@@ -1,8 +1,8 @@
-package com.planus.member.service;
+package com.planus.trip.service;
 
 import com.planus.db.entity.Member;
 import com.planus.db.repository.MemberRepository;
-import com.planus.member.dto.MemberResDTO;
+import com.planus.trip.dto.MemberResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

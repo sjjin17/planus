@@ -1,4 +1,4 @@
-package com.planus.area.dto;
+package com.planus.trip.dto;
 
 import lombok.Builder;
 import lombok.Getter;
