@@ -1,8 +1,15 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@Builder
 public class Recommend {
 
     @Id
@@ -28,8 +35,15 @@ public class Recommend {
     @Column(name="content_type")
     private String contentType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="area_id")
-    private Area area;
+    @Builder
+    public Recommend(long recommendId,String place, String address, double lat, double lng, String contentType,String imgUrl){
+        this.recommendId = recommendId;
+        this.address = address;
+        this.contentType = contentType;
+        this.place = place;
+        this.lat = lat;
+        this.lng = lng;
+        this.imgUrl= imgUrl;
+    }
 
 }
