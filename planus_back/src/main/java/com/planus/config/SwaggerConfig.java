@@ -46,6 +46,7 @@ public class SwaggerConfig {
                 .description("여행 스케줄링 공동 작업 서비스 planus의 swagger입니다.")
                 .build();
     }
+
     @Bean
     public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(
             WebEndpointsSupplier webEndpointsSupplier,
@@ -55,7 +56,7 @@ public class SwaggerConfig {
             CorsEndpointProperties corsProperties,
             WebEndpointProperties webEndpointProperties,
             Environment environment) {
-        List<ExposableEndpoint<?>> allEndpoints = new ArrayList<>();
+        List<ExposableEndpoint<?>> allEndpoints = new ArrayList();
         Collection<ExposableWebEndpoint> webEndpoints = webEndpointsSupplier.getEndpoints();
         allEndpoints.addAll(webEndpoints);
         allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());
