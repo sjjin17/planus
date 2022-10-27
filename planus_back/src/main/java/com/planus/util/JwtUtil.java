@@ -1,4 +1,4 @@
-package com.planus.login.util;
+package com.planus.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

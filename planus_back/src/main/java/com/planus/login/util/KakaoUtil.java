@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +84,6 @@ public class KakaoUtil {
             while((temp=br.readLine())!=null){
                 result+=temp;
             }
-
             JsonObject jsonResult = JsonParser.parseString(result).getAsJsonObject();
             JsonObject account = jsonResult.get("kakao_account").getAsJsonObject();
 

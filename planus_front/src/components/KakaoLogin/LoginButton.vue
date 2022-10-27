@@ -11,7 +11,8 @@ export default {
   name: "LoginButton",
   data: () => ({
     clientId: "88eede4a0af62a869b7cdac429891a07",
-    redirectUri: "http://localhost:8090/login/oauth2/kakao",
+    //로컬
+    redirectUri: "http://localhost:8080/planus/login/oauth2/code/kakao",
   }),
   computed: {
     loginLink() {

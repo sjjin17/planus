@@ -49,4 +49,9 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(userId);
         return userId;
     }
+
+    @Override
+    public User findUserByKakaoId(Long kakaoId) {
+        return userRepository.findOneByKakaoId(kakaoId);
+    }
 }

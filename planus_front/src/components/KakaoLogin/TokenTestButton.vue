@@ -13,9 +13,11 @@ export default {
   methods: {
     test() {
       // var temp = this;
-      axios.defaults.headers.common["token"] = VueCookies.get("token");
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + VueCookies.get("token");
       axios
-        .get("http://localhost:8080/login/test")
+        //로컬
+        .get("http://localhost:8080/planus/login/test")
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
     },
