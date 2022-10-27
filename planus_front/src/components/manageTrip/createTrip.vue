@@ -1,5 +1,8 @@
 <template>
-  <div @click="createTrip">일정 생성</div>
+  <div>
+    <button @click="getAllArea">지역 목록</button><br />
+    <button @click="createTrip">일정 생성</button>
+  </div>
 </template>
 
 <script>
@@ -16,12 +19,22 @@ export default {
     period: 4,
     tripId: 0,
     tripUrl: "",
+    areaList: [
+      {
+        areaId: 0,
+        doName: "",
+        siName: "",
+      },
+    ],
   }),
-  //   created() {
-  //     this.createTrip();
-  //   },
+  created() {},
   watch: {},
   methods: {
+    async getAllArea() {
+      this.res = await api.getAllArea();
+      this.areaList = this.res.areaList;
+      console.log(this.areaList);
+    },
     async createTrip() {
       this.res = await api.createTrip(
         this.admin,
@@ -31,7 +44,13 @@ export default {
       );
       this.tripId = this.res.result.tripId;
       this.tripUrl = this.res.result.tripUrl;
-      console.log("tripId: " + this.tripId + ", tripUrl: " + this.tripUrl);
+      this.$router.push({
+        name: "plans",
+        params: {
+          tripId: this.tripId,
+          tripUrl: this.tripUrl,
+        },
+      });
     },
   },
 };

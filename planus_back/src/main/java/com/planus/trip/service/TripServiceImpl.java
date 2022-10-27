@@ -1,11 +1,7 @@
 package com.planus.trip.service;
 
-import com.planus.db.entity.Area;
-import com.planus.db.entity.Trip;
-import com.planus.db.entity.TripArea;
-import com.planus.db.repository.AreaRepository;
-import com.planus.db.repository.TripAreaRepository;
-import com.planus.db.repository.TripRepository;
+import com.planus.db.entity.*;
+import com.planus.db.repository.*;
 import com.planus.trip.dto.TripAreaDTO;
 import com.planus.trip.dto.TripInfoResDTO;
 import com.planus.trip.dto.TripResDTO;
@@ -26,20 +22,24 @@ public class TripServiceImpl implements TripService{
     private TripRepository tripRepository;
     private AreaRepository areaRepository;
     private TripAreaRepository tripAreaRepository;
+    private MemberRepository memberRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository){
+    public TripServiceImpl(TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, MemberRepository memberRepository, UserRepository userRepository){
         this.tripRepository = tripRepository;
         this.areaRepository = areaRepository;
         this.tripAreaRepository = tripAreaRepository;
+        this.memberRepository = memberRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public TripResDTO createTrip(long admin, LocalDate startDate, int period, int[] areaId) {
+    public TripResDTO createTrip(long admin, String startDate, long period, int[] areaId) {
         Trip trip = Trip.builder()
                 .admin(admin)
                 .createTime(LocalDateTime.now())
-                .startDate(startDate)
+                .startDate(LocalDate.parse(startDate))
                 .period(period)
                 .tripUrl(UUID.randomUUID().toString())
                 .build();
@@ -55,6 +55,15 @@ public class TripServiceImpl implements TripService{
 
             tripAreaRepository.save(tripArea);
         }
+
+        User user = userRepository.findByUserId(admin);
+
+        Member member = Member.builder()
+                .trip(trip)
+                .user(user)
+                .build();
+
+        memberRepository.save(member);
 
         TripResDTO tripResDTO = TripResDTO.builder()
                 .tripId(trip.getTripId())
@@ -86,7 +95,7 @@ public class TripServiceImpl implements TripService{
         TripInfoResDTO tripInfoResDTO = TripInfoResDTO.builder()
                 .tripId(trip.getTripId())
                 .admin(trip.getAdmin())
-                .startDate(trip.getStartDate())
+                .startDate(trip.getStartDate().toString())
                 .period(trip.getPeriod())
                 .tripArea(tripAreaDTOList)
                 .build();
