@@ -13,7 +13,7 @@ public class MyTripResDTO {
     private String startDate;
     private String endDate;
     private boolean complete;
+    private Long participants;
     private String imageUrl;
-    private int participants;
     private List<String> areaList;
 }

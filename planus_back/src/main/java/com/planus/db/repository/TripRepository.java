@@ -10,5 +10,5 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     Trip save(Trip trip);
     Trip findByTripId(long tripId);
 
-    Page<Trip> findByAdmin(long admin);
+    Page<Trip> findByAdminOrderByCreateTimeDesc(long admin);
 }
