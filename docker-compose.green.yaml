@@ -56,3 +56,4 @@ services:
       - "/home/ubuntu/redis:/data"
     environment:
       TZ: "Asia/Seoul"
+      - REDIS_PASSWORD=Tkvlvmffosjtm
