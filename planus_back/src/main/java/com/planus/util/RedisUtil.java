@@ -11,7 +11,6 @@ import springfox.documentation.swagger2.mappers.ModelMapper;
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ModelMapper modelMapper;
 
     public String getData(String key) {
         return (String) redisTemplate.opsForValue().get(key);
