@@ -24,6 +24,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -31,14 +34,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	//swagger
-	implementation('io.springfox:springfox-swagger2:2.9.2')
-	implementation('io.springfox:springfox-swagger-ui:2.9.2')
 
-	//websocket
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.webjars:sockjs-client:1.5.1'
-	implementation 'org.webjars:stomp-websocket:2.3.4'
+	//swagger 설정
+	implementation('io.springfox:springfox-swagger2:3.0.0')
+	implementation('io.springfox:springfox-swagger-ui:3.0.0')
+
+	//health check
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
 }
 
 tasks.named('test') {

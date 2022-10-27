@@ -1,14 +1,29 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+
+import HomeView from "../views/HomeView.vue";
+import kakaoRedirect from "../components/KakaoLogin/KakaoRedirect.vue";
 import MypageView from "../views/MypageView.vue";
+import PlanView from "../views/PlansView.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", name: "homeview", component: HomeView },
   {
     path: "/mypage",
     name: "mypage",
     component: MypageView,
+  },
+  {
+    path: "/login/oauth2/kakao",
+    name: "kakaoRedirect",
+    component: kakaoRedirect,
+  },
+  {
+    path: "/plans",
+    name: "plans",
+    component: PlanView,
   },
   // {
   //   path: "/about",
