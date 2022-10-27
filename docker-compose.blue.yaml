@@ -4,6 +4,7 @@ services:
   planus_back:
     build:
       context: ./planus_back
+    images: planus_back:blue
     container_name: planus_back-blue
     restart: always
     depends_on:
@@ -20,6 +21,7 @@ services:
   planus_front:
     build:
       context: ./planus_front
+    images: planus_front:blue
     container_name: planus_front-blue
     ports:
       - "8081:80"
