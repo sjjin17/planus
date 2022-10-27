@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import springfox.documentation.swagger2.mappers.ModelMapper;
 
 @Component
 @RequiredArgsConstructor
