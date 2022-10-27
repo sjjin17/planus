@@ -2,11 +2,13 @@ package com.planus.trip.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class TripReqDTO {
     private LocalDate startDate;
     private int period;

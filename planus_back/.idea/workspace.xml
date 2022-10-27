@@ -6,8 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="837d12ae-03be-41ef-9f52-f76459b75bf3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/config/SwaggerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/login/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/login/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/trip/controller/TripController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/trip/controller/TripController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/trip/dto/TripReqDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/trip/dto/TripReqDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/api/RESTAPI.js" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/api/RESTAPI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/KakaoRedirect.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/KakaoRedirect.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/LoginButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/LoginButton.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton2.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../planus_front/src/views/HomeView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/views/HomeView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +80,11 @@
     &quot;spring.configuration.checksum&quot;: &quot;61f74c88c84d86541d089d17c59425f6&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.planus.config" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="PlanusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="planus.main" />
