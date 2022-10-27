@@ -1,6 +1,8 @@
 package com.planus.config;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,12 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     public int port;
 
+    @Bean
+    public ModelMapper modelMapper(){
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper;
+    }
     @Bean
     public RedisConnectionFactory connectionFactory() {
         return new LettuceConnectionFactory(host, port);

@@ -11,5 +11,7 @@ import java.util.Map;
 public interface BucketService {
     List<BucketResDTO> findAllBuckets(Long tripId);
 
+    List<BucketResDTO> createBucketList(Long tripId, List<BucketReqDTO> bucketReqDTOList);
+
 
 }

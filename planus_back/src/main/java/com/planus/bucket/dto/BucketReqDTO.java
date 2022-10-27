@@ -3,8 +3,10 @@ package com.planus.bucket.dto;
 import com.planus.db.entity.Bucket;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BucketReqDTO {
     private String place;
 

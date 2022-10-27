@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +28,25 @@ public class BucketServiceImpl implements BucketService{
     @Transactional(readOnly = true)
     @Cacheable(value="bucketList")
     public List<BucketResDTO> findAllBuckets(Long tripId) {
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
-        List<Bucket> buckets = bucketRepository.findAllByTrip(trip).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
+        List<Bucket> buckets = bucketRepository.findAllByTripTripId(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
         return buckets.stream().map(bucket -> BucketResDTO.toResDTO(bucket)).collect(Collectors.toList());
+
+
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "bucketList", allEntries = true)
+    public List<BucketResDTO> createBucketList(Long tripId, List<BucketReqDTO> bucketReqDTOList) {
+        List<Bucket> buckets = bucketReqDTOList.stream().map(bucketReqDTO -> BucketReqDTO.toEntity(bucketReqDTO)).collect(Collectors.toList());
+        List<BucketResDTO> bucketList = new ArrayList<>();
+        for (Bucket bucket: buckets) {
+            bucket.setTrip(tripRepository.findByTripId(tripId));
+            bucketRepository.save(bucket);
+            BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
+            bucketList.add(bucketResDTO);
+        }
+        return bucketList;
 
 
     }
