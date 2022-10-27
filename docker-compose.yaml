@@ -49,7 +49,7 @@ services:
     container_name: redis-container
     restart: always
     ports:
-      - "3379:3379"
+      - "6379:6379"
     volumes:
       - "/home/ubuntu/redis:/data"
     environment:

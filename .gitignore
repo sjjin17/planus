@@ -357,4 +357,4 @@ gradle-app.setting
 /planus_back/.idea/gradle.xml
 /planus_back/.idea/jarRepositories.xml
 /planus_back/.idea/misc.xml
-/planus_back/.idea/vcs.xml
+/planus_back/.idea/*
