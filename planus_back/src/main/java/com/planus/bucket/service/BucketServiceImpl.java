@@ -38,9 +38,7 @@ public class BucketServiceImpl implements BucketService{
     @Transactional
     @CacheEvict(value = "bucketList", allEntries = true)
     public List<BucketResDTO> createBucketList(Long tripId, List<BucketReqDTO> bucketReqDTOList) {
-        bucketRepository.truncateBucket();
         List<Bucket> buckets = bucketReqDTOList.stream().map(bucketReqDTO -> BucketReqDTO.toEntity(bucketReqDTO)).collect(Collectors.toList());
-        System.out.println(buckets);
         List<BucketResDTO> bucketList = new ArrayList<>();
         for (Bucket bucket: buckets) {
             bucket.setTrip(tripRepository.findByTripId(tripId));
