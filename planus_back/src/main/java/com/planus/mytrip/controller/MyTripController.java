@@ -21,7 +21,7 @@ public class MyTripController {
     private final MyTripService mytripService;
 
     @GetMapping("/made")
-    public ResponseEntity<MyTripListResDTO> getBookSearchResult(@RequestHeader Map<String,Object> token, @PageableDefault(sort = "isbn", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok().body(mytripService.getMadeTripList("userId", pageable)); // 토큰 구현되면 바꾸기
+    public ResponseEntity<MyTripListResDTO> getBookSearchResult(@RequestHeader(name="token") String token, @PageableDefault(sort = "isbn", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok().body(mytripService.getMadeTripList(token, pageable)); // 토큰 구현되면 바꾸기
     }
 }
