@@ -41,9 +41,10 @@ public class LoginController {
     }
 
     @GetMapping("/test2")
-    public void Test2(@RequestHeader(name="token") String token){
+    public ResponseEntity Test2(@RequestHeader(name="token") String token){
         long userIdFromToken = jwtUtil.getUserIdFromToken(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome2222! "+ userInfo.getNickname());
+        return new ResponseEntity(OK);
     }
 }
