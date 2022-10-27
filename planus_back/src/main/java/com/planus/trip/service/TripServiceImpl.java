@@ -35,7 +35,7 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public TripResDTO createTrip(long admin, String startDate, int period, int[] areaId) {
+    public TripResDTO createTrip(long admin, String startDate, long period, int[] areaId) {
         Trip trip = Trip.builder()
                 .admin(admin)
                 .createTime(LocalDateTime.now())

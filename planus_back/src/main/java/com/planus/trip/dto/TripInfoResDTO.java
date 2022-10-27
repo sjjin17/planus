@@ -11,10 +11,10 @@ public class TripInfoResDTO {
     private long tripId;
     private long admin;
     private String startDate;
-    private int period;
+    private long period;
     private List<TripAreaDTO> tripArea;
 
-    public TripInfoResDTO(long tripId, long admin, String startDate, int period, List<TripAreaDTO> tripArea) {
+    public TripInfoResDTO(long tripId, long admin, String startDate, long period, List<TripAreaDTO> tripArea) {
         this.tripId = tripId;
         this.admin = admin;
         this.startDate = startDate;

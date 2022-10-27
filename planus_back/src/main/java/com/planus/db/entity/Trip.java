@@ -33,7 +33,7 @@ public class Trip {
     private LocalDate startDate;
 
     @Column(name="period")
-    private int period;
+    private long period;
 
     @Column(name="complete")
     private boolean complete;
@@ -58,7 +58,7 @@ public class Trip {
     List<Plan> planList;
 
     @Builder
-    public Trip(long tripId, String tripUrl, long admin, LocalDateTime createTime, LocalDate startDate, int period, boolean complete, String imageUrl, List<Member> memberList, List<Bucket> bucketList, List<TripArea> tripAreaList, List<Plan> planList) {
+    public Trip(long tripId, String tripUrl, long admin, LocalDateTime createTime, LocalDate startDate, long period, boolean complete, String imageUrl, List<Member> memberList, List<Bucket> bucketList, List<TripArea> tripAreaList, List<Plan> planList) {
         this.tripId = tripId;
         this.tripUrl = tripUrl;
         this.admin = admin;

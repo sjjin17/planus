@@ -45,7 +45,7 @@ public class TripController {
     public ResponseEntity createTrip(@RequestBody TripReqDTO tripReqDTO){
         long admin = tripReqDTO.getAdmin();
         String startDate = tripReqDTO.getStartDate();
-        int period = tripReqDTO.getPeriod();
+        long period = tripReqDTO.getPeriod();
         int[] areaId = tripReqDTO.getAreaId();
 
         Map<String, Object> resultMap = new HashMap<>();

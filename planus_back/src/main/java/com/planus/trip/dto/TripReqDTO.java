@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TripReqDTO {
     private String startDate;
-    private int period;
+    private long period;
     private int[] areaId;
     private int admin;
 
-    public TripReqDTO(String startDate, int period, int[] areaId, int admin) {
+    public TripReqDTO(String startDate, long period, int[] areaId, int admin) {
         this.startDate = startDate;
         this.period = period;
         this.areaId = areaId;
