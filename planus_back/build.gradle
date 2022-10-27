@@ -24,6 +24,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -43,6 +45,9 @@ dependencies {
 //	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
 //	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.4'
 
+
+	//health check
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
 }
 
 tasks.named('test') {

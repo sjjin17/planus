@@ -9,6 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    // 클라이언트에서 WebSocket에 접속할 수 있는 경로
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 //        WebSocketMessageBrokerConfigurer.super.registerStompEndpoints(registry);
@@ -25,4 +26,6 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 이 주소를 구독하는 client에게 메시지를 전달할 때 (topic : 1:N)
         registry.enableSimpleBroker("/topic");  // /sub
     }
+
+
 }

@@ -1,6 +1,8 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -26,6 +28,19 @@ public class User {
     private long kakaoId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    List<Member> memberList;
+    private List<Member> memberList;
 
+    @Builder
+    public User(long userId, String name, String email, long kakaoId, List<Member> memberList) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.kakaoId = kakaoId;
+        this.memberList = memberList;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
+
