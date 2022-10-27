@@ -21,7 +21,7 @@ const routes = [
     component: kakaoRedirect,
   },
   {
-    path: "/plans",
+    path: "/plans/*",
     name: "plans",
     component: PlanView,
   },
