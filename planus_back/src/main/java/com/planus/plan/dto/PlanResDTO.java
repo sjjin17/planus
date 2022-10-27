@@ -1,5 +1,6 @@
 package com.planus.plan.dto;
 
+import com.planus.db.entity.Timetable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +15,13 @@ public class PlanResDTO {
     long planId;
     LocalDate tripDate;
     int startTime;
-    List<TimetableResDTO> timetableResDTOList;
+    List<Timetable> timetableList;
 
     @Builder
-    public PlanResDTO(long planId, LocalDate tripDate, int startTime, List<TimetableResDTO> timetableResDTOList) {
+    public PlanResDTO(long planId, LocalDate tripDate, int startTime, List<Timetable> timetableList) {
         this.planId = planId;
         this.tripDate = tripDate;
         this.startTime = startTime;
-        this.timetableResDTOList = timetableResDTOList;
+        this.timetableList = timetableList;
     }
 }

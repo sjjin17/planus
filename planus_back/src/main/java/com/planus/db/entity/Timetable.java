@@ -1,8 +1,14 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Timetable {
 
     @Id
@@ -35,4 +41,17 @@ public class Timetable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="plan_id")
     private Plan plan;
+
+    @Builder
+    public Timetable(long timetableId, int orders, String place, double lat, double lng, int costTime, Transit transit, int moveTime, Plan plan) {
+        this.timetableId = timetableId;
+        this.orders = orders;
+        this.place = place;
+        this.lat = lat;
+        this.lng = lng;
+        this.costTime = costTime;
+        this.transit = transit;
+        this.moveTime = moveTime;
+        this.plan = plan;
+    }
 }
