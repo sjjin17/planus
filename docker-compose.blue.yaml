@@ -4,7 +4,8 @@ services:
   planus_back:
     build:
       context: ./planus_back
-    container_name: planus_back
+    image: planus_back_blue
+    container_name: planus_back-blue
     restart: always
     depends_on:
       - mysql
@@ -20,7 +21,8 @@ services:
   planus_front:
     build:
       context: ./planus_front
-    container_name: planus_front
+    image: planus_front_blue
+    container_name: planus_front-blue
     ports:
       - "8081:80"
     environment:
@@ -47,10 +49,13 @@ services:
   redis:
     image: redis
     container_name: redis-container
+    command: redis-server --requirepass Tkvlvmffosjtm --port 6379
     restart: always
     ports:
       - "6379:6379"
     volumes:
       - "/home/ubuntu/redis:/data"
     environment:
+      REDIS_PASSWORD="kvlvmffosjtm"
       TZ: "Asia/Seoul"
+

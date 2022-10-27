@@ -4,13 +4,14 @@ services:
   planus_back:
     build:
       context: ./planus_back
-    container_name: planus_back
+    image: planus_back_green
+    container_name: planus_back-green
     restart: always
     depends_on:
       - mysql
       - redis
     ports:
-      - "8080:8080"
+      - "8090:8080"
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-container:3306/planus"
       SPRING_DATASOURCE_USERNAME: "ssafy"
@@ -20,9 +21,10 @@ services:
   planus_front:
     build:
       context: ./planus_front
-    container_name: planus_front
+    image: planus_front_green
+    container_name: planus_front-green
     ports:
-      - "8081:80"
+      - "8091:80"
     environment:
       TZ: "Asia/Seoul"
 
@@ -47,6 +49,7 @@ services:
   redis:
     image: redis
     container_name: redis-container
+    command: redis-server --requirepass Tkvlvmffosjtm --port 6379
     restart: always
     ports:
       - "6379:6379"
