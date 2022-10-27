@@ -49,11 +49,11 @@ services:
   redis:
     image: redis
     container_name: redis-container
+    command: redis-server --requirepass Tkvlvmffosjtm --port 6379
     restart: always
     ports:
       - "6379:6379"
     volumes:
       - "/home/ubuntu/redis:/data"
     environment:
-      REDIS_PASSWORD="Tkvlvmffosjtm"
       TZ: "Asia/Seoul"
