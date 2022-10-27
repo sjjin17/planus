@@ -3,13 +3,16 @@ package com.planus.db.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString(exclude="trip")
 public class Bucket {
 
     @Id
@@ -31,7 +34,6 @@ public class Bucket {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="trip_id")
-    @JsonIgnore
     private Trip trip;
 
 
