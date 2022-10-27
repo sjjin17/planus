@@ -5,57 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="837d12ae-03be-41ef-9f52-f76459b75bf3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../data/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../docker-compose.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/controller/BucketApiController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/dto/BucketReqDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/dto/BucketResDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/service/BucketService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/bucket/service/BucketServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/repository/BucketRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/login/LoginController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/login/util/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/login/util/KakaoUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/recommend/controller/RecommendController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/recommend/repository/RecommendRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/recommend/service/RecommendService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/recommend/service/RecommendServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/server/controller/WebRestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/planus/util/RedisUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/default.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/assets/kakao_login_medium_wide.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/KakaoRedirect.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/LoginButton.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/components/KakaoLogin/TokenTestButton2.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/components/plans/PlanMap.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/views/HomeView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../planus_front/src/views/PlansView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/PlanusApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/PlanusApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Area.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Area.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Bucket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Recommend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/Recommend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/db/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/db/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/user/dto/UserInfoResDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/user/dto/UserInfoResDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/planus/user/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../planus_front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../planus_front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../planus_front/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../planus_front/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../planus_front/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../planus_front/src/router/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
