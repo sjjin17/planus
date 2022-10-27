@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class TripController {
     @PostMapping
     public ResponseEntity createTrip(@RequestBody TripReqDTO tripReqDTO){
         long admin = tripReqDTO.getAdmin();
-        LocalDate startDate = tripReqDTO.getStartDate();
+        String startDate = tripReqDTO.getStartDate();
         int period = tripReqDTO.getPeriod();
         int[] areaId = tripReqDTO.getAreaId();
 

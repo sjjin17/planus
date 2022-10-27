@@ -17,6 +17,7 @@ public class MemberServiceImpl implements MemberService{
     public MemberServiceImpl(MemberRepository memberRepository){
         this.memberRepository = memberRepository;
     }
+
     @Override
     public List<MemberResDTO> findMemberList(long tripId) {
         List<MemberResDTO> memberResDTOList = new ArrayList<>();
