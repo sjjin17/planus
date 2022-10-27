@@ -39,7 +39,7 @@ public class MyTripServiceImpl implements MyTripService {
                             .tripId(ml.getTripId())
                             .tripUrl(ml.getTripUrl())
                             .startDate(ml.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                            .endDate(ml.getStartDate().plusDays((long) ml.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                            .endDate(ml.getStartDate().plusDays(ml.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .complete(ml.isComplete())
                             .participants(memberRepository.countByTripId(ml.getTripId()))
 //                            .imageUrl()
