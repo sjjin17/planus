@@ -5,13 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import springfox.documentation.swagger2.mappers.ModelMapper;
 
 @Component
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ModelMapper modelMapper;
 
     public String getData(String key) {
         return (String) redisTemplate.opsForValue().get(key);

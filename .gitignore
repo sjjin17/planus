@@ -349,8 +349,8 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 *.properties
-
 !gradle-wrapper.properties
+
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java,vuejs,gradle,windows,intellij+all,visualstudiocode,redis
 /planus_back/.idea/.name
 /planus_back/.idea/compiler.xml
