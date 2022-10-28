@@ -74,10 +74,10 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public TripInfoResDTO findTripInfo(long tripId) {
-        Trip trip = tripRepository.findByTripId(tripId);
+    public TripInfoResDTO findTripInfo(String tripUrl) {
+        Trip trip = tripRepository.findByTripUrl(tripUrl);
         List<TripAreaDTO> tripAreaDTOList = new ArrayList<>();
-        List<TripArea> tripAreaList = tripAreaRepository.findByTripTripId(tripId);
+        List<TripArea> tripAreaList = tripAreaRepository.findByTripTripId(trip.getTripId());
 
         for (TripArea tripArea : tripAreaList){
             Area area = areaRepository.findByAreaId(tripArea.getArea().getAreaId());
@@ -97,6 +97,8 @@ public class TripServiceImpl implements TripService{
                 .admin(trip.getAdmin())
                 .startDate(trip.getStartDate().toString())
                 .period(trip.getPeriod())
+                .complete(trip.isComplete())
+                .imageUrl(trip.getImageUrl())
                 .tripArea(tripAreaDTOList)
                 .build();
 
