@@ -5,9 +5,9 @@ import com.planus.db.entity.Trip;
 import com.planus.db.repository.AreaRepository;
 import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
-import com.planus.login.util.JwtUtil;
 import com.planus.mytrip.dto.MyTripListResDTO;
 import com.planus.mytrip.dto.MyTripResDTO;
+import com.planus.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +32,7 @@ public class MyTripServiceImpl implements MyTripService {
 
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
-        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token), pageable);
+        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token.split(" ")[1]), pageable);
         List<MyTripResDTO> madeTrip = new ArrayList<>();
 
         for (Trip ml: madeList
