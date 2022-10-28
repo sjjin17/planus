@@ -5,6 +5,7 @@ import HomeView from "../views/HomeView.vue";
 import kakaoRedirect from "../components/KakaoLogin/KakaoRedirect.vue";
 import MypageView from "../views/MypageView.vue";
 import PlanView from "../views/PlansView.vue";
+import Recommend from "@/components/recommend/RecommendPlace.vue";
 
 Vue.use(VueRouter);
 
@@ -21,7 +22,11 @@ const routes = [
     component: kakaoRedirect,
   },
   {
+<<<<<<< HEAD
     path: "/plans/:tripUrl",
+=======
+    path: "/plans",
+>>>>>>> ad30b8bf4bf0a983636928a092ce701f6cf4b381
     name: "plans",
     component: PlanView,
   },
@@ -34,6 +39,11 @@ const routes = [
   //   component: () =>
   //     import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   // },
+  {
+    path: "/recommend",
+    name: "recommend",
+    component: Recommend,
+  },
 ];
 
 const router = new VueRouter({
