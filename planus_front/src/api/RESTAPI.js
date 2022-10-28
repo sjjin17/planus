@@ -33,6 +33,18 @@ const API = {
     );
     return response.data;
   },
+  async getRecommend(lat, lng, page, size) {
+    const response = await this.instance.get("/recommend", {
+      params: { lat: lat, lng: lng, page: page, size: size },
+    });
+    return response.data;
+  },
+  async getRecommendPageLength(lat, lng, size) {
+    const response = await this.instance.get("/recommend/length", {
+      params: { lat: lat, lng: lng, size: size },
+    });
+    return response.data;
+  },
 };
 
 export default API;
