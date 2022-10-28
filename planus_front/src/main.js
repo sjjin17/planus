@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import VueCookies from "vue-cookies";
 import vuetify from "./plugins/vuetify";
+import VueChatScroll from "vue-chat-scroll";
 
 import * as VueGoogleMaps from "vue2-google-maps"; // Import package
 
@@ -16,6 +17,10 @@ Vue.use(VueGoogleMaps, {
     region: "KR",
   },
 });
+
+Vue.use(VueCookies);
+
+Vue.use(VueChatScroll);
 
 new Vue({
   router,

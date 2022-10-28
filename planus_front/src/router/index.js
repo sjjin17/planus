@@ -8,6 +8,8 @@ import PlanView from "../views/PlansView.vue";
 import Recommend from "@/components/recommend/RecommendPlace.vue";
 import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
+import CompleteView from "../views/CompleteView.vue";
+import Chat from "@/components/chat/WebSocketTest.vue";
 
 Vue.use(VueRouter);
 
@@ -48,9 +50,21 @@ const routes = [
   //     import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   // },
   {
+    // 임시
     path: "/recommend",
     name: "recommend",
     component: Recommend,
+  },
+  {
+    path: "/complete/:tripUrl",
+    name: "complete",
+    component: CompleteView,
+  },
+  {
+    //임시
+    path: "/chat",
+    name: "chat",
+    component: Chat,
   },
 ];
 
