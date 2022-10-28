@@ -22,7 +22,7 @@ public class WebSocketController {
     @MessageMapping("/enter")
     public void enter(WebSocketMessage message, SimpMessageHeaderAccessor headerAccessor){
         message.setAction(0);
-        double tripId = message.getTripId();
+        long tripId = message.getTripId();
         String userName = message.getUserName();
         if(userName != null && tripId != 0){
             try{
