@@ -23,8 +23,8 @@ const API = {
     });
     return response.data;
   },
-  async getTripInfo(tripId) {
-    const response = await this.instance.get("/trip" + "?tripId=" + tripId);
+  async getTripInfo(tripUrl) {
+    const response = await this.instance.get("/trip" + "?tripUrl=" + tripUrl);
     return response.data;
   },
   async getMemberList(tripId) {

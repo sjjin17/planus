@@ -44,13 +44,7 @@ export default {
       );
       this.tripId = this.res.result.tripId;
       this.tripUrl = this.res.result.tripUrl;
-      this.$router.push({
-        name: "plans",
-        params: {
-          tripId: this.tripId,
-          tripUrl: this.tripUrl,
-        },
-      });
+      this.$router.push("/plans/" + this.tripUrl);
     },
   },
 };
