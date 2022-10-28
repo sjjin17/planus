@@ -5,14 +5,17 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
 import time
+import ssl
 
 def api():
     load_dotenv()
 
     API_SERVICE_KEY = os.environ.get('API_SERVICE_KEY')
 
+    context = ssl._create_unverified_context()
+
     url = "https://apis.data.go.kr/B551011/KorService/areaBasedList?numOfRows=50000&pageNo=1&MobileOS=ETC&MobileApp=test&serviceKey="+API_SERVICE_KEY+"&_type=json"
-    response = urlopen(url)
+    response = urlopen(url, context=context)
     json_api = response.read().decode("utf-8")
     apiEnd = time.time()
     print("API done in ",apiEnd-start)
@@ -64,7 +67,7 @@ def api():
     engine = create_engine(db_connection_str, encoding='utf8')
     conn = engine.connect()
     conn.execute('TRUNCATE TABLE Recommend')
-    data.to_sql(name="recommend", con=engine, if_exists='append', index=False)
+    data.to_sql(name="Recommend", con=engine, if_exists='append', index=False)
 
     conn.close()
 
