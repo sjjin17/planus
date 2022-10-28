@@ -5,8 +5,6 @@ import com.planus.db.repository.*;
 import com.planus.trip.dto.TripAreaDTO;
 import com.planus.trip.dto.TripInfoResDTO;
 import com.planus.trip.dto.TripResDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +16,21 @@ import java.util.UUID;
 
 @Service
 public class TripServiceImpl implements TripService{
-    private static final Logger logger = LoggerFactory.getLogger(TripServiceImpl.class);
     private TripRepository tripRepository;
     private AreaRepository areaRepository;
     private TripAreaRepository tripAreaRepository;
-    private MemberRepository memberRepository;
     private UserRepository userRepository;
+    private MemberRepository memberRepository;
+    private PlanRepository planRepository;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, MemberRepository memberRepository, UserRepository userRepository){
+    public TripServiceImpl(TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, UserRepository userRepository, MemberRepository memberRepository, PlanRepository planRepository) {
         this.tripRepository = tripRepository;
         this.areaRepository = areaRepository;
         this.tripAreaRepository = tripAreaRepository;
-        this.memberRepository = memberRepository;
         this.userRepository = userRepository;
+        this.memberRepository = memberRepository;
+        this.planRepository = planRepository;
     }
 
     @Override
@@ -64,6 +63,17 @@ public class TripServiceImpl implements TripService{
                 .build();
 
         memberRepository.save(member);
+
+        for (int i=0; i<=period; i++){
+            LocalDate date = LocalDate.parse(startDate);
+            Plan plan = Plan.builder()
+                    .trip(trip)
+                    .tripDate(date.plusDays(i))
+                    .startTime(480)
+                    .build();
+
+            planRepository.save(plan);
+        }
 
         TripResDTO tripResDTO = TripResDTO.builder()
                 .tripId(trip.getTripId())
