@@ -13,10 +13,13 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -27,6 +30,9 @@ public class RedisConfig {
 
     @Value("${spring.redis.port}")
     public int port;
+
+//    @Value("${spring.redis.password}")
+//    public String password;
 
     @Bean
     public ModelMapper modelMapper(){
@@ -40,13 +46,14 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory());
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer((new StringRedisSerializer()));
-        //redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        //redisTemplate.setValueSerializer((new StringRedisSerializer()));
+        //redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(getClass()));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(getClass()));
         return redisTemplate;
 
     }
@@ -56,8 +63,10 @@ public class RedisConfig {
     @Bean
     public CacheManager redisCacheManager() {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                //.disableCachingNullValues()  // null value 캐시안함
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new Jackson2JsonRedisSerializer<>(ArrayList.class)));
+                //.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
 
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
@@ -69,4 +78,16 @@ public class RedisConfig {
                 .cacheDefaults(redisCacheConfiguration).build();
 
     }
+
+//    private Map<String, RedisCacheConfiguration> getRedisConfigMap() {
+//        final RedisSerializationContext.SerializationPair<String> keySerializationPair = RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer.UTF_8);
+//        final RedisSerializationContext.SerializationPair<Object> valueSerializationPair = RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.json());
+//
+//        return Map.of("BEPOZ", RedisCacheConfiguration.defaultCacheConfig()
+//                .disableCachingNullValues()
+//                .computePrefixWith(cacheName -> "COOL_PREFIX::" + cacheName + "::")
+//                .serializeKeysWith(keySerializationPair)
+//                .serializeValuesWith(valueSerializationPair)
+//        );
+//    }
 }

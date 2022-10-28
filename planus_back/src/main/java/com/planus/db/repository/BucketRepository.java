@@ -13,8 +13,5 @@ import java.util.Optional;
 public interface BucketRepository extends JpaRepository<Bucket, Long> {
     Optional<List<Bucket>> findAllByTripTripId(Long TripId);
 
-    @Transactional
-    @Modifying
-    @Query(value="truncate bucket", nativeQuery = true)
-    void truncateBucket();
+    void deleteAllByTripTripId(Long TripId);
 }

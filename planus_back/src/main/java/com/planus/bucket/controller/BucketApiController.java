@@ -25,7 +25,7 @@ public class BucketApiController {
     @PostMapping("/{tripId}")
     public ResponseEntity createBucketList(@PathVariable Long tripId, @RequestBody List<BucketReqDTO> bucketReqDTOList) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(bucketService.createBucketList(tripId, bucketReqDTOList));
+                .body(bucketService.createBucketList(tripId));
     }
 
 
