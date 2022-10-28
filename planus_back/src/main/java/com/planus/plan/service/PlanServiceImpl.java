@@ -68,8 +68,10 @@ public class PlanServiceImpl implements PlanService {
             planList.add(plan);
         }
 
+        planList.add(Plan.builder().build());
+
         //새로 만들어진 Plan 객체 리스트를 저장
-        planRepository.save(planList);
+        planRepository.saveAll(planList);
 
         return planSaveReqDTO.getTripId();
     }

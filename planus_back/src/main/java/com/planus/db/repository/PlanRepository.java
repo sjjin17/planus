@@ -10,5 +10,5 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     Optional<List<Plan>> findByTripTripId(long tripId);
 
     // 출발시간이 수정됐을 경우 일별일정 저장
-    void save(List<Plan> planList);
+//    void save(List<Plan> planList);
 }

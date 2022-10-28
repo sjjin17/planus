@@ -1,6 +1,7 @@
 package com.planus.plan.controller;
 
 import com.planus.plan.dto.PlanResDTO;
+import com.planus.plan.dto.PlanSaveReqDTO;
 import com.planus.plan.service.PlanService;
 import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,22 @@ public class PlanController {
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
-    
-//    @PostMapping("/")
-//    public ResponseEntity
+
+    @PostMapping("/")
+    public ResponseEntity savePlan(@RequestBody PlanSaveReqDTO planSaveReqDTO) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+             // redis에 저장되어 있는 값을 바로 mysql에 저장?
+            // 혹은 PlanSaveReqDTO를 받아 mysql에 저장?
+            long tripId = planService.savePlan(planSaveReqDTO);
+            resultMap.put("message", "success");
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "일정 저장 오류");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
