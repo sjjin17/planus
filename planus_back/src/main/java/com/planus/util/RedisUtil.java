@@ -1,23 +1,29 @@
 package com.planus.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.planus.bucket.dto.BucketResDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate<String, Object> redisTemplate;
-
+    private final ModelMapper modelMapper;
     public List getListData(String key) {
 
         //return (String) redisTemplate.opsForHash().get(key);
-        ListOperations<String, Object> listOperations = redisTemplate.opsForList();
+        ListOperations<String, ?> listOperations = redisTemplate.opsForList();
         System.out.println(listOperations);
         System.out.println(listOperations.size(key));
         long size = listOperations.size(key) == null ? 0 : listOperations.size(key);
@@ -26,8 +32,8 @@ public class RedisUtil {
         //return (String) redisTemplate.opsForValue().get(key);
     }
 
-    public void setData(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+    public void setDto(String key, BucketResDTO bucketResDTO) {
+        redisDtoTemplate
     }
 
 
@@ -44,5 +50,30 @@ public class RedisUtil {
     public boolean isExists(String key){
         return redisTemplate.hasKey(key);
     }
+
+
+    public <T> boolean saveData(String key, T data) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String value = mapper.writeValueAsString(data);
+            redisTemplate.opsForValue().set(key, value);
+            return true;
+        } catch(Exception e){
+            return false;
+        }
+    }
+
+    public <T> T get(String key, Class<T> clazz){
+        Object o = redisTemplate.opsForValue().get(key);
+        if(o != null) {
+            if(o instanceof LinkedHashMap){
+                return modelMapper.map(o, clazz);
+            }else{
+                return clazz.cast(o);
+            }
+        }
+        return null;
+    }
+
 
 }

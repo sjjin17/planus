@@ -3,10 +3,12 @@ package com.planus.bucket.dto;
 import com.planus.db.entity.Bucket;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
 @ToString
-public class BucketResDTO {
+public class BucketResDTO implements Serializable {
 
 
     private String place;
