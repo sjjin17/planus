@@ -23,14 +23,26 @@ const API = {
     });
     return response.data;
   },
-  async getTripInfo(tripId) {
-    const response = await this.instance.get("/trip" + "?tripId=" + tripId);
+  async getTripInfo(tripUrl) {
+    const response = await this.instance.get("/trip" + "?tripUrl=" + tripUrl);
     return response.data;
   },
   async getMemberList(tripId) {
     const response = await this.instance.get(
       "/trip/member" + "?tripId=" + tripId
     );
+    return response.data;
+  },
+  async getRecommend(lat, lng, page, size) {
+    const response = await this.instance.get("/recommend", {
+      params: { lat: lat, lng: lng, page: page, size: size },
+    });
+    return response.data;
+  },
+  async getRecommendPageLength(lat, lng, size) {
+    const response = await this.instance.get("/recommend/length", {
+      params: { lat: lat, lng: lng, size: size },
+    });
     return response.data;
   },
 };

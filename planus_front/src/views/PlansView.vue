@@ -1,7 +1,10 @@
 <template>
   <v-container>
     <plan-map />
-    <h1>{{ this.result.tripId }}번 방</h1>
+    <h1>{{ this.tripId }}번 방</h1>
+    <div v-for="(member, i) in memberList" :key="i" :member="member">
+      {{ member.name }}({{ member.email }})
+    </div>
   </v-container>
 </template>
 
@@ -25,6 +28,8 @@ export default {
         admin: 0,
         startDate: "",
         period: 0,
+        complete: false,
+        imageUrl: "",
         tripArea: [
           {
             areaId: 0,
@@ -44,22 +49,20 @@ export default {
       ],
     };
   },
-  created() {
-    this.tripId = this.$route.params.tripId;
-    this.tripUrl = this.$route.params.tripUrl;
-    this.getTripInfo();
-    this.getMemberList();
+  async created() {
+    await this.getTripInfo();
+    await this.getMemberList();
   },
   methods: {
     async getTripInfo() {
-      this.res = await api.getTripInfo(this.tripId);
+      this.res = await api.getTripInfo(this.$route.params.tripUrl);
       this.result = this.res.result;
+      this.tripId = this.result.tripId;
       console.log(this.result);
     },
     async getMemberList() {
       this.res = await api.getMemberList(this.tripId);
       this.memberList = this.res.memberList;
-      console.log(this.memberList);
     },
   },
 };
