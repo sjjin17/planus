@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebSocketMessage {
-    private double tripId;
+    private long tripId;
     private String userName;
     private String chatMsg;
-    private int action; // 0:입장, ...
+    private int action; // 0:입장, 1:채팅 ...
 
 }
