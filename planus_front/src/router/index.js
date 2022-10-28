@@ -8,6 +8,7 @@ import PlanView from "../views/PlansView.vue";
 import Recommend from "@/components/recommend/RecommendPlace.vue";
 import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
+import CompleteView from "../views/CompleteView.vue";
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes = [
     path: "/recommend",
     name: "recommend",
     component: Recommend,
+  },
+  {
+    path: "/complete/:tripUrl",
+    name: "complete",
+    component: CompleteView,
   },
 ];
 

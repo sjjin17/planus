@@ -17,6 +17,8 @@ Vue.use(VueGoogleMaps, {
   },
 });
 
+Vue.use(VueCookies);
+
 new Vue({
   router,
   store,
