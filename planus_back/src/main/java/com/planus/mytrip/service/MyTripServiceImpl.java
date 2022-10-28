@@ -32,7 +32,7 @@ public class MyTripServiceImpl implements MyTripService {
 
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
-        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token));
+        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token), pageable);
         List<MyTripResDTO> madeTrip = new ArrayList<>();
 
         for (Trip ml: madeList
@@ -44,9 +44,9 @@ public class MyTripServiceImpl implements MyTripService {
                             .startDate(ml.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .endDate(ml.getStartDate().plusDays(ml.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .complete(ml.isComplete())
-                            .participants(memberRepository.countByTripId(ml.getTripId()))
+                            .participants(memberRepository.countByTripTripId(ml.getTripId()))
 //                            .imageUrl()
-                            .areaList(areaRepository.findAllByTripId_AreaId_SiName(ml.getTripId()).stream().map(Area::getSiName).collect(Collectors.toList()))
+                            .areaList(areaRepository.findAllByTripAreaList_Trip_TripId(ml.getTripId()).stream().map(Area::getSiName).collect(Collectors.toList()))
                             .build()
             );
         }
