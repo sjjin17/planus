@@ -37,6 +37,7 @@ public class SecurityConfig {
 //            cors.setAllowedMethods(Arrays.asList("*"));
             cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization"));
 //            cors.setAllowedHeaders(Arrays.asList("*"));
+            cors.setAllowCredentials(true);
             return cors;
         })
                 .and()
