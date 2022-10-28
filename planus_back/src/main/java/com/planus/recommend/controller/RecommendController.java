@@ -41,4 +41,18 @@ public class RecommendController {
         }
     }
 
+    @GetMapping("/length")
+    public ResponseEntity getPageLength(@RequestParam double lat, @RequestParam double lng, @RequestParam int size){
+        Map<String, Object> resultMap = new HashMap<>();
+        if(size == 0){
+            return new ResponseEntity(resultMap,HttpStatus.BAD_REQUEST);
+        }
+        try{
+            resultMap.put("pageLength", recommendService.countPage(lat,lng,size));
+            return new ResponseEntity(resultMap,HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

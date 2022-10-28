@@ -2,18 +2,18 @@ package com.planus.trip.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class TripReqDTO {
-    private LocalDate startDate;
-    private int period;
+    private String startDate;
+    private long period;
     private int[] areaId;
     private int admin;
 
-    public TripReqDTO(LocalDate startDate, int period, int[] areaId, int admin) {
+    public TripReqDTO(String startDate, long period, int[] areaId, int admin) {
         this.startDate = startDate;
         this.period = period;
         this.areaId = areaId;
