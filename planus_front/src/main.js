@@ -17,7 +17,11 @@ Vue.use(VueGoogleMaps, {
     region: "KR",
   },
 });
+
+Vue.use(VueCookies);
+
 Vue.use(VueChatScroll);
+
 new Vue({
   router,
   store,
