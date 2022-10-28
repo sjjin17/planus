@@ -9,4 +9,6 @@ public interface AreaRepository extends JpaRepository<Area, Long> {
     List<Area> findAll();
 
     Area findByAreaId(long areaId);
+
+    List<Area> findAllByTripId_AreaId_SiName(Long TripId);
 }

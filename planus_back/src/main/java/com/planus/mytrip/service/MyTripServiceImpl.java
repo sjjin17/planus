@@ -1,7 +1,8 @@
 package com.planus.mytrip.service;
 
-import com.planus.db.entity.Member;
+import com.planus.db.entity.Area;
 import com.planus.db.entity.Trip;
+import com.planus.db.repository.AreaRepository;
 import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.login.util.JwtUtil;
@@ -27,6 +28,8 @@ public class MyTripServiceImpl implements MyTripService {
 
     private final MemberRepository memberRepository;
 
+    private final AreaRepository areaRepository;
+
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
         Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token));
@@ -43,7 +46,7 @@ public class MyTripServiceImpl implements MyTripService {
                             .complete(ml.isComplete())
                             .participants(memberRepository.countByTripId(ml.getTripId()))
 //                            .imageUrl()
-//                            .areaList()
+                            .areaList(areaRepository.findAllByTripId_AreaId_SiName(ml.getTripId()).stream().map(Area::getSiName).collect(Collectors.toList()))
                             .build()
             );
         }
