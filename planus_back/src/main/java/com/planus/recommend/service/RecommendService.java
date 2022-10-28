@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RecommendService {
     List<Recommend> findRecommendByLocation(double lat, double lng, Pageable pageable);
+
+    int countPage(double lat, double lng, int size);
 }
