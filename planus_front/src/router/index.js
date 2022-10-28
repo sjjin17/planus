@@ -6,6 +6,8 @@ import kakaoRedirect from "../components/KakaoLogin/KakaoRedirect.vue";
 import MypageView from "../views/MypageView.vue";
 import PlanView from "../views/PlansView.vue";
 import Recommend from "@/components/recommend/RecommendPlace.vue";
+import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
+import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
 
 Vue.use(VueRouter);
 
@@ -17,7 +19,7 @@ const routes = [
     component: MypageView,
   },
   {
-    path: "/login/oauth2/kakao",
+    path: "/temp",
     name: "kakaoRedirect",
     component: kakaoRedirect,
   },
@@ -25,6 +27,16 @@ const routes = [
     path: "/plans",
     name: "plans",
     component: PlanView,
+  },
+  {
+    path: "/login/getkakaotoken",
+    name: "getKakaoToken",
+    component: getKakaoToken,
+  },
+  {
+    path: "/login/redirect",
+    name: "NotLoginRedirect",
+    component: NotLoginRedirect,
   },
   // {
   //   path: "/about",
