@@ -1,10 +1,16 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Plan {
 
     @Id
@@ -24,4 +30,13 @@ public class Plan {
 
     @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY)
     List<Timetable> timetableList;
+
+    @Builder
+    public Plan(long planId, LocalDate tripDate, int startTime, Trip trip, List<Timetable> timetableList) {
+        this.planId = planId;
+        this.tripDate = tripDate;
+        this.startTime = startTime;
+        this.trip = trip;
+        this.timetableList = timetableList;
+    }
 }
