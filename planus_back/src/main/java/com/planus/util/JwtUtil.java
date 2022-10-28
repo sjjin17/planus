@@ -47,6 +47,6 @@ public class JwtUtil {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong((String) claims.get("userId"));
+        return Long.parseLong(String.valueOf(claims.get("userId")));
     }
 }

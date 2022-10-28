@@ -2,6 +2,7 @@ package com.planus.login.handler;
 
 import com.planus.util.JwtUtil;
 import com.planus.user.service.UserService;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,11 +21,11 @@ import java.util.Map;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        System.out.println("HI!");
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
         long kakaoId = (long) attributes.get("id");
@@ -34,7 +35,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String nickname = (String) ((Map<String, Object>) kakaoAccount.get("profile")).get("nickname");
         long userId = userService.findUserByKakaoId(kakaoId).getUserId();
         System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
-        String jwtToken = jwtUtil.createToken(userId, nickname, email);
+        String jwtToken = tokenProvider.createToken(authentication, userId, nickname, email);
+//        String jwtToken = jwtUtil.createToken(userId, nickname, email);
         System.out.println("토큰 생성 성공" + jwtToken);
         if (response.isCommitted()) {
             return;

@@ -18,8 +18,16 @@ export default {
       axios
         //로컬
         .get("http://localhost:8080/planus/login/test")
-        .then((res) => console.log(res))
-        .catch((error) => console.log(error));
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.toLogin();
+        });
+    },
+    toLogin() {
+      this.$router.push("/login/redirect");
     },
   },
 };

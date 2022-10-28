@@ -2,7 +2,6 @@ package com.planus.login.controller;
 
 import com.planus.db.entity.User;
 import com.planus.util.JwtUtil;
-import com.planus.login.util.KakaoUtil;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +16,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
-
-    private final KakaoUtil kakaoUtil;
     private final UserService userService;
 
     private final JwtUtil jwtUtil;
@@ -37,6 +34,7 @@ public class LoginController {
     @GetMapping("/test")
     public void Test(@RequestHeader(name="Authorization") String token){
         token=token.split(" ")[1];
+        //TODO jwtprovider와 jwtUtil 통합할것
         long userIdFromToken = jwtUtil.getUserIdFromToken(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome! "+ userInfo.getNickname());

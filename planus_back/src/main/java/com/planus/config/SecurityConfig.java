@@ -1,7 +1,9 @@
 package com.planus.config;
 
+import com.planus.login.JwtAuthenticationEntryPoint;
 import com.planus.login.handler.OAuth2AuthenticationSuccessHandler;
 import com.planus.login.service.UserOauth2Service;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +22,9 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
     private final UserOauth2Service userOauth2Service;
-
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final TokenProvider tokenProvider;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,8 +35,8 @@ public class SecurityConfig {
             cors.setAllowedOriginPatterns(Collections.singletonList("*"));
             cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD"));
 //            cors.setAllowedMethods(Arrays.asList("*"));
-//            cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization"));
-            cors.setAllowedHeaders(Arrays.asList("*"));
+            cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization"));
+//            cors.setAllowedHeaders(Arrays.asList("*"));
             return cors;
         })
                 .and()
@@ -42,12 +44,15 @@ public class SecurityConfig {
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().authorizeRequests()
-                .antMatchers("/**").permitAll()
-//                    .hasAuthority("ROLE_MEMBER").anyRequest().authenticated()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/login/test").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint().userService(userOauth2Service).and()
+                .and().apply(new JwtSecurityConfig(tokenProvider))
                 .and().build();
 
     }
