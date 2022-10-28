@@ -22,11 +22,7 @@ const routes = [
     component: kakaoRedirect,
   },
   {
-<<<<<<< HEAD
     path: "/plans/:tripUrl",
-=======
-    path: "/plans",
->>>>>>> ad30b8bf4bf0a983636928a092ce701f6cf4b381
     name: "plans",
     component: PlanView,
   },
