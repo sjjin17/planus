@@ -1,4 +1,4 @@
-package com.planus.recommend.repository;
+package com.planus.db.repository;
 
 import com.planus.db.entity.Recommend;
 import org.springframework.data.domain.Pageable;
