@@ -63,7 +63,7 @@ public class BucketServiceImpl implements BucketService{
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
         bucketRepository.deleteAllByTripTripId(tripId);
         String key = "bucketList::" + tripId;
-        Trip trip = tripRepository.findByTripId(tripId);
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
         Set<BucketResDTO> buckets = zSetOperations.range(key, 0, -1);
         ArrayList<BucketResDTO> bucketList = new ArrayList<>(buckets);
         for (BucketResDTO bucketResDTO : bucketList) {
