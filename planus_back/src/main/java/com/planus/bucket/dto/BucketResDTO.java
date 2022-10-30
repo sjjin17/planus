@@ -1,6 +1,5 @@
 package com.planus.bucket.dto;
 
-import com.planus.bucket.vo.BucketVO;
 import com.planus.db.entity.Bucket;
 import lombok.*;
 
