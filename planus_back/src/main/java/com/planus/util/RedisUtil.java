@@ -24,16 +24,14 @@ public class RedisUtil {
 
         //return (String) redisTemplate.opsForHash().get(key);
         ListOperations<String, ?> listOperations = redisTemplate.opsForList();
-        System.out.println(listOperations);
-        System.out.println(listOperations.size(key));
+
         long size = listOperations.size(key) == null ? 0 : listOperations.size(key);
-        System.out.println(listOperations.range(key, 0, size));
         return listOperations.range(key, 0, size);
         //return (String) redisTemplate.opsForValue().get(key);
     }
 
     public void setDto(String key, BucketResDTO bucketResDTO) {
-        redisDtoTemplate
+
     }
 
 

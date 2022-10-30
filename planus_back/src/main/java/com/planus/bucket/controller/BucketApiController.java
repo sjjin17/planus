@@ -18,13 +18,12 @@ public class BucketApiController {
 
     @GetMapping("/{tripId}")
     public ResponseEntity getAllBuckets(@PathVariable Long tripId) {
-        System.out.println(1);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bucketService.findAllBuckets(tripId));
     }
 
     @PostMapping("/{tripId}")
-    public ResponseEntity createBucketList(@PathVariable Long tripId, @RequestBody List<BucketReqDTO> bucketReqDTOList) {
+    public ResponseEntity createBucketList(@PathVariable Long tripId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bucketService.createBucketList(tripId));
     }

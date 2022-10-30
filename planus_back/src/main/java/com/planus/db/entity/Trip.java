@@ -24,7 +24,7 @@ public class Trip {
     private String tripUrl;
 
     @Column(name="admin")
-    private Long admin;
+    private long admin;
 
     @Column(name="create_time")
     private LocalDateTime createTime;
@@ -33,10 +33,10 @@ public class Trip {
     private LocalDate startDate;
 
     @Column(name="period")
-    private Integer period;
+    private int period;
 
     @Column(name="complete")
-    private Boolean complete;
+    private boolean complete;
 
     @Column(name="image_url")
     private String imageUrl;

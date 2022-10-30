@@ -1,5 +1,6 @@
 package com.planus.bucket.dto;
 
+import com.planus.bucket.vo.BucketVO;
 import com.planus.db.entity.Bucket;
 import lombok.*;
 
@@ -38,5 +39,16 @@ public class BucketResDTO implements Serializable {
                 .lng(bucket.getLng())
                 .build();
     }
+
+    public static Bucket toEntity(BucketResDTO bucketResDTO) {
+        return Bucket.builder()
+                .place(bucketResDTO.getPlace())
+                .address(bucketResDTO.getAddress())
+                .lat(bucketResDTO.getLat())
+                .lng(bucketResDTO.getLng())
+                .build();
+    }
+
+
 
 }
