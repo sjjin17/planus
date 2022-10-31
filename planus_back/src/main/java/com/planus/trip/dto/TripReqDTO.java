@@ -11,12 +11,10 @@ public class TripReqDTO {
     private String startDate;
     private long period;
     private int[] areaId;
-    private int admin;
 
-    public TripReqDTO(String startDate, long period, int[] areaId, int admin) {
+    public TripReqDTO(String startDate, long period, int[] areaId) {
         this.startDate = startDate;
         this.period = period;
         this.areaId = areaId;
-        this.admin = admin;
     }
 }
