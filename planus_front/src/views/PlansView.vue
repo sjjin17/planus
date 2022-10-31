@@ -5,6 +5,7 @@
     <div v-for="(member, i) in memberList" :key="i" :member="member">
       {{ member.name }}({{ member.email }})
     </div>
+    <bucket-list></bucket-list>
   </v-container>
 </template>
 
@@ -13,11 +14,13 @@ import API from "@/api/RESTAPI";
 const api = API;
 
 import PlanMap from "@/components/plans/PlanMap.vue";
+import BucketList from "@/components/bucketList/BucketList.vue";
 
 export default {
   name: "PlanView",
   components: {
     PlanMap,
+    BucketList,
   },
   data() {
     return {

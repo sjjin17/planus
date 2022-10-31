@@ -45,6 +45,10 @@ const API = {
     });
     return response.data;
   },
+  async getBucketList(tripId) {
+    const response = await this.instance.get("/buckets/" + `${tripId}`);
+    return response.data;
+  },
 };
 
 export default API;
