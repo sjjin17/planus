@@ -12,5 +12,4 @@ public class WebSocketMessage {
     private String userName;
     private String chatMsg;
     private int action; // 0:입장, 1:채팅 ...
-
 }

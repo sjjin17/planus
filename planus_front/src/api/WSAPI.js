@@ -16,7 +16,7 @@ const WSAPI = {
     this.stomp.connect(
       {},
       () => {
-        this.stomp.subscribe("/topic/planus/{trip_id}", callback);
+        this.stomp.subscribe("/topic/planus/{tripId}", callback);
         this.enter({ tripId, userName });
       },
       (error) => {
@@ -30,6 +30,26 @@ const WSAPI = {
   },
   chat(message) {
     this.stomp.send("/app/chat", JSON.stringify(message));
+  },
+  addBucket(tripId, place, address, lat, lng) {
+    let bucket = {
+      tripId: tripId,
+      place: place,
+      address: address,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/addBucket", JSON.stringify(bucket));
+  },
+  delBucket(tripId, place, address, lat, lng) {
+    let bucket = {
+      tripId: tripId,
+      place: place,
+      address: address,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/delBucket", JSON.stringify(bucket));
   },
 };
 

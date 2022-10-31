@@ -1,5 +1,6 @@
 package com.planus.websocket.controller;
 
+import com.planus.websocket.model.WebSocketBucket;
 import com.planus.websocket.model.WebSocketMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -41,5 +42,18 @@ public class WebSocketController {
     public void chat(WebSocketMessage message){
         message.setAction(1);
         sendingOperations.convertAndSend(ROOT_URL+message.getTripId(),message);
+    }
+
+    @MessageMapping("/addBucket")
+    public void addBucket(WebSocketBucket bucket){
+        bucket.setAction(2);
+//        TODO: redis에 버킷리스트 저장하기
+        sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
+    }
+    @MessageMapping("/delBucket")
+    public void delBucket(WebSocketBucket bucket){
+        bucket.setAction(3);
+//        TODO: redis에 해당 버킷리스트 삭제하기
+        sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
 }

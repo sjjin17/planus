@@ -23,8 +23,8 @@
           </v-col>
         </v-row>
         <v-row class="row-3">
-          <v-btn>아</v-btn>
-          <v-btn>가</v-btn>
+          <v-btn @click="bucketClick">버킷</v-btn>
+          <v-btn>일정</v-btn>
         </v-row>
       </v-container>
     </v-card>
@@ -38,6 +38,17 @@ export default {
   },
   props: {
     recommendPlace: Object,
+  },
+  methods: {
+    bucketClick() {
+      this.$emit(
+        "addBucket",
+        this.recommendPlace.place,
+        this.recommendPlace.address,
+        this.recommendPlace.lat,
+        this.recommendPlace.lng
+      );
+    },
   },
 };
 </script>
