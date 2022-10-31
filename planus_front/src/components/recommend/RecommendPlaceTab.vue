@@ -4,6 +4,7 @@
       v-for="recommendPlace in recommendList"
       :key="recommendPlace.recommendId"
       :recommendPlace="recommendPlace"
+      @addBucket="addBucket"
     ></recommend-place-card>
     <v-container>
       <v-row justify="center">
@@ -54,6 +55,9 @@ export default {
     },
     click() {
       this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+    },
+    addBucket(place, address, lat, lng) {
+      this.$emit("addBucket", place, address, lat, lng);
     },
   },
 };

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import VueCookies from "vue-cookies";
+import API from "@/api/RESTAPI";
+const api = API;
 export default {
   name: "getKakaoToken",
   data() {
@@ -12,14 +12,13 @@ export default {
   },
   created() {
     const token = this.$route.query.token;
-    console.log(token);
     this.saveToken(token);
   },
   methods: {
     saveToken(token) {
-      VueCookies.set("token", token);
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + VueCookies.get("token");
+      this.$cookies.set("token", token);
+      api.defaults.headers.common["Authorization"] =
+        "Bearer " + this.$cookies.get("token");
       this.$router.push("/");
     },
   },

@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
-import kakaoRedirect from "../components/KakaoLogin/KakaoRedirect.vue";
 import MypageView from "../views/MypageView.vue";
 import PlanView from "../views/PlansView.vue";
 import Recommend from "@/components/recommend/RecommendPlace.vue";
@@ -19,11 +18,6 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
-  },
-  {
-    path: "/temp",
-    name: "kakaoRedirect",
-    component: kakaoRedirect,
   },
   {
     path: "/plans/:tripUrl",

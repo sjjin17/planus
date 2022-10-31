@@ -6,7 +6,6 @@
 
 <script>
 import axios from "axios";
-import VueCookies from "vue-cookies";
 export default {
   name: "TokenTestButton.vue",
 
@@ -14,10 +13,10 @@ export default {
     test() {
       // var temp = this;
       axios.defaults.headers.common["Authorization"] =
-        "Bearer " + VueCookies.get("token");
+        "Bearer " + this.$cookies.get("token");
       axios
         //로컬
-        .get("http://localhost:8080/planus/login/test")
+        .get("https://k7a505.p.ssafy.io/planus/login/test")
         .then((res) => {
           console.log(res);
         })
@@ -25,9 +24,6 @@ export default {
           console.log(error);
           this.toLogin();
         });
-    },
-    toLogin() {
-      this.$router.push("/login/redirect");
     },
   },
 };
