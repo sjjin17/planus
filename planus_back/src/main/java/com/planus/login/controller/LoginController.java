@@ -60,6 +60,8 @@ public class LoginController {
         kakaoUtil.kakaoSignOut(kakaoId);
         userService.deleteUser(userIdFromToken);
         //TODO 로컬
-        response.sendRedirect("http://localhost:8081/");
+
+//        response.sendRedirect("http://localhost:8081/");
+        response.sendRedirect("https://k7a505.p.ssafy.io/");
     }
 }
