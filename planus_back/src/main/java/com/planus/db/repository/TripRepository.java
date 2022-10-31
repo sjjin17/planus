@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
     Trip save(Trip trip);
+    Trip findByTripId(long tripId);
     Trip findByTripUrl(String tripUrl);
     Page<Trip> findByAdminOrderByCreateTimeDesc(long admin, Pageable pageable);
 

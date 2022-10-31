@@ -20,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final JwtUtil jwtUtil;
     private final TokenProvider tokenProvider;
     private final UserService userService;
 
@@ -36,7 +35,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         long userId = userService.findUserByKakaoId(kakaoId).getUserId();
         System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
         String jwtToken = tokenProvider.createToken(authentication, userId, nickname, email);
-//        String jwtToken = jwtUtil.createToken(userId, nickname, email);
         System.out.println("토큰 생성 성공" + jwtToken);
         if (response.isCommitted()) {
             return;
@@ -46,6 +44,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private String makeRedirectUrl(String token) {
         //로컬
-        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
+//        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
+        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
     }
 }

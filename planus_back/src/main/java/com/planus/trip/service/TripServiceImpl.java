@@ -5,6 +5,7 @@ import com.planus.db.repository.*;
 import com.planus.trip.dto.TripAreaDTO;
 import com.planus.trip.dto.TripInfoResDTO;
 import com.planus.trip.dto.TripResDTO;
+import com.planus.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Service
 public class TripServiceImpl implements TripService{
+    private JwtUtil jwtUtil;
     private TripRepository tripRepository;
     private AreaRepository areaRepository;
     private TripAreaRepository tripAreaRepository;
@@ -24,7 +26,8 @@ public class TripServiceImpl implements TripService{
     private PlanRepository planRepository;
 
     @Autowired
-    public TripServiceImpl(TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, UserRepository userRepository, MemberRepository memberRepository, PlanRepository planRepository) {
+    public TripServiceImpl(JwtUtil jwtUtil, TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, UserRepository userRepository, MemberRepository memberRepository, PlanRepository planRepository) {
+        this.jwtUtil = jwtUtil;
         this.tripRepository = tripRepository;
         this.areaRepository = areaRepository;
         this.tripAreaRepository = tripAreaRepository;
@@ -34,7 +37,9 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public TripResDTO createTrip(long admin, String startDate, long period, int[] areaId) {
+    public TripResDTO createTrip(String token, String startDate, long period, int[] areaId) {
+        long admin = jwtUtil.getUserIdFromToken(token.split(" ")[1]);
+
         Trip trip = Trip.builder()
                 .admin(admin)
                 .createTime(LocalDateTime.now())
@@ -84,7 +89,7 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public TripInfoResDTO findTripInfo(String tripUrl) {
+    public TripInfoResDTO findTripInfo(String token, String tripUrl) {
         Trip trip = tripRepository.findByTripUrl(tripUrl);
         List<TripAreaDTO> tripAreaDTOList = new ArrayList<>();
         List<TripArea> tripAreaList = tripAreaRepository.findByTripTripId(trip.getTripId());
@@ -102,11 +107,21 @@ public class TripServiceImpl implements TripService{
             tripAreaDTOList.add(tripAreaDTO);
         }
 
+        int memberOrAdmin;
+        if(trip.getAdmin()==jwtUtil.getUserIdFromToken(token.split(" ")[1])){
+            memberOrAdmin = 2;
+        }else if(memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), jwtUtil.getUserIdFromToken(token.split(" ")[1]))){
+            memberOrAdmin = 1;
+        }else{
+            memberOrAdmin = 0;
+        }
+
         TripInfoResDTO tripInfoResDTO = TripInfoResDTO.builder()
                 .tripId(trip.getTripId())
                 .admin(trip.getAdmin())
                 .startDate(trip.getStartDate().toString())
                 .period(trip.getPeriod())
+                .memberOrAdmin(memberOrAdmin)
                 .complete(trip.isComplete())
                 .imageUrl(trip.getImageUrl())
                 .tripArea(tripAreaDTOList)

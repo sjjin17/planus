@@ -12,5 +12,7 @@ public interface UserService {
 
     User join(String nickname, String email, Long kakaoId);
 
+    long findKakaoIdByUserId(long userId);
+
     User findUserByKakaoId(Long kakaoId);
 }

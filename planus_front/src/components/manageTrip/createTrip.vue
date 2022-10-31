@@ -13,10 +13,9 @@ export default {
   components: {},
   props: {},
   data: () => ({
-    admin: 1,
-    areaId: [1, 2],
     startDate: "2022-10-27",
     period: 4,
+    areaId: [1, 2],
     tripId: 0,
     tripUrl: "",
     areaList: [
@@ -28,20 +27,20 @@ export default {
     ],
   }),
   created() {},
-  watch: {},
   methods: {
+    isLogin() {
+      if (!this.$cookies.get("token")) {
+        window.alert("로그인 해주세요!");
+      }
+    },
     async getAllArea() {
       this.res = await api.getAllArea();
       this.areaList = this.res.areaList;
       console.log(this.areaList);
     },
     async createTrip() {
-      this.res = await api.createTrip(
-        this.admin,
-        this.areaId,
-        this.startDate,
-        this.period
-      );
+      this.isLogin();
+      this.res = await api.createTrip(this.startDate, this.period, this.areaId);
       this.tripId = this.res.result.tripId;
       this.tripUrl = this.res.result.tripUrl;
       this.$router.push("/plans/" + this.tripUrl);
