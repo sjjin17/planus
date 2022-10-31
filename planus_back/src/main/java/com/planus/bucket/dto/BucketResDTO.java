@@ -1,15 +1,15 @@
 package com.planus.bucket.dto;
 
 import com.planus.db.entity.Bucket;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-public class BucketResDTO {
-    private Long bucketId;
+@ToString
+public class BucketResDTO implements Serializable {
+
 
     private String place;
 
@@ -21,8 +21,8 @@ public class BucketResDTO {
 
 
     @Builder
-    public BucketResDTO(Long bucketId, String place, String address, Double lat, Double lng) {
-        this.bucketId = bucketId;
+    public BucketResDTO(String place, String address, Double lat, Double lng) {
+        //this.bucketId = bucketId;
         this.place = place;
         this.address = address;
         this.lat = lat;
@@ -31,12 +31,23 @@ public class BucketResDTO {
 
     public static BucketResDTO toResDTO(Bucket bucket) {
         return BucketResDTO.builder()
-                .bucketId(bucket.getBucketId())
+                //.bucketId(bucket.getBucketId())
                 .place(bucket.getPlace())
                 .address(bucket.getAddress())
                 .lat(bucket.getLat())
                 .lng(bucket.getLng())
                 .build();
     }
+
+    public static Bucket toEntity(BucketResDTO bucketResDTO) {
+        return Bucket.builder()
+                .place(bucketResDTO.getPlace())
+                .address(bucketResDTO.getAddress())
+                .lat(bucketResDTO.getLat())
+                .lng(bucketResDTO.getLng())
+                .build();
+    }
+
+
 
 }

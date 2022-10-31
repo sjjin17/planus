@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const baseURL = "https://k7a505.p.ssafy.io/planus";
-const baseURL = "http://localhost:8080/planus";
+const baseURL = "https://k7a505.p.ssafy.io/planus";
+// const baseURL = "http://localhost:8080/planus";
 
 const API = {
   instance: axios.create({

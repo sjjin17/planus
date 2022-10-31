@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/buckets")
+@RequestMapping("/buckets")
 public class BucketApiController {
 
     private final BucketService bucketService;
@@ -18,6 +20,12 @@ public class BucketApiController {
     public ResponseEntity getAllBuckets(@PathVariable Long tripId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bucketService.findAllBuckets(tripId));
+    }
+
+    @PostMapping("/{tripId}")
+    public ResponseEntity createBucketList(@PathVariable Long tripId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(bucketService.createBucketList(tripId));
     }
 
 
