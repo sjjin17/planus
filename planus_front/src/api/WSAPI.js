@@ -51,6 +51,28 @@ const WSAPI = {
     };
     this.stomp.send("/app/delBucket", JSON.stringify(bucket));
   },
+  addPlan(tripId, hours, minutes, place, lat, lng) {
+    let plan = {
+      tripId: tripId,
+      hours: hours,
+      minutes: minutes,
+      place: place,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/addPlan", JSON.stringify(plan));
+  },
+  delPlan(tripId, hours, minutes, place, lat, lng) {
+    let plan = {
+      tripId: tripId,
+      hours: hours,
+      minutes: minutes,
+      place: place,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/delPlan", JSON.stringify(plan));
+  },
 };
 
 export default WSAPI;
