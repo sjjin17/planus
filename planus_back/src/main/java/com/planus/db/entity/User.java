@@ -27,7 +27,7 @@ public class User {
     @Column(name="kakao_id")
     private long kakaoId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Member> memberList;
 
     @Builder

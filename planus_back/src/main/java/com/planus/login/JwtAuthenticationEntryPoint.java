@@ -17,10 +17,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint{
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 //        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-        response.sendRedirect("http://localhost:8081/login/redirect");
-
-
-
-
+//        response.sendRedirect("http://localhost:8081/login/redirect");
+        response.sendRedirect("https://k7a505.p.ssafy.io/login/redirect");
     }
 }

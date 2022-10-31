@@ -1,6 +1,7 @@
 package com.planus.bucket.dto;
 
 import com.planus.db.entity.Bucket;
+import com.planus.websocket.model.WebSocketBucket;
 import lombok.*;
 
 import java.io.Serializable;
@@ -29,6 +30,7 @@ public class BucketResDTO implements Serializable {
         this.lng = lng;
     }
 
+    // Bucket -> BucketResDTO
     public static BucketResDTO toResDTO(Bucket bucket) {
         return BucketResDTO.builder()
                 //.bucketId(bucket.getBucketId())
@@ -39,6 +41,17 @@ public class BucketResDTO implements Serializable {
                 .build();
     }
 
+    // WebSocketBucket -> BucketResDTO
+    public static BucketResDTO toResDTO(WebSocketBucket webSocketBucket) {
+        return BucketResDTO.builder()
+                .place(webSocketBucket.getPlace())
+                .address(webSocketBucket.getAddress())
+                .lat(webSocketBucket.getLat())
+                .lng(webSocketBucket.getLng())
+                .build();
+    }
+
+    // BucketResDTO -> Bucket
     public static Bucket toEntity(BucketResDTO bucketResDTO) {
         return Bucket.builder()
                 .place(bucketResDTO.getPlace())
@@ -47,6 +60,8 @@ public class BucketResDTO implements Serializable {
                 .lng(bucketResDTO.getLng())
                 .build();
     }
+
+
 
 
 

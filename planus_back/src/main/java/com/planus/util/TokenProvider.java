@@ -32,7 +32,7 @@ public class TokenProvider {
         Long now = new Date().getTime();
         Date validity = new Date(now + this.accessTokenTime);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .claim("userId", String.valueOf(userId))
@@ -41,6 +41,8 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setExpiration(validity)
                 .compact();
+        System.out.println("create token "+ token);
+        return token;
     }
 
     public Authentication getAuthentication(String token) {
@@ -74,5 +76,15 @@ public class TokenProvider {
             System.out.println("JWT 토큰 잘못됨");
         }
         return false;
+    }
+
+    public long getUserId(String token){
+        try{
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            return Long.parseLong( String.valueOf(claims.get("userId")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

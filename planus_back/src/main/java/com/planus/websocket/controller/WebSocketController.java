@@ -1,6 +1,9 @@
 package com.planus.websocket.controller;
 
+import com.planus.bucket.service.BucketService;
+import com.planus.websocket.model.WebSocketBucket;
 import com.planus.websocket.model.WebSocketMessage;
+import com.planus.websocket.model.WebSocketPlan;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,8 @@ public class WebSocketController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
     private final SimpMessageSendingOperations sendingOperations;
     private static final String ROOT_URL = "/topic/planus/";
+
+    private final BucketService bucketService;
 
     @MessageMapping("/enter")
     public void enter(WebSocketMessage message, SimpMessageHeaderAccessor headerAccessor){
@@ -41,5 +46,30 @@ public class WebSocketController {
     public void chat(WebSocketMessage message){
         message.setAction(1);
         sendingOperations.convertAndSend(ROOT_URL+message.getTripId(),message);
+    }
+
+    @MessageMapping("/addBucket")
+    public void addBucket(WebSocketBucket bucket){
+        bucket.setAction(2);
+        bucketService.addBucket(bucket.getTripId(), bucket);
+        sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
+    }
+    @MessageMapping("/delBucket")
+    public void delBucket(WebSocketBucket bucket){
+        bucket.setAction(3);
+        bucketService.deleteBucket(bucket.getTripId(), bucket);
+        sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
+    }
+    @MessageMapping("/addPlan")
+    public void addPlan(WebSocketPlan plan){
+        plan.setAction(4);
+//        TODO: redis에 해당 timetable 추가하기
+        sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
+    }
+    @MessageMapping("/delPlan")
+    public void delPlan(WebSocketPlan plan){
+        plan.setAction(5);
+//        TODO: redis에 해당 timetable 삭제하기
+        sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
     }
 }
