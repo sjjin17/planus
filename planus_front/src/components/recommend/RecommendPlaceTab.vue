@@ -5,6 +5,7 @@
       :key="recommendPlace.recommendId"
       :recommendPlace="recommendPlace"
       @addBucket="addBucket"
+      @addPlan="addPlan"
     ></recommend-place-card>
     <v-container>
       <v-row justify="center">
@@ -58,6 +59,9 @@ export default {
     },
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
+    },
+    addPlan(hours, minutes, place, lat, lng) {
+      this.$emit("addPlan", hours, minutes, place, lat, lng);
     },
   },
 };

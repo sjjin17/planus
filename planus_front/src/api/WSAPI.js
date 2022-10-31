@@ -1,8 +1,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-// const WS_SERVER_URL = "http://localhost:8080/planus/ws";
-const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
+const WS_SERVER_URL = "http://localhost:8080/planus/ws";
+// const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
 
 const WSAPI = {
   socket: null,
@@ -50,6 +50,28 @@ const WSAPI = {
       lng: lng,
     };
     this.stomp.send("/app/delBucket", JSON.stringify(bucket));
+  },
+  addPlan(tripId, hours, minutes, place, lat, lng) {
+    let plan = {
+      tripId: tripId,
+      hours: hours,
+      minutes: minutes,
+      place: place,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/addPlan", JSON.stringify(plan));
+  },
+  delPlan(tripId, hours, minutes, place, lat, lng) {
+    let plan = {
+      tripId: tripId,
+      hours: hours,
+      minutes: minutes,
+      place: place,
+      lat: lat,
+      lng: lng,
+    };
+    this.stomp.send("/app/delPlan", JSON.stringify(plan));
   },
 };
 

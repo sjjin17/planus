@@ -3,6 +3,7 @@ package com.planus.websocket.controller;
 import com.planus.bucket.service.BucketService;
 import com.planus.websocket.model.WebSocketBucket;
 import com.planus.websocket.model.WebSocketMessage;
+import com.planus.websocket.model.WebSocketPlan;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,15 +51,25 @@ public class WebSocketController {
     @MessageMapping("/addBucket")
     public void addBucket(WebSocketBucket bucket){
         bucket.setAction(2);
-//        TODO: redis에 버킷리스트 저장하기
         bucketService.addBucket(bucket.getTripId(), bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
     @MessageMapping("/delBucket")
     public void delBucket(WebSocketBucket bucket){
         bucket.setAction(3);
-//        TODO: redis에 해당 버킷리스트 삭제하기
         bucketService.deleteBucket(bucket.getTripId(), bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
+    }
+    @MessageMapping("/addPlan")
+    public void addPlan(WebSocketPlan plan){
+        plan.setAction(4);
+//        TODO: redis에 해당 timetable 추가하기
+        sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
+    }
+    @MessageMapping("/delPlan")
+    public void delPlan(WebSocketPlan plan){
+        plan.setAction(5);
+//        TODO: redis에 해당 timetable 삭제하기
+        sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
     }
 }

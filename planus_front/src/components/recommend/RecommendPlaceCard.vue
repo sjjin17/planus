@@ -24,7 +24,7 @@
         </v-row>
         <v-row class="row-3">
           <v-btn @click="bucketClick">버킷</v-btn>
-          <v-btn>일정</v-btn>
+          <plan-modal @planSubmit="planSubmit"></plan-modal>
         </v-row>
       </v-container>
     </v-card>
@@ -32,9 +32,15 @@
 </template>
 
 <script>
+import PlanModal from "@/components/recommend/PlanModal.vue";
+
 export default {
+  components: { PlanModal },
   data: () => {
     return {};
+  },
+  comments: {
+    PlanModal,
   },
   props: {
     recommendPlace: Object,
@@ -45,6 +51,16 @@ export default {
         "addBucket",
         this.recommendPlace.place,
         this.recommendPlace.address,
+        this.recommendPlace.lat,
+        this.recommendPlace.lng
+      );
+    },
+    planSubmit(hours, minutes) {
+      this.$emit(
+        "addPlan",
+        hours,
+        minutes,
+        this.recommendPlace.place,
         this.recommendPlace.lat,
         this.recommendPlace.lng
       );
