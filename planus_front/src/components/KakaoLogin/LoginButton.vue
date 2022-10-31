@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "LoginButton",
   created() {
@@ -29,6 +30,7 @@ export default {
       return true;
     },
     logout() {
+      axios.defaults.headers.common["Authorization"] = null;
       this.$cookies.remove("token");
       this.isLogin = false;
     },

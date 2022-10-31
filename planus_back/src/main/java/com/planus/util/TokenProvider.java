@@ -32,7 +32,7 @@ public class TokenProvider {
         Long now = new Date().getTime();
         Date validity = new Date(now + this.accessTokenTime);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .claim("userId", String.valueOf(userId))
@@ -41,6 +41,8 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setExpiration(validity)
                 .compact();
+        System.out.println("create token "+ token);
+        return token;
     }
 
     public Authentication getAuthentication(String token) {

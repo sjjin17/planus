@@ -1,17 +1,15 @@
 package com.planus.login.controller;
 
-import com.planus.db.entity.User;
+import com.planus.login.util.KakaoUtil;
 import com.planus.util.JwtUtil;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.OK;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/login")
@@ -22,6 +20,8 @@ public class LoginController {
     private final JwtUtil jwtUtil;
 
     private final TokenProvider tokenProvider;
+
+    private final KakaoUtil kakaoUtil;
 
 //    @GetMapping("/oauth2/kakao")
 //    public ResponseEntity<String> Login(@RequestParam(name="code") String code){
@@ -49,5 +49,17 @@ public class LoginController {
         long userIdFromToken = tokenProvider.getUserId(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome2222! "+ userInfo.getNickname());
+    }
+
+    @GetMapping("/signout")
+    public void signOut(@RequestHeader String Authorization, HttpServletResponse response) throws IOException {
+        String token = Authorization.split(" ")[1];
+        long userIdFromToken = tokenProvider.getUserId(token);
+        long kakaoId = userService.findKakaoIdByUserId(userIdFromToken);
+        System.out.println(kakaoId);
+        kakaoUtil.kakaoSignOut(kakaoId);
+        userService.deleteUser(userIdFromToken);
+        //TODO 로컬
+        response.sendRedirect("http://localhost:8081/");
     }
 }
