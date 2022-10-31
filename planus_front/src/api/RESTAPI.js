@@ -4,14 +4,22 @@ import VueCookies from "vue-cookies";
 const baseURL = "https://k7a505.p.ssafy.io/planus";
 // const baseURL = "http://localhost:8080/planus";
 
+const baseAxios = axios.create({
+  baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+baseAxios.interceptors.request.use((request) => {
+  if (VueCookies.get("token") != null) {
+    request.headers.Authorization = "Bearer " + VueCookies.get("token");
+  }
+  return request;
+});
+
 const API = {
-  instance: axios.create({
-    baseURL,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + VueCookies.get("token"),
-    },
-  }),
+  instance: baseAxios,
   async getAllArea() {
     const response = await this.instance.get("/trip/area");
     return response.data;
@@ -50,6 +58,10 @@ const API = {
     const response = await this.instance.get("/recommend/length", {
       params: { lat: lat, lng: lng, size: size },
     });
+    return response.data;
+  },
+  async signOut() {
+    const response = await this.instance.get("/login/signout");
     return response.data;
   },
 };
