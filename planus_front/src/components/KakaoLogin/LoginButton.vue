@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import API from "@/api/RESTAPI";
-const api = API;
 export default {
   name: "LoginButton",
   created() {
@@ -31,8 +29,6 @@ export default {
       return true;
     },
     logout() {
-      api.defaults.headers.common["Authorization"] = null;
-      // axios.defaults.headers.common["Authorization"] = null;
       this.$cookies.remove("token");
       this.isLogin = false;
     },

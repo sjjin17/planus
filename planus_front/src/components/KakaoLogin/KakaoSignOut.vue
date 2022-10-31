@@ -5,15 +5,14 @@
 </template>
 
 <script>
-import axios from "axios";
+import API from "@/api/RESTAPI";
+const api = API;
 export default {
   name: "KakaoSignOut",
   methods: {
-    signOut() {
+    async signOut() {
+      this.res = await api.signOut();
       this.$cookies.remove("token");
-      //로컬
-      axios.get("https://k7a505.p.ssafy.io/planus/login/signout");
-      // axios.get("http://localhost:8080/planus/login/signout");
     },
   },
 };
