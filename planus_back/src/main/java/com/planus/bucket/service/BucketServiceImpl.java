@@ -7,6 +7,7 @@ import com.planus.db.entity.Trip;
 import com.planus.db.repository.BucketRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.util.RedisUtil;
+import com.planus.websocket.model.WebSocketBucket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.*;
@@ -72,6 +73,18 @@ public class BucketServiceImpl implements BucketService{
             bucketRepository.save(bucket);
         }
         return tripId;
+    }
+
+    /**
+     * redis에서 해당 버킷 삭제
+     */
+    @Override
+    public void deleteBucket(long tripId, WebSocketBucket bucket) {
+        ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        String key = "bucketList::" + tripId;
+        // WebSocketBucket -> BucketResDTO
+        BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
+        zSetOperations.remove(key, bucketResDTO);
     }
 
 
