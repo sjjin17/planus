@@ -21,6 +21,7 @@ export default {
         admin: 0,
         startDate: "",
         period: 0,
+        memberOrAdmin: 0,
         complete: false,
         imageUrl: "",
         tripArea: [

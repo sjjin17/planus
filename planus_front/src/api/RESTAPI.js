@@ -1,4 +1,5 @@
 import axios from "axios";
+import VueCookies from "vue-cookies";
 
 const baseURL = "https://k7a505.p.ssafy.io/planus";
 // const baseURL = "http://localhost:8080/planus";
@@ -8,23 +9,29 @@ const API = {
     baseURL,
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + VueCookies.get("token"),
     },
   }),
   async getAllArea() {
     const response = await this.instance.get("/trip/area");
     return response.data;
   },
-  async createTrip(admin, areaId, startDate, period) {
+  async createTrip(startDate, period, areaId) {
     const response = await this.instance.post("/trip", {
-      admin: admin,
-      areaId: areaId,
       startDate: startDate,
       period: period,
+      areaId: areaId,
     });
     return response.data;
   },
   async getTripInfo(tripUrl) {
     const response = await this.instance.get("/trip" + "?tripUrl=" + tripUrl);
+    return response.data;
+  },
+  async addMember(tripId) {
+    const response = await this.instance.post(
+      "/trip/member" + "?tripId=" + tripId
+    );
     return response.data;
   },
   async getMemberList(tripId) {
