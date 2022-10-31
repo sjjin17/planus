@@ -75,4 +75,14 @@ public class TokenProvider {
         }
         return false;
     }
+
+    public long getUserId(String token){
+        try{
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            return Long.parseLong( String.valueOf(claims.get("userId")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 1;
+    }
 }

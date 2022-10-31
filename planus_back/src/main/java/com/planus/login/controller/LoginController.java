@@ -4,6 +4,7 @@ import com.planus.db.entity.User;
 import com.planus.util.JwtUtil;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ public class LoginController {
 
     private final JwtUtil jwtUtil;
 
+    private final TokenProvider tokenProvider;
+
 //    @GetMapping("/oauth2/kakao")
 //    public ResponseEntity<String> Login(@RequestParam(name="code") String code){
 //        System.out.println(code);
@@ -32,18 +35,18 @@ public class LoginController {
 //    }
 
     @GetMapping("/test")
-    public void Test(@RequestHeader(name="Authorization") String token){
-        token=token.split(" ")[1];
+    public void Test(@RequestHeader String Authorization){
+        String token=Authorization.split(" ")[1];
         //TODO jwtprovider와 jwtUtil 통합할것
-        long userIdFromToken = jwtUtil.getUserIdFromToken(token);
+        long userIdFromToken = tokenProvider.getUserId(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome! "+ userInfo.getNickname());
     }
 
     @GetMapping("/test2")
-    public void Test2(@RequestHeader(name="Authorization") String token){
-        token=token.split(" ")[1];
-        long userIdFromToken = jwtUtil.getUserIdFromToken(token);
+    public void Test2(@RequestHeader String Authorization){
+        String token=Authorization.split(" ")[1];
+        long userIdFromToken = tokenProvider.getUserId(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome2222! "+ userInfo.getNickname());
     }

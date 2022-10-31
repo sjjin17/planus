@@ -20,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final JwtUtil jwtUtil;
     private final TokenProvider tokenProvider;
     private final UserService userService;
 

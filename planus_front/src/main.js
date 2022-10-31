@@ -16,11 +16,10 @@ Vue.use(VueGoogleMaps, {
     region: "KR",
   },
 });
-
+Vue.use(VueCookies);
 new Vue({
   router,
   store,
-  VueCookies,
   vuetify,
   render: (h) => h(App),
 }).$mount("#app");
