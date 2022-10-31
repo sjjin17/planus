@@ -87,5 +87,15 @@ public class BucketServiceImpl implements BucketService{
         zSetOperations.remove(key, bucketResDTO);
     }
 
+    @Override
+    public void addBucket(long tripId, WebSocketBucket bucket) {
+        ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        String key = "bucketList::" + tripId;
+        // WebSocketBucket -> BucketResDTO로 변환
+        BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
+        // redis에 저장
+        zSetOperations.add(key, bucketResDTO, new java.util.Date().getTime());
+    }
+
 
 }

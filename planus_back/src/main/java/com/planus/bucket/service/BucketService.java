@@ -12,4 +12,5 @@ public interface BucketService {
 
     void deleteBucket(long tripId, WebSocketBucket bucket);
 
+    void addBucket(long tripId, WebSocketBucket bucket);
 }
