@@ -12,7 +12,8 @@ export default {
     signOut() {
       this.$cookies.remove("token");
       //로컬
-      axios.get("http://localhost:8080/planus/login/signout");
+      axios.get("https://k7a505.p.ssafy.io/planus/login/signout");
+      // axios.get("http://localhost:8080/planus/login/signout");
     },
   },
 };

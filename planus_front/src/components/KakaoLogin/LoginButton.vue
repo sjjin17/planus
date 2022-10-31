@@ -1,6 +1,7 @@
 <template>
   <div v-if="!isLogin">
-    <a href="http://localhost:8080/planus/oauth2/authorization/kakao">
+    <!-- <a href="http://localhost:8080/planus/oauth2/authorization/kakao"> -->
+    <a href="https://k7a505.p.ssafy.io/planus/oauth2/authorization/kakao">
       <img src="@/assets/kakao_login_medium_wide.png" />
     </a>
   </div>
@@ -10,7 +11,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import API from "@/api/RESTAPI";
+const api = API;
 export default {
   name: "LoginButton",
   created() {
@@ -23,14 +25,14 @@ export default {
   },
   methods: {
     checkLogin() {
-      console.log(this.$cookies.get("token"));
       if (this.$cookies.get("token") == null) {
         return false;
       }
       return true;
     },
     logout() {
-      axios.defaults.headers.common["Authorization"] = null;
+      api.defaults.headers.common["Authorization"] = null;
+      // axios.defaults.headers.common["Authorization"] = null;
       this.$cookies.remove("token");
       this.isLogin = false;
     },
