@@ -31,10 +31,10 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity getTripInfo(@RequestParam String tripUrl){
+    public ResponseEntity getTripInfo(@RequestHeader(name="Authorization") String token, @RequestParam String tripUrl){
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            resultMap.put("result", tripService.findTripInfo(tripUrl));
+            resultMap.put("result", tripService.findTripInfo(token, tripUrl));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -42,15 +42,14 @@ public class TripController {
     }
 
     @PostMapping
-    public ResponseEntity createTrip(@RequestBody TripReqDTO tripReqDTO){
-        long admin = tripReqDTO.getAdmin();
+    public ResponseEntity createTrip(@RequestHeader(name="Authorization") String token, @RequestBody TripReqDTO tripReqDTO){
         String startDate = tripReqDTO.getStartDate();
         long period = tripReqDTO.getPeriod();
         int[] areaId = tripReqDTO.getAreaId();
 
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            resultMap.put("result", tripService.createTrip(admin, startDate, period, areaId));
+            resultMap.put("result", tripService.createTrip(token, startDate, period, areaId));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -62,6 +61,17 @@ public class TripController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("areaList", areaService.findAllArea());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/member")
+    public ResponseEntity addMember(@RequestHeader(name="Authorization") String token, @RequestParam long tripId){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("memberId", memberService.addMember(token, tripId));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
