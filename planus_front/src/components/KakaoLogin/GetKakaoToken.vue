@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import API from "@/api/RESTAPI";
-const api = API;
 export default {
   name: "getKakaoToken",
   data() {
@@ -17,8 +15,6 @@ export default {
   methods: {
     saveToken(token) {
       this.$cookies.set("token", token);
-      api.defaults.headers.common["Authorization"] =
-        "Bearer " + this.$cookies.get("token");
       this.$router.push("/");
     },
   },
