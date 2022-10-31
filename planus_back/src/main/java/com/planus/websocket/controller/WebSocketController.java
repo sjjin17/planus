@@ -51,6 +51,7 @@ public class WebSocketController {
     public void addBucket(WebSocketBucket bucket){
         bucket.setAction(2);
 //        TODO: redis에 버킷리스트 저장하기
+        bucketService.addBucket(bucket.getTripId(), bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
     @MessageMapping("/delBucket")
