@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import VueCookies from "vue-cookies";
 const baseURL = "https://k7a505.p.ssafy.io/planus";
 // const baseURL = "http://localhost:8080/planus";
 
@@ -8,6 +8,7 @@ const API = {
     baseURL,
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + VueCookies.get("token"),
     },
   }),
   async getAllArea() {
