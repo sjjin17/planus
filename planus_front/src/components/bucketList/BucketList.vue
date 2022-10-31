@@ -14,8 +14,13 @@ export default {
   components: {
     BucketCard,
   },
-  data: () => {
-    return {};
+  data: function () {
+    return {
+      
+    }
+  },
+  props: {
+    tripId: Number,
   },
 
   methods: {},

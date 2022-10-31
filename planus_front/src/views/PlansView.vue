@@ -5,7 +5,9 @@
     <div v-for="(member, i) in memberList" :key="i" :member="member">
       {{ member.name }}({{ member.email }})
     </div>
-    <bucket-list></bucket-list>
+    <bucket-list
+      :trip-id="tripId"
+    ></bucket-list>
   </v-container>
 </template>
 
