@@ -54,4 +54,10 @@ public class UserServiceImpl implements UserService{
     public User findUserByKakaoId(Long kakaoId) {
         return userRepository.findOneByKakaoId(kakaoId);
     }
+
+    @Override
+    public long findKakaoIdByUserId(long userId) {
+        User user = userRepository.findByUserId(userId);
+        return user.getKakaoId();
+    }
 }

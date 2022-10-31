@@ -25,7 +25,6 @@ Vue.use(VueChatScroll);
 new Vue({
   router,
   store,
-  VueCookies,
   vuetify,
   render: (h) => h(App),
 }).$mount("#app");
