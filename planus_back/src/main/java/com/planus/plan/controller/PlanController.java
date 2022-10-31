@@ -1,8 +1,9 @@
 package com.planus.plan.controller;
 
+import com.planus.plan.dto.PlanIdResDTO;
 import com.planus.plan.dto.PlanResDTO;
-import com.planus.plan.dto.PlanSaveReqDTO;
 import com.planus.plan.service.PlanService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,29 +21,64 @@ public class PlanController {
     PlanService planService;
 
     @GetMapping("/{tripId}")
-    public ResponseEntity getPlan(@PathVariable long tripId) {
+    @ApiOperation(value = "planId 목록 조회", notes = "tripId를 이용해 일정 정보를 불러오는 데 필요한 planId의 목록들을 받아옵니다.")
+    public ResponseEntity getPlanId(@PathVariable long tripId) {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            List<PlanResDTO> planResDTOList = planService.readPlan(tripId);
+            List<PlanIdResDTO> planIdResDTOList = planService.readPlanId(tripId);
+            resultMap.put("planIdList", planIdResDTOList);
+            resultMap.put("message", "success");
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "planId 조회 오류");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/planlist")
+    @ApiOperation(value = "planList 정보 조회", notes = "planId 목록을 이용해 일정 정보를 불러옵니다.")
+    public ResponseEntity getPlanList(@RequestBody List planIdList) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            List<PlanResDTO> planResDTOList = planService.readPlanList(planIdList);
             resultMap.put("planList", planResDTOList);
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            resultMap.put("message", "일정 조회 오류");
+            resultMap.put("message", "planList 조회 오류");
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/")
-    public ResponseEntity savePlan(@RequestBody PlanSaveReqDTO planSaveReqDTO) {
+    //redis에 먼저 출발시간 변경사항을 저장한 후, 이 api를 호출해야 함
+    @GetMapping("/start/{planId}")
+    public ResponseEntity savePlanStart(@PathVariable long planId) {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-             // redis에 저장되어 있는 값을 바로 mysql에 저장?
-            // 혹은 PlanSaveReqDTO를 받아 mysql에 저장?
-            long tripId = planService.savePlan(planSaveReqDTO);
+            planService.savePlanStart(planId);
+            resultMap.put("message", "success");
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "일정 출발 시간 저장 오류");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @PostMapping
+    public ResponseEntity savePlan(@RequestBody List<Long> planIdList) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            for (long planId:planIdList) {
+                planService.savePlan(planId);
+            }
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
