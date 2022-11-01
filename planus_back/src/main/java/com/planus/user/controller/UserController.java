@@ -2,6 +2,7 @@ package com.planus.user.controller;
 
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
+import com.planus.util.TokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,17 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final TokenProvider tokenProvider;
+
+    public UserController(UserService userService, TokenProvider tokenProvider) {
         this.userService = userService;
+        this.tokenProvider = tokenProvider;
     }
 
     @GetMapping
-    public ResponseEntity myInfo(@RequestParam long userId){
+    public ResponseEntity myInfo(@RequestHeader String Authorization){
+        String token = Authorization.substring(7);
+        long userId = tokenProvider.getUserId(token);
         Map<String, Object> resultMap = new HashMap<>();
         try{
             UserInfoResDTO userInfo = userService.findUserInfo(userId);
