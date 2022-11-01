@@ -56,11 +56,12 @@ public class PlanController {
 
     //redis에 먼저 출발시간 변경사항을 저장한 후, 이 api를 호출해야 함
     @GetMapping("/start/{planId}")
+    @ApiOperation(value = "Plan 출발시간만 저장")
     public ResponseEntity savePlanStart(@PathVariable long planId) {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            planService.savePlanStart(planId);
+            planService.savePlan(planId);
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
@@ -72,12 +73,26 @@ public class PlanController {
 
 
     @PostMapping
+    @ApiOperation(value = "Plan 및 Timetable 저장")
     public ResponseEntity savePlan(@RequestBody List<Long> planIdList) {
+        // 더미데이터 만드는 구간
+        for (long planId:planIdList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("trip_date", "");
+            map.put("start_time", "480");
+            //JSON으로 String화한 문자열을 저장해야 함
+            map.put("timetables", "");
+        }
+
+        // 더미데이터 만드는 구간 끝
+
+
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
             for (long planId:planIdList) {
                 planService.savePlan(planId);
+                planService.saveTimetable(planId);
             }
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);

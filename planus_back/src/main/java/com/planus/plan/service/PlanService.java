@@ -8,6 +8,6 @@ import java.util.List;
 public interface PlanService {
     List<PlanIdResDTO> readPlanId(long tripId);
     List<PlanResDTO> readPlanList(List<Long> planIdList);
-    void savePlanStart(long planId);
     void savePlan(long planId);
+    void saveTimetable(long planId);
 }
