@@ -33,7 +33,7 @@ public class TokenProvider {
         Date validity = new Date(now + this.accessTokenTime);
 
         String token = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject("planus_token")
                 .claim("auth", authorities)
                 .claim("userId", String.valueOf(userId))
                 .claim("nickname", nickname)
