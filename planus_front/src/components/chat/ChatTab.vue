@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 20%">
     <div no-gutters class="chat_body" v-chat-scroll>
       <div class="chat_message" v-for="(chat, idx) in chatList" :key="idx">
         {{ chat }}
@@ -9,6 +9,7 @@
     <div class="form">
       <input
         class="form_input"
+        style="background-color: white"
         type="text"
         placeholder="채팅을 입력하세요."
         v-model="message"
@@ -67,4 +68,51 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.chat_body {
+  height: 400px;
+  padding: 0.4rem;
+  padding-left: 1rem;
+  margin: auto;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  font-weight: 6;
+}
+.chat_message {
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+.form {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+.form_input {
+  border: none;
+  padding: 0.5rem;
+  font-size: 16px;
+  width: calc(100% - 60px);
+}
+
+.form_input:focus {
+  outline: none;
+}
+
+.form_submit {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+svg {
+  transition: 0.3s;
+}
+
+svg:hover {
+  fill: #3c3c3c;
+}
+</style>

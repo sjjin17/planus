@@ -1,8 +1,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-// const WS_SERVER_URL = "http://localhost:8080/planus/ws";
-const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
+const WS_SERVER_URL = "http://localhost:8080/planus/ws";
+// const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
 
 const WSAPI = {
   socket: null,
@@ -32,6 +32,7 @@ const WSAPI = {
     this.stomp.send("/app/chat", JSON.stringify(message));
   },
   addBucket(tripId, place, address, lat, lng) {
+    console.log("버킷추가");
     let bucket = {
       tripId: tripId,
       place: place,
