@@ -1,8 +1,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-const WS_SERVER_URL = "http://localhost:8080/planus/ws";
-//const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
+// const WS_SERVER_URL = "http://localhost:8080/planus/ws";
+const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
 
 const WSAPI = {
   socket: null,
@@ -51,27 +51,30 @@ const WSAPI = {
     };
     this.stomp.send("/app/delBucket", JSON.stringify(bucket));
   },
-  addPlan(tripId, hours, minutes, place, lat, lng) {
+  setPlan(tripId, planId, tripDate, startTime) {
     let plan = {
       tripId: tripId,
-      hours: hours,
-      minutes: minutes,
-      place: place,
-      lat: lat,
-      lng: lng,
+      planId: planId,
+      tripDate: tripDate,
+      startTime: startTime,
     };
-    this.stomp.send("/app/addPlan", JSON.stringify(plan));
+    this.stomp.send("app/setPlan", JSON.stringify(plan));
   },
-  delPlan(tripId, hours, minutes, place, lat, lng) {
-    let plan = {
+
+  addTimetable(tripId, planId, hours, minutes, place, lat, lng) {
+    let timetable = {
       tripId: tripId,
+      planId: planId,
       hours: hours,
       minutes: minutes,
       place: place,
       lat: lat,
       lng: lng,
     };
-    this.stomp.send("/app/delPlan", JSON.stringify(plan));
+    this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
+  },
+  delTimetable(timetableList) {
+    this.stomp.send("/app/delTimetable", JSON.stringify(timetableList));
   },
 };
 

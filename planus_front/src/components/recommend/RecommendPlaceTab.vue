@@ -5,20 +5,20 @@
       :key="recommendPlace.recommendId"
       :recommendPlace="recommendPlace"
       @addBucket="addBucket"
-      @addPlan="addPlan"
+      @addTimetable="addTimetable"
     ></recommend-place-card>
     <v-container>
-      <v-row justify="center">
-        <v-col cols="8">
-          <v-container class="max-width">
+      <v-row>
+        <v-container d-flex>
+          <v-col cols="6">
             <v-pagination
               v-model="page"
-              class="my-4"
-              :length="length"
+              :length="pageLength"
               @input="click"
             ></v-pagination>
-          </v-container>
-        </v-col>
+          </v-col>
+          <v-col cols="6"> {{ page }}/{{ pageLength }} </v-col>
+        </v-container>
       </v-row>
     </v-container>
   </div>
@@ -37,18 +37,27 @@ export default {
     return {
       recommendList: [],
       page: 1,
+      pageLength: 0,
     };
   },
   props: {
     lat: Number,
     lng: Number,
     size: Number,
-    length: Number,
   },
-  created() {
+  async created() {
+    await this.getPageLength();
     this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
   },
   methods: {
+    async getPageLength() {
+      let data = await api.getRecommendPageLength(
+        this.lat,
+        this.lng,
+        this.size
+      );
+      this.pageLength = data.pageLength;
+    },
     async getRecommend(lat, lng, page, size) {
       await api.getRecommend(lat, lng, page, size).then((res) => {
         this.recommendList = res.recommendList;
@@ -60,11 +69,18 @@ export default {
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
     },
-    addPlan(hours, minutes, place, lat, lng) {
-      this.$emit("addPlan", hours, minutes, place, lat, lng);
+    addTimetable(hours, minutes, place, lat, lng) {
+      this.$emit("addTimetable", hours, minutes, place, lat, lng);
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.v-pagination__item {
+  display: none !important;
+}
+.v-pagination__more {
+  display: none !important;
+}
+</style>

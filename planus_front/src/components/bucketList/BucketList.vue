@@ -5,7 +5,7 @@
       :key="bucket.place"
       :bucket="bucket"
     ></bucket-card>
-    <h1>{{ tripId }}</h1>
+    <h1 v-if="flag">{{ tripId }}</h1>
   </div>
 </template>
 
@@ -22,19 +22,19 @@ export default {
   data: function () {
     return {
       bucketList: [],
+      flag: false,
     };
   },
   props: {
     tripId: Number,
   },
-  watch: {
-    tripId() {
-      this.getBucketList();
-    },
+  mounted() {
+    this.getBucketList();
   },
   methods: {
     async getBucketList() {
       this.bucketList = await api.getBucketList(this.tripId);
+      this.flag = true;
       console.log(this.bucketList);
     },
   },
