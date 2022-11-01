@@ -23,7 +23,7 @@ public class TokenProvider {
     private static Long accessTokenTime = 60*60*24*30*1000L;
 
 
-    public String createToken(Authentication authentication, long userId, String nickname, String email){
+    public String createToken(Authentication authentication, long userId, String nickname, String email, String imageUrl){
         String authorities = authentication
                 .getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
@@ -38,10 +38,11 @@ public class TokenProvider {
                 .claim("userId", String.valueOf(userId))
                 .claim("nickname", nickname)
                 .claim("email", email)
+                .claim("imageUrl", imageUrl)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setExpiration(validity)
                 .compact();
-        System.out.println("create token "+ token);
+//        System.out.println("create token "+ token);
         return token;
     }
 
