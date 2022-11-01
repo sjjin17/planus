@@ -1,16 +1,22 @@
 <template>
   <v-container>
-    <plan-map />
-    <h1>{{ this.tripId }}번 방</h1>
-    <invite-dialog
-      :tripId="tripId"
-      :tripUrl="tripUrl"
-      :admin="admin"
-    ></invite-dialog>
-    <div v-for="(member, i) in memberList" :key="i" :member="member">
-      {{ member.name }}({{ member.email }})
-    </div>
-    <bucket-list :trip-id="tripId">hello</bucket-list>
+    <v-row no-gutters>
+      <v-col cols="3">
+        <bucket-list :tripId="tripId"></bucket-list>
+      </v-col>
+      <v-col cols="8">
+        <plan-map />
+        <h1>{{ this.tripId }}번 방</h1>
+        <invite-dialog
+          :tripId="tripId"
+          :tripUrl="tripUrl"
+          :admin="admin"
+        ></invite-dialog>
+        <div v-for="(member, i) in memberList" :key="i" :member="member">
+          {{ member.name }}({{ member.email }})
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -20,12 +26,14 @@ const api = API;
 
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
+import BucketList from "@/components/bucketList/BucketList.vue";
 
 export default {
   name: "PlanView",
   components: {
     PlanMap,
     InviteDialog,
+    BucketList,
   },
   data() {
     return {

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <bucket-card></bucket-card>
+    <bucket-card
+      v-for="bucket in bucketList"
+      :key="bucket.place"
+      :bucket="bucket"
+    ></bucket-card>
+    <h1>{{ tripId }}</h1>
   </div>
 </template>
 
@@ -22,12 +27,15 @@ export default {
   props: {
     tripId: Number,
   },
-
+  watch: {
+    tripId() {
+      this.getBucketList();
+    },
+  },
   methods: {
-    getBucketList: function () {
-      api.getBucketList(this.tripId).then((res) => {
-        console.log(res);
-      });
+    async getBucketList() {
+      this.bucketList = await api.getBucketList(this.tripId);
+      console.log(this.bucketList);
     },
   },
 };

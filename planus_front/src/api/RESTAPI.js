@@ -65,11 +65,11 @@ const API = {
     return response.data;
   },
   async getBucketList(tripId) {
-    const response = await this.instance.get("/buckets/" + `${tripId}`);
+    const response = await this.instance.get("/buckets/" + tripId);
     return response.data;
   },
   async saveBucketList(tripId) {
-    const response = await this.instance.post("/buckets/" + `${tripId}`);
+    const response = await this.instance.post("/buckets/" + tripId);
     return response.data;
   },
 };
