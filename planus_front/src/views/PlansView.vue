@@ -18,7 +18,7 @@
             <div>장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
-            <div>버킷리스트 컴포넌트</div>
+            <bucket-list :tripId="tripId"></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
@@ -45,6 +45,7 @@ import WSAPI from "@/api/WSAPI";
 import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
+import BucketList from "@/components/bucketList/BucketList.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -54,6 +55,7 @@ export default {
     PlanMap,
     InviteDialog,
     RecommendPlaceTab,
+    BucketList,
   },
   data() {
     return {
