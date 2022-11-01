@@ -9,28 +9,37 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
-    private static String secretKey = "ahf?fn";
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     private static Long accessTokenTime = 60*60*24*30*1000L;
 
-
-    public String createToken(Authentication authentication, long userId, String nickname, String email){
+    public String createToken(Authentication authentication, long userId){
         String authorities = authentication
                 .getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        Long now = new Date().getTime();
-        Date validity = new Date(now + this.accessTokenTime);
+        Map<String, Object> kakaoAccount = ((OAuth2User) authentication.getPrincipal()).getAttribute("kakao_account");
+        String email = (String) kakaoAccount.get("email");
+
+        Map<String, Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
+        String nickname = (String)profile.get("nickname");
+        String imageUrl = (String)profile.get("profile_image_url");
+
+        Date validity = getValidity();
 
         String token = Jwts.builder()
                 .setSubject("planus_token")
@@ -38,11 +47,17 @@ public class TokenProvider {
                 .claim("userId", String.valueOf(userId))
                 .claim("nickname", nickname)
                 .claim("email", email)
+                .claim("imageUrl", imageUrl)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setExpiration(validity)
                 .compact();
-        System.out.println("create token "+ token);
         return token;
+    }
+
+    private Date getValidity() {
+        Long now = new Date().getTime();
+        Date validity = new Date(now + this.accessTokenTime);
+        return validity;
     }
 
     public Authentication getAuthentication(String token) {
@@ -66,7 +81,7 @@ public class TokenProvider {
         try{
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             return true;
-        }catch(SecurityException | MalformedJwtException e){
+        }catch(SecurityException | MalformedJwtException | SignatureException e){
             System.out.println("JWT 서명 문제");
         }catch(ExpiredJwtException e){
             System.out.println("jwt 만료");
@@ -82,15 +97,17 @@ public class TokenProvider {
         try{
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             return Long.parseLong( String.valueOf(claims.get("userId")));
+        }catch (SignatureException e){
+            System.out.println("토큰 서명과정에서 에러 발생함");
         }catch (Exception e){
+            System.out.println("토큰 파싱과정에서 에러발생(서명아님)");
             e.printStackTrace();
         }
-        return 1;
+        return -1;
     }
 
     public String updateTokenNickname(String token, String newNickname){
-        Long now = new Date().getTime();
-        Date validity = new Date(now + this.accessTokenTime);
+        Date validity = getValidity();
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(secretKey)
