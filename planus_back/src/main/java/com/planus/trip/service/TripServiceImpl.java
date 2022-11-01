@@ -108,7 +108,9 @@ public class TripServiceImpl implements TripService{
         }
 
         int memberOrAdmin;
-        if(trip.getAdmin()==jwtUtil.getUserIdFromToken(token.split(" ")[1])){
+        if(token==null){
+            memberOrAdmin = -1;
+        }else if(trip.getAdmin()==jwtUtil.getUserIdFromToken(token.split(" ")[1])){
             memberOrAdmin = 2;
         }else if(memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), jwtUtil.getUserIdFromToken(token.split(" ")[1]))){
             memberOrAdmin = 1;

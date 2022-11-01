@@ -22,7 +22,15 @@
       </v-card-actions>
       <v-card-title class="dialogtitle">참가자 목록</v-card-title>
       <v-card-text v-for="(member, i) in memberList" :key="i" :member="member"
-        >{{ member.name }}({{ member.email }})</v-card-text
+        ><v-btn
+          depressed
+          color="primary"
+          white--text
+          v-if="admin == member.userId"
+          >방장</v-btn
+        >
+        <v-btn depressed color="primary" white--text v-else>방장변경</v-btn>
+        {{ member.name }}({{ member.email }})</v-card-text
       >
     </v-card>
   </v-dialog>
@@ -48,15 +56,14 @@ export default {
   props: {
     tripId: Number,
     tripUrl: String,
+    admin: Number,
   },
   async created() {},
   methods: {
     async getMemberList() {
-      console.log(this.tripId);
       this.res = await api.getMemberList(this.tripId);
       this.memberList = this.res.memberList;
       console.log(this.memberList);
-      console.log(this.tripId);
     },
     copyUrl() {
       navigator.clipboard.writeText(window.location.href).then(() => {
