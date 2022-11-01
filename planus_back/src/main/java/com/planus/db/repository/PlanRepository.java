@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
     Optional<List<Plan>> findByTripTripId(long tripId);
+    Optional<Plan> findByPlanId(long planId);
     Plan save(Plan plan);
 }
