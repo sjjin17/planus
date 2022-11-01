@@ -1,8 +1,8 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-const baseURL = "https://k7a505.p.ssafy.io/planus";
-// const baseURL = "http://localhost:8080/planus";
+// const baseURL = "https://k7a505.p.ssafy.io/planus";
+const baseURL = "http://localhost:8080/planus";
 
 const baseAxios = axios.create({
   baseURL,
@@ -62,6 +62,18 @@ const API = {
   },
   async signOut() {
     const response = await this.instance.get("/login/signout");
+    return response.data;
+  },
+  async getMyTripMade(page) {
+    const response = await this.instance.get("/mytrip/made", {
+      params: { page },
+    });
+    return response.data;
+  },
+  async getMyTripShared(page) {
+    const response = await this.instance.get("/mytrip/shared", {
+      params: { page },
+    });
     return response.data;
   },
 };

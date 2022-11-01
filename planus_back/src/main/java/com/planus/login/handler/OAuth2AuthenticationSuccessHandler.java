@@ -44,7 +44,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private String makeRedirectUrl(String token) {
         //로컬
-//        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
-        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
+        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
+//        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
     }
 }
