@@ -4,6 +4,7 @@ import com.planus.util.JwtUtil;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,6 +23,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
     private final UserService userService;
+
+    @Value("${base.url}")
+    private String BASE_URL;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -43,8 +47,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(String token) {
-        //로컬
-//        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
-        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
+        return UriComponentsBuilder.fromUriString(BASE_URL+"/login/getkakaotoken?token=" + token).build().toUriString();
     }
 }
