@@ -32,8 +32,8 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     public int port;
 
-    @Value("${spring.redis.password}")
-    public String password;
+//    @Value("${spring.redis.password}")
+//    public String password;
 
     @Bean
     public ModelMapper modelMapper(){
@@ -43,11 +43,12 @@ public class RedisConfig {
     }
     @Bean
     public RedisConnectionFactory connectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(host);
-        redisStandaloneConfiguration.setPort(port);
-        redisStandaloneConfiguration.setPassword(password);
-        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+//        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+//        redisStandaloneConfiguration.setHostName(host);
+//        redisStandaloneConfiguration.setPort(port);
+//        redisStandaloneConfiguration.setPassword(password);
+//        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean
