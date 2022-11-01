@@ -1,30 +1,63 @@
 <template>
-  <v-container>
-    <plan-map />
+  <div>
     <h1>{{ this.tripId }}번 방</h1>
     <invite-dialog
       :tripId="tripId"
       :tripUrl="tripUrl"
       :admin="admin"
     ></invite-dialog>
-  </v-container>
+    <v-container d-flex style="margin: 0; max-width: 100%">
+      <v-container style="width: 20%; margin: 0; min-width: 300px">
+        <v-tabs v-model="tabs" fixed-tabs>
+          <v-tab style="padding: 0">장소검색</v-tab>
+          <v-tab style="padding: 0">버킷리스트</v-tab>
+          <v-tab style="padding: 0">추천관광지 </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tabs">
+          <v-tab-item>
+            <div>장소검색 컴포넌트</div>
+          </v-tab-item>
+          <v-tab-item>
+            <div>버킷리스트 컴포넌트</div>
+          </v-tab-item>
+          <v-tab-item>
+            <recommend-place-tab
+              :lat="lat"
+              :lng="lng"
+              :size="size"
+              @addBucket="addBucket"
+              @addTimetable="addTimetable"
+            ></recommend-place-tab>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-container>
+      <plan-map style="width: 60%; background-color: blue" />
+      <div style="width: 20%; background-color: red; min-width: 300px">
+        일정
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import API from "@/api/RESTAPI";
-const api = API;
-
+import WSAPI from "@/api/WSAPI";
+import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 
+const ws = WSAPI;
+const api = API;
 export default {
   name: "PlanView",
   components: {
     PlanMap,
     InviteDialog,
+    RecommendPlaceTab,
   },
   data() {
     return {
+      tabs: null,
       dialog: false,
       tripId: 0,
       tripUrl: "",
@@ -48,6 +81,9 @@ export default {
           },
         ],
       },
+      lat: 37.5168415735,
+      lng: 127.0341090296,
+      size: 5,
     };
   },
   async created() {
@@ -99,8 +135,79 @@ export default {
       }
       console.log(this.res.memberId);
     },
+    connect() {
+      ws.connect(this.tripId, this.userName, this.onSocketReceive);
+    },
+    async onSocketReceive(result) {
+      const content = JSON.parse(result.body);
+      switch (content.action) {
+        case 1:
+          this.chatList.push(content.userName + ": " + content.chatMsg);
+          break;
+        case 2:
+          console.log(content);
+          // TODO: 버킷리스트 추가
+          break;
+        case 3:
+          console.log(content);
+          // TODO: 버킷리스트 삭제
+          break;
+        case 4:
+          console.log(content);
+          // TODO: 일정(plan)변경
+          break;
+        case 5:
+          console.log(content);
+          // TODO: 일정(timetable)추가
+          break;
+        case 6:
+          console.log(content);
+          // TODO: 일정(timetable)삭제
+          break;
+      }
+    },
+    sendChat(message) {
+      if (this.userName) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.chat({
+            userName: this.userName,
+            chatMsg: message,
+            tripId: this.tripId,
+          });
+        }
+      }
+    },
+    addBucket(place, address, lat, lng) {
+      if (this.userName) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.addBucket(this.tripId, place, address, lat, lng);
+        }
+      }
+    },
+    addTimetable(hours, minutes, place, lat, lng) {
+      if (this.userName) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.addTimetable(
+            this.tripId,
+            this.planId,
+            hours,
+            minutes,
+            place,
+            lat,
+            lng
+          );
+        }
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.v-slide-group__prev {
+  display: none !important;
+}
+.v-slide-group__next {
+  display: none !important;
+}
+</style>

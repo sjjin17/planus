@@ -1,10 +1,7 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
-import com.planus.websocket.model.WebSocketBucket;
-import com.planus.websocket.model.WebSocketMessage;
-import com.planus.websocket.model.WebSocketPlan;
-import com.planus.websocket.model.WebSocketTimetable;
+import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ws")
@@ -76,9 +75,9 @@ public class WebSocketController {
         sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
     }
     @MessageMapping("/delTimetable")
-    public void delTimetable(WebSocketTimetable Timetable){
-        Timetable.setAction(6);
+    public void delTimetable(WebSocketTimetableList TimetableList){
+        TimetableList.setAction(6);
 //        TODO: redis에 해당 timetable 삭제하기
-        sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
+        sendingOperations.convertAndSend(ROOT_URL+TimetableList.getTripId(),TimetableList);
     }
 }
