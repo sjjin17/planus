@@ -2,9 +2,7 @@
   <v-container>
     <plan-map />
     <h1>{{ this.tripId }}번 방</h1>
-    <div v-for="(member, i) in memberList" :key="i" :member="member">
-      {{ member.name }}({{ member.email }})
-    </div>
+    <invite-dialog :tripId="tripId" :tripUrl="tripUrl"></invite-dialog>
   </v-container>
 </template>
 
@@ -13,14 +11,17 @@ import API from "@/api/RESTAPI";
 const api = API;
 
 import PlanMap from "@/components/plans/PlanMap.vue";
+import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 
 export default {
   name: "PlanView",
   components: {
     PlanMap,
+    InviteDialog,
   },
   data() {
     return {
+      dialog: false,
       tripId: 0,
       tripUrl: "",
       memberOrAdmin: 0,
@@ -42,20 +43,12 @@ export default {
           },
         ],
       },
-      memberList: [
-        {
-          userId: 0,
-          name: "",
-          email: "",
-        },
-      ],
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
     this.isLogin();
     await this.getTripInfo();
-    await this.getMemberList();
   },
   methods: {
     isLogin() {
@@ -87,11 +80,6 @@ export default {
             break;
         }
       }
-    },
-    async getMemberList() {
-      this.res = await api.getMemberList(this.tripId);
-      this.memberList = this.res.memberList;
-      console.log(this.memberList);
     },
     async addMember() {
       this.res = await api.addMember(this.tripId);
