@@ -73,7 +73,7 @@ const WSAPI = {
     };
     this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
   },
-  delTimetable(tripId, planId, hours, minutes, place, lat, lng) {
+  delTimetable(tripId, planId, hours, minutes, place, lat, lng, order) {
     let timetable = {
       tripId: tripId,
       planId: planId,
@@ -82,6 +82,7 @@ const WSAPI = {
       place: place,
       lat: lat,
       lng: lng,
+      order: order,
     };
     this.stomp.send("/app/delTimetable", JSON.stringify(timetable));
   },
