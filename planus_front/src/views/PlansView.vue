@@ -2,7 +2,11 @@
   <v-container>
     <plan-map />
     <h1>{{ this.tripId }}번 방</h1>
-    <invite-dialog :tripId="tripId" :tripUrl="tripUrl"></invite-dialog>
+    <invite-dialog
+      :tripId="tripId"
+      :tripUrl="tripUrl"
+      :admin="admin"
+    ></invite-dialog>
   </v-container>
 </template>
 
@@ -24,6 +28,7 @@ export default {
       dialog: false,
       tripId: 0,
       tripUrl: "",
+      admin: 0,
       memberOrAdmin: 0,
       result: {
         tripId: 0,
@@ -47,16 +52,9 @@ export default {
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
-    this.isLogin();
     await this.getTripInfo();
   },
   methods: {
-    isLogin() {
-      if (!this.$cookies.get("token")) {
-        window.alert("로그인 해주세요!");
-        this.$router.push("/");
-      }
-    },
     async getTripInfo() {
       this.res = await api.getTripInfo(this.tripUrl).catch(() => {
         window.alert("존재하지 않는 url입니다!");
@@ -64,11 +62,18 @@ export default {
       });
       this.result = this.res.result;
       this.tripId = this.result.tripId;
+      this.admin = this.result.admin;
       this.memberOrAdmin = this.result.memberOrAdmin;
       if (this.result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
         switch (this.memberOrAdmin) {
+          case -1:
+            window.alert(
+              "일정짜기가 진행중인 경우 로그인한 사용자만 입장 가능합니다!"
+            );
+            this.$router.push("/");
+            break;
           case 0:
             this.addMember();
             break;
@@ -90,7 +95,7 @@ export default {
         window.alert("정원 10명이 마감되어 참가할 수 없습니다!");
         this.$router.push("/");
       } else {
-        console.log("참가자로 등록합니다.");
+        window.alert("참가자로 등록합니다!");
       }
       console.log(this.res.memberId);
     },
