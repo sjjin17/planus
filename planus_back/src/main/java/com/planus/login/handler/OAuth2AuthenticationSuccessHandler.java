@@ -4,6 +4,7 @@ import com.planus.util.JwtUtil;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,6 +24,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final TokenProvider tokenProvider;
     private final UserService userService;
 
+    @Value("${base.url}")
+    private String BASE_URL;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -33,9 +37,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) ((Map<String, Object>) kakaoAccount.get("profile")).get("nickname");
         long userId = userService.findUserByKakaoId(kakaoId).getUserId();
-        System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
+//        System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
         String jwtToken = tokenProvider.createToken(authentication, userId, nickname, email);
-        System.out.println("토큰 생성 성공" + jwtToken);
+//        System.out.println("토큰 생성 성공" + jwtToken);
         if (response.isCommitted()) {
             return;
         }
@@ -43,8 +47,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(String token) {
-        //로컬
-//        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
-        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
+        return UriComponentsBuilder.fromUriString(BASE_URL+"/login/getkakaotoken?token=" + token).build().toUriString();
     }
 }

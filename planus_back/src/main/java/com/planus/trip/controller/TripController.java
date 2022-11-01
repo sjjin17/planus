@@ -31,7 +31,7 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity getTripInfo(@RequestHeader(name="Authorization") String token, @RequestParam String tripUrl){
+    public ResponseEntity getTripInfo(@RequestHeader(name="Authorization", required = false) String token, @RequestParam String tripUrl){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("result", tripService.findTripInfo(token, tripUrl));
