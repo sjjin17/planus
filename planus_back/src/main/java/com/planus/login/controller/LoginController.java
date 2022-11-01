@@ -23,6 +23,7 @@ public class LoginController {
 
     private final KakaoUtil kakaoUtil;
 
+
 //    @GetMapping("/oauth2/kakao")
 //    public ResponseEntity<String> Login(@RequestParam(name="code") String code){
 //        System.out.println(code);
@@ -56,12 +57,12 @@ public class LoginController {
         String token = Authorization.split(" ")[1];
         long userIdFromToken = tokenProvider.getUserId(token);
         long kakaoId = userService.findKakaoIdByUserId(userIdFromToken);
-        System.out.println(kakaoId);
-        kakaoUtil.kakaoSignOut(kakaoId);
-        userService.deleteUser(userIdFromToken);
-        //TODO 로컬
-
-//        response.sendRedirect("http://localhost:8081/");
-        response.sendRedirect("https://k7a505.p.ssafy.io/");
+        try {
+            kakaoUtil.kakaoSignOut(kakaoId);
+            userService.deleteUser(userIdFromToken);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return;
     }
 }
