@@ -33,9 +33,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) ((Map<String, Object>) kakaoAccount.get("profile")).get("nickname");
         long userId = userService.findUserByKakaoId(kakaoId).getUserId();
-        System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
+//        System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
         String jwtToken = tokenProvider.createToken(authentication, userId, nickname, email);
-        System.out.println("토큰 생성 성공" + jwtToken);
+//        System.out.println("토큰 생성 성공" + jwtToken);
         if (response.isCommitted()) {
             return;
         }

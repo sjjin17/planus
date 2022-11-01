@@ -7,7 +7,7 @@ public interface UserService {
 
 
     UserInfoResDTO findUserInfo(long userId);
-    long updateUser(long userId, String nickname);
+    String updateUser(String token, String nickname);
     long deleteUser(long userId);
 
     User join(String nickname, String email, Long kakaoId);

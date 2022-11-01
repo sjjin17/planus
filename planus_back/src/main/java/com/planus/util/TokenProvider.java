@@ -87,4 +87,23 @@ public class TokenProvider {
         }
         return 1;
     }
+
+    public String updateTokenNickname(String token, String newNickname){
+        Long now = new Date().getTime();
+        Date validity = new Date(now + this.accessTokenTime);
+        Claims claims = Jwts
+                .parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        String newToken = Jwts.builder()
+                .setClaims(claims)
+                .claim("nickname", newNickname)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(validity)
+                .compact();
+
+        return newToken;
+    }
 }
