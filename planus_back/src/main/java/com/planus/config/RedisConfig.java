@@ -83,6 +83,7 @@ public class RedisConfig {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
         redisCacheConfigurationMap.put("bucketList", redisCacheConfiguration);
         redisCacheConfigurationMap.put("planList", redisCacheConfiguration);
+        redisCacheConfigurationMap.put("timetableList", redisCacheConfiguration);
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(connectionFactory())
                 .withInitialCacheConfigurations(redisCacheConfigurationMap)
