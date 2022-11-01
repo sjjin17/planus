@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const baseURL = "https://k7a505.p.ssafy.io/planus";
-// const baseURL = "http://localhost:8080/planus";
+//const baseURL = "https://k7a505.p.ssafy.io/planus";
+const baseURL = "http://localhost:8080/planus";
 
 const API = {
   instance: axios.create({
@@ -47,6 +47,10 @@ const API = {
   },
   async getBucketList(tripId) {
     const response = await this.instance.get("/buckets/" + `${tripId}`);
+    return response.data;
+  },
+  async saveBucketList(tripId) {
+    const response = await this.instance.post("/buckets/" + `${tripId}`);
     return response.data;
   },
 };

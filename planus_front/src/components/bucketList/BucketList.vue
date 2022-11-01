@@ -5,8 +5,8 @@
 </template>
 
 <script>
-// import api from "@/api/RESTAPI";
-// const api = API;
+import API from "@/api/RESTAPI";
+const api = API;
 
 import BucketCard from "@/components/bucketList/BucketCard.vue";
 export default {
@@ -16,14 +16,20 @@ export default {
   },
   data: function () {
     return {
-      
-    }
+      bucketList: [],
+    };
   },
   props: {
     tripId: Number,
   },
 
-  methods: {},
+  methods: {
+    getBucketList: function () {
+      api.getBucketList(this.tripId).then((res) => {
+        console.log(res);
+      });
+    },
+  },
 };
 </script>
 <style></style>
