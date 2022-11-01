@@ -1,12 +1,17 @@
 package com.planus.trip.service;
 
+import com.planus.bucket.dto.BucketResDTO;
 import com.planus.db.entity.Member;
 import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
 import com.planus.trip.dto.MemberResDTO;
 import com.planus.util.JwtUtil;
+import com.planus.websocket.model.WebSocketMember;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,13 +23,15 @@ public class MemberServiceImpl implements MemberService{
     private MemberRepository memberRepository;
     private UserRepository userRepository;
     private TripRepository tripRepository;
+    private RedisTemplate<String, int[]> redisTemplate;
 
     @Autowired
-    public MemberServiceImpl(JwtUtil jwtUtil, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository){
+    public MemberServiceImpl(JwtUtil jwtUtil, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, int[]> redisTemplate){
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
         this.tripRepository = tripRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -60,5 +67,23 @@ public class MemberServiceImpl implements MemberService{
         }
 
         return memberResDTOList;
+    }
+
+    @Override
+    public void addConnector(WebSocketMember member) {
+
+    }
+
+    @Override
+    public void delConnector(WebSocketMember member) {
+
+    }
+
+    @Override
+    public int[] getConnector(WebSocketMember member) {
+        SetOperations<String, int[]> SetOperations = redisTemplate.opsForSet();
+        String key = "connectorList::" + member.getTripId();
+        
+        return new int[0];
     }
 }
