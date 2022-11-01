@@ -1,7 +1,6 @@
 package com.planus.login.controller;
 
 import com.planus.login.util.KakaoUtil;
-import com.planus.util.JwtUtil;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
