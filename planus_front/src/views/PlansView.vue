@@ -25,6 +25,8 @@
               @delBucket="delBucket"
               :deletedBucket="deletedBucket"
               :addedBucket="addedBucket"
+              :memberOrAdmin="memberOrAdmin"
+              @addTimetable="addTimetable"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
@@ -158,6 +160,7 @@ export default {
       ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
+      console.log(result);
       const content = JSON.parse(result.body);
       switch (content.action) {
         case 1:

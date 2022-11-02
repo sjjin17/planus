@@ -4,7 +4,9 @@
       v-for="bucket in bucketList"
       :key="bucket.place"
       :bucket="bucket"
+      :memberOrAdmin="memberOrAdmin"
       @delBucket="delBucket"
+      @addTimetable="addTimetable"
     ></bucket-card>
   </div>
 </template>
@@ -28,6 +30,7 @@ export default {
     tripId: Number,
     deletedBucket: Object,
     addedBucket: Object,
+    memberOrAdmin: Number,
   },
   mounted() {
     this.getBucketList();
@@ -50,7 +53,7 @@ export default {
       }
     },
     addedBucket() {
-      // 추가 로직
+      // 중복이 없으면 추가해줘야 함 => 수정 필요
       this.bucketList.push(this.addedBucket);
     },
   },
@@ -60,6 +63,9 @@ export default {
     },
     delBucket(bucket) {
       this.$emit("delBucket", bucket);
+    },
+    addTimetable(address, place, lat, lng, fromBucket) {
+      this.$emit("addTimetable", address, place, lat, lng, fromBucket);
     },
   },
 };

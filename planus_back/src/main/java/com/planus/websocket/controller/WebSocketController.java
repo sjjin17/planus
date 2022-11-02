@@ -62,14 +62,14 @@ public class WebSocketController {
     @MessageMapping("/addBucket")
     public void addBucket(WebSocketBucket bucket){
         bucket.setAction(2);
-        bucketService.addBucket(bucket.getTripId(), bucket);
+        bucketService.addBucket(bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
 
     @MessageMapping("/delBucket")
     public void delBucket(WebSocketBucket bucket){
         bucket.setAction(3);
-        bucketService.deleteBucket(bucket.getTripId(), bucket);
+        bucketService.deleteBucket(bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
 
@@ -86,6 +86,8 @@ public class WebSocketController {
         logger.info("fromBucket? "+timetable.getFromBucket());
         if(timetable.getFromBucket()){
             // TODO: bucket redis 작업
+
+
         }
 //        TODO: redis에 해당 timetable 추가하기
         sendingOperations.convertAndSend(ROOT_URL+timetable.getTripId(),timetable);
