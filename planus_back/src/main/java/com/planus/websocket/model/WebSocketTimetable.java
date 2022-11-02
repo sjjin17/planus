@@ -11,8 +11,6 @@ public class WebSocketTimetable {
     private long tripId;
     private long planId;
     private String place;
-    private int hours;
-    private int minutes;
     private double lat;
     private double lng;
     private int orders;

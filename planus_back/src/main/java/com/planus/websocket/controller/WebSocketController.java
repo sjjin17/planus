@@ -1,6 +1,7 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
+import com.planus.plan.service.PlanService;
 import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class WebSocketController {
     private static final String ROOT_URL = "/topic/planus/";
 
     private final BucketService bucketService;
+    private final PlanService planService;
 
     @MessageMapping("/enter")
     public void enter(WebSocketMessage message, SimpMessageHeaderAccessor headerAccessor){
@@ -64,6 +66,7 @@ public class WebSocketController {
     public void setPlan(WebSocketPlan plan){
         plan.setAction(4);
 //        TODO: redis에 해당 Plan 수정
+        planService.setPlan(plan.getPlanId(), plan);
         sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
     }
 
@@ -72,12 +75,28 @@ public class WebSocketController {
     public void addTimetable(WebSocketTimetable Timetable){
         Timetable.setAction(5);
 //        TODO: redis에 해당 timetable 추가하기
+        planService.addTimetable(Timetable.getPlanId(), Timetable);
         sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
     }
     @MessageMapping("/delTimetable")
     public void delTimetable(WebSocketTimetableList TimetableList){
         TimetableList.setAction(6);
 //        TODO: redis에 해당 timetable 삭제하기
+        planService.delTimetable(TimetableList.getPlanId(), TimetableList);
         sendingOperations.convertAndSend(ROOT_URL+TimetableList.getTripId(),TimetableList);
+    }
+
+    @MessageMapping("/setTimetableOrders")
+    public void setTimetableOrders(WebSocketTimetableList TimetableList) {
+        TimetableList.setAction(7);
+        planService.setTimetableOrders(TimetableList.getPlanId(), TimetableList);
+        sendingOperations.convertAndSend(ROOT_URL+TimetableList.getTripId(),TimetableList);
+    }
+
+    @MessageMapping("/setTimetable")
+    public void setTimetable(WebSocketTimetable Timetable) {
+        Timetable.setAction(8);
+        planService.setTimetable(Timetable.getPlanId(), Timetable);
+        sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
     }
 }
