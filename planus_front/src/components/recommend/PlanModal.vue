@@ -1,10 +1,8 @@
 <template>
-  <v-row justify="center">
+  <v-col>
     <v-dialog v-model="dialog" max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          일정에 추가
-        </v-btn>
+        <v-btn style="margin: 0" v-bind="attrs" v-on="on"> 일정에 추가 </v-btn>
       </template>
       <v-card>
         <v-card-text>
@@ -44,7 +42,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-col>
 </template>
 <script>
 export default {
