@@ -20,18 +20,40 @@
         >
       </v-card-actions>
       <v-card-title class="dialogtitle">참가자 목록</v-card-title>
-      <v-card-text v-for="(member, i) in memberList" :key="i" :member="member"
-        ><v-btn
-          depressed
-          rounded
-          color="primary"
-          white--text
-          v-if="admin == member.userId"
-          >방장</v-btn
-        >
-        <v-btn depressed rounded white--text v-else>방장변경</v-btn>
-        {{ member.name }}({{ member.email }})</v-card-text
-      >
+      <v-card-text v-for="(member, i) in memberList" :key="i" :member="member">
+        <v-row>
+          <v-col>
+            <v-btn
+              depressed
+              rounded
+              color="primary"
+              white--text
+              v-if="admin == member.userId"
+              >방장</v-btn
+            >
+            <v-btn depressed rounded white--text v-else>방장변경</v-btn>
+          </v-col>
+          <v-col>
+            <div class="memberName">{{ member.name }}</div>
+          </v-col>
+          <v-col>
+            <div class="memberEmail" v-show="member.email != null">
+              ({{ member.email }})
+            </div>
+          </v-col>
+          <v-col>
+            <v-btn
+              depressed
+              rounded
+              color="primary"
+              white--text
+              v-if="connector.includes(member.userId)"
+              >접속</v-btn
+            >
+            <v-btn depressed rounded white--text v-else>접속안함</v-btn>
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
@@ -51,19 +73,23 @@ export default {
           email: "",
         },
       ],
+      token: "Bearer " + this.$cookies.get("token"),
     };
   },
   props: {
     tripId: Number,
     tripUrl: String,
     admin: Number,
+    connector: Array,
   },
-  async created() {},
+  created() {},
   methods: {
     async getMemberList() {
+      this.$emit("getConnector");
       this.res = await api.getMemberList(this.tripId);
       this.memberList = this.res.memberList;
       console.log(this.memberList);
+      console.log(this.connector);
     },
     copyUrl() {
       navigator.clipboard.writeText(window.location.href).then(() => {

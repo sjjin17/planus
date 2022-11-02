@@ -5,8 +5,9 @@
       :tripId="tripId"
       :tripUrl="tripUrl"
       :admin="admin"
+      :connector="connector"
+      @getConnector="getConnector"
     ></invite-dialog>
-    <v-btn @click="getConnector">접속자 목록</v-btn>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
         style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
@@ -92,6 +93,7 @@ export default {
       nickname: "",
       userId: 0,
       chatList: [],
+      connector: [],
       isRecommendClick: false,
     };
   },
@@ -155,6 +157,8 @@ export default {
       switch (content.action) {
         case 0:
           console.log(content);
+          this.connector = content.connector;
+          console.log("plansview: " + this.connector);
           break;
         case 1:
           this.chatList.push(content.userName + ": " + content.chatMsg);

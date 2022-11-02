@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class WebSocketMember {
     private long tripId;
     private String token;
-    private Integer[] connector;
     private int action;
 }

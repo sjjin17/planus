@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.Arrays;
+
 @RestController
 @RequestMapping("/ws")
 @RequiredArgsConstructor
@@ -50,10 +52,10 @@ public class WebSocketController {
 
     @MessageMapping("/connector")
     public void getConnector(WebSocketMember member){
-        member.setConnector(memberService.getConnector(member));
         member.setAction(0);
         try{
-            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
+            logger.info("!!!!!!!!!!!!!!!"+ Arrays.toString(memberService.getConnector(member)));
+            sendingOperations.convertAndSend(ROOT_URL+"connector",memberService.getConnector(member));
         }catch (Exception e){
             e.printStackTrace();
         }

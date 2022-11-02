@@ -10,5 +10,5 @@ public interface MemberService {
     List<MemberResDTO> findMemberList(long tripId);
     void addConnector(WebSocketMember member);
     void delConnector(WebSocketMember member);
-    Integer[] getConnector(WebSocketMember member);
+    Object[] getConnector(WebSocketMember member);
 }
