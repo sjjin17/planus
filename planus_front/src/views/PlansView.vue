@@ -22,7 +22,12 @@
             <div>장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
-            <bucket-list :tripId="tripId"></bucket-list>
+            <bucket-list
+              :tripId="tripId"
+              @delBucket="delBucket"
+              :deletedBucket="deletedBucket"
+              :addedBucket="addedBucket"
+            ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
@@ -60,6 +65,7 @@
 <script>
 import API from "@/api/RESTAPI";
 import WSAPI from "@/api/WSAPI";
+import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
@@ -73,8 +79,7 @@ export default {
   components: {
     PlanMap,
     InviteDialog,
-    RecommendPlaceTab: () =>
-      import("@/components/recommend/RecommendPlaceTab.vue"),
+    RecommendPlaceTab,
     BucketList,
     ChatTab,
   },
@@ -95,6 +100,8 @@ export default {
       chatList: [],
       connector: [],
       isRecommendClick: false,
+      deletedBucket: {},
+      addedBucket: {},
     };
   },
   async created() {
@@ -136,6 +143,7 @@ export default {
         }
       }
     },
+
     async addMember() {
       this.res = await api.addMember(this.tripId);
       if (this.res.memberId == -2) {
@@ -164,10 +172,22 @@ export default {
         case 2:
           console.log(content);
           // TODO: 버킷리스트 추가
+          this.addedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 3:
           console.log(content);
           // TODO: 버킷리스트 삭제
+          this.deletedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 4:
           console.log(content);
@@ -237,6 +257,19 @@ export default {
     },
     recommendClick() {
       this.isRecommendClick = !this.isRecommendClick;
+    },
+    delBucket(bucket) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delBucket(
+            this.tripId,
+            bucket.place,
+            bucket.address,
+            bucket.lat,
+            bucket.lng
+          );
+        }
+      }
     },
   },
 };
