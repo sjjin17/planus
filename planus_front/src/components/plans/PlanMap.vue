@@ -1,6 +1,11 @@
 <template>
   <div>
-    <gmap-map :zoom="10" :center="center" style="width: 100%; height: 600px">
+    <gmap-map
+      :zoom="10"
+      :center="center"
+      style="width: 100%; height: 600px"
+      @bounds_changed="moveCenter"
+    >
       <gmap-marker
         :icon="img"
         :key="index + 'i'"
@@ -51,6 +56,16 @@ export default {
       ],
       existingPlace: null,
     };
+  },
+  methods: {
+    moveCenter(newCoordinates) {
+      if (!newCoordinates) return;
+      this.$emit(
+        "getCenter",
+        newCoordinates.cb.center(),
+        newCoordinates.Ha.center()
+      );
+    },
   },
 };
 </script>
