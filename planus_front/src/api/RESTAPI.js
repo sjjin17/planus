@@ -3,20 +3,30 @@ import VueCookies from "vue-cookies";
 
 const baseURL = "https://k7a505.p.ssafy.io/planus";
 // const baseURL = "http://localhost:8080/planus";
-
 const baseAxios = axios.create({
   baseURL,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
 baseAxios.interceptors.request.use((request) => {
   if (VueCookies.get("token") != null) {
     request.headers.Authorization = "Bearer " + VueCookies.get("token");
   }
   return request;
 });
+baseAxios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response.data.status == 403) {
+      console.log("권한인증 실패");
+      window.location.href = "/login/redirect";
+      // temp.$router.push("/login/redirect");
+    }
+  }
+);
 
 const API = {
   instance: baseAxios,

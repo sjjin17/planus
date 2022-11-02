@@ -35,19 +35,14 @@ public class JwtFilter extends GenericFilterBean {
         try {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }catch(SecurityException | MalformedJwtException | SignatureException e){
-            System.out.println("JWT 서명 문제");
             request.setAttribute("exception", "JWT 서명 문제");
         }catch(ExpiredJwtException e){
-            System.out.println("jwt 만료");
             request.setAttribute("exception", "만료된 JWT");
         }catch(UnsupportedJwtException e){
-            System.out.println("지원하지 않는 토큰??");
             request.setAttribute("exception", "지원하지 않는 토큰형식");
         }catch(IllegalArgumentException e){
-            System.out.println("JWT 토큰 잘못됨");
-            request.setAttribute("exception", "JWT 토큰에 문제");
+            request.setAttribute("exception", "JWT 토큰 없음");
         }
         chain.doFilter(request, response);
     }
