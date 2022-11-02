@@ -7,7 +7,7 @@ import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.mytrip.dto.MyTripListResDTO;
 import com.planus.mytrip.dto.MyTripResDTO;
-import com.planus.util.JwtUtil;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +22,14 @@ import java.util.stream.Collectors;
 @Service("myTripService")
 public class MyTripServiceImpl implements MyTripService {
 
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final AreaRepository areaRepository;
 
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
-        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token.split(" ")[1]), pageable);
+        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(tokenProvider.getUserId(token.split(" ")[1]), pageable);
 
         return MyTripListResDTO.builder()
                 .currentPage(madeList.getNumber())
@@ -40,7 +40,7 @@ public class MyTripServiceImpl implements MyTripService {
 
     @Override
     public MyTripListResDTO getSharedTripList(String token, Pageable pageable) {
-        Long userId = jwtUtil.getUserIdFromToken(token.split(" ")[1]);
+        Long userId = tokenProvider.getUserId(token.split(" ")[1]);
         Page<Trip> sharedList = tripRepository.findAllByAdminNotAndMemberList_User_UserIdOrderByCreateTimeDesc(userId, userId, pageable);
 
         return MyTripListResDTO.builder()
