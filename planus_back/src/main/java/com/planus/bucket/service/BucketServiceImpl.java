@@ -44,14 +44,11 @@ public class BucketServiceImpl implements BucketService{
             ArrayList<BucketResDTO> bucketList = new ArrayList<>(resultSet);
             return bucketList;
         } else {
-            System.out.println(1);
             List<Bucket> buckets = bucketRepository.findAllByTripTripId(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
             List<BucketResDTO> bucketList = buckets.stream().map(bucket -> BucketResDTO.toResDTO(bucket)).collect(Collectors.toList());
             for (BucketResDTO bucketResDTO : bucketList) {
                 zSetOperations.add(key, bucketResDTO, new java.util.Date().getTime());
             }
-            System.out.println(bucketList);
-            System.out.println("dB");
             return bucketList;
         }
 
