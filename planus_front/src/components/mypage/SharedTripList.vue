@@ -1,21 +1,19 @@
 <template>
   <div>
-    <span>롸....</span>
+    <span>공유받은</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "MyTripList",
+  name: "SharedTripList",
 
   data() {
     return {
       tmp: null,
     };
   },
-  created() {
-    console.log("aaa");
-  },
+  created() {},
 };
 </script>
 
