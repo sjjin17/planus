@@ -13,20 +13,26 @@
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0">추천관광지 </v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
             <div>장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
-            <bucket-list :tripId="tripId"></bucket-list>
+            <bucket-list
+              :tripId="tripId"
+              @delBucket="delBucket"
+              :deletedBucket="deletedBucket"
+              :addedBucket="addedBucket"
+            ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
               :lat="lat"
               :lng="lng"
               :size="size"
+              :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
             ></recommend-place-tab>
@@ -43,7 +49,10 @@
           "
         />
       </v-container>
-      <plan-map style="width: 60%; background-color: blue" />
+      <plan-map
+        style="width: 60%; background-color: blue"
+        @getCenter="getCenter"
+      />
       <div style="width: 20%; background-color: red; min-width: 300px">
         일정
       </div>
@@ -87,6 +96,9 @@ export default {
       nickname: "",
       userId: 0,
       chatList: [],
+      isRecommendClick: false,
+      deletedBucket: {},
+      addedBucket: {},
     };
   },
   async created() {
@@ -128,6 +140,7 @@ export default {
         }
       }
     },
+
     async addMember() {
       this.res = await api.addMember(this.tripId);
       if (this.res.memberId == -2) {
@@ -142,7 +155,7 @@ export default {
       console.log(this.res.memberId);
     },
     connect() {
-      ws.connect(this.tripId, this.userId, this.onSocketReceive);
+      ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
@@ -153,10 +166,22 @@ export default {
         case 2:
           console.log(content);
           // TODO: 버킷리스트 추가
+          this.addedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 3:
           console.log(content);
           // TODO: 버킷리스트 삭제
+          this.deletedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 4:
           console.log(content);
@@ -190,17 +215,17 @@ export default {
         }
       }
     },
-    addTimetable(hours, minutes, place, lat, lng) {
+    addTimetable(costTime, place, lat, lng, fromBucket) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addTimetable(
             this.tripId,
             this.planId,
-            hours,
-            minutes,
+            costTime,
             place,
             lat,
-            lng
+            lng,
+            fromBucket
           );
         }
       }
@@ -209,6 +234,26 @@ export default {
       let decode = jwt_decode(this.token);
       this.nickname = decode.nickname;
       this.userId = decode.userId;
+    },
+    getCenter(lat, lng) {
+      this.lat = lat;
+      this.lng = lng;
+    },
+    recommendClick() {
+      this.isRecommendClick = !this.isRecommendClick;
+    },
+    delBucket(bucket) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delBucket(
+            this.tripId,
+            bucket.place,
+            bucket.address,
+            bucket.lat,
+            bucket.lng
+          );
+        }
+      }
     },
   },
 };

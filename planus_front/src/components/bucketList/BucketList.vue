@@ -4,8 +4,8 @@
       v-for="bucket in bucketList"
       :key="bucket.place"
       :bucket="bucket"
+      @delBucket="delBucket"
     ></bucket-card>
-    <h1 v-if="flag">{{ tripId }}</h1>
   </div>
 </template>
 
@@ -22,20 +22,44 @@ export default {
   data: function () {
     return {
       bucketList: [],
-      flag: false,
     };
   },
   props: {
     tripId: Number,
+    deletedBucket: Object,
+    addedBucket: Object,
   },
   mounted() {
     this.getBucketList();
   },
+  watch: {
+    deletedBucket() {
+      // 삭제 로직
+
+      let item = {
+        place: this.deletedBucket.place,
+        address: this.deletedBucket.address,
+        lat: this.deletedBucket.lat,
+        lng: this.deletedBucket.lng,
+      };
+
+      for (const idx of this.bucketList.keys()) {
+        if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
+          this.bucketList.splice(idx, 1);
+        }
+      }
+    },
+    addedBucket() {
+      // 추가 로직
+      this.bucketList.push(this.addedBucket);
+    },
+  },
   methods: {
     async getBucketList() {
       this.bucketList = await api.getBucketList(this.tripId);
-      this.flag = true;
-      console.log(this.bucketList);
+    },
+    delBucket(bucket) {
+      this.$emit("delBucket", bucket);
     },
   },
 };

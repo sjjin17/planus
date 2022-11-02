@@ -51,6 +51,9 @@ export default {
     hours: 2,
     minutes: 0,
   }),
+  props: {
+    fromBucket: Boolean,
+  },
   computed: {
     timeFlag() {
       if (String(this.hours).length > 2 || String(this.minutes).length > 2) {
@@ -90,7 +93,8 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit("planSubmit", this.hours, this.minutes);
+      let costTime = this.hours * 60 + this.minutes * 1;
+      this.$emit("planSubmit", costTime, this.fromBucket);
       this.dialog = false;
     },
   },

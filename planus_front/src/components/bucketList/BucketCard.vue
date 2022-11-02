@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-card outlined color="#B8DBC6" class="my-4">
+      <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
@@ -21,7 +22,11 @@ export default {
   props: {
     bucket: Object,
   },
-  methods: {},
+  methods: {
+    delClick() {
+      this.$emit("delBucket", this.bucket);
+    },
+  },
 };
 </script>
 <style></style>
