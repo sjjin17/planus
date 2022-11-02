@@ -156,9 +156,7 @@ export default {
       const content = JSON.parse(result.body);
       switch (content.action) {
         case 0:
-          console.log(content);
           this.connector = content.connector;
-          console.log("plansview: " + this.connector);
           break;
         case 1:
           this.chatList.push(content.userName + ": " + content.chatMsg);

@@ -73,7 +73,6 @@ export default {
           email: "",
         },
       ],
-      token: "Bearer " + this.$cookies.get("token"),
     };
   },
   props: {

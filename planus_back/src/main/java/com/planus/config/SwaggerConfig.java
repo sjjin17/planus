@@ -24,10 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 @Configuration
 @EnableWebMvc
 public class SwaggerConfig {
@@ -44,9 +40,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("planus Spring Boot REST API")
+                .title("Planus Spring Boot REST API")
                 .version("1.0.0")
-                .description("여행 스케줄링 공동 작업 서비스 planus의 swagger입니다.")
+                .description("여행 스케줄링 공동 작업 서비스 Planus의 swagger입니다.")
                 .build();
     }
 

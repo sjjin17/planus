@@ -3,10 +3,6 @@ package com.planus.websocket.controller;
 import com.planus.bucket.service.BucketService;
 import com.planus.trip.service.MemberService;
 import com.planus.websocket.model.*;
-import com.planus.websocket.model.WebSocketBucket;
-import com.planus.websocket.model.WebSocketMember;
-import com.planus.websocket.model.WebSocketMessage;
-import com.planus.websocket.model.WebSocketPlan;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +14,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-
-import java.util.Arrays;
 
 @RestController
 @RequestMapping("/ws")
@@ -52,10 +46,10 @@ public class WebSocketController {
 
     @MessageMapping("/connector")
     public void getConnector(WebSocketMember member){
+        member.setConnector(memberService.getConnector(member));
         member.setAction(0);
         try{
-            logger.info("!!!!!!!!!!!!!!!"+ Arrays.toString(memberService.getConnector(member)));
-            sendingOperations.convertAndSend(ROOT_URL+"connector",memberService.getConnector(member));
+            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
         }catch (Exception e){
             e.printStackTrace();
         }
