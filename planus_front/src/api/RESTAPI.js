@@ -2,7 +2,7 @@ import axios from "axios";
 import VueCookies from "vue-cookies";
 
 const baseURL = "https://k7a505.p.ssafy.io/planus";
-// const baseURL = "http://localhost:8080/planus";
+//const baseURL = "http://localhost:8080/planus";
 
 const baseAxios = axios.create({
   baseURL,
@@ -62,6 +62,25 @@ const API = {
   },
   async signOut() {
     const response = await this.instance.get("/login/signout");
+    return response.data;
+  },
+  async getMyInfo() {
+    const response = await this.instance.get("/mypage");
+    return response.data.result;
+  },
+
+  async changeMyInfo(newNickname) {
+    const response = await this.instance.put("/mypage", {
+      nickname: newNickname,
+    });
+    return response.data;
+  },
+  async getBucketList(tripId) {
+    const response = await this.instance.get("/buckets/" + tripId);
+    return response.data;
+  },
+  async saveBucketList(tripId) {
+    const response = await this.instance.post("/buckets/" + tripId);
     return response.data;
   },
 };

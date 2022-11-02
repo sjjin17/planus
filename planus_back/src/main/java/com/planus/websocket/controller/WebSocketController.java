@@ -2,6 +2,7 @@ package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
 import com.planus.trip.service.MemberService;
+import com.planus.websocket.model.*;
 import com.planus.websocket.model.WebSocketBucket;
 import com.planus.websocket.model.WebSocketMember;
 import com.planus.websocket.model.WebSocketMessage;
@@ -17,8 +18,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/ws")
@@ -66,23 +65,33 @@ public class WebSocketController {
         bucketService.addBucket(bucket.getTripId(), bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
+
     @MessageMapping("/delBucket")
     public void delBucket(WebSocketBucket bucket){
         bucket.setAction(3);
         bucketService.deleteBucket(bucket.getTripId(), bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
-    @MessageMapping("/addPlan")
-    public void addPlan(WebSocketPlan plan){
+
+    @MessageMapping("/setPlan")
+    public void setPlan(WebSocketPlan plan){
         plan.setAction(4);
-//        TODO: redis에 해당 timetable 추가하기
+//        TODO: redis에 해당 Plan 수정
         sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
     }
-    @MessageMapping("/delPlan")
-    public void delPlan(WebSocketPlan plan){
-        plan.setAction(5);
+
+    @MessageMapping("/addTimetable")
+    public void addTimetable(WebSocketTimetable Timetable){
+        Timetable.setAction(5);
+//        TODO: redis에 해당 timetable 추가하기
+        sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
+    }
+
+    @MessageMapping("/delTimetable")
+    public void delTimetable(WebSocketTimetableList TimetableList){
+        TimetableList.setAction(6);
 //        TODO: redis에 해당 timetable 삭제하기
-        sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
+        sendingOperations.convertAndSend(ROOT_URL+TimetableList.getTripId(),TimetableList);
     }
 
     @EventListener

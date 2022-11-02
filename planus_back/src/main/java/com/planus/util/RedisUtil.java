@@ -6,20 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class RedisUtil {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ModelMapper modelMapper;
+
     public List getListData(String key) {
 
         //return (String) redisTemplate.opsForHash().get(key);
@@ -35,11 +35,18 @@ public class RedisUtil {
     }
 
 
-    public List setListData(String key, Object value) {
+    public List addListData(String key, Object value) {
 
         redisTemplate.opsForList().rightPush(key, value);
         return getListData(key);
     }
+
+    public List setListData(String key, long index, Object value) {
+        //해당 index에, 값을 수정해 넣기
+        redisTemplate.opsForList().set(key, index, value);
+        return getListData(key);
+    }
+
     public void deleteData(String key) {
         redisTemplate.delete(key);
     }
@@ -73,5 +80,29 @@ public class RedisUtil {
         return null;
     }
 
+    public Map getHashData(String key) {
+        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
+
+//        hashMap.put("tripDate", (String) redisTemplate.opsForHash().get(key, "trip_date"));
+//        hashMap.put("startTime", (String) redisTemplate.opsForHash().get(key, "start_time"));
+//        hashMap.put("timetables", (String) redisTemplate.opsForHash().get(key, "timetables"));
+
+        return map;
+    }
+
+    public boolean setHashData(String key, Map<String, Object> map) {
+        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+
+        try {
+            // map으로 만든 파라미터를 넣기
+            hashOperations.putAll(key, map);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

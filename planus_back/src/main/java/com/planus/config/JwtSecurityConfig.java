@@ -1,7 +1,6 @@
 package com.planus.config;
 
 
-import antlr.Token;
 import com.planus.login.filter.JwtFilter;
 import com.planus.util.TokenProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;

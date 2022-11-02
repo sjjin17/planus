@@ -1,11 +1,11 @@
 package com.planus.login.controller;
 
 import com.planus.login.util.KakaoUtil;
-import com.planus.util.JwtUtil;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +15,8 @@ import java.io.IOException;
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
-    private final UserService userService;
 
-    private final JwtUtil jwtUtil;
+    private final UserService userService;
 
     private final TokenProvider tokenProvider;
 

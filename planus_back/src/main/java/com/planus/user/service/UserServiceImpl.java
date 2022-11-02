@@ -3,15 +3,18 @@ package com.planus.user.service;
 import com.planus.db.entity.User;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.db.repository.UserRepository;
+import com.planus.util.TokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService{
 
+    private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(TokenProvider tokenProvider, UserRepository userRepository) {
+        this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
     }
 
@@ -37,10 +40,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public long updateUser(long userId, String nickname) {
+    public String updateUser(String token, String nickname) {
+        long userId = tokenProvider.getUserId(token);
         User user = userRepository.findByUserId(userId);
         user.setName(nickname);
-        return user.getUserId();
+        String newToken = tokenProvider.updateTokenNickname(token, nickname);
+
+        return newToken;
     }
 
     @Override

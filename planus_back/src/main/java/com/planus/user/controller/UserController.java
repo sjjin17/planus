@@ -2,12 +2,10 @@ package com.planus.user.controller;
 
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
+import com.planus.util.TokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +16,17 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final TokenProvider tokenProvider;
+
+    public UserController(UserService userService, TokenProvider tokenProvider) {
         this.userService = userService;
+        this.tokenProvider = tokenProvider;
     }
 
     @GetMapping
-    public ResponseEntity myInfo(@RequestParam long userId){
+    public ResponseEntity myInfo(@RequestHeader String Authorization){
+        String token = Authorization.substring(7);
+        long userId = tokenProvider.getUserId(token);
         Map<String, Object> resultMap = new HashMap<>();
         try{
             UserInfoResDTO userInfo = userService.findUserInfo(userId);
@@ -32,6 +35,24 @@ public class UserController {
             return new ResponseEntity(resultMap, HttpStatus.OK);
         }catch(Exception e){
             resultMap.put("message", "회원정보 조회에서 에러!");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity modifyNickname(@RequestHeader String Authorization, @RequestBody Map<String, String> body){
+        Map<String, Object> resultMap = new HashMap<>();
+        try{
+            String nickname = body.get("nickname");
+            String token = Authorization.substring(7);
+            String newToken = userService.updateUser(token, nickname);
+            resultMap.put("message", "success");
+            resultMap.put("newToken", newToken);
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        }catch(Exception e){
+            resultMap.put("message", "회원정보 수정에서 에러");
+            System.out.println("회원정보 수정에서 에러");
+            e.printStackTrace();
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
     }

@@ -57,7 +57,7 @@ export default {
     },
     planSubmit(hours, minutes) {
       this.$emit(
-        "addPlan",
+        "addTimetable",
         hours,
         minutes,
         this.recommendPlace.place,
