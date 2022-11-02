@@ -13,7 +13,7 @@
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0">추천관광지 </v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
@@ -27,6 +27,7 @@
               :lat="lat"
               :lng="lng"
               :size="size"
+              :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
             ></recommend-place-tab>
@@ -43,7 +44,10 @@
           "
         />
       </v-container>
-      <plan-map style="width: 60%; background-color: blue" />
+      <plan-map
+        style="width: 60%; background-color: blue"
+        @getCenter="getCenter"
+      />
       <div style="width: 20%; background-color: red; min-width: 300px">
         일정
       </div>
@@ -54,7 +58,6 @@
 <script>
 import API from "@/api/RESTAPI";
 import WSAPI from "@/api/WSAPI";
-import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
@@ -68,7 +71,8 @@ export default {
   components: {
     PlanMap,
     InviteDialog,
-    RecommendPlaceTab,
+    RecommendPlaceTab: () =>
+      import("@/components/recommend/RecommendPlaceTab.vue"),
     BucketList,
     ChatTab,
   },
@@ -87,6 +91,7 @@ export default {
       nickname: "",
       userId: 0,
       chatList: [],
+      isRecommendClick: false,
     };
   },
   async created() {
@@ -142,7 +147,7 @@ export default {
       console.log(this.res.memberId);
     },
     connect() {
-      ws.connect(this.tripId, this.userId, this.onSocketReceive);
+      ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
@@ -190,17 +195,17 @@ export default {
         }
       }
     },
-    addTimetable(hours, minutes, place, lat, lng) {
+    addTimetable(costTime, place, lat, lng, fromBucket) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addTimetable(
             this.tripId,
             this.planId,
-            hours,
-            minutes,
+            costTime,
             place,
             lat,
-            lng
+            lng,
+            fromBucket
           );
         }
       }
@@ -209,6 +214,13 @@ export default {
       let decode = jwt_decode(this.token);
       this.nickname = decode.nickname;
       this.userId = decode.userId;
+    },
+    getCenter(lat, lng) {
+      this.lat = lat;
+      this.lng = lng;
+    },
+    recommendClick() {
+      this.isRecommendClick = !this.isRecommendClick;
     },
   },
 };

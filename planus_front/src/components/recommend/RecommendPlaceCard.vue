@@ -53,14 +53,14 @@ export default {
         this.recommendPlace.lng
       );
     },
-    planSubmit(hours, minutes) {
+    planSubmit(costTime, fromBucket) {
       this.$emit(
         "addTimetable",
-        hours,
-        minutes,
+        costTime,
         this.recommendPlace.place,
         this.recommendPlace.lat,
-        this.recommendPlace.lng
+        this.recommendPlace.lng,
+        fromBucket
       );
     },
   },
