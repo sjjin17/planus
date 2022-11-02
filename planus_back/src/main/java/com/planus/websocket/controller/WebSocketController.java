@@ -50,9 +50,10 @@ public class WebSocketController {
 
     @MessageMapping("/connector")
     public void getConnector(WebSocketMember member){
+        member.setConnector(memberService.getConnector(member));
         member.setAction(0);
         try{
-            sendingOperations.convertAndSend(ROOT_URL+"connector",memberService.getConnector(member));
+            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
         }catch (Exception e){
             e.printStackTrace();
         }
