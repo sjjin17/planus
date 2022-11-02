@@ -5,7 +5,7 @@ import com.planus.db.repository.*;
 import com.planus.trip.dto.TripAreaDTO;
 import com.planus.trip.dto.TripInfoResDTO;
 import com.planus.trip.dto.TripResDTO;
-import com.planus.util.JwtUtil;
+import com.planus.util.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Service
 public class TripServiceImpl implements TripService{
-    private JwtUtil jwtUtil;
+    private TokenProvider tokenProvider;
     private TripRepository tripRepository;
     private AreaRepository areaRepository;
     private TripAreaRepository tripAreaRepository;
@@ -26,8 +26,8 @@ public class TripServiceImpl implements TripService{
     private PlanRepository planRepository;
 
     @Autowired
-    public TripServiceImpl(JwtUtil jwtUtil, TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, UserRepository userRepository, MemberRepository memberRepository, PlanRepository planRepository) {
-        this.jwtUtil = jwtUtil;
+    public TripServiceImpl(TokenProvider tokenProvider, TripRepository tripRepository, AreaRepository areaRepository, TripAreaRepository tripAreaRepository, UserRepository userRepository, MemberRepository memberRepository, PlanRepository planRepository) {
+        this.tokenProvider = tokenProvider;
         this.tripRepository = tripRepository;
         this.areaRepository = areaRepository;
         this.tripAreaRepository = tripAreaRepository;
@@ -38,7 +38,7 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public TripResDTO createTrip(String token, String startDate, long period, int[] areaId) {
-        long admin = jwtUtil.getUserIdFromToken(token.split(" ")[1]);
+        long admin = tokenProvider.getUserId(token.split(" ")[1]);
 
         Trip trip = Trip.builder()
                 .admin(admin)
@@ -110,9 +110,9 @@ public class TripServiceImpl implements TripService{
         int memberOrAdmin;
         if(token==null){
             memberOrAdmin = -1;
-        }else if(trip.getAdmin()==jwtUtil.getUserIdFromToken(token.split(" ")[1])){
+        }else if(trip.getAdmin()==tokenProvider.getUserId(token.split(" ")[1])){
             memberOrAdmin = 2;
-        }else if(memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), jwtUtil.getUserIdFromToken(token.split(" ")[1]))){
+        }else if(memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), tokenProvider.getUserId(token.split(" ")[1]))){
             memberOrAdmin = 1;
         }else{
             memberOrAdmin = 0;
