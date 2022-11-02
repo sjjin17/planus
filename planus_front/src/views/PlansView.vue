@@ -190,18 +190,10 @@ export default {
         }
       }
     },
-    addTimetable(hours, minutes, place, lat, lng) {
+    addTimetable(costTime, place, lat, lng) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
-          ws.addTimetable(
-            this.tripId,
-            this.planId,
-            hours,
-            minutes,
-            place,
-            lat,
-            lng
-          );
+          ws.addTimetable(this.tripId, this.planId, costTime, place, lat, lng);
         }
       }
     },
