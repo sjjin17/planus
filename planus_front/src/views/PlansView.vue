@@ -7,7 +7,9 @@
       :admin="admin"
     ></invite-dialog>
     <v-container d-flex style="margin: 0; max-width: 100%">
-      <v-container style="width: 20%; margin: 0; min-width: 300px">
+      <v-container
+        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+      >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
@@ -30,6 +32,16 @@
             ></recommend-place-tab>
           </v-tab-item>
         </v-tabs-items>
+        <chat-tab
+          :chatList="chatList"
+          @sendMessage="sendChat"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #4a8072;
+          "
+        />
       </v-container>
       <plan-map style="width: 60%; background-color: blue" />
       <div style="width: 20%; background-color: red; min-width: 300px">
@@ -46,6 +58,8 @@ import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
+import jwt_decode from "jwt-decode";
+import ChatTab from "@/components/chat/ChatTab.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -56,6 +70,7 @@ export default {
     InviteDialog,
     RecommendPlaceTab,
     BucketList,
+    ChatTab,
   },
   data() {
     return {
@@ -65,44 +80,31 @@ export default {
       tripUrl: "",
       admin: 0,
       memberOrAdmin: 0,
-      result: {
-        tripId: 0,
-        admin: 0,
-        startDate: "",
-        period: 0,
-        memberOrAdmin: 0,
-        complete: false,
-        imageUrl: "",
-        tripArea: [
-          {
-            areaId: 0,
-            doName: "",
-            siName: "",
-            lat: 0,
-            lng: 0,
-          },
-        ],
-      },
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
+      token: this.$cookies.get("token"),
+      nickname: "",
+      userId: 0,
+      chatList: [],
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
+    this.decoding();
     await this.getTripInfo();
   },
   methods: {
     async getTripInfo() {
-      this.res = await api.getTripInfo(this.tripUrl).catch(() => {
+      let data = await api.getTripInfo(this.tripUrl).catch(() => {
         window.alert("존재하지 않는 url입니다!");
         this.$router.push("/");
       });
-      this.result = this.res.result;
-      this.tripId = this.result.tripId;
-      this.admin = this.result.admin;
-      this.memberOrAdmin = this.result.memberOrAdmin;
-      if (this.result.complete) {
+      let result = data.result;
+      this.tripId = result.tripId;
+      this.admin = result.admin;
+      this.memberOrAdmin = result.memberOrAdmin;
+      if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
         switch (this.memberOrAdmin) {
@@ -117,9 +119,11 @@ export default {
             break;
           case 1:
             console.log("참가자입니다.");
+            this.connect();
             break;
           case 2:
             console.log("방장입니다.");
+            this.connect();
             break;
         }
       }
@@ -133,12 +137,12 @@ export default {
         window.alert("정원 10명이 마감되어 참가할 수 없습니다!");
         this.$router.push("/");
       } else {
-        window.alert("참가자로 등록합니다!");
+        this.connect();
       }
       console.log(this.res.memberId);
     },
     connect() {
-      ws.connect(this.tripId, this.userName, this.onSocketReceive);
+      ws.connect(this.tripId, this.userId, this.onSocketReceive);
     },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
@@ -169,10 +173,10 @@ export default {
       }
     },
     sendChat(message) {
-      if (this.userName) {
+      if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.chat({
-            userName: this.userName,
+            userName: this.nickname,
             chatMsg: message,
             tripId: this.tripId,
           });
@@ -180,14 +184,14 @@ export default {
       }
     },
     addBucket(place, address, lat, lng) {
-      if (this.userName) {
+      if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addBucket(this.tripId, place, address, lat, lng);
         }
       }
     },
     addTimetable(hours, minutes, place, lat, lng) {
-      if (this.userName) {
+      if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addTimetable(
             this.tripId,
@@ -200,6 +204,11 @@ export default {
           );
         }
       }
+    },
+    decoding() {
+      let decode = jwt_decode(this.token);
+      this.nickname = decode.nickname;
+      this.userId = decode.userId;
     },
   },
 };

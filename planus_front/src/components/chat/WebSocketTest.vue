@@ -1,6 +1,6 @@
 <template>
   <div>
-    <chat-tab :chatList="chatList" @sendMessage="sendChat"></chat-tab>
+    <chat-tab :chatList="chatList" @sendMessage="sendChat" />
     <recommend-place-tab
       :lat="lat"
       :lng="lng"

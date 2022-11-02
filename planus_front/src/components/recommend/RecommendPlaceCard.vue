@@ -2,28 +2,26 @@
   <v-container>
     <v-card>
       <v-container>
-        <v-row class="pt-1 row-9" align="center">
-          <v-col cols="5">
-            <v-img :src="recommendPlace.imgUrl" class="ml-1" max-> </v-img>
-          </v-col>
+        <v-row class="row-9" align="center">
           <v-col cols="7" align="left">
             <v-row>
-              <v-col cols="9">
-                <h3 class="ml-3">
-                  <span class="dark--text">{{ recommendPlace.place }}</span>
-                </h3>
-              </v-col>
-              <v-col cols="3">
-                <span class="semidark--text"
-                  >{{ recommendPlace.contentType }}
-                </span>
-              </v-col>
+              <span class="dark--text">{{ recommendPlace.place }}</span>
+              <v-chip class="semidark--text"
+                >{{ recommendPlace.contentType }}
+              </v-chip>
             </v-row>
-            <v-row>{{ recommendPlace.address }}</v-row>
+            <v-row style="font-size: 0.8rem">{{
+              recommendPlace.address
+            }}</v-row>
+          </v-col>
+          <v-col cols="5">
+            <v-img :src="recommendPlace.imgUrl" max-> </v-img>
           </v-col>
         </v-row>
         <v-row class="row-3">
-          <v-btn @click="bucketClick">버킷</v-btn>
+          <v-col>
+            <v-btn @click="bucketClick">버킷</v-btn>
+          </v-col>
           <plan-modal @planSubmit="planSubmit"></plan-modal>
         </v-row>
       </v-container>
