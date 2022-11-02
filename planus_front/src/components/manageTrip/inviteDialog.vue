@@ -4,7 +4,6 @@
       <v-btn
         depressed
         color="primary"
-        white--text
         outlined
         v-bind="attrs"
         v-on="on"
@@ -16,7 +15,7 @@
     <v-card style="margin: auto">
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn depressed color="primary" white--text outlined @click="copyUrl"
+        <v-btn depressed color="primary" outlined @click="copyUrl"
           >링크 복사</v-btn
         >
       </v-card-actions>
@@ -24,12 +23,13 @@
       <v-card-text v-for="(member, i) in memberList" :key="i" :member="member"
         ><v-btn
           depressed
+          rounded
           color="primary"
           white--text
           v-if="admin == member.userId"
           >방장</v-btn
         >
-        <v-btn depressed color="primary" white--text v-else>방장변경</v-btn>
+        <v-btn depressed rounded white--text v-else>방장변경</v-btn>
         {{ member.name }}({{ member.email }})</v-card-text
       >
     </v-card>
