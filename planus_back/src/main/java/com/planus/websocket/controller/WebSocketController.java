@@ -86,17 +86,21 @@ public class WebSocketController {
     }
 
     @MessageMapping("/addTimetable")
-    public void addTimetable(WebSocketTimetable Timetable){
-        Timetable.setAction(5);
+    public void addTimetable(WebSocketTimetable timetable){
+        timetable.setAction(5);
+        logger.info("fromBucket? "+timetable.getFromBucket());
+        if(timetable.getFromBucket()){
+            // TODO: bucket redis 작업
+        }
 //        TODO: redis에 해당 timetable 추가하기
-        sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
+        sendingOperations.convertAndSend(ROOT_URL+timetable.getTripId(),timetable);
     }
 
     @MessageMapping("/delTimetable")
-    public void delTimetable(WebSocketTimetableList TimetableList){
-        TimetableList.setAction(6);
+    public void delTimetable(WebSocketTimetableList timetablelist){
+        timetablelist.setAction(6);
 //        TODO: redis에 해당 timetable 삭제하기
-        sendingOperations.convertAndSend(ROOT_URL+TimetableList.getTripId(),TimetableList);
+        sendingOperations.convertAndSend(ROOT_URL+timetablelist.getTripId(),timetablelist);
     }
 
     @EventListener
@@ -108,7 +112,7 @@ public class WebSocketController {
             WebSocketMember member = new WebSocketMember();
 
             //웹소켓세션에서 token과 tripId 가져오기
-            member.setTripId((int) headerAccessor.getSessionAttributes().get("tripId"));
+            member.setTripId((long)headerAccessor.getSessionAttributes().get("tripId"));
             member.setToken(headerAccessor.getSessionAttributes().get("token").toString());
 
             //redis 접속자 목록에서 삭제

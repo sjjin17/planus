@@ -6,6 +6,7 @@
       :recommendPlace="recommendPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
+      :fromBucket="false"
     ></recommend-place-card>
     <v-container>
       <v-row>
@@ -44,12 +45,21 @@ export default {
     lat: Number,
     lng: Number,
     size: Number,
+    isRecommendClick: Boolean,
   },
-  async created() {
-    await this.getPageLength();
-    this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+  mounted() {
+    this.loadRecommend();
+  },
+  watch: {
+    isRecommendClick() {
+      this.loadRecommend();
+    },
   },
   methods: {
+    async loadRecommend() {
+      await this.getPageLength();
+      this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+    },
     async getPageLength() {
       let data = await api.getRecommendPageLength(
         this.lat,
@@ -69,8 +79,8 @@ export default {
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
     },
-    addTimetable(costTime, place, lat, lng) {
-      this.$emit("addTimetable", costTime, place, lat, lng);
+    addTimetable(costTime, place, lat, lng, fromBucket) {
+      this.$emit("addTimetable", costTime, place, lat, lng, fromBucket);
     },
   },
 };
