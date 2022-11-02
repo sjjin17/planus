@@ -44,12 +44,21 @@ export default {
     lat: Number,
     lng: Number,
     size: Number,
+    isRecommendClick: Boolean,
   },
-  async created() {
-    await this.getPageLength();
-    this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+  mounted() {
+    this.loadRecommend();
+  },
+  watch: {
+    isRecommendClick() {
+      this.loadRecommend();
+    },
   },
   methods: {
+    async loadRecommend() {
+      await this.getPageLength();
+      this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+    },
     async getPageLength() {
       let data = await api.getRecommendPageLength(
         this.lat,
