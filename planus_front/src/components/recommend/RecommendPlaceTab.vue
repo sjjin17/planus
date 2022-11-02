@@ -6,6 +6,7 @@
       :recommendPlace="recommendPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
+      :fromBucket="false"
     ></recommend-place-card>
     <v-container>
       <v-row>
@@ -78,8 +79,8 @@ export default {
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
     },
-    addTimetable(costTime, place, lat, lng) {
-      this.$emit("addTimetable", costTime, place, lat, lng);
+    addTimetable(costTime, place, lat, lng, fromBucket) {
+      this.$emit("addTimetable", costTime, place, lat, lng, fromBucket);
     },
   },
 };

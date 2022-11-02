@@ -7,7 +7,7 @@ const WS_SERVER_URL = "https://k7a505.p.ssafy.io/planus/ws";
 const WSAPI = {
   socket: null,
   stomp: null,
-  connect(tripId, userName, callback) {
+  connect(tripId, token, callback) {
     this.socket = new SockJS(WS_SERVER_URL);
     this.stomp = Stomp.over(this.socket);
     this.stomp.debug = () => {
@@ -17,7 +17,7 @@ const WSAPI = {
       {},
       () => {
         this.stomp.subscribe("/topic/planus/{tripId}", callback);
-        this.enter({ tripId, userName });
+        this.enter({ tripId, token });
       },
       (error) => {
         console.log(error);
@@ -62,15 +62,15 @@ const WSAPI = {
     this.stomp.send("app/setPlan", JSON.stringify(plan));
   },
 
-  addTimetable(tripId, planId, hours, minutes, place, lat, lng) {
+  addTimetable(tripId, planId, costTime, place, lat, lng, fromBucket) {
     let timetable = {
       tripId: tripId,
       planId: planId,
-      hours: hours,
-      minutes: minutes,
+      costTime: costTime,
       place: place,
       lat: lat,
       lng: lng,
+      fromBucket: fromBucket,
     };
     this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
   },

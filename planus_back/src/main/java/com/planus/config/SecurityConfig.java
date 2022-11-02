@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @EnableWebSecurity
 @Configuration
@@ -31,8 +30,8 @@ public class SecurityConfig {
         return http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
             //로컬
-//            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081"));
-            cors.setAllowedOriginPatterns(Collections.singletonList("*"));
+            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://k7a505.p.ssafy.io", "https://k7a505.p.ssafy.io/planus"));
+//            cors.setAllowedOriginPatterns(Collections.singletonList("*"));
             cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD"));
 //            cors.setAllowedMethods(Arrays.asList("*"));
             cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization"));
@@ -50,6 +49,7 @@ public class SecurityConfig {
                 .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/login/test").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/mypage").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint().userService(userOauth2Service).and()
