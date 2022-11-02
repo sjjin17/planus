@@ -83,6 +83,18 @@ const API = {
     const response = await this.instance.post("/buckets/" + tripId);
     return response.data;
   },
+  async getMyTripMade(page) {
+    const response = await this.instance.get("/mytrip/made", {
+      params: { page },
+    });
+    return response.data;
+  },
+  async getMyTripShared(page) {
+    const response = await this.instance.get("/mytrip/shared", {
+      params: { page },
+    });
+    return response.data;
+  },
 };
 
 export default API;

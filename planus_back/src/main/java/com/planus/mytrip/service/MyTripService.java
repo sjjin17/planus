@@ -6,4 +6,5 @@ import org.springframework.data.domain.Pageable;
 public interface MyTripService {
 
     MyTripListResDTO getMadeTripList(String token, Pageable pageable);
+    MyTripListResDTO getSharedTripList(String token, Pageable pageable);
 }

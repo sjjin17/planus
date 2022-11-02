@@ -21,7 +21,12 @@ public class MyTripController {
     private final MyTripService mytripService;
 
     @GetMapping("/made")
-    public ResponseEntity<MyTripListResDTO> getMadeTripList(@RequestHeader(name="Authorization") String token, @PageableDefault(sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok().body(mytripService.getMadeTripList(token, pageable));
+    public ResponseEntity<MyTripListResDTO> getMadeTripList(@RequestHeader String Authorization, @PageableDefault(size = 6, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok().body(mytripService.getMadeTripList(Authorization, pageable));
+    }
+
+    @GetMapping("/shared")
+    public ResponseEntity<MyTripListResDTO> getSharedTripList(@RequestHeader String Authorization, @PageableDefault(size = 6, sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok().body(mytripService.getSharedTripList(Authorization, pageable));
     }
 }
