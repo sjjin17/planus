@@ -77,20 +77,23 @@ public class TokenProvider {
 
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) throws Exception{
         try{
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             return true;
         }catch(SecurityException | MalformedJwtException | SignatureException e){
             System.out.println("JWT 서명 문제");
+            throw new SignatureException("JWT 서명 문제");
         }catch(ExpiredJwtException e){
             System.out.println("jwt 만료");
+            throw new ExpiredJwtException(null, null, "만료된 토큰문제");
         }catch(UnsupportedJwtException e){
             System.out.println("지원하지 않는 토큰??");
+            throw new UnsupportedJwtException("지원안되는 토큰");
         }catch(IllegalArgumentException e){
-            System.out.println("JWT 토큰 잘못됨");
+            System.out.println("JWT 토큰 없나?!");
+            throw new IllegalArgumentException();
         }
-        return false;
     }
 
     public long getUserId(String token){
@@ -98,9 +101,9 @@ public class TokenProvider {
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             return Long.parseLong( String.valueOf(claims.get("userId")));
         }catch (SignatureException e){
-            System.out.println("토큰 서명과정에서 에러 발생함");
+            System.out.println("토큰 서명과정에서 에러 발생함(getUserId)");
         }catch (Exception e){
-            System.out.println("토큰 파싱과정에서 에러발생(서명아님)");
+            System.out.println("토큰 파싱과정에서 에러발생(서명아님)(getUserId)");
             e.printStackTrace();
         }
         return -1;
