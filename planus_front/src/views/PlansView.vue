@@ -147,7 +147,7 @@ export default {
       console.log(this.res.memberId);
     },
     connect() {
-      ws.connect(this.tripId, this.userId, this.onSocketReceive);
+      ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
@@ -195,10 +195,18 @@ export default {
         }
       }
     },
-    addTimetable(costTime, place, lat, lng) {
+    addTimetable(costTime, place, lat, lng, fromBucket) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
-          ws.addTimetable(this.tripId, this.planId, costTime, place, lat, lng);
+          ws.addTimetable(
+            this.tripId,
+            this.planId,
+            costTime,
+            place,
+            lat,
+            lng,
+            fromBucket
+          );
         }
       }
     },
