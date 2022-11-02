@@ -22,7 +22,9 @@
           <v-tab-item>
             <bucket-list
               :tripId="tripId"
-              @getBucketList="getBucketList"
+              @delBucket="delBucket"
+              :deletedBucket="deletedBucket"
+              :addedBucket="addedBucket"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
@@ -95,7 +97,8 @@ export default {
       userId: 0,
       chatList: [],
       isRecommendClick: false,
-      buckets: [],
+      deletedBucket: {},
+      addedBucket: {},
     };
   },
   async created() {
@@ -163,10 +166,22 @@ export default {
         case 2:
           console.log(content);
           // TODO: 버킷리스트 추가
+          this.addedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 3:
           console.log(content);
           // TODO: 버킷리스트 삭제
+          this.deletedBucket = {
+            place: content.place,
+            address: content.address,
+            lat: content.lat,
+            lng: content.lng,
+          };
           break;
         case 4:
           console.log(content);
@@ -219,8 +234,18 @@ export default {
     recommendClick() {
       this.isRecommendClick = !this.isRecommendClick;
     },
-    getBucketList(bucketList) {
-      this.buckets = bucketList;
+    delBucket(bucket) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delBucket(
+            this.tripId,
+            bucket.place,
+            bucket.address,
+            bucket.lat,
+            bucket.lng
+          );
+        }
+      }
     },
   },
 };
