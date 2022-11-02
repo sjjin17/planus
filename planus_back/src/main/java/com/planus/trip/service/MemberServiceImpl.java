@@ -13,7 +13,9 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -21,10 +23,10 @@ public class MemberServiceImpl implements MemberService{
     private MemberRepository memberRepository;
     private UserRepository userRepository;
     private TripRepository tripRepository;
-    private RedisTemplate<String, int[]> redisTemplate;
+    private RedisTemplate<String, Long> redisTemplate;
 
     @Autowired
-    public MemberServiceImpl(TokenProvider tokenProvider, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, int[]> redisTemplate){
+    public MemberServiceImpl(TokenProvider tokenProvider, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, Long> redisTemplate){
         this.tokenProvider = tokenProvider;
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
@@ -69,19 +71,29 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void addConnector(WebSocketMember member) {
+        String key = "connectorList::" + member.getTripId();
 
+        SetOperations<String, Long> setOps = redisTemplate.opsForSet();
+        setOps.add(key, tokenProvider.getUserId(member.getToken().split(" ")[1]));
     }
 
     @Override
     public void delConnector(WebSocketMember member) {
+        String key = "connectorList::" + member.getTripId();
 
+        SetOperations<String, Long> setOps = redisTemplate.opsForSet();
+        setOps.remove(key,tokenProvider.getUserId(member.getToken().split(" ")[1]));
     }
 
     @Override
-    public int[] getConnector(WebSocketMember member) {
-        SetOperations<String, int[]> SetOperations = redisTemplate.opsForSet();
+    public Integer[] getConnector(WebSocketMember member) {
         String key = "connectorList::" + member.getTripId();
-        
-        return new int[0];
+
+        SetOperations<String, Long> setOps = redisTemplate.opsForSet();
+        Set<Long> connectorSet= setOps.members(key);
+
+        Integer[] connectorArray = connectorSet.toArray(new Integer[0]);
+
+        return connectorArray;
     }
 }
