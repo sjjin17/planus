@@ -1,6 +1,10 @@
 package com.planus.login.filter;
 
 import com.planus.util.TokenProvider;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -28,11 +32,22 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String jwt = resolveToken(httpServletRequest);
 
-        if(StringUtils.hasText(jwt)&&tokenProvider.validateToken(jwt)){
+        try {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }else{
-            System.out.println("유효한 토큰 없음");
+
+        }catch(SecurityException | MalformedJwtException | SignatureException e){
+            System.out.println("JWT 서명 문제");
+            request.setAttribute("exception", "JWT 서명 문제");
+        }catch(ExpiredJwtException e){
+            System.out.println("jwt 만료");
+            request.setAttribute("exception", "만료된 JWT");
+        }catch(UnsupportedJwtException e){
+            System.out.println("지원하지 않는 토큰??");
+            request.setAttribute("exception", "지원하지 않는 토큰형식");
+        }catch(IllegalArgumentException e){
+            System.out.println("JWT 토큰 잘못됨");
+            request.setAttribute("exception", "JWT 토큰에 문제");
         }
         chain.doFilter(request, response);
     }

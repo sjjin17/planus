@@ -19,6 +19,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint{
     private String BASE_URL;
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        String exception = (String)request.getAttribute("exception");
+        if(exception!=null){
+            System.out.println(exception);
+        }
         response.sendRedirect(BASE_URL+"/login/redirect");
+
+
     }
 }
