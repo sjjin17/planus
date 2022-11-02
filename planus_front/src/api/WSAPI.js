@@ -32,6 +32,7 @@ const WSAPI = {
     this.stomp.send("/app/chat", JSON.stringify(message));
   },
   addBucket(tripId, place, address, lat, lng) {
+    console.log("버킷추가");
     let bucket = {
       tripId: tripId,
       place: place,
@@ -51,27 +52,30 @@ const WSAPI = {
     };
     this.stomp.send("/app/delBucket", JSON.stringify(bucket));
   },
-  addPlan(tripId, hours, minutes, place, lat, lng) {
+  setPlan(tripId, planId, tripDate, startTime) {
     let plan = {
       tripId: tripId,
-      hours: hours,
-      minutes: minutes,
-      place: place,
-      lat: lat,
-      lng: lng,
+      planId: planId,
+      tripDate: tripDate,
+      startTime: startTime,
     };
-    this.stomp.send("/app/addPlan", JSON.stringify(plan));
+    this.stomp.send("app/setPlan", JSON.stringify(plan));
   },
-  delPlan(tripId, hours, minutes, place, lat, lng) {
-    let plan = {
+
+  addTimetable(tripId, planId, hours, minutes, place, lat, lng) {
+    let timetable = {
       tripId: tripId,
+      planId: planId,
       hours: hours,
       minutes: minutes,
       place: place,
       lat: lat,
       lng: lng,
     };
-    this.stomp.send("/app/delPlan", JSON.stringify(plan));
+    this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
+  },
+  delTimetable(timetableList) {
+    this.stomp.send("/app/delTimetable", JSON.stringify(timetableList));
   },
 };
 

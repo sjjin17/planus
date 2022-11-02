@@ -1,82 +1,129 @@
 <template>
-  <v-container>
-    <plan-map />
+  <div>
     <h1>{{ this.tripId }}번 방</h1>
-    <invite-dialog :tripId="tripId" :tripUrl="tripUrl"></invite-dialog>
-  </v-container>
+    <invite-dialog
+      :tripId="tripId"
+      :tripUrl="tripUrl"
+      :admin="admin"
+    ></invite-dialog>
+    <v-container d-flex style="margin: 0; max-width: 100%">
+      <v-container
+        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+      >
+        <v-tabs v-model="tabs" fixed-tabs>
+          <v-tab style="padding: 0">장소검색</v-tab>
+          <v-tab style="padding: 0">버킷리스트</v-tab>
+          <v-tab style="padding: 0">추천관광지 </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tabs">
+          <v-tab-item>
+            <div>장소검색 컴포넌트</div>
+          </v-tab-item>
+          <v-tab-item>
+            <bucket-list :tripId="tripId"></bucket-list>
+          </v-tab-item>
+          <v-tab-item>
+            <recommend-place-tab
+              :lat="lat"
+              :lng="lng"
+              :size="size"
+              @addBucket="addBucket"
+              @addTimetable="addTimetable"
+            ></recommend-place-tab>
+          </v-tab-item>
+        </v-tabs-items>
+        <chat-tab
+          :chatList="chatList"
+          @sendMessage="sendChat"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #4a8072;
+          "
+        />
+      </v-container>
+      <plan-map style="width: 60%; background-color: blue" />
+      <div style="width: 20%; background-color: red; min-width: 300px">
+        일정
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import API from "@/api/RESTAPI";
-const api = API;
-
+import WSAPI from "@/api/WSAPI";
+import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
 import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
+import BucketList from "@/components/bucketList/BucketList.vue";
+import jwt_decode from "jwt-decode";
+import ChatTab from "@/components/chat/ChatTab.vue";
 
+const ws = WSAPI;
+const api = API;
 export default {
   name: "PlanView",
   components: {
     PlanMap,
     InviteDialog,
+    RecommendPlaceTab,
+    BucketList,
+    ChatTab,
   },
   data() {
     return {
+      tabs: null,
       dialog: false,
       tripId: 0,
       tripUrl: "",
+      admin: 0,
       memberOrAdmin: 0,
-      result: {
-        tripId: 0,
-        admin: 0,
-        startDate: "",
-        period: 0,
-        memberOrAdmin: 0,
-        complete: false,
-        imageUrl: "",
-        tripArea: [
-          {
-            areaId: 0,
-            doName: "",
-            siName: "",
-            lat: 0,
-            lng: 0,
-          },
-        ],
-      },
+      lat: 37.5168415735,
+      lng: 127.0341090296,
+      size: 5,
+      token: this.$cookies.get("token"),
+      nickname: "",
+      userId: 0,
+      chatList: [],
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
-    this.isLogin();
+    this.decoding();
     await this.getTripInfo();
   },
   methods: {
-    isLogin() {
-      if (!this.$cookies.get("token")) {
-        window.alert("로그인 해주세요!");
-        this.$router.push("/");
-      }
-    },
     async getTripInfo() {
-      this.res = await api.getTripInfo(this.tripUrl).catch(() => {
+      let data = await api.getTripInfo(this.tripUrl).catch(() => {
         window.alert("존재하지 않는 url입니다!");
         this.$router.push("/");
       });
-      this.result = this.res.result;
-      this.tripId = this.result.tripId;
-      this.memberOrAdmin = this.result.memberOrAdmin;
-      if (this.result.complete) {
+      let result = data.result;
+      this.tripId = result.tripId;
+      this.admin = result.admin;
+      this.memberOrAdmin = result.memberOrAdmin;
+      if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
         switch (this.memberOrAdmin) {
+          case -1:
+            window.alert(
+              "일정짜기가 진행중인 경우 로그인한 사용자만 입장 가능합니다!"
+            );
+            this.$router.push("/");
+            break;
           case 0:
             this.addMember();
             break;
           case 1:
             console.log("참가자입니다.");
+            this.connect();
             break;
           case 2:
             console.log("방장입니다.");
+            this.connect();
             break;
         }
       }
@@ -90,12 +137,88 @@ export default {
         window.alert("정원 10명이 마감되어 참가할 수 없습니다!");
         this.$router.push("/");
       } else {
-        console.log("참가자로 등록합니다.");
+        this.connect();
       }
       console.log(this.res.memberId);
+    },
+    connect() {
+      ws.connect(this.tripId, this.userId, this.onSocketReceive);
+    },
+    async onSocketReceive(result) {
+      const content = JSON.parse(result.body);
+      switch (content.action) {
+        case 1:
+          this.chatList.push(content.userName + ": " + content.chatMsg);
+          break;
+        case 2:
+          console.log(content);
+          // TODO: 버킷리스트 추가
+          break;
+        case 3:
+          console.log(content);
+          // TODO: 버킷리스트 삭제
+          break;
+        case 4:
+          console.log(content);
+          // TODO: 일정(plan)변경
+          break;
+        case 5:
+          console.log(content);
+          // TODO: 일정(timetable)추가
+          break;
+        case 6:
+          console.log(content);
+          // TODO: 일정(timetable)삭제
+          break;
+      }
+    },
+    sendChat(message) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.chat({
+            userName: this.nickname,
+            chatMsg: message,
+            tripId: this.tripId,
+          });
+        }
+      }
+    },
+    addBucket(place, address, lat, lng) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.addBucket(this.tripId, place, address, lat, lng);
+        }
+      }
+    },
+    addTimetable(hours, minutes, place, lat, lng) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.addTimetable(
+            this.tripId,
+            this.planId,
+            hours,
+            minutes,
+            place,
+            lat,
+            lng
+          );
+        }
+      }
+    },
+    decoding() {
+      let decode = jwt_decode(this.token);
+      this.nickname = decode.nickname;
+      this.userId = decode.userId;
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.v-slide-group__prev {
+  display: none !important;
+}
+.v-slide-group__next {
+  display: none !important;
+}
+</style>

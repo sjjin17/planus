@@ -64,6 +64,25 @@ const API = {
     const response = await this.instance.get("/login/signout");
     return response.data;
   },
+  async getMyInfo() {
+    const response = await this.instance.get("/mypage");
+    return response.data.result;
+  },
+
+  async changeMyInfo(newNickname) {
+    const response = await this.instance.put("/mypage", {
+      nickname: newNickname,
+    });
+    return response.data;
+  },
+  async getBucketList(tripId) {
+    const response = await this.instance.get("/buckets/" + tripId);
+    return response.data;
+  },
+  async saveBucketList(tripId) {
+    const response = await this.instance.post("/buckets/" + tripId);
+    return response.data;
+  },
   async getMyTripMade(page) {
     const response = await this.instance.get("/mytrip/made", {
       params: { page },

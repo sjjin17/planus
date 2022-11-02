@@ -1,9 +1,9 @@
 package com.planus.login.handler;
 
-import com.planus.util.JwtUtil;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,28 +23,29 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final TokenProvider tokenProvider;
     private final UserService userService;
 
+    @Value("${base.url}")
+    private String BASE_URL;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        long kakaoId = (long) attributes.get("id");
-
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        String email = (String) kakaoAccount.get("email");
-        String nickname = (String) ((Map<String, Object>) kakaoAccount.get("profile")).get("nickname");
+        long kakaoId = getKakaoId(authentication);
         long userId = userService.findUserByKakaoId(kakaoId).getUserId();
-        System.out.println("카카오에서 정보 받기 성공" + nickname + " " + email);
-        String jwtToken = tokenProvider.createToken(authentication, userId, nickname, email);
-        System.out.println("토큰 생성 성공" + jwtToken);
+        String jwtToken = tokenProvider.createToken(authentication, userId);
+
         if (response.isCommitted()) {
             return;
         }
         getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(jwtToken));
     }
 
+    private long getKakaoId(Authentication authentication) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        long kakaoId = (long) attributes.get("id");
+        return kakaoId;
+    }
+
     private String makeRedirectUrl(String token) {
-        //로컬
-//        return UriComponentsBuilder.fromUriString("http://localhost:8081/login/getkakaotoken?token=" + token).build().toUriString();
-        return UriComponentsBuilder.fromUriString("https://k7a505.p.ssafy.io/login/getkakaotoken?token=" + token).build().toUriString();
+        return UriComponentsBuilder.fromUriString(BASE_URL+"/login/getkakaotoken?token=" + token).build().toUriString();
     }
 }

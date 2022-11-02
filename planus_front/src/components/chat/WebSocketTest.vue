@@ -1,13 +1,13 @@
 <template>
   <div>
-    <chat-tab :chatList="chatList" @sendMessage="sendChat"></chat-tab>
+    <chat-tab :chatList="chatList" @sendMessage="sendChat" />
     <recommend-place-tab
       :lat="lat"
       :lng="lng"
       :size="size"
       :length="pageLength"
       @addBucket="addBucket"
-      @addPlan="addPlan"
+      @addTimetable="addTimetable"
     ></recommend-place-tab>
   </div>
 </template>
@@ -22,6 +22,7 @@ export default {
   data: () => {
     return {
       tripId: 1,
+      planId: 1,
       userName: "김",
       message: "",
       chatList: [],
@@ -59,11 +60,15 @@ export default {
           break;
         case 4:
           console.log(content);
-          // TODO: 일정 추가
+          // TODO: 일정(plan)변경
           break;
         case 5:
           console.log(content);
-          // TODO: 일정삭제
+          // TODO: 일정(timetable)추가
+          break;
+        case 6:
+          console.log(content);
+          // TODO: 일정(timetable)삭제
           break;
       }
     },
@@ -85,10 +90,18 @@ export default {
         }
       }
     },
-    addPlan(hours, minutes, place, lat, lng) {
+    addTimetable(hours, minutes, place, lat, lng) {
       if (this.userName) {
         if (ws.stomp && ws.stomp.connected) {
-          ws.addPlan(this.tripId, hours, minutes, place, lat, lng);
+          ws.addTimetable(
+            this.tripId,
+            this.planId,
+            hours,
+            minutes,
+            place,
+            lat,
+            lng
+          );
         }
       }
     },

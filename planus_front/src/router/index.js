@@ -9,6 +9,7 @@ import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
 import CompleteView from "../views/CompleteView.vue";
 import Chat from "@/components/chat/WebSocketTest.vue";
+import MyInfo from "@/components/mypage/MyInfo.vue";
 
 Vue.use(VueRouter);
 
@@ -77,6 +78,11 @@ const routes = [
     path: "/chat",
     name: "chat",
     component: Chat,
+  },
+  {
+    path: "/myinfo",
+    name: "MyInfo",
+    component: MyInfo,
   },
 ];
 
