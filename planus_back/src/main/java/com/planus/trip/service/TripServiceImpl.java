@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class TripServiceImpl implements TripService{
+public class TripServiceImpl implements TripService {
     private TokenProvider tokenProvider;
     private TripRepository tripRepository;
     private AreaRepository areaRepository;
@@ -50,7 +50,7 @@ public class TripServiceImpl implements TripService{
 
         tripRepository.save(trip);
 
-        for (int i=0; i<areaId.length; i++){
+        for (int i = 0; i < areaId.length; i++) {
             Area area = areaRepository.findByAreaId(areaId[i]);
             TripArea tripArea = TripArea.builder()
                     .trip(trip)
@@ -69,7 +69,7 @@ public class TripServiceImpl implements TripService{
 
         memberRepository.save(member);
 
-        for (int i=0; i<=period; i++){
+        for (int i = 0; i <= period; i++) {
             LocalDate date = LocalDate.parse(startDate);
             Plan plan = Plan.builder()
                     .trip(trip)
@@ -94,7 +94,7 @@ public class TripServiceImpl implements TripService{
         List<TripAreaDTO> tripAreaDTOList = new ArrayList<>();
         List<TripArea> tripAreaList = tripAreaRepository.findByTripTripId(trip.getTripId());
 
-        for (TripArea tripArea : tripAreaList){
+        for (TripArea tripArea : tripAreaList) {
             Area area = areaRepository.findByAreaId(tripArea.getArea().getAreaId());
             TripAreaDTO tripAreaDTO = TripAreaDTO.builder()
                     .areaId(area.getAreaId())
@@ -108,13 +108,13 @@ public class TripServiceImpl implements TripService{
         }
 
         int memberOrAdmin;
-        if(token==null){
+        if (token == null) {
             memberOrAdmin = -1;
-        }else if(trip.getAdmin()==tokenProvider.getUserId(token.split(" ")[1])){
+        } else if (trip.getAdmin() == tokenProvider.getUserId(token.split(" ")[1])) {
             memberOrAdmin = 2;
-        }else if(memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), tokenProvider.getUserId(token.split(" ")[1]))){
+        } else if (memberRepository.existsByTripTripIdAndUserUserId(trip.getTripId(), tokenProvider.getUserId(token.split(" ")[1]))) {
             memberOrAdmin = 1;
-        }else{
+        } else {
             memberOrAdmin = 0;
         }
 
@@ -130,5 +130,23 @@ public class TripServiceImpl implements TripService{
                 .build();
 
         return tripInfoResDTO;
+    }
+
+    @Override
+    public long changeAdmin(String token, long tripId, long userId) {
+        Trip trip = tripRepository.findByTripId(tripId);
+        Long adminId = trip.getAdmin();
+        long requestUserId = tokenProvider.getUserId(token);
+
+        if (adminId != requestUserId) {
+            System.out.println("방장이 아닌데 요청이 들어왔음");
+            return -1;
+        } else if (!memberRepository.existsByTripTripIdAndUserUserId(tripId, userId)) {
+            System.out.println("없는 사람한테 위임함");
+            return -1;
+        } else {
+            trip.changeAdmin(userId);
+            return userId;
+        }
     }
 }
