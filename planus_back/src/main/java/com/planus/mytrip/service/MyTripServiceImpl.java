@@ -7,7 +7,7 @@ import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.mytrip.dto.MyTripListResDTO;
 import com.planus.mytrip.dto.MyTripResDTO;
-import com.planus.util.JwtUtil;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,22 +22,39 @@ import java.util.stream.Collectors;
 @Service("myTripService")
 public class MyTripServiceImpl implements MyTripService {
 
-    private final JwtUtil jwtUtil;
-
+    private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
-
     private final MemberRepository memberRepository;
-
     private final AreaRepository areaRepository;
 
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
-        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(jwtUtil.getUserIdFromToken(token.split(" ")[1]), pageable);
-        List<MyTripResDTO> madeTrip = new ArrayList<>();
+        Page<Trip> madeList = tripRepository.findByAdminOrderByCreateTimeDesc(tokenProvider.getUserId(token.split(" ")[1]), pageable);
 
-        for (Trip ml: madeList
-             ) {
-            madeTrip.add(
+        return MyTripListResDTO.builder()
+                .currentPage(madeList.getNumber())
+                .totalPage(madeList.getTotalPages())
+                .tripList(setMyTripList(madeList))
+                .build();
+    }
+
+    @Override
+    public MyTripListResDTO getSharedTripList(String token, Pageable pageable) {
+        Long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        Page<Trip> sharedList = tripRepository.findAllByAdminNotAndMemberList_User_UserIdOrderByCreateTimeDesc(userId, userId, pageable);
+
+        return MyTripListResDTO.builder()
+                .currentPage(sharedList.getNumber())
+                .totalPage(sharedList.getTotalPages())
+                .tripList(setMyTripList(sharedList))
+                .build();
+    }
+
+    private List<MyTripResDTO> setMyTripList(Page<Trip> tripList) {
+        List<MyTripResDTO> myTripList = new ArrayList<>();
+
+        for (Trip ml: tripList) {
+            myTripList.add(
                     MyTripResDTO.builder()
                             .tripId(ml.getTripId())
                             .tripUrl(ml.getTripUrl())
@@ -45,16 +62,12 @@ public class MyTripServiceImpl implements MyTripService {
                             .endDate(ml.getStartDate().plusDays(ml.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .complete(ml.isComplete())
                             .participants(memberRepository.countByTripTripId(ml.getTripId()))
-//                            .imageUrl()
+                            .imageUrl(areaRepository.findTop1ByTripAreaList_Trip_TripId(ml.getTripId()).getImageUrl())
                             .areaList(areaRepository.findAllByTripAreaList_Trip_TripId(ml.getTripId()).stream().map(Area::getSiName).collect(Collectors.toList()))
                             .build()
             );
         }
 
-        return MyTripListResDTO.builder()
-                .currentPage(madeList.getNumber())
-                .totalPage(madeList.getTotalPages())
-                .tripList(madeTrip)
-                .build();
+        return myTripList;
     }
 }

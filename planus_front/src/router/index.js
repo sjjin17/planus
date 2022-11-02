@@ -19,6 +19,24 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
+    redirect: "/mypage/made",
+    children: [
+      // {
+      //   path: "myinfo",
+      //   name: "myinfo",
+      //   component: () => import("@/components/mypage/MyInfo.vue"),
+      // },
+      {
+        path: "made",
+        name: "made",
+        component: () => import("@/components/mypage/MadeTripList.vue"),
+      },
+      {
+        path: "shared",
+        name: "shared",
+        component: () => import("@/components/mypage/SharedTripList.vue"),
+      },
+    ],
   },
   {
     path: "/plans/:tripUrl",
