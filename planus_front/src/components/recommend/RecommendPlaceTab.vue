@@ -69,8 +69,8 @@ export default {
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
     },
-    addTimetable(hours, minutes, place, lat, lng) {
-      this.$emit("addTimetable", hours, minutes, place, lat, lng);
+    addTimetable(costTime, place, lat, lng) {
+      this.$emit("addTimetable", costTime, place, lat, lng);
     },
   },
 };
