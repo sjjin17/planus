@@ -90,7 +90,8 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit("planSubmit", this.hours, this.minutes);
+      let costTime = this.hours * 60 + this.minutes * 1;
+      this.$emit("planSubmit", costTime);
       this.dialog = false;
     },
   },

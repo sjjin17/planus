@@ -53,11 +53,10 @@ export default {
         this.recommendPlace.lng
       );
     },
-    planSubmit(hours, minutes) {
+    planSubmit(costTime) {
       this.$emit(
         "addTimetable",
-        hours,
-        minutes,
+        costTime,
         this.recommendPlace.place,
         this.recommendPlace.lat,
         this.recommendPlace.lng
