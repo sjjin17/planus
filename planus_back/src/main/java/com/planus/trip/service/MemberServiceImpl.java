@@ -1,17 +1,15 @@
 package com.planus.trip.service;
 
-import com.planus.bucket.dto.BucketResDTO;
 import com.planus.db.entity.Member;
 import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
 import com.planus.trip.dto.MemberResDTO;
-import com.planus.util.JwtUtil;
+import com.planus.util.TokenProvider;
 import com.planus.websocket.model.WebSocketMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,15 +17,15 @@ import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService{
-    private JwtUtil jwtUtil;
+    private TokenProvider tokenProvider;
     private MemberRepository memberRepository;
     private UserRepository userRepository;
     private TripRepository tripRepository;
     private RedisTemplate<String, int[]> redisTemplate;
 
     @Autowired
-    public MemberServiceImpl(JwtUtil jwtUtil, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, int[]> redisTemplate){
-        this.jwtUtil = jwtUtil;
+    public MemberServiceImpl(TokenProvider tokenProvider, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, int[]> redisTemplate){
+        this.tokenProvider = tokenProvider;
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
         this.tripRepository = tripRepository;
@@ -36,13 +34,13 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public long addMember(String token, long tripId) {
-        if(memberRepository.existsByTripTripIdAndUserUserId(tripId, jwtUtil.getUserIdFromToken(token.split(" ")[1]))){
+        if(memberRepository.existsByTripTripIdAndUserUserId(tripId, tokenProvider.getUserId(token.split(" ")[1]))){
             return -2;
         }else if(memberRepository.countByTripTripId(tripId)>9){
             return -1;
         }else{
             Member member = Member.builder()
-                    .user(userRepository.findByUserId(jwtUtil.getUserIdFromToken(token.split(" ")[1])))
+                    .user(userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1])))
                     .trip(tripRepository.findByTripId(tripId))
                     .build();
 
