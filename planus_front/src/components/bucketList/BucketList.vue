@@ -21,8 +21,8 @@ export default {
   },
   data: function () {
     return {
-      bucketList: [],
       flag: false,
+      bucketList: [],
     };
   },
   props: {
@@ -36,6 +36,7 @@ export default {
       this.bucketList = await api.getBucketList(this.tripId);
       this.flag = true;
       console.log(this.bucketList);
+      this.$emit("getBucketList", this.bucketList);
     },
   },
 };

@@ -20,7 +20,10 @@
             <div>장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
-            <bucket-list :tripId="tripId"></bucket-list>
+            <bucket-list
+              :tripId="tripId"
+              @getBucketList="getBucketList"
+            ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
@@ -87,6 +90,7 @@ export default {
       nickname: "",
       userId: 0,
       chatList: [],
+      buckets: [],
     };
   },
   async created() {
@@ -128,6 +132,7 @@ export default {
         }
       }
     },
+
     async addMember() {
       this.res = await api.addMember(this.tripId);
       if (this.res.memberId == -2) {
@@ -209,6 +214,9 @@ export default {
       let decode = jwt_decode(this.token);
       this.nickname = decode.nickname;
       this.userId = decode.userId;
+    },
+    getBucketList(bucketList) {
+      this.buckets = bucketList;
     },
   },
 };

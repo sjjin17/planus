@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-card outlined color="#B8DBC6" class="my-4">
+      <v-icon @Click="delBucket" class="d-flex justify-end">mdi-close</v-icon>
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
@@ -16,12 +17,23 @@
 export default {
   name: "BucketCard",
   data: function () {
-    return {};
+    return {
+      result: {
+        place: "",
+        address: "",
+        lat: "",
+        lng: "",
+      },
+    };
   },
   props: {
     bucket: Object,
   },
-  methods: {},
+  methods: {
+    delBucket() {
+      this.$emit("delBucket");
+    },
+  },
 };
 </script>
 <style></style>

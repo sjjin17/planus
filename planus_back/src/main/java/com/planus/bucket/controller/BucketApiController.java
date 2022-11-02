@@ -18,6 +18,7 @@ public class BucketApiController {
 
     @GetMapping("/{tripId}")
     public ResponseEntity getAllBuckets(@PathVariable Long tripId) {
+        System.out.println("hello");
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bucketService.findAllBuckets(tripId));
     }
