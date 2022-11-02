@@ -48,7 +48,7 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPort(port);
         redisStandaloneConfiguration.setPassword(password);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
-//        return new LettuceConnectionFactory(host, port);
+        //return new LettuceConnectionFactory(host, port);
     }
 
     @Bean
