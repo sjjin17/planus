@@ -1,5 +1,6 @@
 package com.planus.trip.controller;
 
+import com.planus.trip.dto.ChangeAdminReqDTO;
 import com.planus.trip.dto.TripReqDTO;
 import com.planus.trip.service.AreaService;
 import com.planus.trip.service.MemberService;
@@ -87,5 +88,30 @@ public class TripController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PutMapping("/changeadmin")
+    public ResponseEntity changeAdmin(@RequestHeader String Authorization, @RequestBody ChangeAdminReqDTO dto){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String token = Authorization.substring(7);
+        long tripId = dto.getTripId();
+        long userId = dto.getUserId();
+        //TODO: 차후에 exception으로 수정
+        try{
+            long newAdminId = tripService.changeAdmin(token, tripId, userId);
+            if(newAdminId==-1){
+                resultMap.put("message", "방장 바꾸기에서 문제 발생");
+                return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+            }else{
+                resultMap.put("message", "success");
+                resultMap.put("newAdminId", newAdminId);
+                return new ResponseEntity(resultMap, HttpStatus.OK);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
