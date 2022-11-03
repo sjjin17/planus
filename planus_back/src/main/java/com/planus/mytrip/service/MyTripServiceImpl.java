@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 @Service("myTripService")
 public class MyTripServiceImpl implements MyTripService {
 
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+
     private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
@@ -50,6 +53,31 @@ public class MyTripServiceImpl implements MyTripService {
                 .build();
     }
 
+    @Override
+    public String deleteTrip(String token, Long tripId) {
+        Long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        Trip trip = tripRepository.findByTripId(tripId);
+        // 완료된 일정 (참가자에서만 삭제)
+        if(trip.isComplete()) {
+            memberRepository.deleteByTripIdAndUserId(tripId, userId);
+            return SUCCESS;
+        }
+        // 진행중 일정 - 참가자 (참가자에서만 삭제)
+        if(trip.getTripId() != userId) {
+            memberRepository.deleteByTripIdAndUserId(tripId, userId);
+            return SUCCESS;
+        }
+        // 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
+        if(memberRepository.countByTripTripId(trip.getTripId()) > 1) {
+            // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
+            return SUCCESS;
+        }
+        // 참가자 더 없으면 일정 삭제
+        return SUCCESS;
+
+//        return FAIL;
+    }
+
     private List<MyTripResDTO> setMyTripList(Page<Trip> tripList) {
         List<MyTripResDTO> myTripList = new ArrayList<>();
 
@@ -70,4 +98,6 @@ public class MyTripServiceImpl implements MyTripService {
 
         return myTripList;
     }
+
+
 }

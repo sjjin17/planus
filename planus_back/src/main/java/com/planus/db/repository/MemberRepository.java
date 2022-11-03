@@ -10,4 +10,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByTripTripId(long tripId);
     boolean existsByTripTripIdAndUserUserId(long tripId, long userId);
     Long countByTripTripId(long tripId);
+
+    void deleteByTripIdAndUserId(long tripId, long userId);
 }
