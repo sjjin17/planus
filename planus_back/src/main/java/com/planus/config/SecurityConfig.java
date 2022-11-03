@@ -30,7 +30,7 @@ public class SecurityConfig {
         return http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
             //로컬
-            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://k7a505.p.ssafy.io", "https://k7a505.p.ssafy.io/planus"));
+            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://k7a505.p.ssafy.io", "https://k7a505.p.ssafy.io/planus", "https://planus.co.kr", "https://planus.co.kr/planus"));
 //            cors.setAllowedOriginPatterns(Collections.singletonList("*"));
             cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD"));
 //            cors.setAllowedMethods(Arrays.asList("*"));

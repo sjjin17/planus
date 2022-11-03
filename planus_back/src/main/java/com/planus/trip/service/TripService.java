@@ -6,4 +6,6 @@ import com.planus.trip.dto.TripResDTO;
 public interface TripService {
     TripResDTO createTrip(String token, String startDate, long period, int[] areaId);
     TripInfoResDTO findTripInfo(String token, String tripUrl);
+
+    long changeAdmin(String token, long tripId, long userId);
 }
