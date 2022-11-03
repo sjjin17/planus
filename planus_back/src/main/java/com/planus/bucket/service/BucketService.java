@@ -2,6 +2,7 @@ package com.planus.bucket.service;
 
 import com.planus.bucket.dto.BucketResDTO;
 import com.planus.websocket.model.WebSocketBucket;
+import com.planus.websocket.model.WebSocketTimetable;
 
 import java.util.List;
 
@@ -10,7 +11,9 @@ public interface BucketService {
 
     Long createBucketList(long tripId);
 
-    void deleteBucket(long tripId, WebSocketBucket bucket);
+    void deleteBucket(WebSocketBucket bucket);
 
-    void addBucket(long tripId, WebSocketBucket bucket);
+    void addBucket(WebSocketBucket bucket);
+
+    void moveToPlan(WebSocketTimetable timetable);
 }

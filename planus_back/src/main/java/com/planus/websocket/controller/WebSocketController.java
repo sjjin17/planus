@@ -3,10 +3,6 @@ package com.planus.websocket.controller;
 import com.planus.bucket.service.BucketService;
 import com.planus.trip.service.MemberService;
 import com.planus.websocket.model.*;
-import com.planus.websocket.model.WebSocketBucket;
-import com.planus.websocket.model.WebSocketMember;
-import com.planus.websocket.model.WebSocketMessage;
-import com.planus.websocket.model.WebSocketPlan;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +46,13 @@ public class WebSocketController {
 
     @MessageMapping("/connector")
     public void getConnector(WebSocketMember member){
-        memberService.getConnector(member);
+        member.setConnector(memberService.getConnector(member));
+        member.setAction(0);
+        try{
+            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @MessageMapping("/chat")
@@ -62,14 +64,14 @@ public class WebSocketController {
     @MessageMapping("/addBucket")
     public void addBucket(WebSocketBucket bucket){
         bucket.setAction(2);
-        bucketService.addBucket(bucket.getTripId(), bucket);
+        bucketService.addBucket(bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
 
     @MessageMapping("/delBucket")
     public void delBucket(WebSocketBucket bucket){
         bucket.setAction(3);
-        bucketService.deleteBucket(bucket.getTripId(), bucket);
+        bucketService.deleteBucket(bucket);
         sendingOperations.convertAndSend(ROOT_URL+bucket.getTripId(),bucket);
     }
 
@@ -86,6 +88,8 @@ public class WebSocketController {
         logger.info("fromBucket? "+timetable.getFromBucket());
         if(timetable.getFromBucket()){
             // TODO: bucket redis 작업
+
+
         }
 //        TODO: redis에 해당 timetable 추가하기
         sendingOperations.convertAndSend(ROOT_URL+timetable.getTripId(),timetable);
