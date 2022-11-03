@@ -5,7 +5,7 @@
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
-        <plan-modal @planSubmit="planSubmit"></plan-modal>
+        <plan-modal @planSubmit="planSubmit" :fromBucket="true"></plan-modal>
       </div>
     </v-card>
   </div>
@@ -32,7 +32,6 @@ export default {
     },
 
     planSubmit(costTime, fromBucket) {
-      fromBucket = true;
       this.$emit(
         "addTimetable",
         costTime,

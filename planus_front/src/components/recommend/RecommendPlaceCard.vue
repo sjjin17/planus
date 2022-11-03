@@ -22,7 +22,7 @@
           <v-col>
             <v-btn @click="bucketClick">버킷</v-btn>
           </v-col>
-          <plan-modal @planSubmit="planSubmit"></plan-modal>
+          <plan-modal @planSubmit="planSubmit" :fromBucket="false"></plan-modal>
         </v-row>
       </v-container>
     </v-card>
