@@ -1,5 +1,6 @@
 package com.planus.login.service;
 
+import com.planus.db.entity.User;
 import com.planus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,9 +31,12 @@ public class UserOauth2Service extends DefaultOAuth2UserService {
         Map<String,Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         long id = (long) attributes.get("id");
         String email = (String) kakaoAccount.get("email");
-        String nickname = (String) ((Map<String,Object>)kakaoAccount.get("profile")).get("nickname");
+        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+        String nickname = (String) profile.get("nickname");
 
-        userService.join(nickname,email,id);
+        User user = userService.join(nickname, email, id);
+
+        profile.put("nickname", user.getName());
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_MEMBER")),attributes, "id");
     }
