@@ -5,18 +5,9 @@
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
-        <v-btn
-          depressed
-          elevation="2"
-          color="#4A8072"
-          class="white--text"
-          v-show="memberOrAdmin == 2"
-          @click="movePlan"
-          >일정 추가</v-btn
-        >
+        <plan-modal @planSubmit="planSubmit"></plan-modal>
       </div>
     </v-card>
-    <plan-modal @planSubmit="planSubmit"></plan-modal>
   </div>
 </template>
 
@@ -45,13 +36,12 @@ export default {
       this.$emit(
         "addTimetable",
         costTime,
-        this.bucket.address,
         this.bucket.place,
         this.bucket.lat,
         this.bucket.lng,
-        fromBucket
+        fromBucket,
+        this.bucket.address
       );
-      console.log(fromBucket);
     },
   },
 };

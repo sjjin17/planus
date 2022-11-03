@@ -160,7 +160,6 @@ export default {
       ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
-      console.log(result);
       const content = JSON.parse(result.body);
       switch (content.action) {
         case 1:
@@ -218,7 +217,7 @@ export default {
         }
       }
     },
-    addTimetable(costTime, place, lat, lng, fromBucket) {
+    addTimetable(costTime, place, lat, lng, fromBucket, address) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addTimetable(
@@ -228,7 +227,8 @@ export default {
             place,
             lat,
             lng,
-            fromBucket
+            fromBucket,
+            address
           );
         }
       }
