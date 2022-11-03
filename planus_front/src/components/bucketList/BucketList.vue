@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     async getBucketList() {
-      this.bucketList = await api.getBucketList(this.tripId);
+      this.bucketList = await api.getBucketList(11111);
     },
     delBucket(bucket) {
       this.$emit("delBucket", bucket);

@@ -5,7 +5,10 @@
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
-        <plan-modal @planSubmit="planSubmit"></plan-modal>
+        <plan-modal
+          v-show="memberOrAdmin == 2"
+          @planSubmit="planSubmit"
+        ></plan-modal>
       </div>
     </v-card>
   </div>
