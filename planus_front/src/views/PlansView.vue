@@ -29,6 +29,7 @@
               :addedBucket="addedBucket"
               :memberOrAdmin="memberOrAdmin"
               @addTimetable="addTimetable"
+              style="overflow-y: scroll; height: 500px"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
