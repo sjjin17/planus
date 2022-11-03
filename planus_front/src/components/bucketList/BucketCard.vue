@@ -8,6 +8,7 @@
         <plan-modal
           v-show="memberOrAdmin == 2"
           @planSubmit="planSubmit"
+          :fromBucket="true"
         ></plan-modal>
       </div>
     </v-card>
