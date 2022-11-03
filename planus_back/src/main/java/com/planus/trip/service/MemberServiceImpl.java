@@ -22,10 +22,10 @@ public class MemberServiceImpl implements MemberService{
     private MemberRepository memberRepository;
     private UserRepository userRepository;
     private TripRepository tripRepository;
-    private RedisTemplate<String, Integer> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public MemberServiceImpl(TokenProvider tokenProvider, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, Integer> redisTemplate){
+    public MemberServiceImpl(TokenProvider tokenProvider, MemberRepository memberRepository, UserRepository userRepository, TripRepository tripRepository, RedisTemplate<String, String> redisTemplate){
         this.tokenProvider = tokenProvider;
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
@@ -71,29 +71,30 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void addConnector(WebSocketMember member) {
         String key = "connectorList::" + member.getTripId();
-        Long subKey = tokenProvider.getUserId(member.getToken().split(" ")[1]);
+        String subKey = String.valueOf(tokenProvider.getUserId(member.getToken().split(" ")[1]));
 
-        HashOperations<String, Long, Integer> hashOperations = redisTemplate.opsForHash();
-        if (hashOperations.get(key, subKey)==null){
-            hashOperations.put(key,subKey,1);
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+
+        if (hashOperations.get(key, subKey)==null || Integer.parseInt(hashOperations.get(key, subKey))<=0){
+            hashOperations.put(key,subKey, String.valueOf(1));
         }else {
-            hashOperations.put(key,subKey,hashOperations.get(key, subKey)+1);
+            hashOperations.increment(key, subKey, 1);
         }
     }
 
     @Override
     public void delConnector(WebSocketMember member) {
         String key = "connectorList::" + member.getTripId();
-        Long subKey = tokenProvider.getUserId(member.getToken().split(" ")[1]);
+        String subKey = String.valueOf(tokenProvider.getUserId(member.getToken().split(" ")[1]));
 
-        HashOperations<String, Long, Integer> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
 
         if (hashOperations.get(key, subKey)!=null){
-            if(hashOperations.get(key, subKey)<2){
-                hashOperations.delete(key, subKey);
-            }else {
-                hashOperations.put(key,subKey,hashOperations.get(key, subKey)-1);
-            }
+            hashOperations.increment(key, subKey, -1);
+        }
+
+        if (Integer.parseInt(hashOperations.get(key, subKey))<=0){
+            hashOperations.delete(key, subKey);
         }
     }
 
@@ -101,7 +102,7 @@ public class MemberServiceImpl implements MemberService{
     public Object[] getConnector(WebSocketMember member) {
         String key = "connectorList::" + member.getTripId();
 
-        HashOperations<String, Long, Integer> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
 
         Map map = hashOperations.entries(key);
 
