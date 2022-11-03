@@ -1,8 +1,8 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-const baseURL = "https://k7a505.p.ssafy.io/planus";
-// const baseURL = "http://localhost:8080/planus";
+// const baseURL = "https://k7a505.p.ssafy.io/planus";
+const baseURL = "http://localhost:8080/planus";
 const baseAxios = axios.create({
   baseURL,
   headers: {
@@ -102,6 +102,25 @@ const API = {
   async getMyTripShared(page) {
     const response = await this.instance.get("/mytrip/shared", {
       params: { page },
+    });
+    return response.data;
+  },
+
+  async getPlanId(tripId) {
+    const response = await this.instance.get("/plans/" + tripId);
+    return response.data;
+  },
+  async getPlanList(planIdList) {
+    const response = await this.instance.post("/plans/planlist", planIdList);
+    return response.data;
+  },
+  async savePlanStart(planId) {
+    const response = await this.instance.get("/plans/start/" + planId);
+    return response.data;
+  },
+  async savePlan(planIdList) {
+    const response = await this.instance.post("/plans", {
+      params: { planIdList },
     });
     return response.data;
   },

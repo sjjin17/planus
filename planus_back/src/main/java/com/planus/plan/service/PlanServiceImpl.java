@@ -52,7 +52,10 @@ public class PlanServiceImpl implements PlanService {
 
         List<Plan> planList = planRepository.findByTripTripId(tripId).orElseThrow();
         for (Plan p : planList) {
-            PlanIdResDTO planIdResDTO = PlanIdResDTO.builder().planId(p.getPlanId()).build();
+            PlanIdResDTO planIdResDTO = PlanIdResDTO.builder()
+                    .planId(p.getPlanId())
+                    .tripDate(p.getTripDate())
+                    .build();
             planIdResDTOList.add(planIdResDTO);
         }
 

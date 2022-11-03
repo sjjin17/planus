@@ -55,9 +55,20 @@
         style="width: 60%; background-color: blue"
         @getCenter="getCenter"
       />
-      <div style="width: 20%; background-color: red; min-width: 300px">
-        일정
-      </div>
+      <v-container
+        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+      >
+        <v-tabs v-model="planTabs" fixed-tabs>
+          <v-tab v-for="plan in planIdList" :key="plan.planId"
+            >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
+          >
+        </v-tabs>
+        <v-tabs-items v-model="planTabs">
+          <v-tab-item v-for="plan in planIdList" :key="plan.planId">
+            <plan-list :plan="plan" :tripId="tripId"></plan-list>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-container>
     </v-container>
   </div>
 </template>
@@ -71,6 +82,7 @@ import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
+import PlanList from "@/components/plans/PlanList.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -82,6 +94,7 @@ export default {
     RecommendPlaceTab,
     BucketList,
     ChatTab,
+    PlanList,
   },
   data() {
     return {
@@ -102,11 +115,15 @@ export default {
       isRecommendClick: false,
       deletedBucket: {},
       addedBucket: {},
+
+      planIdList: [],
+      planTabs: null,
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
     await this.getTripInfo();
+    await this.getPlanId(this.tripId);
     this.decoding();
   },
   methods: {
@@ -270,6 +287,12 @@ export default {
           );
         }
       }
+    },
+    async getPlanId(tripId) {
+      await api.getPlanId(tripId).then((res) => {
+        this.planIdList = res.planIdList;
+      });
+      console.log(this.planIdList);
     },
   },
 };
