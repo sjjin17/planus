@@ -1,17 +1,17 @@
 <template>
-  <v-container>
+  <v-container class="made-container">
     <v-row>
       <v-col v-for="(trip, index) in tripList" :key="index" cols="6">
-        <v-card outlined class="mx-10 mt-2">
-          <v-list-item three-line>
-            <v-list-item-avatar tile size="130" class="my-0"
+        <v-card outlined class="mx-10 mt-2" @click="goToTrip(trip.tripUrl)">
+          <v-list-item>
+            <v-list-item-avatar tile class="my-0 img-avatar"
               ><v-img :src="trip.imageUrl"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
               <div class="text-overline mb-4 d-flex justify-space-between">
                 <span>{{ trip.startDate }} ~ {{ trip.endDate }}</span>
-                <v-icon>mdi-close</v-icon>
+                <v-icon @click.stop="deleteTrip(trip.tripId)">mdi-close</v-icon>
               </div>
               <v-list-item-title class="text-h5 mb-1">
                 <span>| </span>
@@ -35,7 +35,8 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row justify="center">
+    <v-spacer></v-spacer>
+    <v-row justify="center" class="pagenation-bar">
       <v-pagination
         v-model="currentPage"
         class="my-4"
@@ -74,6 +75,14 @@ export default {
       this.tripList = res.tripList;
       this.totalPage = res.totalPage;
     },
+    goToTrip(tripUrl) {
+      this.$router.push("/plans/" + tripUrl);
+    },
+    deleteTrip(tripId) {
+      console.log(tripId);
+      //지우고
+      //목록 새로 받아오기
+    },
   },
 };
 </script>
@@ -85,5 +94,18 @@ export default {
 .v-card {
   border-radius: 0;
   border-color: #4a8072 !important;
+}
+.made-container {
+  height: 100%;
+  position: relative;
+}
+.pagenation-bar {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.img-avatar {
+  height: 100% !important;
+  width: 40% !important;
 }
 </style>

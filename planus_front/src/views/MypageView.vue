@@ -43,7 +43,7 @@ export default {
     },
   },
   created() {
-    this.tab = this.items[1];
+    this.tab = this.items[0];
   },
 };
 </script>
