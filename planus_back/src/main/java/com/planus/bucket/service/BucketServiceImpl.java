@@ -8,6 +8,7 @@ import com.planus.db.repository.BucketRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.util.RedisUtil;
 import com.planus.websocket.model.WebSocketBucket;
+import com.planus.websocket.model.WebSocketTimetable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.*;
@@ -79,8 +80,9 @@ public class BucketServiceImpl implements BucketService{
      * redis에서 해당 버킷 삭제
      */
     @Override
-    public void deleteBucket(long tripId, WebSocketBucket bucket) {
+    public void deleteBucket(WebSocketBucket bucket) {
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        long tripId = bucket.getTripId();
         String key = "bucketList::" + tripId;
         // WebSocketBucket -> BucketResDTO
         BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
@@ -88,13 +90,23 @@ public class BucketServiceImpl implements BucketService{
     }
 
     @Override
-    public void addBucket(long tripId, WebSocketBucket bucket) {
+    public void addBucket(WebSocketBucket bucket) {
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        long tripId = bucket.getTripId();
         String key = "bucketList::" + tripId;
         // WebSocketBucket -> BucketResDTO로 변환
         BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
         // redis에 저장
         zSetOperations.add(key, bucketResDTO, new java.util.Date().getTime());
+    }
+
+    @Override
+    public void moveToPlan(WebSocketTimetable timetable) {
+        long tripId = timetable.getTripId();
+        String key = "bucketList::" + tripId;
+        ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        BucketResDTO bucketResDTO = BucketResDTO.toResDTO(timetable);
+        zSetOperations.add(key, bucketResDTO, 0);
     }
 
 

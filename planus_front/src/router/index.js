@@ -9,7 +9,6 @@ import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
 import CompleteView from "../views/CompleteView.vue";
 import Chat from "@/components/chat/WebSocketTest.vue";
-import MyInfo from "@/components/mypage/MyInfo.vue";
 
 Vue.use(VueRouter);
 
@@ -21,11 +20,11 @@ const routes = [
     component: MypageView,
     redirect: "/mypage/made",
     children: [
-      // {
-      //   path: "myinfo",
-      //   name: "myinfo",
-      //   component: () => import("@/components/mypage/MyInfo.vue"),
-      // },
+      {
+        path: "myinfofix",
+        name: "myinfofix",
+        component: () => import("@/components/mypage/MyInfoFix.vue"),
+      },
       {
         path: "made",
         name: "made",
@@ -78,11 +77,6 @@ const routes = [
     path: "/chat",
     name: "chat",
     component: Chat,
-  },
-  {
-    path: "/myinfo",
-    name: "MyInfo",
-    component: MyInfo,
   },
 ];
 
