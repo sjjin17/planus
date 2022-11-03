@@ -80,6 +80,7 @@ public class WebSocketController {
     @MessageMapping("/setPlan")
     public void setPlan(WebSocketPlan plan){
         plan.setAction(4);
+        System.out.println("websocketcontroller까지 들어옴");
 //        TODO: redis에 해당 Plan 수정
         planService.setPlan(plan.getPlanId(), plan);
         sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);

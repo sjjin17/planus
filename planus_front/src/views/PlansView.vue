@@ -8,6 +8,13 @@
       :connector="connector"
       @getConnector="getConnector"
     ></invite-dialog>
+    <div>
+      <v-tabs v-model="planTabs" fixed-tabs>
+        <v-tab v-for="plan in planIdList" :key="plan.planId"
+          >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
+        >
+      </v-tabs>
+    </div>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
         style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
@@ -58,14 +65,14 @@
       <v-container
         style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
       >
-        <v-tabs v-model="planTabs" fixed-tabs>
-          <v-tab v-for="plan in planIdList" :key="plan.planId"
-            >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
-          >
-        </v-tabs>
         <v-tabs-items v-model="planTabs">
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
-            <plan-list :plan="plan" :tripId="tripId"></plan-list>
+            <plan-list
+              :plan="plan"
+              :tripId="tripId"
+              @setPlan="setPlan"
+              @setTimetable="setTimetable"
+            ></plan-list>
           </v-tab-item>
         </v-tabs-items>
       </v-container>
@@ -293,6 +300,37 @@ export default {
         this.planIdList = res.planIdList;
       });
       console.log(this.planIdList);
+    },
+    setPlan(newPlan) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setPlan(
+            this.tripId,
+            newPlan.planId,
+            newPlan.tripDate,
+            newPlan.startTime
+          );
+          console.log("새Plan" + newPlan.planId);
+        }
+      }
+    },
+    setTimetable(newTimetable, planId) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setTimetable(
+            this.tripId,
+            planId,
+            newTimetable.place,
+            newTimetable.lat,
+            newTimetable.lng,
+            newTimetable.orders,
+            newTimetable.costTime,
+            newTimetable.moveTime,
+            newTimetable.transit,
+            false
+          );
+        }
+      }
     },
   },
 };

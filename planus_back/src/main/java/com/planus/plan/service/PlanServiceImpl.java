@@ -252,6 +252,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void setPlan(long planId, WebSocketPlan plan) {
+        System.out.println("setPlan으로 들어왔음");
 //        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
         String key = "planList::" + planId;
 
@@ -316,7 +317,7 @@ public class PlanServiceImpl implements PlanService {
             try {
                 JSONParser parser = new JSONParser();
                 JSONObject jsonObject = (JSONObject) parser.parse(timetableListData.get(i));
-                if((int) jsonObject.get("orders") == order) {
+                if((int) (long) jsonObject.get("orders") == order) {
                     JSONObject timetableObject = new JSONObject();
 
                     timetableObject.put("orders", timetable.getOrders());
