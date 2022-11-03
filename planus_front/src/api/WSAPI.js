@@ -1,8 +1,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-// const WS_SERVER_URL = "http://localhost:8080/planus/ws";
-const WS_SERVER_URL = "https://planus.co.kr/planus/ws";
+const WS_SERVER_URL = "http://localhost:8080/planus/ws";
+//const WS_SERVER_URL = "https://planus.co.kr/planus/ws";
 
 const WSAPI = {
   socket: null,
