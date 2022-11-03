@@ -17,7 +17,7 @@
         </v-btn>
       </v-btn-toggle>
     </div>
-    <v-sheet height="550px" width="100%" class="content">
+    <v-sheet height="80vh" width="100%" class="content">
       <router-view />
     </v-sheet>
   </v-container>
