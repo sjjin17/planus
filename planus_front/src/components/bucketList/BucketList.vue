@@ -1,14 +1,13 @@
 <template>
   <div>
     <bucket-card
-      v-for="bucket in showBucketList"
+      v-for="bucket in bucketList"
       :key="bucket.place"
       :bucket="bucket"
       :memberOrAdmin="memberOrAdmin"
       @delBucket="delBucket"
       @addTimetable="addTimetable"
     ></bucket-card>
-    <infinite-loading @infinite="showMoreBucket"></infinite-loading>
   </div>
 </template>
 
@@ -16,21 +15,15 @@
 import API from "@/api/RESTAPI";
 const api = API;
 
-import InfiniteLoading from "vue-infinite-loading";
 import BucketCard from "@/components/bucketList/BucketCard.vue";
 export default {
   name: "BucketList",
   components: {
     BucketCard,
-    InfiniteLoading,
   },
   data: function () {
     return {
       bucketList: [],
-      showBucketList: [],
-      page: 0,
-      size: 5,
-      isNext: true,
     };
   },
   props: {
@@ -74,7 +67,6 @@ export default {
       }
     },
   },
-
   methods: {
     async getBucketList() {
       this.bucketList = await api.getBucketList(this.tripId);
@@ -92,23 +84,6 @@ export default {
         fromBucket,
         address
       );
-    },
-    showMoreBucket($state) {
-      console.log(this.bucketList.length);
-      console.log(this.tripId);
-      console.log(this.page * this.size);
-      console.log("loaded!!");
-      this.bucketList
-        .slice(this.page * this.size, (this.page + 1) * this.size)
-        .forEach((buckets) => {
-          this.showBucketList.push(buckets);
-        });
-      this.page += 1;
-      if (this.page * this.size > this.bucketList.length) {
-        $state.complete(); // data 끝
-      } else {
-        $state.loaded(); // $state => infinite scroll의 상태
-      }
     },
   },
 };
