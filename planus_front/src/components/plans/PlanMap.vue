@@ -62,7 +62,7 @@ export default {
       if (!newCoordinates) return;
       this.$emit(
         "getCenter",
-        newCoordinates.cb.center(),
+        newCoordinates.eb.center(),
         newCoordinates.Ha.center()
       );
     },
