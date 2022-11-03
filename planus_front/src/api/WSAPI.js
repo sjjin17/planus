@@ -25,8 +25,11 @@ const WSAPI = {
       }
     );
   },
-  enter(message) {
-    this.stomp.send("/app/enter", JSON.stringify(message));
+  enter(member) {
+    this.stomp.send("/app/enter", JSON.stringify(member));
+  },
+  getConnector(member) {
+    this.stomp.send("/app/connector", JSON.stringify(member));
   },
   chat(message) {
     this.stomp.send("/app/chat", JSON.stringify(message));

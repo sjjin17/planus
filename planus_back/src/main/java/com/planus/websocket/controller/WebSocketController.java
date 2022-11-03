@@ -4,10 +4,6 @@ import com.planus.bucket.service.BucketService;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
 import com.planus.websocket.model.*;
-import com.planus.websocket.model.WebSocketBucket;
-import com.planus.websocket.model.WebSocketMember;
-import com.planus.websocket.model.WebSocketMessage;
-import com.planus.websocket.model.WebSocketPlan;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +48,13 @@ public class WebSocketController {
 
     @MessageMapping("/connector")
     public void getConnector(WebSocketMember member){
-        memberService.getConnector(member);
+        member.setConnector(memberService.getConnector(member));
+        member.setAction(0);
+        try{
+            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @MessageMapping("/chat")
