@@ -17,7 +17,7 @@
         </v-btn>
       </v-btn-toggle>
     </div>
-    <v-sheet height="550px" width="100%" class="content">
+    <v-sheet height="80vh" width="100%" class="content">
       <router-view />
     </v-sheet>
   </v-container>
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       items: [
-        { title: "정보수정", link: "" },
+        { title: "정보수정", link: "/mypage/myinfofix" },
         { title: "내가만든 일정", link: "/mypage/made" },
         { title: "공유받은", link: "/mypage/shared" },
       ],

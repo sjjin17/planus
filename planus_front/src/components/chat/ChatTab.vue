@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 20%; padding-top: 3px">
+  <div style="width: 20%; min-width: 300px; padding-top: 3px; margin-left: 5px">
     <v-icon class="chatButton" v-if="isChatOpen" @click="chatButton"
       >mdi-chevron-double-down</v-icon
     >

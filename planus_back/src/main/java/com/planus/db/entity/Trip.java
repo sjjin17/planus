@@ -72,4 +72,8 @@ public class Trip {
         this.tripAreaList = tripAreaList;
         this.planList = planList;
     }
+
+    public void changeAdmin(long userId){
+        this.admin = userId;
+    }
 }

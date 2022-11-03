@@ -6,8 +6,10 @@ import com.planus.db.entity.Bucket;
 import com.planus.db.entity.Trip;
 import com.planus.db.repository.BucketRepository;
 import com.planus.db.repository.TripRepository;
+import com.planus.exception.CustomException;
 import com.planus.util.RedisUtil;
 import com.planus.websocket.model.WebSocketBucket;
+import com.planus.websocket.model.WebSocketTimetable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.*;
@@ -36,7 +38,7 @@ public class BucketServiceImpl implements BucketService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<BucketResDTO> findAllBuckets(Long tripId) {
+    public List<BucketResDTO> findAllBuckets(long tripId) {
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
         String key = "bucketList::" + tripId;
         if (redisUtil.isExists(key)) {
@@ -44,7 +46,7 @@ public class BucketServiceImpl implements BucketService{
             ArrayList<BucketResDTO> bucketList = new ArrayList<>(resultSet);
             return bucketList;
         } else {
-            List<Bucket> buckets = bucketRepository.findAllByTripTripId(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
+            List<Bucket> buckets = bucketRepository.findAllByTripTripId(tripId).orElseThrow(() -> new CustomException("존재하지 않는 여행정보입니다."));
             List<BucketResDTO> bucketList = buckets.stream().map(bucket -> BucketResDTO.toResDTO(bucket)).collect(Collectors.toList());
             for (BucketResDTO bucketResDTO : bucketList) {
                 zSetOperations.add(key, bucketResDTO, new java.util.Date().getTime());
@@ -64,7 +66,7 @@ public class BucketServiceImpl implements BucketService{
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
         bucketRepository.deleteAllByTripTripId(tripId);
         String key = "bucketList::" + tripId;
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 여행정보입니다."));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException("존재하지 않는 여행정보입니다."));
         Set<BucketResDTO> buckets = zSetOperations.range(key, 0, -1);
         ArrayList<BucketResDTO> bucketList = new ArrayList<>(buckets);
         for (BucketResDTO bucketResDTO : bucketList) {
@@ -79,8 +81,9 @@ public class BucketServiceImpl implements BucketService{
      * redis에서 해당 버킷 삭제
      */
     @Override
-    public void deleteBucket(long tripId, WebSocketBucket bucket) {
+    public void deleteBucket(WebSocketBucket bucket) {
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        long tripId = bucket.getTripId();
         String key = "bucketList::" + tripId;
         // WebSocketBucket -> BucketResDTO
         BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
@@ -88,13 +91,23 @@ public class BucketServiceImpl implements BucketService{
     }
 
     @Override
-    public void addBucket(long tripId, WebSocketBucket bucket) {
+    public void addBucket(WebSocketBucket bucket) {
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        long tripId = bucket.getTripId();
         String key = "bucketList::" + tripId;
         // WebSocketBucket -> BucketResDTO로 변환
         BucketResDTO bucketResDTO = BucketResDTO.toResDTO(bucket);
         // redis에 저장
         zSetOperations.add(key, bucketResDTO, new java.util.Date().getTime());
+    }
+
+    @Override
+    public void moveToPlan(WebSocketTimetable timetable) {
+        long tripId = timetable.getTripId();
+        String key = "bucketList::" + tripId;
+        ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
+        BucketResDTO bucketResDTO = BucketResDTO.toResDTO(timetable);
+        zSetOperations.add(key, bucketResDTO, 0);
     }
 
 

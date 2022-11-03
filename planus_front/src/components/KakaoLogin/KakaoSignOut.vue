@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 @click="signOut">탈퇴하기</h3>
+    <h5 @click="signOut" style="color: #544c4c">탈퇴하기&nbsp;&nbsp;&nbsp;</h5>
   </div>
 </template>
 

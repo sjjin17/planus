@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //클라이언트가 WebSocket 서버에 연결하는데 사용할 Endpoint 등록
         //Endpoint 구성에 withSockJS() 사용
         //SockJS는 WebSocket을 지원하지 않는 브라우저에 Fallback 옵션을 활성화하는데 사용
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("http://localhost:8081", "http://localhost:8080", "https://k7a505.p.ssafy.io").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("http://localhost:8081", "http://localhost:8080", "https://k7a505.p.ssafy.io", "https://planus.co.kr").withSockJS();
     }
 
     @Override

@@ -34,6 +34,9 @@
               @delBucket="delBucket"
               :deletedBucket="deletedBucket"
               :addedBucket="addedBucket"
+              :memberOrAdmin="memberOrAdmin"
+              @addTimetable="addTimetable"
+              style="overflow-y: scroll; height: 500px"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
@@ -255,7 +258,7 @@ export default {
         }
       }
     },
-    addTimetable(costTime, place, lat, lng, fromBucket) {
+    addTimetable(costTime, place, lat, lng, fromBucket, address) {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addTimetable(
@@ -265,7 +268,8 @@ export default {
             place,
             lat,
             lng,
-            fromBucket
+            fromBucket,
+            address
           );
         }
       }

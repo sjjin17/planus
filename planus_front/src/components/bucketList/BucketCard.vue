@@ -5,26 +5,47 @@
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
         <p>{{ bucket.address }}</p>
-        <v-btn depressed elevation="2" color="#4A8072" class="white--text"
-          >일정 추가</v-btn
-        >
+        <plan-modal
+          v-show="memberOrAdmin == 2"
+          @planSubmit="planSubmit"
+          :fromBucket="true"
+        ></plan-modal>
       </div>
     </v-card>
   </div>
 </template>
 
 <script>
+import PlanModal from "@/components/recommend/PlanModal.vue";
+
 export default {
   name: "BucketCard",
   data: function () {
     return {};
   },
+  components: {
+    PlanModal,
+  },
   props: {
     bucket: Object,
+    memberOrAdmin: Number,
   },
   methods: {
     delClick() {
       this.$emit("delBucket", this.bucket);
+    },
+
+    planSubmit(costTime, fromBucket) {
+      fromBucket = true;
+      this.$emit(
+        "addTimetable",
+        costTime,
+        this.bucket.place,
+        this.bucket.lat,
+        this.bucket.lng,
+        fromBucket,
+        this.bucket.address
+      );
     },
   },
 };

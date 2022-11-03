@@ -1,7 +1,43 @@
 <template>
-  <div>
-    <button @click="getAllArea">지역 목록</button><br />
-    <button @click="createTrip">일정 생성</button>
+  <div class="createTripDiv">
+    <v-row>
+      <v-col cols="4">
+        <v-menu
+          ref="dateMenu"
+          v-model="dateMenu"
+          :close-on-content-click="false"
+          :return-value.sync="dates"
+          transition="scale-transition"
+          offset-y
+          min-width="auto"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-combobox
+              v-model="dates"
+              label="여행 일정 선택"
+              prepend-icon="mdi-calendar"
+              multiple
+              chips
+              dense
+              outlined
+              clearable
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-combobox>
+          </template>
+          <v-date-picker v-model="dates" range no-title scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="dateMenu = false"> 취소 </v-btn>
+            <v-btn text color="primary" @click="$refs.dateMenu.save(dates)">
+              선택
+            </v-btn>
+          </v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="4"><v-btn @click="getAllArea">여행지 선택</v-btn></v-col>
+      <v-col cols="2"><v-btn @click="createTrip">시작하기</v-btn></v-col>
+    </v-row>
   </div>
 </template>
 
@@ -25,8 +61,11 @@ export default {
         siName: "",
       },
     ],
+    dates: [],
+    dateMenu: false,
   }),
   created() {},
+  computed: {},
   methods: {
     isLogin() {
       if (!this.$cookies.get("token")) {
@@ -49,4 +88,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.createTripDiv {
+  margin: 0 auto;
+  width: 70%;
+}
+</style>

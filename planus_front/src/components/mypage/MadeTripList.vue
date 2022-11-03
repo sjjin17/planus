@@ -4,16 +4,32 @@
       <v-col v-for="(trip, index) in tripList" :key="index" cols="6">
         <v-card outlined class="mx-10 mt-2">
           <v-list-item three-line>
-            <v-list-item-avatar tile size="123" class="my-0"
+            <v-list-item-avatar tile size="130" class="my-0"
               ><v-img :src="trip.imageUrl"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <div class="text-overline mb-4">{{ trip.startDate }}</div>
+              <div class="text-overline mb-4 d-flex justify-space-between">
+                <span>{{ trip.startDate }} ~ {{ trip.endDate }}</span>
+                <v-icon>mdi-close</v-icon>
+              </div>
               <v-list-item-title class="text-h5 mb-1">
-                {{ trip.complete }}
+                <span>| </span>
+                <span v-for="(area, idx) in trip.areaList" :key="idx + 'a'"
+                  >{{ area }} |
+                </span>
               </v-list-item-title>
-              <v-list-item-subtitle>{{ trip.endDate }}</v-list-item-subtitle>
+              <v-list-item-subtitle
+                class="d-flex align-end flex-column my-0 py-0"
+              >
+                <span
+                  ><v-icon v-if="trip.complete" color="#4a8072"
+                    >mdi-file-document-edit</v-icon
+                  >
+                  <v-icon v-else color="#4a8072">mdi-file-check</v-icon>
+                  &nbsp;{{ trip.participants }} 명
+                </span>
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -45,9 +61,19 @@ export default {
     };
   },
   async created() {
-    let res = await api.getMyTripMade(0);
-    this.tripList = res.tripList;
-    this.totalPage = res.totalPage;
+    await this.getMadeTripList(1);
+  },
+  watch: {
+    currentPage(newVal) {
+      this.getMadeTripList(newVal);
+    },
+  },
+  methods: {
+    async getMadeTripList(page) {
+      let res = await api.getMyTripMade(page - 1);
+      this.tripList = res.tripList;
+      this.totalPage = res.totalPage;
+    },
   },
 };
 </script>
