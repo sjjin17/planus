@@ -74,7 +74,23 @@ export default {
     delBucket(bucket) {
       this.$emit("delBucket", bucket);
     },
-    addTimetable(costTime, place, lat, lng, fromBucket, address) {
+    addTimetable(costTime, place, lat, lng, fromBucket, address, isClick) {
+      if (isClick) {
+        // 해당 버킷카드는 버킷리스트 제일 뒤로 옮기기
+        // let item = {
+        //   place: this.deletedBucket.place,
+        //   address: this.deletedBucket.address,
+        //   lat: this.deletedBucket.lat,
+        //   lng: this.deletedBucket.lng,
+        // };
+        // for (const idx of this.bucketList.keys()) {
+        //   if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
+        //     this.bucketList.splice(idx, 1);
+        //     this.bucketList.push(item);
+        //     break;
+        //   }
+        // }
+      }
       this.$emit(
         "addTimetable",
         costTime,

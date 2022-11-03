@@ -35,8 +35,7 @@ export default {
       this.$emit("delBucket", this.bucket);
     },
 
-    planSubmit(costTime, fromBucket) {
-      fromBucket = true;
+    planSubmit(costTime, fromBucket, isClick) {
       this.$emit(
         "addTimetable",
         costTime,
@@ -44,7 +43,8 @@ export default {
         this.bucket.lat,
         this.bucket.lng,
         fromBucket,
-        this.bucket.address
+        this.bucket.address,
+        isClick
       );
     },
   },
