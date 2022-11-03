@@ -5,6 +5,8 @@
       :tripId="tripId"
       :tripUrl="tripUrl"
       :admin="admin"
+      :connector="connector"
+      @getConnector="getConnector"
     ></invite-dialog>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
@@ -92,10 +94,11 @@ export default {
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
-      token: this.$cookies.get("token"),
+      token: "Bearer " + this.$cookies.get("token"),
       nickname: "",
       userId: 0,
       chatList: [],
+      connector: [],
       isRecommendClick: false,
       deletedBucket: {},
       addedBucket: {},
@@ -103,8 +106,8 @@ export default {
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
-    this.decoding();
     await this.getTripInfo();
+    this.decoding();
   },
   methods: {
     async getTripInfo() {
@@ -160,6 +163,9 @@ export default {
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
       switch (content.action) {
+        case 0:
+          this.connector = content.connector;
+          break;
         case 1:
           this.chatList.push(content.userName + ": " + content.chatMsg);
           break;
@@ -195,6 +201,16 @@ export default {
           console.log(content);
           // TODO: 일정(timetable)삭제
           break;
+      }
+    },
+    getConnector() {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.getConnector({
+            tripId: this.tripId,
+            token: this.token,
+          });
+        }
       }
     },
     sendChat(message) {
