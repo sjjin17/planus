@@ -38,7 +38,6 @@ export default {
     return {
       timetableList: [],
       startTime: 0,
-      //   calTime:출발시간을....ㅣ고민...for문이 한 번에 렌더링되기 때문에 순차적으로 시간을 계산해 줄 수가 없다
       calTime: [],
 
       startHour: 0,

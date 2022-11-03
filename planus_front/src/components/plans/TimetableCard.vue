@@ -88,6 +88,9 @@ export default {
       console.log(newTimetable);
       this.dialog = false;
       this.$emit("setTimetable", newTimetable);
+      //re-rendering을 위해 timetable에 뭔가 수정하기
+      // this.$set();
+      this.$forceUpdate();
     },
   },
 };
