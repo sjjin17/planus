@@ -47,7 +47,7 @@
               rounded
               color="primary"
               white--text
-              v-if="connector.includes(member.userId)"
+              v-if="connector.includes(member.userId + '')"
               >접속</v-btn
             >
             <v-btn depressed rounded white--text v-else>접속안함</v-btn>
