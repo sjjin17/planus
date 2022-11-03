@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isLogin">
-    <a href="http://localhost:8080/planus/oauth2/authorization/kakao">
-      <!-- <a href="https://k7a505.p.ssafy.io/planus/oauth2/authorization/kakao"> -->
+    <!-- <a href="http://localhost:8080/planus/oauth2/authorization/kakao"> -->
+    <a href="https://planus.co.kr/planus/oauth2/authorization/kakao">
       <img src="@/assets/kakao_login_medium_wide.png" />
     </a>
   </div>

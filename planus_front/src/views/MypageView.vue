@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       items: [
-        { title: "정보수정", link: "" },
+        { title: "정보수정", link: "/mypage/myinfofix" },
         { title: "내가만든 일정", link: "/mypage/made" },
         { title: "공유받은", link: "/mypage/shared" },
       ],
