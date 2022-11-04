@@ -1,43 +1,169 @@
 <template>
   <div class="createTripDiv">
-    <v-row>
-      <v-col cols="4">
-        <v-menu
-          ref="dateMenu"
-          v-model="dateMenu"
-          :close-on-content-click="false"
-          :return-value.sync="dates"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
+    <div class="selectAreaMenu">
+      <v-menu
+        ref="areaMenu"
+        v-model="areaMenu"
+        :close-on-content-click="false"
+        :return-value.sync="areas"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-combobox
+            v-model="areas"
+            label="여행지 선택"
+            allowOverflow="false"
+            multiple
+            chips
+            dense
+            solo
+            clearable
+            readonly
+            appendIcon=""
+            clear-icon="mdi-close-circle"
+            v-bind="attrs"
+            v-on="on"
+            @click:clear="clearArea"
+          >
+          </v-combobox>
+        </template>
+        <v-card v-model="areaMenu">
+          <v-card-title
+            ><v-tabs v-model="tabs" fixed-tabs>
+              <v-tab style="padding: 0">서울/인천</v-tab>
+              <v-tab>경기도</v-tab>
+              <v-tab>강원도</v-tab>
+              <v-tab>충청도</v-tab>
+              <v-tab>경상도</v-tab>
+              <v-tab>전라도</v-tab>
+              <v-tab>제주도</v-tab>
+            </v-tabs>
+          </v-card-title>
+          <v-card-text
+            ><v-tabs-items v-model="tabs"
+              ><v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup1"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup2"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup3"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup4"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup5"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup6"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item>
+              <v-tab-item>
+                <v-chip
+                  v-for="(area, i) in areaGroup7"
+                  :key="i"
+                  :area="area"
+                  @click="addArea(area)"
+                >
+                  {{ area.siName }}
+                </v-chip>
+              </v-tab-item></v-tabs-items
+            ></v-card-text
+          >
+        </v-card>
+      </v-menu>
+    </div>
+    <div class="selectDateMenu">
+      <v-menu
+        ref="dateMenu"
+        v-model="dateMenu"
+        :close-on-content-click="false"
+        :return-value.sync="dates"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-combobox
+            v-model="dates"
+            label="여행 일정 선택"
+            allowOverflow="false"
+            multiple
+            chips
+            dense
+            solo
+            clearable
+            readonly
+            appendIcon=""
+            prepend-inner-icon="mdi-calendar"
+            clear-icon="mdi-close-circle"
+            v-bind="attrs"
+            v-on="on"
+          >
+          </v-combobox>
+        </template>
+        <v-date-picker
+          v-model="dates"
+          :allowed-dates="disablePastDates"
+          range
+          no-title
+          scrollable
+          @input="dateSort"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-combobox
-              v-model="dates"
-              label="여행 일정 선택"
-              prepend-icon="mdi-calendar"
-              multiple
-              chips
-              dense
-              outlined
-              clearable
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-combobox>
-          </template>
-          <v-date-picker v-model="dates" range no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="dateMenu = false"> 취소 </v-btn>
-            <v-btn text color="primary" @click="$refs.dateMenu.save(dates)">
-              선택
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
-      </v-col>
-      <v-col cols="4"><v-btn @click="getAllArea">여행지 선택</v-btn></v-col>
-      <v-col cols="2"><v-btn @click="createTrip">시작하기</v-btn></v-col>
-    </v-row>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="dateMenu = false"> 취소 </v-btn>
+          <v-btn text color="primary" @click="$refs.dateMenu.save(dates)">
+            선택
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+    </div>
+    <v-btn @click="createTrip">일정 짜기</v-btn>
   </div>
 </template>
 
@@ -49,40 +175,88 @@ export default {
   components: {},
   props: {},
   data: () => ({
-    startDate: "2022-10-27",
-    period: 4,
-    areaId: [1, 2],
+    period: 0,
+    areaId: [],
     tripId: 0,
     tripUrl: "",
-    areaList: [
-      {
-        areaId: 0,
-        doName: "",
-        siName: "",
-      },
-    ],
+    areaGroup1: [],
+    areaGroup2: [],
+    areaGroup3: [],
+    areaGroup4: [],
+    areaGroup5: [],
+    areaGroup6: [],
+    areaGroup7: [],
+    tabs: 0,
     dates: [],
+    areas: [],
     dateMenu: false,
+    areaMenu: false,
   }),
-  created() {},
+  created() {
+    this.getAllArea();
+  },
   computed: {},
+  watch: {},
   methods: {
+    async getAllArea() {
+      this.res = await api.getAllArea();
+      let res = this.res.areaList;
+      console.log(res);
+      this.areaGroup1 = res.slice(0, 2);
+      this.areaGroup2 = res.slice(2, 33);
+      this.areaGroup3 = res.slice(33, 51);
+      this.areaGroup4 = res.slice(51, 79);
+      this.areaGroup5 = res.slice(79, 123);
+      this.areaGroup6 = res.slice(123, 160);
+      this.areaGroup7 = res.slice(160);
+    },
+    async createTrip() {
+      this.isLogin();
+
+      if (this.areaId.length == 0 || this.dates.length == 0) {
+        window.alert("여행지와 여행 일정을 선택해주세요!");
+      }
+
+      if (this.dates.length < 2) {
+        this.period = 0;
+      } else {
+        let a = new Date(this.dates[0]);
+        let b = new Date(this.dates[1]);
+        this.period = (b - a) / 86400000;
+      }
+
+      console.log(this.dates[0]);
+      console.log(this.period);
+      console.log(this.areaId);
+
+      this.res = await api.createTrip(this.dates[0], this.period, this.areaId);
+      this.tripId = this.res.result.tripId;
+      this.tripUrl = this.res.result.tripUrl;
+      this.$router.push("/plans/" + this.tripUrl);
+    },
     isLogin() {
       if (!this.$cookies.get("token")) {
         window.alert("로그인 해주세요!");
       }
     },
-    async getAllArea() {
-      this.res = await api.getAllArea();
-      this.areaList = this.res.areaList;
-      console.log(this.areaList);
+    addArea(area) {
+      console.log(area);
+      if (!this.areaId.includes(area.areaId)) {
+        this.areaId.push(area.areaId);
+        this.areas.push(area.siName);
+      }
     },
-    async createTrip() {
-      this.isLogin();
-      this.res = await api.createTrip(this.startDate, this.period, this.areaId);
-      this.tripId = this.res.result.tripId;
-      this.tripUrl = this.res.result.tripUrl;
-      this.$router.push("/plans/" + this.tripUrl);
+    clearArea() {
+      this.areaId = [];
+      this.areas = [];
+    },
+    disablePastDates(val) {
+      return val >= new Date().toISOString().substr(0, 10);
+    },
+    dateSort() {
+      if (this.dates.length > 1) {
+        this.dates.sort();
+      }
     },
   },
 };
@@ -90,7 +264,12 @@ export default {
 
 <style>
 .createTripDiv {
-  margin: 0 auto;
-  width: 70%;
+  display: flex;
+}
+.selectAreaMenu {
+  width: 40%;
+}
+.selectDateMenu {
+  width: 40%;
 }
 </style>

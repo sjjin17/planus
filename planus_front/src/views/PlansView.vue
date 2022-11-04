@@ -72,6 +72,7 @@
       </v-container>
       <plan-map
         style="width: 60%; background-color: blue"
+        :tripArea="tripArea"
         @getCenter="getCenter"
       />
       <v-container
@@ -126,6 +127,7 @@ export default {
       tripUrl: "",
       admin: 0,
       memberOrAdmin: 0,
+      tripArea: [],
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
@@ -162,6 +164,7 @@ export default {
       this.tripId = result.tripId;
       this.admin = result.admin;
       this.memberOrAdmin = result.memberOrAdmin;
+      this.tripArea = result.tripArea;
       if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
