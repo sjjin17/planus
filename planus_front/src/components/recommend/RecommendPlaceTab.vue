@@ -77,7 +77,7 @@ export default {
           this.recommendList = recommendList;
           this.page += 1;
           if ($state) {
-            if (this.pageLength <= this.page) {
+            if (this.pageLength < this.page) {
               $state.complete();
             } else {
               $state.loaded();
