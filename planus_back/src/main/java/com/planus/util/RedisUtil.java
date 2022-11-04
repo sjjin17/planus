@@ -81,7 +81,7 @@ public class RedisUtil {
     }
 
     public Map getHashData(String key) {
-        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
 
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
 
@@ -89,15 +89,19 @@ public class RedisUtil {
 //        hashMap.put("startTime", (String) redisTemplate.opsForHash().get(key, "start_time"));
 //        hashMap.put("timetables", (String) redisTemplate.opsForHash().get(key, "timetables"));
 
+
+
         return map;
     }
 
     public boolean setHashData(String key, Map<String, Object> map) {
-        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
 
         try {
             // map으로 만든 파라미터를 넣기
             hashOperations.putAll(key, map);
+
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();

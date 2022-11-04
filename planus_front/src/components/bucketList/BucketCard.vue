@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-card outlined color="#B8DBC6" class="my-4">
+    <v-card
+      outlined
+      color="#b8dbc6"
+      class="my-4"
+      :class="[isPlan == false ? 'isBucket' : 'toPlan']"
+    >
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
       <div class="d-flex justify-space-between">
@@ -21,7 +26,9 @@ import PlanModal from "@/components/recommend/PlanModal.vue";
 export default {
   name: "BucketCard",
   data: function () {
-    return {};
+    return {
+      isPlan: false,
+    };
   },
   components: {
     PlanModal,
@@ -35,8 +42,8 @@ export default {
       this.$emit("delBucket", this.bucket);
     },
 
-    planSubmit(costTime, fromBucket) {
-      fromBucket = true;
+    planSubmit(costTime, fromBucket, isClick) {
+      this.isPlan = isClick;
       this.$emit(
         "addTimetable",
         costTime,
@@ -44,10 +51,25 @@ export default {
         this.bucket.lat,
         this.bucket.lng,
         fromBucket,
-        this.bucket.address
+        this.bucket.address,
+        isClick
       );
     },
   },
 };
 </script>
-<style></style>
+<style>
+.toPlan {
+  background-color: grey;
+  opacity: 0.7;
+}
+.isBucket {
+  background-color: #b8dbc6;
+}
+/* 
+      :style="[
+        isPlan == false
+          ? { background: '#B8DBC6' }
+          : { backgroud: rgba(184, 219, 198, 0.5) },
+      ]" */
+</style>

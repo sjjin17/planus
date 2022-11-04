@@ -105,6 +105,25 @@ const API = {
     });
     return response.data;
   },
+
+  async getPlanId(tripId) {
+    const response = await this.instance.get("/plans/" + tripId);
+    return response.data;
+  },
+  async getPlanList(planIdList) {
+    const response = await this.instance.post("/plans/planlist", planIdList);
+    return response.data;
+  },
+  async savePlanStart(planId) {
+    const response = await this.instance.get("/plans/start/" + planId);
+    return response.data;
+  },
+  async savePlan(planIdList) {
+    const response = await this.instance.post("/plans", {
+      params: { planIdList },
+    });
+    return response.data;
+  },
 };
 
 export default API;
