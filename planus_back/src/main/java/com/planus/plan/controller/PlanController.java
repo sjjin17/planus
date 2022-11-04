@@ -83,13 +83,13 @@ public class PlanController {
         System.out.println("savePlan 들어옴1");
 
         // 더미데이터 만드는 구간
-        for (long planId:planIdList) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("trip_date", "");
-            map.put("start_time", "480");
-            //JSON으로 String화한 문자열을 저장해야 함
-            map.put("timetables", "");
-        }
+//        for (long planId:planIdList) {
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("trip_date", "");
+//            map.put("start_time", "480");
+//            //JSON으로 String화한 문자열을 저장해야 함
+//            map.put("timetables", "");
+//        }
 
         // 더미데이터 만드는 구간 끝
 

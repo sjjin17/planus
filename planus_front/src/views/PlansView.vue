@@ -10,7 +10,10 @@
     ></invite-dialog>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
-        <v-tab v-for="plan in planIdList" :key="plan.planId"
+        <v-tab
+          v-for="plan in planIdList"
+          :key="plan.planId"
+          @click="saveTimetableList(plan.planId)"
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
@@ -144,6 +147,8 @@ export default {
       planTabs: null,
 
       startTime: {},
+
+      planId: 0,
     };
   },
   async created() {
@@ -151,6 +156,16 @@ export default {
     await this.getTripInfo();
     await this.getPlanId(this.tripId);
     this.decoding();
+  },
+  watch: {
+    planId(newVal, oldVal) {
+      if (oldVal == 0) {
+        return;
+      }
+      console.log("oldVal:" + oldVal);
+      api.savePlan([oldVal]);
+      newVal;
+    },
   },
   methods: {
     async getTripInfo() {
@@ -330,14 +345,15 @@ export default {
     async getPlanId(tripId) {
       await api.getPlanId(tripId).then((res) => {
         this.planIdList = res.planIdList;
+        this.planId = res.planIdList[0].planId;
       });
-      console.log(this.planIdList);
-      let paramPlanIdList = [];
-      this.planIdList.forEach((p) => {
-        paramPlanIdList.push(p.planId);
-        console.log(p.planId);
-      });
-      await api.getPlanList(paramPlanIdList);
+      // console.log(this.planIdList);
+      // let paramPlanIdList = [];
+      // this.planIdList.forEach((p) => {
+      //   paramPlanIdList.push(p.planId);
+      //   console.log(p.planId);
+      // });
+      // await api.getPlanList(paramPlanIdList);
     },
     setPlan(newPlan) {
       if (this.token) {
@@ -369,6 +385,16 @@ export default {
           );
         }
       }
+    },
+    async saveTimetableList(planId) {
+      console.log("----");
+      console.log(planId);
+      // let savePlanIdList = [];
+      // this.planIdList.forEach((p) => {
+      //   savePlanIdList.push(p.planId);
+      // });
+      // await api.savePlan(savePlanIdList);
+      this.planId = planId;
     },
   },
 };
