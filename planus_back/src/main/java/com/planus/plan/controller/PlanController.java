@@ -80,6 +80,8 @@ public class PlanController {
     @PostMapping
     @ApiOperation(value = "Plan 및 Timetable 저장")
     public ResponseEntity savePlan(@RequestBody List<Long> planIdList) {
+        System.out.println("savePlan 들어옴1");
+
         // 더미데이터 만드는 구간
         for (long planId:planIdList) {
             Map<String, Object> map = new HashMap<>();
