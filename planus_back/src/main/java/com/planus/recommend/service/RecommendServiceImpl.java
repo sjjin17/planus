@@ -27,7 +27,7 @@ public class RecommendServiceImpl implements RecommendService{
     @Override
     public int countPage(double lat, double lng, int size){
         int count = recommendRepository.countPage(lat,lng);
-        int countPage = count/size;
+        int countPage = count/size-1;
         if(count%size!=0){
             countPage+=1;
         }
