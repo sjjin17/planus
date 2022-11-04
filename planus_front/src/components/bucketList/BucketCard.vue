@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined color="#b8dbc6" class="my-4 px-2">
+    <v-card outlined color="#b8dbc6" class="my-4 ps-2">
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
       <p class="text-h5 font-weight-bold box mt-5" style="color: #544c4c">
         {{ bucket.place }}
