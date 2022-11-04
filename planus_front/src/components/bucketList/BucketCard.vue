@@ -2,10 +2,9 @@
   <div>
     <v-card
       outlined
+      color="#b8dbc6"
       class="my-4"
-      :style="[
-        isPlan == false ? { background: '#B8DBC6' } : { backgroud: '#FFFFFF' },
-      ]"
+      :class="[isPlan == false ? 'isBucket' : 'toPlan']"
     >
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
       <p class="text-h5 text--primary">{{ bucket.place }}</p>
@@ -59,4 +58,18 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.toPlan {
+  background-color: grey;
+  opacity: 0.7;
+}
+.isBucket {
+  background-color: #b8dbc6;
+}
+/* 
+      :style="[
+        isPlan == false
+          ? { background: '#B8DBC6' }
+          : { backgroud: rgba(184, 219, 198, 0.5) },
+      ]" */
+</style>
