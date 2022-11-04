@@ -50,7 +50,6 @@ export default {
     dialog: false,
     hours: 2,
     minutes: 0,
-    isClick: false,
   }),
   props: {
     fromBucket: Boolean,
@@ -95,10 +94,7 @@ export default {
   methods: {
     submit() {
       let costTime = this.hours * 60 + this.minutes * 1;
-      if (this.fromBucket) {
-        this.isClick = true;
-      }
-      this.$emit("planSubmit", costTime, this.fromBucket, this.isClick);
+      this.$emit("planSubmit", costTime, this.fromBucket);
       this.dialog = false;
     },
   },
