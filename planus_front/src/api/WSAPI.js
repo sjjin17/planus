@@ -65,7 +65,17 @@ const WSAPI = {
     this.stomp.send("/app/setPlan", JSON.stringify(plan));
   },
 
-  addTimetable(tripId, planId, costTime, place, lat, lng, fromBucket, address) {
+  addTimetable(
+    tripId,
+    planId,
+    costTime,
+    place,
+    lat,
+    lng,
+    orders,
+    fromBucket,
+    address
+  ) {
     let timetable = {
       tripId: tripId,
       planId: planId,
@@ -73,6 +83,7 @@ const WSAPI = {
       place: place,
       lat: lat,
       lng: lng,
+      orders: orders,
       fromBucket: fromBucket,
       address: address,
     };

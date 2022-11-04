@@ -86,6 +86,7 @@
               :WebSocketStartTime="startTime"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
+              @countTimetable="countTimetable"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -146,6 +147,7 @@ export default {
       planTabs: null,
 
       startTime: {},
+      timeTableLength: 0,
     };
   },
   async created() {
@@ -251,6 +253,7 @@ export default {
             place: content.place,
             lat: content.lat,
             lng: content.lng,
+            orders: content.orders,
             fromBucket: content.fromBucket,
             address: content.address,
           };
@@ -299,6 +302,7 @@ export default {
             place,
             lat,
             lng,
+            this.timeTableLength + 1,
             fromBucket,
             address
           );
@@ -372,6 +376,9 @@ export default {
           );
         }
       }
+    },
+    countTimetable(length) {
+      this.timeTableLength = length;
     },
   },
 };
