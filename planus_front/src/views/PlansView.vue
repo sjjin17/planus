@@ -14,6 +14,7 @@
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
+      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
     </div>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
@@ -71,6 +72,7 @@
       </v-container>
       <plan-map
         style="width: 60%; background-color: blue"
+        :tripArea="tripArea"
         @getCenter="getCenter"
       />
       <v-container
@@ -81,6 +83,7 @@
             <plan-list
               :plan="plan"
               :tripId="tripId"
+              :WebSocketStartTime="startTime"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
@@ -102,6 +105,7 @@ import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
+import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -114,6 +118,7 @@ export default {
     BucketList,
     ChatTab,
     PlanList,
+    PlanSaveButton,
   },
   data() {
     return {
@@ -123,6 +128,7 @@ export default {
       tripUrl: "",
       admin: 0,
       memberOrAdmin: 0,
+      tripArea: [],
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
@@ -139,6 +145,8 @@ export default {
 
       planIdList: [],
       planTabs: null,
+
+      startTime: {},
       timeTableLength: 0,
     };
   },
@@ -158,6 +166,7 @@ export default {
       this.tripId = result.tripId;
       this.admin = result.admin;
       this.memberOrAdmin = result.memberOrAdmin;
+      this.tripArea = result.tripArea;
       if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
@@ -231,6 +240,10 @@ export default {
         case 4:
           console.log(content);
           // TODO: 일정(plan)변경
+          this.startTime = {
+            planId: content.planId,
+            startTime: content.startTime,
+          };
           break;
         case 5:
           console.log(content);
@@ -326,6 +339,12 @@ export default {
         this.planIdList = res.planIdList;
       });
       console.log(this.planIdList);
+      let paramPlanIdList = [];
+      this.planIdList.forEach((p) => {
+        paramPlanIdList.push(p.planId);
+        console.log(p.planId);
+      });
+      await api.getPlanList(paramPlanIdList);
     },
     setPlan(newPlan) {
       if (this.token) {

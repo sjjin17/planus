@@ -107,7 +107,8 @@ public class BucketServiceImpl implements BucketService{
         String key = "bucketList::" + tripId;
         ZSetOperations<String, BucketResDTO> zSetOperations = redisTemplate.opsForZSet();
         BucketResDTO bucketResDTO = BucketResDTO.toResDTO(timetable);
-        zSetOperations.add(key, bucketResDTO, 0);
+        zSetOperations.remove(key, bucketResDTO);
+
     }
 
 

@@ -74,7 +74,7 @@ public class PlanServiceImpl implements PlanService {
 
             // redis에 값이 있으면 redis에서 가져오고,
             if (redisUtil.isExists(planKey)) {
-                System.out.println("redis에서 값을 가져옵니다.");
+                System.out.println(planId+"를 redis에서 값을 가져옵니다.");
                 //planList::planId 를 key로 가진 hash에서 startTime, tripDate를 가져올 수 있음
                 Map<String, String> map = redisUtil.getHashData(planKey);
                 List list = redisUtil.getListData(timetableKey);
@@ -117,7 +117,7 @@ public class PlanServiceImpl implements PlanService {
 
             // 없으면 mysql에서 가져오기 + redis에 저장하기
             else {
-                System.out.println("mysql에서 가져옵니다.");
+                System.out.println(planId+"를 mysql에서 가져옵니다.");
 
                 //redis에 timetableList::planId가 있으면 삭제 후 넣기
                 if(redisUtil.isExists(timetableKey)) {
@@ -193,6 +193,8 @@ public class PlanServiceImpl implements PlanService {
         String key = "planList::" + planId;
 
         Map<String, String> map = redisUtil.getHashData(key);
+
+        System.out.println("trip_date출력"+map.get("trip_date"));
 
         Plan plan = Plan.builder()
                 .planId(planId)

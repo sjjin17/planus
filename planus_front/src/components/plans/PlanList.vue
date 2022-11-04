@@ -47,13 +47,20 @@ export default {
   props: {
     tripId: Number,
     plan: Object,
+    WebSocketStartTime: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
   },
   watch: {
-    startTime(newStartTime) {
-      newStartTime;
+    WebSocketStartTime(newVal) {
+      if (newVal.planId == this.plan.planId) {
+        this.startTime = newVal.startTime * 1;
+        this.startHour = this.startTime / 60;
+        this.startMin = this.startTime % 60;
+      }
+    },
+    startTime() {
       this.calculateCalTime(this.calTime, this.timetableList, this.startTime);
       //re-rendering을 위해 배열 splice 필요
       this.calTime.splice(0, 1, this.startTime);
@@ -72,7 +79,6 @@ export default {
   methods: {
     async getPlanList(planIdList) {
       api.getPlanList(planIdList).then((res) => {
-        console.log(res.planList[0]);
         this.timetableList = res.planList[0].timetableList;
         this.startTime = res.planList[0].startTime;
         // this.calTime = this.startTime;
@@ -110,7 +116,6 @@ export default {
         startTime: this.startTime,
         tripDate: plan.tripDate,
       };
-      console.log(newPlan);
       //emit으로 newPlan을 PlansView로 보내기
       this.$emit("setPlan", newPlan);
     },
