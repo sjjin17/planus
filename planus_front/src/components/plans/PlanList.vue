@@ -64,6 +64,7 @@ export default {
         this.calculateCalTime(this.calTime, this.timetableList, this.startTime);
         //re-rendering을 위해 배열 splice 필요
         this.calTime.splice(0, 1, this.startTime);
+        this.$emit("countTimetable", this.timetableList.length);
       },
       deep: true,
     },
