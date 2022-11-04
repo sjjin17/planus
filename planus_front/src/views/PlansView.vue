@@ -36,6 +36,7 @@
               :addedBucket="addedBucket"
               :memberOrAdmin="memberOrAdmin"
               @addTimetable="addTimetable"
+              :addedTimetable="addedTimetable"
               style="overflow-y: scroll; height: 500px"
             ></bucket-list>
           </v-tab-item>
@@ -125,6 +126,8 @@ export default {
       isRecommendClick: false,
       deletedBucket: {},
       addedBucket: {},
+      // plan
+      addedTimetable: {},
 
       planIdList: [],
       planTabs: null,
@@ -223,6 +226,14 @@ export default {
         case 5:
           console.log(content);
           // TODO: 일정(timetable)추가
+          this.addedTimetable = {
+            costTime: content.costTime,
+            place: content.place,
+            lat: content.lat,
+            lng: content.lng,
+            fromBucket: content.fromBucket,
+            address: content.address,
+          };
           break;
         case 6:
           console.log(content);
