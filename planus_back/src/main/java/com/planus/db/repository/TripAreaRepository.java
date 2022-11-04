@@ -8,4 +8,5 @@ import java.util.List;
 public interface TripAreaRepository extends JpaRepository<TripArea, Long> {
     TripArea save(TripArea tripArea);
     List<TripArea> findByTripTripId(long tripId);
+    void deleteAllByTripTripId(long tripId);
 }

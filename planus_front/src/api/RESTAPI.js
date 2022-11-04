@@ -2,7 +2,7 @@ import axios from "axios";
 import VueCookies from "vue-cookies";
 
 const baseURL = "https://planus.co.kr/planus";
-//const baseURL = "http://localhost:8080/planus";
+// const baseURL = "http://localhost:8080/planus";
 const baseAxios = axios.create({
   baseURL,
   headers: {
@@ -120,6 +120,12 @@ const API = {
   },
   async savePlan(planIdList) {
     const response = await this.instance.post("/plans", planIdList);
+    return response.data;
+  },
+  async deleteTrip(tripId) {
+    const response = await this.instance.delete("/mytrip", {
+      params: { tripId },
+    });
     return response.data;
   },
 };
