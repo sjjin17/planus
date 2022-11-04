@@ -39,13 +39,18 @@ public class PlanController {
 
     @PostMapping("/planlist")
     @ApiOperation(value = "planList 정보 조회", notes = "planId 목록을 이용해 일정 정보를 불러옵니다.")
-    public ResponseEntity getPlanList(@RequestBody List planIdList) {
+    public ResponseEntity getPlanList(@RequestBody List<Long> planIdList) {
+        System.out.println(planIdList.toArray().toString());
+
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
             List<PlanResDTO> planResDTOList = planService.readPlanList(planIdList);
             resultMap.put("planList", planResDTOList);
             resultMap.put("message", "success");
+
+            System.out.println("getPlanList출력문");
+            
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,6 +80,8 @@ public class PlanController {
     @PostMapping
     @ApiOperation(value = "Plan 및 Timetable 저장")
     public ResponseEntity savePlan(@RequestBody List<Long> planIdList) {
+        System.out.println("savePlan 들어옴1");
+
         // 더미데이터 만드는 구간
         for (long planId:planIdList) {
             Map<String, Object> map = new HashMap<>();

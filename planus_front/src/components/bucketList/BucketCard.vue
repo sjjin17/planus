@@ -1,16 +1,17 @@
 <template>
   <div>
-    <v-card outlined color="#B8DBC6" class="my-4">
+    <v-card outlined color="#b8dbc6" class="my-4 px-2">
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
-      <p class="text-h5 text--primary">{{ bucket.place }}</p>
-      <div class="d-flex justify-space-between">
-        <p>{{ bucket.address }}</p>
-        <plan-modal
-          v-show="memberOrAdmin == 2"
-          @planSubmit="planSubmit"
-          :fromBucket="true"
-        ></plan-modal>
-      </div>
+      <p class="text-h5 font-weight-bold box mt-5" style="color: #544c4c">
+        {{ bucket.place }}
+      </p>
+      <p>{{ bucket.address }}</p>
+      <plan-modal
+        class="d-flex justify-end"
+        v-show="memberOrAdmin == 2"
+        @planSubmit="planSubmit"
+        :fromBucket="true"
+      ></plan-modal>
     </v-card>
   </div>
 </template>
@@ -21,7 +22,9 @@ import PlanModal from "@/components/recommend/PlanModal.vue";
 export default {
   name: "BucketCard",
   data: function () {
-    return {};
+    return {
+      isPlan: false,
+    };
   },
   components: {
     PlanModal,
@@ -36,7 +39,6 @@ export default {
     },
 
     planSubmit(costTime, fromBucket) {
-      fromBucket = true;
       this.$emit(
         "addTimetable",
         costTime,
@@ -50,4 +52,16 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+.v-card {
+  height: 100%;
+}
+.v-icon {
+  float: right;
+}
+.box {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

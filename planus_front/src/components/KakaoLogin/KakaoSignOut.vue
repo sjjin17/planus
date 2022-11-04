@@ -11,8 +11,10 @@ export default {
   name: "KakaoSignOut",
   methods: {
     async signOut() {
-      this.res = await api.signOut();
-      this.$cookies.remove("token");
+      this.res = await api
+        .signOut()
+        .then(() => this.$cookies.remove("token"))
+        .then(() => this.$router.push("/"));
     },
   },
 };

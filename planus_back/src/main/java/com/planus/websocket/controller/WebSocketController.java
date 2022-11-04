@@ -1,6 +1,7 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
+import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
 import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class WebSocketController {
     private static final String ROOT_URL = "/topic/planus/";
 
     private final BucketService bucketService;
+    private final PlanService planService;
     private final MemberService memberService;
 
     @MessageMapping("/enter")
@@ -49,7 +51,7 @@ public class WebSocketController {
         member.setConnector(memberService.getConnector(member));
         member.setAction(0);
         try{
-            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
+            sendingOperations.convertAndSend(ROOT_URL+member.getTripId(),member);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -78,7 +80,9 @@ public class WebSocketController {
     @MessageMapping("/setPlan")
     public void setPlan(WebSocketPlan plan){
         plan.setAction(4);
+        System.out.println("websocketcontroller까지 들어옴");
 //        TODO: redis에 해당 Plan 수정
+        planService.setPlan(plan.getPlanId(), plan);
         sendingOperations.convertAndSend(ROOT_URL+plan.getTripId(),plan);
     }
 
@@ -88,10 +92,11 @@ public class WebSocketController {
         logger.info("fromBucket? "+timetable.getFromBucket());
         if(timetable.getFromBucket()){
             // TODO: bucket redis 작업
-
+            bucketService.moveToPlan(timetable);
 
         }
 //        TODO: redis에 해당 timetable 추가하기
+        planService.addTimetable(timetable.getPlanId(), timetable);
         sendingOperations.convertAndSend(ROOT_URL+timetable.getTripId(),timetable);
     }
 
@@ -99,7 +104,22 @@ public class WebSocketController {
     public void delTimetable(WebSocketTimetableList timetablelist){
         timetablelist.setAction(6);
 //        TODO: redis에 해당 timetable 삭제하기
+        planService.delTimetable(timetablelist.getPlanId(), timetablelist);
         sendingOperations.convertAndSend(ROOT_URL+timetablelist.getTripId(),timetablelist);
+    }
+
+    @MessageMapping("/setTimetableOrders")
+    public void setTimetableOrders(WebSocketTimetableList timetableList) {
+        timetableList.setAction(7);
+        planService.setTimetableOrders(timetableList.getPlanId(), timetableList);
+        sendingOperations.convertAndSend(ROOT_URL+timetableList.getTripId(),timetableList);
+    }
+
+    @MessageMapping("/setTimetable")
+    public void setTimetable(WebSocketTimetable Timetable) {
+        Timetable.setAction(8);
+        planService.setTimetable(Timetable.getPlanId(), Timetable);
+        sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
     }
 
     @EventListener

@@ -8,9 +8,24 @@
       :connector="connector"
       @getConnector="getConnector"
     ></invite-dialog>
+    <complete-dialog :tripId="tripId"></complete-dialog>
+    <div>
+      <v-tabs v-model="planTabs" fixed-tabs>
+        <v-tab v-for="plan in planIdList" :key="plan.planId"
+          >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
+        >
+      </v-tabs>
+      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
+    </div>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
-        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+        style="
+          width: 20%;
+          margin: 0;
+          min-width: 300px;
+          height: 85vh;
+          position: relative;
+        "
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
@@ -19,7 +34,7 @@
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
-            <div>장소검색 컴포넌트</div>
+            <div id="leftTab">장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
             <bucket-list
@@ -29,17 +44,19 @@
               :addedBucket="addedBucket"
               :memberOrAdmin="memberOrAdmin"
               @addTimetable="addTimetable"
-              style="overflow-y: scroll; height: 500px"
+              :addedTimetable="addedTimetable"
+              id="leftTab"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
-              :lat="lat"
-              :lng="lng"
+              :mapLat="lat"
+              :mapLng="lng"
               :size="size"
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
         </v-tabs-items>
@@ -56,11 +73,25 @@
       </v-container>
       <plan-map
         style="width: 60%; background-color: blue"
+        :tripArea="tripArea"
         @getCenter="getCenter"
       />
-      <div style="width: 20%; background-color: red; min-width: 300px">
-        일정
-      </div>
+      <v-container
+        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+      >
+        <v-tabs-items v-model="planTabs">
+          <v-tab-item v-for="plan in planIdList" :key="plan.planId">
+            <plan-list
+              :plan="plan"
+              :tripId="tripId"
+              :WebSocketStartTime="startTime"
+              @setPlan="setPlan"
+              @setTimetable="setTimetable"
+              @countTimetable="countTimetable"
+            ></plan-list>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-container>
     </v-container>
   </div>
 </template>
@@ -74,6 +105,9 @@ import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
+import PlanList from "@/components/plans/PlanList.vue";
+import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
+import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -85,6 +119,9 @@ export default {
     RecommendPlaceTab,
     BucketList,
     ChatTab,
+    PlanList,
+    PlanSaveButton,
+    CompleteDialog,
   },
   data() {
     return {
@@ -94,6 +131,7 @@ export default {
       tripUrl: "",
       admin: 0,
       memberOrAdmin: 0,
+      tripArea: [],
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
@@ -105,11 +143,20 @@ export default {
       isRecommendClick: false,
       deletedBucket: {},
       addedBucket: {},
+      // plan
+      addedTimetable: {},
+
+      planIdList: [],
+      planTabs: null,
+
+      startTime: {},
+      timeTableLength: 0,
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
     await this.getTripInfo();
+    await this.getPlanId(this.tripId);
     this.decoding();
   },
   methods: {
@@ -122,6 +169,7 @@ export default {
       this.tripId = result.tripId;
       this.admin = result.admin;
       this.memberOrAdmin = result.memberOrAdmin;
+      this.tripArea = result.tripArea;
       if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
@@ -195,10 +243,23 @@ export default {
         case 4:
           console.log(content);
           // TODO: 일정(plan)변경
+          this.startTime = {
+            planId: content.planId,
+            startTime: content.startTime,
+          };
           break;
         case 5:
           console.log(content);
           // TODO: 일정(timetable)추가
+          this.addedTimetable = {
+            costTime: content.costTime,
+            place: content.place,
+            lat: content.lat,
+            lng: content.lng,
+            orders: content.orders,
+            fromBucket: content.fromBucket,
+            address: content.address,
+          };
           break;
         case 6:
           console.log(content);
@@ -244,6 +305,7 @@ export default {
             place,
             lat,
             lng,
+            this.timeTableLength + 1,
             fromBucket,
             address
           );
@@ -275,6 +337,52 @@ export default {
         }
       }
     },
+    async getPlanId(tripId) {
+      await api.getPlanId(tripId).then((res) => {
+        this.planIdList = res.planIdList;
+      });
+      console.log(this.planIdList);
+      let paramPlanIdList = [];
+      this.planIdList.forEach((p) => {
+        paramPlanIdList.push(p.planId);
+        console.log(p.planId);
+      });
+      await api.getPlanList(paramPlanIdList);
+    },
+    setPlan(newPlan) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setPlan(
+            this.tripId,
+            newPlan.planId,
+            newPlan.tripDate,
+            newPlan.startTime
+          );
+          console.log("새Plan" + newPlan.planId);
+        }
+      }
+    },
+    setTimetable(newTimetable, planId) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setTimetable(
+            this.tripId,
+            planId,
+            newTimetable.place,
+            newTimetable.lat,
+            newTimetable.lng,
+            newTimetable.orders,
+            newTimetable.costTime,
+            newTimetable.moveTime,
+            newTimetable.transit,
+            false
+          );
+        }
+      }
+    },
+    countTimetable(length) {
+      this.timeTableLength = length;
+    },
   },
 };
 </script>
@@ -285,5 +393,20 @@ export default {
 }
 .v-slide-group__next {
   display: none !important;
+}
+#leftTab {
+  overflow-y: scroll;
+  height: calc(85vh - 150px);
+}
+#leftTab::-webkit-scrollbar {
+  color: "#00000000";
+  width: 10px;
+}
+#leftTab::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-color: #00000000;
 }
 </style>

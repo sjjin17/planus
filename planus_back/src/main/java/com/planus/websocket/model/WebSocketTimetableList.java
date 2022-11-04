@@ -11,7 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 public class WebSocketTimetableList {
     private long tripId;
-    List<WebSocketTimetable> timetableList;
+    private long planId;
+    List<WebSocketTimetableItem> timetableList;
     // 0:입장, 1:채팅, 2:버킷리스트 추가, 3: 버킷리스트 삭제, 4: 일정(plan)변경, 5:일정(timetable)추가, 6:일정(timetable)삭제 ...
     private int action;
 

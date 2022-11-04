@@ -50,7 +50,6 @@ export default {
     dialog: false,
     hours: 2,
     minutes: 0,
-    isClick: false,
   }),
   props: {
     fromBucket: Boolean,
