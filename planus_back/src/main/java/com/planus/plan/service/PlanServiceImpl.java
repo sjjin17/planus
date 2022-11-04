@@ -192,6 +192,14 @@ public class PlanServiceImpl implements PlanService {
 //        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         String key = "planList::" + planId;
 
+        if(redisUtil.isExists(key)){
+            System.out.println("key가 있음");
+        }
+        else {
+            System.out.println("key가 없음");
+            return;
+        }
+
         Map<String, String> map = redisUtil.getHashData(key);
 
         System.out.println("trip_date출력"+map.get("trip_date"));
@@ -219,7 +227,15 @@ public class PlanServiceImpl implements PlanService {
 //            HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         String key = "timetableList::" + planId;
 
+        if(!redisUtil.isExists(key)){
+            System.out.println("timetableListKey가 없음");
+            return;
+        }
+
         List list = redisUtil.getListData(key);
+
+        System.out.println(planId+"출력문~timetableList");
+        System.out.println(list.get(0).toString());
 
         //mysql에 저장되어 있는 timetable을 전부 삭제
         timetableRepository.deleteByPlanPlanId(planId);
