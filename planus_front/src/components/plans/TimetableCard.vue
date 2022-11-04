@@ -1,7 +1,17 @@
 <template>
   <div>
+    <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
+    <div
+      v-if="
+        this.calTime[this.timetable.orders - 1] < 1440 &&
+        this.calTime[this.timetable.orders - 1] + this.timetable.costTime > 1440
+      "
+    >
+      0시 이후의 일정입니다.
+    </div>
     <v-card>
       <v-card-title>{{ this.timetable.place }}</v-card-title>
+      <v-icon>mdi-close</v-icon>
       <v-card-text>
         <div>
           {{ Math.floor(this.calTime[this.timetable.orders - 1] / 60) }} :
@@ -55,14 +65,6 @@ export default {
     timetable: Object,
     calTime: Array,
   },
-  watch: {
-    timetable: {
-      handler() {
-        console.log("costTime이 바뀌었음");
-      },
-      deep: true,
-    },
-  },
   mounted() {
     console.log("props로 받은 calTime : " + this.calTime);
     // this.endTime = this.startTime + this.timetable.costTime;
@@ -75,22 +77,18 @@ export default {
       this.dialog = true;
     },
     changeCostTime(costHour, costMin) {
-      console.log(costHour + "시간" + costMin + "분으로 변경");
+      let changedCost = parseInt(costHour) * 60 + parseInt(costMin);
       let newTimetable = {
         orders: this.timetable.orders,
         place: this.timetable.place,
         lat: this.timetable.lat,
         lng: this.timetable.lng,
-        costTime: costHour * 60 + costMin,
+        costTime: changedCost,
         moveTime: this.timetable.moveTime,
         transit: this.timetable.transit,
       };
-      console.log(newTimetable);
       this.dialog = false;
       this.$emit("setTimetable", newTimetable);
-      //re-rendering을 위해 timetable에 뭔가 수정하기
-      // this.$set();
-      this.$forceUpdate();
     },
   },
 };
