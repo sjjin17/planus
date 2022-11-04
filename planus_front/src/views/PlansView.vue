@@ -8,6 +8,7 @@
       :connector="connector"
       @getConnector="getConnector"
     ></invite-dialog>
+    <complete-dialog :tripId="tripId"></complete-dialog>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
         <v-tab v-for="plan in planIdList" :key="plan.planId"
@@ -104,6 +105,7 @@ import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
 import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
+import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -117,6 +119,7 @@ export default {
     ChatTab,
     PlanList,
     PlanSaveButton,
+    CompleteDialog,
   },
   data() {
     return {
