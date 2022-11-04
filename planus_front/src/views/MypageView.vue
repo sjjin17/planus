@@ -2,7 +2,7 @@
   <v-container>
     <h1>마이페이지</h1>
     <div style="display: flex; justify-content: end; padding-right: 10%">
-      <v-btn-toggle v-model="tab">
+      <v-btn-toggle v-model="tab" mandatory>
         <v-btn
           class="rounded-btn"
           x-large

@@ -14,4 +14,6 @@ public interface TimetableRepository extends JpaRepository<Timetable, Long> {
 
     // 일별일정에 해당하는 일정 저장
 //    void saveAll(List<Timetable> timetableList);
+
+    void deleteAllByPlan_Trip_TripId(long tripId);
 }

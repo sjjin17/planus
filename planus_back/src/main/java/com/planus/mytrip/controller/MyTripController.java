@@ -29,6 +29,6 @@ public class MyTripController {
 
     @DeleteMapping
     public ResponseEntity<String> deleteTrip(@RequestHeader String Authorization, Long tripId) {
-        return ResponseEntity.ok().body("success");
+        return ResponseEntity.ok().body(mytripService.deleteTrip(Authorization, tripId));
     }
 }

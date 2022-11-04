@@ -2,15 +2,21 @@
   <v-container class="made-container">
     <v-row>
       <v-col v-for="(trip, index) in tripList" :key="index" cols="6">
-        <v-card outlined class="mx-10 mt-2" @click="goToTrip(trip.tripUrl)">
+        <v-card
+          outlined
+          class="mx-10 mt-2"
+          @click="goToTrip(trip.tripUrl)"
+          height="19vh"
+        >
           <v-list-item>
             <v-list-item-avatar tile class="my-0 img-avatar"
               ><v-img :src="trip.imageUrl"></v-img>
             </v-list-item-avatar>
-
             <v-list-item-content>
               <div class="text-overline mb-4 d-flex justify-space-between">
-                <span>{{ trip.startDate }} ~ {{ trip.endDate }}</span>
+                <span class="txt_line"
+                  >{{ trip.startDate }} ~ {{ trip.endDate }}</span
+                >
                 <v-icon @click.stop="deleteTrip(trip.tripId)">mdi-close</v-icon>
               </div>
               <v-list-item-title class="text-h5 mb-1">
@@ -24,10 +30,10 @@
               >
                 <span
                   ><v-icon v-if="trip.complete" color="#4a8072"
-                    >mdi-file-document-edit</v-icon
+                    >mdi-file-check</v-icon
                   >
-                  <v-icon v-else color="#4a8072">mdi-file-check</v-icon>
-                  &nbsp;{{ trip.participants }} 명
+                  <v-icon v-else color="#4a8072">mdi-file-document-edit</v-icon>
+                  &nbsp;{{ trip.participants }}명
                 </span>
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -67,21 +73,23 @@ export default {
   watch: {
     currentPage(newVal) {
       this.getMadeTripList(newVal);
+      console.log(newVal);
     },
   },
   methods: {
     async getMadeTripList(page) {
       let res = await api.getMyTripMade(page - 1);
-      this.tripList = res.tripList;
       this.totalPage = res.totalPage;
+      this.tripList = res.tripList;
     },
     goToTrip(tripUrl) {
       this.$router.push("/plans/" + tripUrl);
     },
-    deleteTrip(tripId) {
+    async deleteTrip(tripId) {
       console.log(tripId);
-      //지우고
-      //목록 새로 받아오기
+      await api.deleteTrip(tripId);
+      await this.getMadeTripList(this.currentPage);
+      if (this.currentPage > this.totalPage) this.currentPage--;
     },
   },
 };
@@ -94,6 +102,7 @@ export default {
 .v-card {
   border-radius: 0;
   border-color: #4a8072 !important;
+  overflow: hidden;
 }
 .made-container {
   height: 100%;
@@ -107,5 +116,15 @@ export default {
 .img-avatar {
   height: 100% !important;
   width: 40% !important;
+}
+.v-card > *:last-child:not(.v-btn):not(.v-chip):not(.v-avatar) {
+  height: -webkit-fill-available;
+}
+.txt_line {
+  width: 80%;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

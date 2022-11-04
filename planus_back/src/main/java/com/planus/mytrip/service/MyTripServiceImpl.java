@@ -2,9 +2,7 @@ package com.planus.mytrip.service;
 
 import com.planus.db.entity.Area;
 import com.planus.db.entity.Trip;
-import com.planus.db.repository.AreaRepository;
-import com.planus.db.repository.MemberRepository;
-import com.planus.db.repository.TripRepository;
+import com.planus.db.repository.*;
 import com.planus.mytrip.dto.MyTripListResDTO;
 import com.planus.mytrip.dto.MyTripResDTO;
 import com.planus.util.TokenProvider;
@@ -13,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,15 @@ import java.util.stream.Collectors;
 public class MyTripServiceImpl implements MyTripService {
 
     private static final String SUCCESS = "success";
-    private static final String FAIL = "fail";
 
     private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
     private final MemberRepository memberRepository;
     private final AreaRepository areaRepository;
+    private final TripAreaRepository tripAreaRepository;
+    private final BucketRepository bucketRepository;
+    private final TimetableRepository timetableRepository;
+    private final PlanRepository planRepository;
 
     @Override
     public MyTripListResDTO getMadeTripList(String token, Pageable pageable) {
@@ -54,28 +56,36 @@ public class MyTripServiceImpl implements MyTripService {
     }
 
     @Override
+    @Transactional
     public String deleteTrip(String token, Long tripId) {
         Long userId = tokenProvider.getUserId(token.split(" ")[1]);
         Trip trip = tripRepository.findByTripId(tripId);
-        // 완료된 일정 (참가자에서만 삭제)
+        //(완료) 완료된 일정 (참가자에서만 삭제, 방장이면 admin = 0)
         if(trip.isComplete()) {
-            memberRepository.deleteByTripIdAndUserId(tripId, userId);
+            memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+            if(trip.getAdmin() == userId)
+                trip.changeAdmin(0);
             return SUCCESS;
         }
         // 진행중 일정 - 참가자 (참가자에서만 삭제)
-        if(trip.getTripId() != userId) {
-            memberRepository.deleteByTripIdAndUserId(tripId, userId);
+        if(trip.getAdmin() != userId) {
+            memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
             return SUCCESS;
         }
-        // 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
+        //(완료) 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
         if(memberRepository.countByTripTripId(trip.getTripId()) > 1) {
-            // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
+            memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+            trip.changeAdmin(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
             return SUCCESS;
         }
-        // 참가자 더 없으면 일정 삭제
+        // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
+        memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+        tripAreaRepository.deleteAllByTripTripId(tripId);
+        bucketRepository.deleteAllByTripTripId(tripId);
+        timetableRepository.deleteAllByPlan_Trip_TripId(tripId);
+        planRepository.deleteAllByTripTripId(tripId);
+        tripRepository.deleteById(tripId);
         return SUCCESS;
-
-//        return FAIL;
     }
 
     private List<MyTripResDTO> setMyTripList(Page<Trip> tripList) {
@@ -98,6 +108,4 @@ public class MyTripServiceImpl implements MyTripService {
 
         return myTripList;
     }
-
-
 }
