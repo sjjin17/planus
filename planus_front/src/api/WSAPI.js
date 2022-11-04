@@ -16,7 +16,7 @@ const WSAPI = {
     this.stomp.connect(
       {},
       () => {
-        this.stomp.subscribe("/topic/planus/{tripId}", callback);
+        this.stomp.subscribe("/topic/planus/" + tripId, callback);
         this.enter({ tripId, token });
       },
       (error) => {
