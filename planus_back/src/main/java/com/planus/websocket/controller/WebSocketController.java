@@ -51,7 +51,7 @@ public class WebSocketController {
         member.setConnector(memberService.getConnector(member));
         member.setAction(0);
         try{
-            sendingOperations.convertAndSend(ROOT_URL+"connector",member);
+            sendingOperations.convertAndSend(ROOT_URL+member.getTripId(),member);
         }catch (Exception e){
             e.printStackTrace();
         }
