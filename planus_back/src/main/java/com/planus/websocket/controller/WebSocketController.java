@@ -92,7 +92,7 @@ public class WebSocketController {
         logger.info("fromBucket? "+timetable.getFromBucket());
         if(timetable.getFromBucket()){
             // TODO: bucket redis 작업
-
+            bucketService.moveToPlan(timetable);
 
         }
 //        TODO: redis에 해당 timetable 추가하기
