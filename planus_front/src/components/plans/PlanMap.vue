@@ -4,7 +4,7 @@
       <v-btn
         v-for="(area, areaIdx) in tripArea"
         :key="areaIdx"
-        @click="center = area"
+        @click="buttonClick(area)"
         >{{ area.siName }}</v-btn
       >
     </div>
@@ -15,7 +15,11 @@
       @bounds_changed="moveCenter"
     >
       <gmap-marker
-        :icon="img"
+        :icon="{
+          url: require('@/assets/GreenMarker.png'),
+          scaledSize: { width: 40, height: 40 },
+          labelOrigin: { x: 20, y: -10 },
+        }"
         :key="index + 'i'"
         v-for="(m, index) in locationMarkers"
         :position="m"
@@ -28,7 +32,15 @@
         :position="m"
         :label="m.label"
         @click="center = m"
+        :icon="{
+          url: require('@/assets/RedMarker.png'),
+          scaledSize: { width: 40, height: 40 },
+          labelOrigin: { x: 20, y: -10 },
+        }"
+        class="plan"
       ></gmap-marker>
+      <gmap-polyline :path.sync="locPlaces" :options="{ strokeColor: 'red' }">
+      </gmap-polyline>
     </gmap-map>
   </div>
 </template>
@@ -46,6 +58,7 @@ export default {
         scaledSize: { width: 30, height: 30 },
       },
       center: { lat: 37.5400456, lng: 126.9921017 },
+      nowCenter: {},
       locationMarkers: [
         { label: "C", name: "코엑스몰", lat: 37.5115557, lng: 127.0595261 },
         { label: "G", name: "고투몰", lat: 37.5062379, lng: 127.0050378 },
@@ -71,11 +84,26 @@ export default {
   methods: {
     moveCenter(newCoordinates) {
       if (!newCoordinates) return;
+      this.nowCenter = {
+        lat: newCoordinates.eb.center(),
+        lng: newCoordinates.Ha.center(),
+      };
       this.$emit(
         "getCenter",
         newCoordinates.eb.center(),
         newCoordinates.Ha.center()
       );
+    },
+    async buttonClick(area) {
+      console.log(this.center);
+      await setTimeout(() => {
+        this.center = this.nowCenter;
+        console.log(this.center);
+      }, 2);
+      await setTimeout(() => {
+        this.center = area;
+        console.log(this.center);
+      }, 2);
     },
   },
 };
@@ -105,7 +133,7 @@ a[href^="https://maps.google.com/maps"]
   display: none;
 }
 .gm-style div {
-  color: white !important;
+  color: #ff1744 !important;
 }
 .mapAreaBtn {
   width: 80px;
