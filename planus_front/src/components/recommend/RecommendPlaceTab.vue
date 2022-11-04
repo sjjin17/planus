@@ -9,23 +9,16 @@
       :fromBucket="false"
     ></recommend-place-card>
     <v-container>
-      <v-row>
-        <v-container d-flex>
-          <v-col cols="6">
-            <v-pagination
-              v-model="page"
-              :length="pageLength"
-              @input="click"
-            ></v-pagination>
-          </v-col>
-          <v-col cols="6"> {{ page }}/{{ pageLength }} </v-col>
-        </v-container>
-      </v-row>
+      <infinite-loading @infinite="getRecommend">
+        <div slot="no-results"></div>
+        <div slot="no-more"></div>
+      </infinite-loading>
     </v-container>
   </div>
 </template>
 
 <script>
+import InfiniteLoading from "vue-infinite-loading";
 import API from "@/api/RESTAPI";
 import RecommendPlaceCard from "@/components/recommend/RecommendPlaceCard.vue";
 
@@ -33,17 +26,18 @@ const api = API;
 export default {
   components: {
     RecommendPlaceCard,
+    InfiniteLoading,
   },
   data: () => {
     return {
       recommendList: [],
-      page: 1,
+      page: 0,
       pageLength: 0,
     };
   },
   props: {
-    lat: Number,
-    lng: Number,
+    mapLat: Number,
+    mapLng: Number,
     size: Number,
     isRecommendClick: Boolean,
   },
@@ -52,13 +46,17 @@ export default {
   },
   watch: {
     isRecommendClick() {
+      this.recommendList = [];
+      this.page = 0;
       this.loadRecommend();
+      this.getRecommend();
     },
   },
   methods: {
     async loadRecommend() {
+      this.lat = this.mapLat;
+      this.lng = this.mapLng;
       await this.getPageLength();
-      this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
     },
     async getPageLength() {
       let data = await api.getRecommendPageLength(
@@ -68,13 +66,27 @@ export default {
       );
       this.pageLength = data.pageLength;
     },
-    async getRecommend(lat, lng, page, size) {
-      await api.getRecommend(lat, lng, page, size).then((res) => {
-        this.recommendList = res.recommendList;
-      });
+    async getRecommend($state) {
+      await api
+        .getRecommend(this.lat, this.lng, this.page, this.size)
+        .then((res) => {
+          let recommendList = this.recommendList;
+          res.recommendList.forEach((recommend) => {
+            recommendList.push(recommend);
+          });
+          this.recommendList = recommendList;
+          this.page += 1;
+          if ($state) {
+            if (this.pageLength < this.page) {
+              $state.complete();
+            } else {
+              $state.loaded();
+            }
+          }
+        });
     },
     click() {
-      this.getRecommend(this.lat, this.lng, this.page - 1, this.size);
+      this.getRecommend(this.lat, this.lng, this.page, this.size);
     },
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
@@ -86,11 +98,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.v-pagination__item {
-  display: none !important;
-}
-.v-pagination__more {
-  display: none !important;
-}
-</style>
+<style scoped></style>

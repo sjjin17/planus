@@ -17,7 +17,13 @@
     </div>
     <v-container d-flex style="margin: 0; max-width: 100%">
       <v-container
-        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+        style="
+          width: 20%;
+          margin: 0;
+          min-width: 300px;
+          height: 85vh;
+          position: relative;
+        "
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
@@ -26,7 +32,7 @@
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
-            <div>장소검색 컴포넌트</div>
+            <div id="leftTab">장소검색 컴포넌트</div>
           </v-tab-item>
           <v-tab-item>
             <bucket-list
@@ -37,17 +43,18 @@
               :memberOrAdmin="memberOrAdmin"
               @addTimetable="addTimetable"
               :addedTimetable="addedTimetable"
-              style="overflow-y: scroll; height: 500px"
+              id="leftTab"
             ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
-              :lat="lat"
-              :lng="lng"
+              :mapLat="lat"
+              :mapLng="lng"
               :size="size"
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
         </v-tabs-items>
@@ -357,5 +364,20 @@ export default {
 }
 .v-slide-group__next {
   display: none !important;
+}
+#leftTab {
+  overflow-y: scroll;
+  height: calc(85vh - 150px);
+}
+#leftTab::-webkit-scrollbar {
+  color: "#00000000";
+  width: 10px;
+}
+#leftTab::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-color: #00000000;
 }
 </style>
