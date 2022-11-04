@@ -122,6 +122,12 @@ const API = {
     const response = await this.instance.post("/plans", planIdList);
     return response.data;
   },
+  async deleteTrip(tripId) {
+    const response = await this.instance.delete("/mytrip", {
+      params: { tripId },
+    });
+    return response.data;
+  },
 };
 
 export default API;

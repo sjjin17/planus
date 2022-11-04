@@ -1,5 +1,13 @@
 <template>
-  <div>
+  <div style="position: relative">
+    <div class="mapAreaBtn">
+      <v-btn
+        v-for="(area, areaIdx) in tripArea"
+        :key="areaIdx"
+        @click="center = area"
+        >{{ area.siName }}</v-btn
+      >
+    </div>
     <gmap-map
       :zoom="10"
       :center="center"
@@ -57,6 +65,9 @@ export default {
       existingPlace: null,
     };
   },
+  props: {
+    tripArea: Array,
+  },
   methods: {
     moveCenter(newCoordinates) {
       if (!newCoordinates) return;
@@ -95,5 +106,12 @@ a[href^="https://maps.google.com/maps"]
 }
 .gm-style div {
   color: white !important;
+}
+.mapAreaBtn {
+  width: 80px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
 }
 </style>

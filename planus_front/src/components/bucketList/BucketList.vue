@@ -24,7 +24,6 @@ export default {
   data: function () {
     return {
       bucketList: [],
-      planCnt: 0,
     };
   },
   props: {
@@ -65,11 +64,7 @@ export default {
         }
       }
       if (flag) {
-        this.bucketList.splice(
-          this.bucketList.length - this.planCnt,
-          0,
-          this.addedBucket
-        );
+        this.bucketList.push(this.addedBucket);
       }
     },
     addedTimetable() {
@@ -81,9 +76,9 @@ export default {
       };
       for (const idx of this.bucketList.keys()) {
         if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
-          // bucketList에서 제거한 후 맨 뒤로 push
+          // bucketList에서 제거
           this.bucketList.splice(idx, 1);
-          this.bucketList.push(item);
+          break;
         }
       }
     },
@@ -95,10 +90,7 @@ export default {
     delBucket(bucket) {
       this.$emit("delBucket", bucket);
     },
-    addTimetable(costTime, place, lat, lng, fromBucket, address, isClick) {
-      if (isClick) {
-        this.planCnt += 1;
-      }
+    addTimetable(costTime, place, lat, lng, fromBucket, address) {
       this.$emit(
         "addTimetable",
         costTime,

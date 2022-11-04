@@ -8,6 +8,7 @@
       :connector="connector"
       @getConnector="getConnector"
     ></invite-dialog>
+    <complete-dialog :tripId="tripId"></complete-dialog>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
         <v-tab
@@ -75,6 +76,7 @@
       </v-container>
       <plan-map
         style="width: 60%; background-color: blue"
+        :tripArea="tripArea"
         @getCenter="getCenter"
       />
       <v-container
@@ -88,6 +90,7 @@
               :WebSocketStartTime="startTime"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
+              @countTimetable="countTimetable"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -107,6 +110,7 @@ import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
 import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
+import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -120,6 +124,7 @@ export default {
     ChatTab,
     PlanList,
     PlanSaveButton,
+    CompleteDialog,
   },
   data() {
     return {
@@ -129,6 +134,7 @@ export default {
       tripUrl: "",
       admin: 0,
       memberOrAdmin: 0,
+      tripArea: [],
       lat: 37.5168415735,
       lng: 127.0341090296,
       size: 5,
@@ -147,6 +153,7 @@ export default {
       planTabs: null,
 
       startTime: {},
+      timeTableLength: 0,
 
       planId: 0,
     };
@@ -177,6 +184,7 @@ export default {
       this.tripId = result.tripId;
       this.admin = result.admin;
       this.memberOrAdmin = result.memberOrAdmin;
+      this.tripArea = result.tripArea;
       if (result.complete) {
         this.$router.push("/complete/" + this.tripUrl);
       } else {
@@ -263,6 +271,7 @@ export default {
             place: content.place,
             lat: content.lat,
             lng: content.lng,
+            orders: content.orders,
             fromBucket: content.fromBucket,
             address: content.address,
           };
@@ -311,6 +320,7 @@ export default {
             place,
             lat,
             lng,
+            this.timeTableLength + 1,
             fromBucket,
             address
           );
@@ -385,6 +395,9 @@ export default {
           );
         }
       }
+    },
+    countTimetable(length) {
+      this.timeTableLength = length;
     },
     async saveTimetableList(planId) {
       console.log("----");

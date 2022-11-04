@@ -1,21 +1,17 @@
 <template>
   <div>
-    <v-card
-      outlined
-      color="#b8dbc6"
-      class="my-4"
-      :class="[isPlan == false ? 'isBucket' : 'toPlan']"
-    >
+    <v-card outlined color="#b8dbc6" class="my-4 px-2">
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
-      <p class="text-h5 text--primary">{{ bucket.place }}</p>
-      <div class="d-flex justify-space-between">
-        <p>{{ bucket.address }}</p>
-        <plan-modal
-          v-show="memberOrAdmin == 2"
-          @planSubmit="planSubmit"
-          :fromBucket="true"
-        ></plan-modal>
-      </div>
+      <p class="text-h5 font-weight-bold box mt-5" style="color: #544c4c">
+        {{ bucket.place }}
+      </p>
+      <p>{{ bucket.address }}</p>
+      <plan-modal
+        class="d-flex justify-end"
+        v-show="memberOrAdmin == 2"
+        @planSubmit="planSubmit"
+        :fromBucket="true"
+      ></plan-modal>
     </v-card>
   </div>
 </template>
@@ -42,8 +38,7 @@ export default {
       this.$emit("delBucket", this.bucket);
     },
 
-    planSubmit(costTime, fromBucket, isClick) {
-      this.isPlan = isClick;
+    planSubmit(costTime, fromBucket) {
       this.$emit(
         "addTimetable",
         costTime,
@@ -51,25 +46,22 @@ export default {
         this.bucket.lat,
         this.bucket.lng,
         fromBucket,
-        this.bucket.address,
-        isClick
+        this.bucket.address
       );
     },
   },
 };
 </script>
-<style>
-.toPlan {
-  background-color: grey;
-  opacity: 0.7;
+<style scoped>
+.v-card {
+  height: 100%;
 }
-.isBucket {
-  background-color: #b8dbc6;
+.v-icon {
+  float: right;
 }
-/* 
-      :style="[
-        isPlan == false
-          ? { background: '#B8DBC6' }
-          : { backgroud: rgba(184, 219, 198, 0.5) },
-      ]" */
+.box {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
