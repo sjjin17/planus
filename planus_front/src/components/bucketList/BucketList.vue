@@ -24,6 +24,7 @@ export default {
   data: function () {
     return {
       bucketList: [],
+      planCnt: 0,
     };
   },
   props: {
@@ -31,6 +32,7 @@ export default {
     deletedBucket: Object,
     addedBucket: Object,
     memberOrAdmin: Number,
+    addedTimetable: Object,
   },
   mounted() {
     this.getBucketList();
@@ -63,7 +65,26 @@ export default {
         }
       }
       if (flag) {
-        this.bucketList.push(this.addedBucket);
+        this.bucketList.splice(
+          this.bucketList.length - this.planCnt,
+          0,
+          this.addedBucket
+        );
+      }
+    },
+    addedTimetable() {
+      let item = {
+        place: this.addedTimetable.place,
+        address: this.addedTimetable.address,
+        lat: this.addedTimetable.lat,
+        lng: this.addedTimetable.lng,
+      };
+      for (const idx of this.bucketList.keys()) {
+        if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
+          // bucketList에서 제거한 후 맨 뒤로 push
+          this.bucketList.splice(idx, 1);
+          this.bucketList.push(item);
+        }
       }
     },
   },
@@ -76,20 +97,7 @@ export default {
     },
     addTimetable(costTime, place, lat, lng, fromBucket, address, isClick) {
       if (isClick) {
-        // 해당 버킷카드는 버킷리스트 제일 뒤로 옮기기
-        // let item = {
-        //   place: this.deletedBucket.place,
-        //   address: this.deletedBucket.address,
-        //   lat: this.deletedBucket.lat,
-        //   lng: this.deletedBucket.lng,
-        // };
-        // for (const idx of this.bucketList.keys()) {
-        //   if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
-        //     this.bucketList.splice(idx, 1);
-        //     this.bucketList.push(item);
-        //     break;
-        //   }
-        // }
+        this.planCnt += 1;
       }
       this.$emit(
         "addTimetable",
