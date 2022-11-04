@@ -31,6 +31,7 @@ export default {
     deletedBucket: Object,
     addedBucket: Object,
     memberOrAdmin: Number,
+    addedTimetable: Object,
   },
   mounted() {
     this.getBucketList();
@@ -64,6 +65,21 @@ export default {
       }
       if (flag) {
         this.bucketList.push(this.addedBucket);
+      }
+    },
+    addedTimetable() {
+      let item = {
+        place: this.addedTimetable.place,
+        address: this.addedTimetable.address,
+        lat: this.addedTimetable.lat,
+        lng: this.addedTimetable.lng,
+      };
+      for (const idx of this.bucketList.keys()) {
+        if (JSON.stringify(this.bucketList[idx]) == JSON.stringify(item)) {
+          // bucketList에서 제거
+          this.bucketList.splice(idx, 1);
+          break;
+        }
       }
     },
   },

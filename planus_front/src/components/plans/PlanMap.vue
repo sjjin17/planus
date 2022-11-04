@@ -11,7 +11,7 @@
     <gmap-map
       :zoom="10"
       :center="center"
-      style="width: 100%; height: 600px"
+      style="width: 100%; height: 85vh"
       @bounds_changed="moveCenter"
     >
       <gmap-marker
