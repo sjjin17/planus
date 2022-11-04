@@ -75,12 +75,14 @@ export default {
             recommendList.push(recommend);
           });
           this.recommendList = recommendList;
-          if (this.pageLength <= this.page) {
-            $state.complete();
-          } else {
-            $state.loaded();
-          }
           this.page += 1;
+          if ($state) {
+            if (this.pageLength <= this.page) {
+              $state.complete();
+            } else {
+              $state.loaded();
+            }
+          }
         });
     },
     click() {
