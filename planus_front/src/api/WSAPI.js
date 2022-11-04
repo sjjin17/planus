@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-// const WS_SERVER_URL = "http://localhost:8080/planus/ws";
+//const WS_SERVER_URL = "http://localhost:8080/planus/ws";
 const WS_SERVER_URL = "https://planus.co.kr/planus/ws";
 
 const WSAPI = {
@@ -25,8 +25,11 @@ const WSAPI = {
       }
     );
   },
-  enter(message) {
-    this.stomp.send("/app/enter", JSON.stringify(message));
+  enter(member) {
+    this.stomp.send("/app/enter", JSON.stringify(member));
+  },
+  getConnector(member) {
+    this.stomp.send("/app/connector", JSON.stringify(member));
   },
   chat(message) {
     this.stomp.send("/app/chat", JSON.stringify(message));
@@ -62,7 +65,7 @@ const WSAPI = {
     this.stomp.send("app/setPlan", JSON.stringify(plan));
   },
 
-  addTimetable(tripId, planId, costTime, place, lat, lng, fromBucket) {
+  addTimetable(tripId, planId, costTime, place, lat, lng, fromBucket, address) {
     let timetable = {
       tripId: tripId,
       planId: planId,
@@ -71,6 +74,7 @@ const WSAPI = {
       lat: lat,
       lng: lng,
       fromBucket: fromBucket,
+      address: address,
     };
     this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
   },
