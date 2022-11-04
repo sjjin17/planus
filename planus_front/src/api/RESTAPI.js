@@ -2,7 +2,7 @@ import axios from "axios";
 import VueCookies from "vue-cookies";
 
 const baseURL = "https://planus.co.kr/planus";
-// const baseURL = "http://localhost:8080/planus";
+//const baseURL = "http://localhost:8080/planus";
 const baseAxios = axios.create({
   baseURL,
   headers: {
