@@ -1,9 +1,6 @@
 package com.planus.db.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,6 +26,17 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Member> memberList;
+
+    @OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+    private List<Article> articleList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ArticleLike> articleLikeList;
+
+
 
     @Builder
     public User(long userId, String name, String email, long kakaoId, List<Member> memberList) {
