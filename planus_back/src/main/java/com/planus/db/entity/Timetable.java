@@ -54,4 +54,5 @@ public class Timetable {
         this.moveTime = moveTime;
         this.plan = plan;
     }
+
 }
