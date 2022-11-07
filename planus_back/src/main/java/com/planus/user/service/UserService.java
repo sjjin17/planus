@@ -10,9 +10,10 @@ public interface UserService {
     String updateUser(String token, String nickname);
     long deleteUser(long userId);
 
-    User join(String nickname, String email, Long kakaoId);
+    User join(String nickname, String email, Long kakaoId, String imageUrl);
 
     long findKakaoIdByUserId(long userId);
 
     User findUserByKakaoId(Long kakaoId);
+
 }

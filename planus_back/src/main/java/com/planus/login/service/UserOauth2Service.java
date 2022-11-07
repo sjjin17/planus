@@ -33,11 +33,11 @@ public class UserOauth2Service extends DefaultOAuth2UserService {
         String email = (String) kakaoAccount.get("email");
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
         String nickname = (String) profile.get("nickname");
+        String imageUrl = (String) profile.get("profile_image_url");
 
-        User user = userService.join(nickname, email, id);
+        User user = userService.join(nickname, email, id, imageUrl);
 
         profile.put("nickname", user.getName());
-
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_MEMBER")),attributes, "id");
     }
 }
