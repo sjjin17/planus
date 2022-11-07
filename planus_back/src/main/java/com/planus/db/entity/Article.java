@@ -2,6 +2,8 @@ package com.planus.db.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@ToString
 public class Article {
 
     @Id
@@ -37,7 +41,7 @@ public class Article {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="trip_id")
     private Trip trip;
 
@@ -54,5 +58,8 @@ public class Article {
         this.hits = 0;
     }
 
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
 
 }
