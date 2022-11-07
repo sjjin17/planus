@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- asdf -->
     <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
     <div
       v-if="
@@ -12,7 +11,7 @@
     </div>
     <v-card>
       <v-card-title>{{ this.timetable.place }}</v-card-title>
-      <v-icon>mdi-close</v-icon>
+      <v-icon @click="delTimetable">mdi-close</v-icon>
       <v-card-text>
         <div>
           {{ Math.floor(this.calTime[this.timetable.orders - 1] / 60) }} :
@@ -90,6 +89,9 @@ export default {
       };
       this.dialog = false;
       this.$emit("setTimetable", newTimetable);
+    },
+    delTimetable() {
+      this.$emit("delTimetable", this.timetable.orders);
     },
   },
 };

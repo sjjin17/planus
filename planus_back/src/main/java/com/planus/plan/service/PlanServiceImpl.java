@@ -75,6 +75,7 @@ public class PlanServiceImpl implements PlanService {
             // redis에 값이 있으면 redis에서 가져오고,
             if (redisUtil.isExists(planKey)) {
                 System.out.println(planId+"를 redis에서 값을 가져옵니다.");
+
                 //planList::planId 를 key로 가진 hash에서 startTime, tripDate를 가져올 수 있음
                 Map<String, String> map = redisUtil.getHashData(planKey);
                 List list = redisUtil.getListData(timetableKey);
@@ -187,7 +188,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "planList", key = "#planId")
+//    @CacheEvict(cacheNames = "planList", key = "#planId")
     public void savePlan(long planId) {
 //        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         String key = "planList::" + planId;
@@ -217,14 +218,13 @@ public class PlanServiceImpl implements PlanService {
     //redis에서 여행정보를 가져와서 mysql에 저장
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "timetableList", key = "#planId")
+//    @CacheEvict(cacheNames = "timetableList", key = "#planId")
     public void saveTimetable(long planId) {
         //일별일정 수정(저장)
         //기존의 timetable 삭제
         //새로운 timetable로 저장
         //새로운 timetable과 redis에서 가져온 map 정보들로 plan 객체 만들어서 저장
 
-//            HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         String key = "timetableList::" + planId;
 
         if(!redisUtil.isExists(key)){
@@ -361,6 +361,23 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void delTimetable(long planId, WebSocketTimetableList timetableList) {
+        String key = "timetableList::" + planId;
+        //redis에서 timetableList::planId를 찾고, 전부 삭제한 후 새 timetableList 넣기
+        redisUtil.deleteData(key);
 
+        for (WebSocketTimetableItem item:timetableList.getTimetableList()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("orders", item.getOrders());
+            jsonObject.put("place", item.getPlace());
+            jsonObject.put("lat", item.getLat());
+            jsonObject.put("lng", item.getLng());
+            jsonObject.put("cost_time", item.getCostTime());
+            jsonObject.put("move_time", item.getMoveTime());
+            jsonObject.put("transit", item.getTransit());
+
+            String timetableStr = jsonObject.toJSONString();
+
+            redisUtil.addListData(key, timetableStr);
+        }
     }
 }

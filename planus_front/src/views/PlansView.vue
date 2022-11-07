@@ -88,9 +88,11 @@
               :plan="plan"
               :tripId="tripId"
               :WebSocketStartTime="startTime"
+              :deletedTimetableList="deletedTimetableList"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
+              @delTimetable="delTimetable"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -148,6 +150,8 @@ export default {
       addedBucket: {},
       // plan
       addedTimetable: {},
+      //삭제된 것을 제외한 timetableList
+      deletedTimetableList: {},
 
       planIdList: [],
       planTabs: null,
@@ -279,6 +283,10 @@ export default {
         case 6:
           console.log(content);
           // TODO: 일정(timetable)삭제
+          this.deletedTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
           break;
       }
     },
@@ -408,6 +416,13 @@ export default {
       // });
       // await api.savePlan(savePlanIdList);
       this.planId = planId;
+    },
+    delTimetable(planId, delTimetableList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delTimetable(this.tripId, planId, delTimetableList);
+        }
+      }
     },
   },
 };

@@ -19,6 +19,7 @@
       :startTime="startTime"
       @changeCalTime="changeCalTime"
       @setTimetable="setTimetable"
+      @delTimetable="delTimetable"
     >
     </timetable-card>
   </div>
@@ -48,6 +49,7 @@ export default {
     tripId: Number,
     plan: Object,
     WebSocketStartTime: Object,
+    deletedTimetableList: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
@@ -74,6 +76,9 @@ export default {
         this.$emit("countTimetable", this.timetableList.length);
       },
       deep: true,
+    },
+    deletedTimetableList(newVal) {
+      this.timetableList = newVal.timetableList;
     },
   },
   methods: {
@@ -125,6 +130,27 @@ export default {
       //해당 timetable 객체의 costTime을 수동으로 바꿔줌 .. ...왜..?
       this.timetableList[newTimetable.orders - 1].costTime =
         newTimetable.costTime;
+    },
+    delTimetable(delOrders) {
+      //delOrder의 Timetable만 빼고 새로운 timetableList를 구성
+      let delTimetableList = [];
+      for (let i = 0; i < this.timetableList.length; i++) {
+        if (this.timetableList[i].orders == delOrders) {
+          continue;
+        }
+        let delTimetable = {
+          place: this.timetableList[i].place,
+          lat: this.timetableList[i].lat,
+          lng: this.timetableList[i].lng,
+          orders: this.timetableList[i].orders,
+          costTime: this.timetableList[i].costTime,
+          moveTime: this.timetableList[i].moveTime,
+          transit: this.timetableList[i].transit,
+        };
+        delTimetableList.push(delTimetable);
+      }
+      //emit으로 delTimetableList를 올려보내기
+      this.$emit("delTimetable", this.plan.planId, delTimetableList);
     },
   },
 };
