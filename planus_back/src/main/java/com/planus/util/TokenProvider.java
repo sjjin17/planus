@@ -24,7 +24,8 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private static Long accessTokenTime = 60*60*24*30*1000L;
+    private static Long accessTokenTime = 300L;
+    private static Long refreshTokenTime = 2*60*60*24*30*1000L;
 
     public String createToken(Authentication authentication, long userId){
         String authorities = authentication
@@ -39,7 +40,7 @@ public class TokenProvider {
         String nickname = (String)profile.get("nickname");
         String imageUrl = (String)profile.get("profile_image_url");
 
-        Date validity = getValidity();
+        Date validity = getValidity(accessTokenTime);
 
         String token = Jwts.builder()
                 .setSubject("planus_token")
@@ -54,9 +55,17 @@ public class TokenProvider {
         return token;
     }
 
-    private Date getValidity() {
+    public String createRefreshToken(){
+        String token = Jwts.builder()
+                .setSubject("planun_refresh_token")
+                .setExpiration(getValidity(refreshTokenTime))
+                .compact();
+        return token;
+    }
+
+    private Date getValidity(Long tokenTime) {
         Long now = new Date().getTime();
-        Date validity = new Date(now + this.accessTokenTime);
+        Date validity = new Date(now + tokenTime);
         return validity;
     }
 
@@ -110,7 +119,7 @@ public class TokenProvider {
     }
 
     public String updateTokenNickname(String token, String newNickname){
-        Date validity = getValidity();
+        Date validity = getValidity(accessTokenTime);
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(secretKey)
