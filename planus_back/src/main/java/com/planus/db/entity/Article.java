@@ -2,6 +2,7 @@ package com.planus.db.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class Article {
 
     @Id
@@ -25,9 +27,9 @@ public class Article {
     @CreatedDate @Column(name="reg_date")
     private LocalDateTime regDate;
 
-    private long count;
+    private long hits;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article")
     private List<ArticleLike> articleLikeList;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -57,7 +57,7 @@ public class Trip {
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
     List<Plan> planList;
 
-    @OneToOne(mappedBy = "article", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "trip", fetch = FetchType.LAZY)
     private Article article;
 
 
