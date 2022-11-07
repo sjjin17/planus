@@ -1,8 +1,8 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-const baseURL = "https://planus.co.kr/planus";
-// const baseURL = "http://localhost:8080/planus";
+// const baseURL = "https://planus.co.kr/planus";
+const baseURL = "http://localhost:8080/planus";
 const baseAxios = axios.create({
   baseURL,
   headers: {
@@ -78,7 +78,6 @@ const API = {
     const response = await this.instance.get("/mypage");
     return response.data.result;
   },
-
   async changeMyInfo(newNickname) {
     const response = await this.instance.put("/mypage", {
       nickname: newNickname,
@@ -105,7 +104,6 @@ const API = {
     });
     return response.data;
   },
-
   async getPlanId(tripId) {
     const response = await this.instance.get("/plans/" + tripId);
     return response.data;
@@ -126,6 +124,41 @@ const API = {
     const response = await this.instance.delete("/mytrip", {
       params: { tripId },
     });
+    return response.data;
+  },
+  async addComment(articleId, content) {
+    const response = await this.instance.post("/comment", {
+      articleId: articleId,
+      content: content,
+    });
+    return response.data;
+  },
+  async modifyComment(commentId, content) {
+    const response = await this.instance.put("/comment", {
+      commentId: commentId,
+      content: content,
+    });
+    return response.data;
+  },
+  async getArticleComment(articleId, page) {
+    const response = await this.instance.get(
+      "/comment" + "?articleId=" + articleId,
+      {
+        params: { page },
+      }
+    );
+    return response.data;
+  },
+  async getMyComment(page) {
+    const response = await this.instance.get("/comment", {
+      params: { page },
+    });
+    return response.data;
+  },
+  async delComment(commentId) {
+    const response = await this.instance.delete(
+      "/comment" + "?commentId=" + commentId
+    );
     return response.data;
   },
 };
