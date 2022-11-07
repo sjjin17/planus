@@ -1,9 +1,9 @@
 package com.planus.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cache;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -26,10 +26,12 @@ public class Comment {
     private LocalDateTime regDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="article_id")
     private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="user_id")
     private User user;
 

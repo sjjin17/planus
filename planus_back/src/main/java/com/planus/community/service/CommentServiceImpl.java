@@ -103,6 +103,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void delComment(String token, long commentId) {
         if (tokenProvider.getUserId(token.split(" ")[1])==commentRepository.findByCommentId(commentId).getUser().getUserId()){
             commentRepository.deleteByCommentId(commentId);
