@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/buckets")
-public class BucketApiController {
+public class BucketController {
 //    // LoggerFactory를 이용하여 Logger 객체 생성
 //    private Logger logger = LoggerFactory.getLogger(this.getClass());
 

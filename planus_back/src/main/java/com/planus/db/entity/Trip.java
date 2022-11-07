@@ -57,6 +57,10 @@ public class Trip {
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
     List<Plan> planList;
 
+    @OneToOne(mappedBy = "trip", fetch = FetchType.LAZY)
+    private Article article;
+
+
     @Builder
     public Trip(long tripId, String tripUrl, long admin, LocalDateTime createTime, LocalDate startDate, long period, boolean complete, String imageUrl, List<Member> memberList, List<Bucket> bucketList, List<TripArea> tripAreaList, List<Plan> planList) {
         this.tripId = tripId;
