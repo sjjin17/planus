@@ -58,8 +58,12 @@ public class Article {
         this.hits = 0;
     }
 
+    //== 연관관계 편의 메서드 ==//
     public void setTrip(Trip trip) {
         this.trip = trip;
+        trip.getArticleList().add(this);
     }
+
+
 
 }
