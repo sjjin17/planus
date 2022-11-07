@@ -1,6 +1,8 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +32,18 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+
+    @Builder
+    public Comment(long commentId, String content, LocalDateTime regDate, Article article, User user) {
+        this.commentId = commentId;
+        this.content = content;
+        this.regDate = regDate;
+        this.article = article;
+        this.user = user;
+    }
+
+    public void updateComment(String content, LocalDateTime regDate){
+        this.content = content;
+        this.regDate = regDate;
+    }
 }
