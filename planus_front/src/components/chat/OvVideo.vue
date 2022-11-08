@@ -90,6 +90,8 @@ export default {
   display: none !important;
   position: absolute;
   z-index: 1; /*다른 요소들보다 앞에 배치*/
+  margin-left: 2px;
+  width: max-content;
 }
 
 #userBtn:hover #userBtn-content {
