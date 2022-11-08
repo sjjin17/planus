@@ -1,5 +1,6 @@
 package com.planus.trip.dto;
 
+import com.planus.db.entity.Trip;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,4 +28,7 @@ public class TripInfoResDTO {
         this.imageUrl = imageUrl;
         this.tripArea = tripArea;
     }
+
+
+
 }

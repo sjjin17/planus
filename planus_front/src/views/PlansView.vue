@@ -1,5 +1,10 @@
 <template>
   <div>
+    <voice-chat
+      v-if="isConnect"
+      :tripId="tripId"
+      :nickname="nickname"
+    ></voice-chat>
     <h1>{{ this.tripId }}번 방</h1>
     <invite-dialog
       :tripId="tripId"
@@ -114,6 +119,7 @@ import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
 import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
+import VoiceChat from "@/components/chat/VoiceChat.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -128,9 +134,11 @@ export default {
     PlanList,
     PlanSaveButton,
     CompleteDialog,
+    VoiceChat,
   },
   data() {
     return {
+      isConnect: false,
       tabs: null,
       dialog: false,
       tripId: 0,
@@ -229,6 +237,7 @@ export default {
       console.log(this.res.memberId);
     },
     connect() {
+      this.isConnect = true;
       ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {
