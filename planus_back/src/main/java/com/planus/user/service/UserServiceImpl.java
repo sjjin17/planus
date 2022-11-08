@@ -69,4 +69,14 @@ public class UserServiceImpl implements UserService{
         return user.getKakaoId();
     }
 
+    @Override
+    public String makeNewAccessToken(String refreshToken) {
+        User user = userRepository.findByRefreshTokenContains(refreshToken);
+        if(user!=null) {
+            String newAccessToken = tokenProvider.createNewAccessToken(user);
+            return newAccessToken;
+        }else{
+            return null;
+        }
+    }
 }

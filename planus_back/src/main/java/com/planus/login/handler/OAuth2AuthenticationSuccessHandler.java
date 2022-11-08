@@ -1,5 +1,6 @@
 package com.planus.login.handler;
 
+import com.planus.db.entity.User;
 import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         long kakaoId = getKakaoId(authentication);
-        long userId = userService.findUserByKakaoId(kakaoId).getUserId();
+        User user = userService.findUserByKakaoId(kakaoId);
+        long userId = user.getUserId();
         String jwtToken = tokenProvider.createToken(authentication, userId);
-
+        String refreshToken = user.getRefreshToken();
         if (response.isCommitted()) {
             return;
         }
-        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(jwtToken));
+        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(jwtToken, refreshToken));
     }
 
     private long getKakaoId(Authentication authentication) {
@@ -45,7 +47,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return kakaoId;
     }
 
-    private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString(BASE_URL+"/login/getkakaotoken?token=" + token).build().toUriString();
+    private String makeRedirectUrl(String token, String refreshToken) {
+        return UriComponentsBuilder.fromUriString(BASE_URL + "/login/getkakaotoken?token=" + token + "&refresh=" + refreshToken).build().toUriString();
     }
 }
