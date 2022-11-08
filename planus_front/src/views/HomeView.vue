@@ -1,7 +1,8 @@
 <template>
   <div class="mainPage">
     <div class="mainHeaderDiv">
-      <mypage-button></mypage-button>
+      <v-btn @click="goToCommunity">커뮤니티</v-btn>
+      <v-btn @click="goToMypage"> 마이페이지 </v-btn>
       <login-button></login-button>
     </div>
     <div class="mainLogoDiv">Planus</div>
@@ -11,18 +12,24 @@
 </template>
 
 <script>
-import MypageButton from "@/components/mypage/MypageButton.vue";
 import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
-import CreateTrip from "@/components/manageTrip/createTrip.vue";
-import FestivalList from "@/components/mainPage/festivalList.vue";
+import CreateTrip from "@/components/manageTrip/CreateTrip.vue";
+import FestivalList from "@/components/mainPage/FestivalList.vue";
 
 export default {
   name: "HomeView",
   components: {
-    MypageButton,
     LoginButton,
     CreateTrip,
     FestivalList,
+  },
+  methods: {
+    goToCommunity() {
+      this.$router.push("/community");
+    },
+    goToMypage() {
+      this.$router.push("/mypage");
+    },
   },
 };
 </script>

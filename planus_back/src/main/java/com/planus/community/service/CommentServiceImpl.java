@@ -94,7 +94,6 @@ public class CommentServiceImpl implements CommentService {
                     .name(comment.getUser().getName())
                     .content(comment.getContent())
                     .regDate(comment.getRegDate().toString())
-
                     .build();
 
             commentDTOList.add(commentDTO);

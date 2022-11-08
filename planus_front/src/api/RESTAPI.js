@@ -1,8 +1,8 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-// const baseURL = "https://planus.co.kr/planus";
-const baseURL = "http://localhost:8080/planus";
+const baseURL = "https://planus.co.kr/planus";
+// const baseURL = "http://localhost:8080/planus";
 const baseAxios = axios.create({
   baseURL,
   headers: {
@@ -158,6 +158,24 @@ const API = {
   async delComment(commentId) {
     const response = await this.instance.delete(
       "/comment" + "?commentId=" + commentId
+    );
+    return response.data;
+  },
+  async getArticleListByTitle(title, page) {
+    const response = await this.instance.get(
+      "/articles/title" + "?title=" + title,
+      {
+        params: { page },
+      }
+    );
+    return response.data;
+  },
+  async getArticleListByArea(area, page) {
+    const response = await this.instance.get(
+      "/articles/area" + "?area=" + area,
+      {
+        params: { page },
+      }
     );
     return response.data;
   },

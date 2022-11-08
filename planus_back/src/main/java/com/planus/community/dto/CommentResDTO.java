@@ -1,6 +1,5 @@
 package com.planus.community.dto;
 
-import com.planus.db.entity.Comment;
 import lombok.Builder;
 import lombok.Getter;
 
