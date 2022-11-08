@@ -19,18 +19,18 @@ public class ArticleReqDTO {
     private String title;
 
     private String content;
-    private long userId;
-    private long tripId;
+    private User user;
+    private Trip trip;
 
 
 
     // articleReqDTO -> article
-    public static Article toEntity(ArticleReqDTO articleReqDTO, Trip trip, User user) {
+    public static Article toEntity(ArticleReqDTO articleReqDTO) {
         return Article.builder()
                 .title(articleReqDTO.getTitle())
                 .content(articleReqDTO.getContent())
-                .user(user)
-                .trip(trip)
+                .user(articleReqDTO.getUser())
+                .trip(articleReqDTO.getTrip())
                 .build();
 
     }
