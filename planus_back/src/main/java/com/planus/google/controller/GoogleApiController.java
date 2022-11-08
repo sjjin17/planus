@@ -23,7 +23,7 @@ public class GoogleApiController {
     @Value("${google.map.key}")
     private String googleMapKey;
 
-    @PostMapping("/direction")
+    @PostMapping
     public ResponseEntity getDirection(@RequestBody String url){
 
         RestTemplate restTemplate = new RestTemplate();

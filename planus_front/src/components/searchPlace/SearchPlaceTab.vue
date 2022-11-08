@@ -70,24 +70,16 @@ export default {
   },
   methods: {
     searchPlace() {
+      this.keyword.trim();
       console.log("검색");
       if (this.keyword.length == 0) return;
-      var config = {
-        method: "get",
-        // url: "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json",
-        url: `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json`,
-        params: {
-          input: this.keyword,
-          inputtype: "textquery",
-          locationbias: `circle:5000@${this.mapLat},${this.mapLng}`,
-          fields: "formatted_address,name,geometry,photo",
-          key: process.env.VUE_APP_GOOGLE_MAP_KEY,
-          language: "ko",
-        },
-      };
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
+      axios
+        .post(
+          process.env.VUE_APP_API_URL + "/google",
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
+        )
+        .then((res) => {
+          console.log(res.data);
         })
         .catch(function (error) {
           console.log(error);
