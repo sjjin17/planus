@@ -15,13 +15,20 @@
         </v-col>
         <v-col><v-btn @click="search">검색</v-btn></v-col>
       </v-row>
+      <div v-if="moveRoute">
+        <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
+          {{ route.text }}
+          <span style="color: red">
+            {{ route.duration }}
+          </span>
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-const GOOGLE_KEY = process.env.VUE_APP_GOOGLE_MAP_KEY;
 export default {
   data() {
     return {
@@ -60,9 +67,29 @@ export default {
           transit: "NONE",
         },
       ],
+      moveRoute: "",
+      costTime: 0,
     };
   },
-  components: {},
+  computed: {
+    routeList() {
+      let list = this.moveRoute.split("/");
+      console.log(list);
+      let last = list[list.length - 2].split(" ");
+      list.pop();
+      list.pop();
+      list.push("다음위치까지 " + last[last.length - 1]);
+      return list;
+    },
+    routeToJsonList() {
+      let array = [];
+      this.routeList.forEach((route) => {
+        let text = route.split(":");
+        array.push({ text: text[0], duration: text[1] });
+      });
+      return array;
+    },
+  },
   methods: {
     search(order, transit) {
       order = 1;
@@ -70,11 +97,10 @@ export default {
       console.log(transit);
       if (transit == "NONE") {
         console.log("선택안함");
-      } else {
-        console.log(this.planList[order - 1].lat, this.planList[order - 1].lng);
-        console.log(this.planList[order].lat, this.planList[order].lng);
+      } else if (transit == "transit") {
         axios
-          .get(
+          .post(
+            "http://localhost:8080/planus/google/direction",
             "https://maps.googleapis.com/maps/api/directions/json?origin=" +
               this.planList[order - 1].lat +
               "," +
@@ -85,17 +111,41 @@ export default {
               this.planList[order].lng +
               "&mode=" +
               transit +
-              "&departure_time=now&key=" +
-              GOOGLE_KEY,
-            {
-              headers: {
-                "Accept-Language": "ko",
-              },
-            }
+              "&departure_time=now&key="
           )
           .then((res) => {
-            console.log(res.data.routes[0]);
+            let data = res.data.routes[0].legs[0];
+            this.costTime = Math.ceil(data.duration.value / 60);
+            let steps = data.steps;
+            console.log(steps);
+            let move = "";
+            steps.forEach((step) => {
+              if (step.transit_details) {
+                let detail = step.transit_details;
+                let sub = "";
+                sub += detail.line.vehicle.name;
+                if (detail.line.short_name) {
+                  sub += detail.line.short_name;
+                } else {
+                  sub += detail.line.name;
+                }
+                sub += " ";
+                sub +=
+                  detail.departure_stop.name +
+                  " - " +
+                  detail.arrival_stop.name +
+                  ":" +
+                  step.duration.text +
+                  "/";
+                move += sub;
+              } else {
+                move += step.html_instructions + ":" + step.duration.text + "/";
+              }
+            });
+            this.moveRoute = move;
           });
+      } else {
+        console.log();
       }
     },
   },
