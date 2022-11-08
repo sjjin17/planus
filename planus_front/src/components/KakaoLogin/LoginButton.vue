@@ -23,13 +23,14 @@ export default {
   },
   methods: {
     checkLogin() {
-      if (this.$cookies.get("token") == null) {
+      if (this.$cookies.get("refresh") == null) {
         return false;
       }
       return true;
     },
     logout() {
       this.$cookies.remove("token");
+      this.$cookies.remove("refresh");
       this.isLogin = false;
     },
   },

@@ -14,6 +14,7 @@ export default {
       this.res = await api
         .signOut()
         .then(() => this.$cookies.remove("token"))
+        .then(() => this.$cookies.remove("refresh"))
         .then(() => this.$router.push("/"));
     },
   },
