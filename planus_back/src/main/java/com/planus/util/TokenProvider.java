@@ -55,6 +55,20 @@ public class TokenProvider {
         return token;
     }
 
+    public String createNewAccessToken(com.planus.db.entity.User user) {
+        String token = Jwts.builder()
+                .setSubject("planus_token")
+                .claim("auth", "ROLE_MEMBER")
+                .claim("userId", String.valueOf(user.getUserId()))
+                .claim("nickname", user.getName())
+                .claim("email", user.getEmail())
+                .claim("imageUrl",user.getImageUrl())
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(getValidity(accessTokenTime))
+                .compact();
+        return token;
+    }
+
     public String createRefreshToken(){
         String token = Jwts.builder()
                 .setSubject("planun_refresh_token")

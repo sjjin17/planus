@@ -1,7 +1,6 @@
 <template>
   <div v-if="!isLogin">
-    <!-- <a href="http://localhost:8080/planus/oauth2/authorization/kakao"> -->
-    <a href="https://planus.co.kr/planus/oauth2/authorization/kakao">
+    <a :href="kakaoUrl">
       <img src="@/assets/kakao_login_medium_narrow.png" />
     </a>
   </div>
@@ -19,17 +18,19 @@ export default {
   data: () => {
     return {
       isLogin: true,
+      kakaoUrl: process.env.VUE_APP_API_URL_KAKAO,
     };
   },
   methods: {
     checkLogin() {
-      if (this.$cookies.get("token") == null) {
+      if (this.$cookies.get("refresh") == null) {
         return false;
       }
       return true;
     },
     logout() {
       this.$cookies.remove("token");
+      this.$cookies.remove("refresh");
       this.isLogin = false;
     },
   },
