@@ -3,6 +3,7 @@ package com.planus.websocket.controller;
 import com.planus.bucket.service.BucketService;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
+import com.planus.util.TokenProvider;
 import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class WebSocketController {
     private final BucketService bucketService;
     private final PlanService planService;
     private final MemberService memberService;
+
 
     @MessageMapping("/enter")
     public void enter(WebSocketMember member, SimpMessageHeaderAccessor headerAccessor){

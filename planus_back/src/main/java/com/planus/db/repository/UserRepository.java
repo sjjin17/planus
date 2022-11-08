@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findOneByKakaoId(long kakaoId);
 
+    User findByRefreshTokenContains(String refreshToken);
 }
