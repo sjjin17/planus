@@ -1,14 +1,28 @@
 <template>
   <div>
-    <h1>{{ this.tripId }}번 방</h1>
-    <invite-dialog
-      :tripId="tripId"
-      :tripUrl="tripUrl"
-      :admin="admin"
-      :connector="connector"
-      @getConnector="getConnector"
-    ></invite-dialog>
-    <complete-dialog :tripId="tripId"></complete-dialog>
+    <v-container
+      d-flex
+      class="ma-0 pa-0"
+      style="align-items: center; max-width: 100%"
+      v-if="isConnect"
+    >
+      <voice-chat
+        :tripId="tripId"
+        :nickname="nickname"
+        class="ml-1"
+        style="align-items: center"
+      ></voice-chat>
+      <v-spacer></v-spacer>
+      <h1>{{ this.tripId }}번 방</h1>
+      <invite-dialog
+        :tripId="tripId"
+        :tripUrl="tripUrl"
+        :admin="admin"
+        :connector="connector"
+        @getConnector="getConnector"
+      ></invite-dialog>
+      <complete-dialog :tripId="tripId" class="mr-3"></complete-dialog>
+    </v-container>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
         <v-tab
@@ -111,6 +125,7 @@ import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
 import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
+import VoiceChat from "@/components/chat/VoiceChat.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -125,9 +140,11 @@ export default {
     PlanList,
     PlanSaveButton,
     CompleteDialog,
+    VoiceChat,
   },
   data() {
     return {
+      isConnect: false,
       tabs: null,
       dialog: false,
       tripId: 0,
@@ -224,6 +241,7 @@ export default {
       console.log(this.res.memberId);
     },
     connect() {
+      this.isConnect = true;
       ws.connect(this.tripId, this.token, this.onSocketReceive);
     },
     async onSocketReceive(result) {

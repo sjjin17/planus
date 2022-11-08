@@ -1,8 +1,12 @@
 package com.planus.article.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.planus.db.entity.Article;
 import com.planus.db.entity.Trip;
 import com.planus.db.entity.User;
+import com.planus.mytrip.dto.MyTripResDTO;
+import com.planus.trip.dto.TripInfoResDTO;
+import com.planus.user.dto.UserResDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,13 +20,14 @@ public class ArticleListResDTO {
     private String title;
     private LocalDateTime regDate;
     private long hits;
-    private User user;
-    private Trip trip;
+
+    private UserResDTO user;
+    private MyTripResDTO trip;
 
 
 
     @Builder
-    public ArticleListResDTO(long articleId, String title, LocalDateTime regDate, long hits, User user, Trip trip) {
+    public ArticleListResDTO(long articleId, String title, LocalDateTime regDate, long hits, UserResDTO user, MyTripResDTO trip) {
         this.articleId = articleId;
         this.title = title;
         this.regDate = regDate;
@@ -33,13 +38,14 @@ public class ArticleListResDTO {
 
     // entity -> ResDTO
     public static ArticleListResDTO toResDTO(Article article) {
+        System.out.println(UserResDTO.toResDto(article.getUser()));
         return ArticleListResDTO.builder()
                 .articleId(article.getArticleId())
                 .title(article.getTitle())
                 .regDate(article.getRegDate())
                 .hits(article.getHits())
-                .user(article.getUser())
-                .trip(article.getTrip())
+                .user(UserResDTO.toResDto(article.getUser()))
+                .trip(MyTripResDTO.toResDTO(article.getTrip()))
                 .build();
 
 

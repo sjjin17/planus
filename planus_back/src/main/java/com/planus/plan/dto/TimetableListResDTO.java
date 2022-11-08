@@ -29,4 +29,6 @@ public class TimetableListResDTO {
         this.transit = transit;
         this.moveTime = moveTime;
     }
+
+
 }

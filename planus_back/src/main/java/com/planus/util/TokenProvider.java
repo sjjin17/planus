@@ -12,7 +12,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,7 +24,7 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private static Long accessTokenTime = 3000*12*1000L;
+    private static Long accessTokenTime = 1000*60*60*3L;
     private static Long refreshTokenTime = 2*60*60*24*30*1000L;
 
     public String createToken(Authentication authentication, long userId){
@@ -52,29 +55,10 @@ public class TokenProvider {
         return token;
     }
 
-    public String createNewAccessToken(com.planus.db.entity.User user) {
-        String token = Jwts.builder()
-                .setSubject("planus_token")
-                .claim("auth", "ROLE_MEMBER")
-                .claim("userId", String.valueOf(user.getUserId()))
-                .claim("nickname", user.getName())
-                .claim("email", user.getEmail())
-                .claim("imageUrl",user.getImageUrl())
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .setExpiration(getValidity(accessTokenTime))
-                .compact();
-        return token;
-    }
-
-
-
     public String createRefreshToken(){
-        Random random = new Random();
         String token = Jwts.builder()
                 .setSubject("planun_refresh_token")
-                .claim("-", String.valueOf(random.nextInt(1000)))
                 .setExpiration(getValidity(refreshTokenTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
         return token;
     }
@@ -122,11 +106,9 @@ public class TokenProvider {
     }
 
     public long getUserId(String token){
-        try {
+        try{
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-            return Long.parseLong(String.valueOf(claims.get("userId")));
-        }catch(ExpiredJwtException e){
-                System.out.println("만료된 토큰(getUserId)");
+            return Long.parseLong( String.valueOf(claims.get("userId")));
         }catch (SignatureException e){
             System.out.println("토큰 서명과정에서 에러 발생함(getUserId)");
         }catch (Exception e){
