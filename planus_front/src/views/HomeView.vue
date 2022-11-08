@@ -1,9 +1,9 @@
 <template>
   <div class="mainPage">
     <div class="mainHeaderDiv">
+      <login-button></login-button>
       <v-btn @click="goToCommunity">커뮤니티</v-btn>
       <v-btn @click="goToMypage"> 마이페이지 </v-btn>
-      <login-button></login-button>
     </div>
     <div class="mainLogoDiv">Planus</div>
     <create-trip class="mainTripDiv"></create-trip>
