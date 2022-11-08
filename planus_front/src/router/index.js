@@ -9,6 +9,7 @@ import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
 import CompleteView from "../views/CompleteView.vue";
 import Chat from "@/components/chat/WebSocketTest.vue";
+import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
 
 Vue.use(VueRouter);
 
@@ -82,6 +83,11 @@ const routes = [
     path: "/completetest/:url",
     name: "completePage",
     component: CompletePage,
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: TokenTestButton,
   },
 ];
 
