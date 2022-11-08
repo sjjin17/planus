@@ -25,8 +25,13 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity createArticle(@RequestBody @Valid ArticleReqDTO articleReqDTO) {
-        System.out.println(1);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.createArticle(articleReqDTO));
     }
+
+//    @GetMapping("/{article_id}")
+//    public ResponseEntity getArticle(@PathVariable long articleId) {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(articleService.findOneArticle(articleId));
+//    }
 }

@@ -21,7 +21,7 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private static Long accessTokenTime = 3000*12*1000L;
+    private static Long accessTokenTime = 1000*60*60*3L;
     private static Long refreshTokenTime = 2*60*60*24*30*1000L;
 
     public String createToken(Authentication authentication, long userId){

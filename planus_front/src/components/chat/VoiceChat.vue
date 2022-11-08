@@ -1,16 +1,30 @@
 <template>
-  <div>
-    {{ tripId }}/{{ userId }}
-    <v-btn @click="micBtnHandler">
+  <div style="position: relative; display: flex">
+    <v-btn v-if="!joinClick" @click="joinBtnClick">참여</v-btn>
+    <v-btn v-if="joinClick" @click="micBtnHandler">
       <v-icon v-if="micOn">mdi-microphone</v-icon>
       <v-icon v-if="!micOn">mdi-microphone-off</v-icon>
     </v-btn>
+
+    <v-container d-flex v-if="isConnected" style="padding: 0">
+      <v-col style="flex-grow: 0; padding: 0">
+        <user-video :stream-manager="publisher" :idx="0" />
+      </v-col>
+      <v-col
+        style="flex-grow: 0; padding: 0"
+        v-for="(sub, idx) in subscribers"
+        :key="sub.stream.connection.connectionId"
+      >
+        <user-video :stream-manager="sub" :idx="idx + 1" />
+      </v-col>
+    </v-container>
   </div>
 </template>
 
 <script>
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
+import UserVideo from "@/components/chat/UserVideo.vue";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
@@ -24,34 +38,42 @@ export default {
       publisher: undefined,
       subscribers: [],
       micOn: false,
+      isConnected: false,
+      joinClick: false,
     };
   },
   props: {
     tripId: Number,
-    userId: Number,
+    nickname: String,
+  },
+  components: {
+    UserVideo,
   },
   async mounted() {
-    await this.audioCheck();
-    if (this.audioActive) {
-      this.joinSession();
-    }
+    // this.joinSession();
   },
   methods: {
+    joinBtnClick() {
+      this.joinClick = true;
+      this.joinSession();
+    },
     micBtnHandler() {
-      this.micOn = !this.micOn;
-      this.publisher.publishAudio(this.micOn);
+      if (this.joinClick) {
+        this.micOn = !this.micOn;
+        this.publisher.publishAudio(this.micOn);
+      }
     },
 
-    async audioCheck() {
-      await navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then(() => {
-          this.audioActive = true;
-        })
-        .catch(() => {
-          this.audioActive = false;
-        });
-    },
+    // async audioCheck() {
+    //   await navigator.mediaDevices
+    //     .getUserMedia({ audio: true })
+    //     .then(() => {
+    //       this.audioActive = true;
+    //     })
+    //     .catch(() => {
+    //       this.audioActive = false;
+    //     });
+    // },
     joinSession() {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -76,7 +98,7 @@ export default {
       });
       this.getToken(this.tripId).then(async (token) => {
         this.session
-          .connect(token, { clientData: this.userId })
+          .connect(token, { clientData: this.nickname })
           .then(async () => {
             let publisher = this.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -89,7 +111,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .then(() => {
-            // this.videoSetting = true;
+            this.isConnected = true;
           })
           .catch((error) => {
             console.error(
@@ -112,7 +134,7 @@ export default {
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
-      // this.videoSetting = false;
+      this.isConnected = false;
       //   stompApi.disconnect();
       window.removeEventListener("beforeunload", this.leaveSession);
       this.$router.replace("/").then(() => {
