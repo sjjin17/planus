@@ -100,7 +100,7 @@ export default {
       } else if (transit == "transit") {
         axios
           .post(
-            `${process.env.VUE_APP_API_URL}/google/direction`,
+            process.env.VUE_APP_API_URL + "/google/direction",
             "https://maps.googleapis.com/maps/api/directions/json?origin=" +
               this.planList[order - 1].lat +
               "," +
