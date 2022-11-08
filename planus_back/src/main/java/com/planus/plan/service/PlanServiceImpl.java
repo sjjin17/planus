@@ -286,8 +286,12 @@ public class PlanServiceImpl implements PlanService {
     public void addTimetable(long planId, WebSocketTimetable timetable) {
         String key = "timetableList::" + planId;
 
+        //여기서 새로 추가할 Timetable의 orders를 계산
+        int orders = (int) redisUtil.getListDataSize(key)+1;
+        System.out.println("addTimetable에서 계산한 orders : " + orders);
+
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("orders", timetable.getOrders());
+        jsonObject.put("orders", orders);
         jsonObject.put("place", timetable.getPlace());
         jsonObject.put("lat", timetable.getLat());
         jsonObject.put("lng", timetable.getLng());

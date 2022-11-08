@@ -100,6 +100,17 @@ const WSAPI = {
     };
     this.stomp.send("/app/delTimetable", JSON.stringify(delTimetableList));
   },
+  setTimetableOrders(tripId, planId, timetableList) {
+    let setTimetableOrdersList = {
+      tripId: tripId,
+      planId: planId,
+      timetableList: timetableList,
+    };
+    this.stomp.send(
+      "/app/setTimetableOrders",
+      JSON.stringify(setTimetableOrdersList)
+    );
+  },
   setTimetable(
     tripId,
     planId,

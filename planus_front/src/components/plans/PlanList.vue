@@ -11,29 +11,38 @@
         >
       </form>
     </div>
-    <timetable-card
-      v-for="timetable in timetableList"
-      :key="timetable.orders"
-      :timetable="timetable"
-      :calTime="calTime"
-      :startTime="startTime"
-      @changeCalTime="changeCalTime"
-      @setTimetable="setTimetable"
-      @delTimetable="delTimetable"
+    <draggable
+      :list="timetableList"
+      :disabled="!enabled"
+      @start="dragging = true"
+      @end="onEnd"
     >
-    </timetable-card>
+      <timetable-card
+        v-for="timetable in timetableList"
+        :key="timetable.orders"
+        :timetable="timetable"
+        :calTime="calTime"
+        :startTime="startTime"
+        @changeCalTime="changeCalTime"
+        @setTimetable="setTimetable"
+        @delTimetable="delTimetable"
+      >
+      </timetable-card>
+    </draggable>
   </div>
 </template>
 
 <script>
 import API from "@/api/RESTAPI";
 import TimetableCard from "@/components/plans/TimetableCard.vue";
+import draggable from "vuedraggable";
 
 const api = API;
 
 export default {
   components: {
     TimetableCard,
+    draggable,
   },
   data() {
     return {
@@ -43,6 +52,10 @@ export default {
 
       startHour: 0,
       startMin: 0,
+
+      //드래그용
+      enabled: true,
+      dragging: false,
     };
   },
   props: {
@@ -51,10 +64,14 @@ export default {
     WebSocketStartTime: Object,
     deletedTimetableList: Object,
     addedTimetable: Object,
+    setOrdersTimetableList: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
   },
+  // mounted() {
+  //   console.log(this.plan.planId + "번의 plan-list입니다.");
+  // },
   watch: {
     WebSocketStartTime(newVal) {
       if (newVal.planId == this.plan.planId) {
@@ -83,6 +100,13 @@ export default {
         this.timetableList = newVal.timetableList;
       }
     },
+    setOrdersTimetableList(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        this.timetableList = newVal.timetableList;
+      }
+      // //re-rendering을 위해 배열 splice
+      // this.timetableList.splice(0, 1, this.timetableList[0]);
+    },
     addedTimetable(newVal) {
       if (this.plan.planId == newVal.planId) {
         let newTimetable = {
@@ -96,7 +120,6 @@ export default {
           transit: newVal.transit,
         };
         this.timetableList.push(newTimetable);
-        console.log(this.timetableList);
         this.updateOrders(this.timetableList);
       }
     },
@@ -178,9 +201,6 @@ export default {
       }
 
       //delTimetableList를 돌면서 orders를 갱신
-      // for (let i = 0; i < delTimetableList.length; i++) {
-      //   delTimetableList[i].orders = i + 1;
-      // }
       this.updateOrders(delTimetableList);
 
       //emit으로 delTimetableList를 올려보내기
@@ -191,8 +211,66 @@ export default {
       console.log("updateOrders로 들어옴");
       for (let i = 0; i < list.length; i++) {
         list[i].orders = i + 1;
-        console.log("순서 " + list[i].orders);
+        console.log("순서 " + list[i].orders + list[i].place);
       }
+    },
+    onEnd(event) {
+      //oldIndex : 이동 전 인덱스
+      //newIndex : 이동 후 인덱스
+
+      let oldIdx = event.oldIndex;
+      let newIdx = event.newIndex;
+
+      if (oldIdx != newIdx) {
+        this.changeDraggedOrders(oldIdx, newIdx);
+      }
+
+      this.dragging = false;
+    },
+    changeDraggedOrders(oldIdx, newIdx) {
+      console.log("oldIdx " + oldIdx);
+      console.log("newIdx " + newIdx);
+      //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime 초기화
+      if (oldIdx != 0) {
+        this.timetableList[oldIdx - 1].transit = "NONE";
+        this.timetableList[oldIdx - 1].moveTime = 0;
+      }
+      this.timetableList[newIdx].transit = "NONE";
+      this.timetableList[newIdx].moveTime = 0;
+
+      //splice로 oldIdx -> newIdx 배열 내 위치 변경
+      // let selectedTimetable = this.timetableList[oldIdx];
+
+      // this.timetableList.splice(oldIdx, 1);
+      // this.timetableList.splice(newIdx, 0, selectedTimetable);
+
+      if (newIdx != 0) {
+        this.timetableList[newIdx - 1].transit = "NONE";
+        this.timetableList[newIdx - 1].moveTime = 0;
+      }
+
+      this.updateOrders(this.timetableList);
+
+      //웹소켓 형식에 맞게 재구성
+      let setTimetableOrdersList = [];
+      for (let i = 0; i < this.timetableList.length; i++) {
+        let timetable = {
+          place: this.timetableList[i].place,
+          lat: this.timetableList[i].lat,
+          lng: this.timetableList[i].lng,
+          orders: this.timetableList[i].orders,
+          costTime: this.timetableList[i].costTime,
+          moveTime: this.timetableList[i].moveTime,
+          transit: this.timetableList[i].transit,
+        };
+        setTimetableOrdersList.push(timetable);
+      }
+
+      this.$emit(
+        "setTimetableOrders",
+        this.plan.planId,
+        setTimetableOrdersList
+      );
     },
   },
 };

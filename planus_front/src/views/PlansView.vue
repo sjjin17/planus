@@ -94,11 +94,13 @@
               :tripId="tripId"
               :WebSocketStartTime="startTime"
               :deletedTimetableList="deletedTimetableList"
+              :setOrdersTimetableList="setOrdersTimetableList"
               :addedTimetable="addedTimetable"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
               @delTimetable="delTimetable"
+              @setTimetableOrders="setTimetableOrders"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -161,6 +163,8 @@ export default {
       addedTimetable: {},
       //삭제된 것을 제외한 timetableList
       deletedTimetableList: {},
+      //순서 변경 완료된 timetableList
+      setOrdersTimetableList: {},
 
       planIdList: [],
       planTabs: null,
@@ -301,6 +305,14 @@ export default {
             timetableList: content.timetableList,
           };
           break;
+        case 7:
+          console.log(content);
+          // TODO: 일정(timetable) 순서 변경
+          this.setOrdersTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
+          break;
       }
     },
     getConnector() {
@@ -432,6 +444,13 @@ export default {
       if (this.token) {
         if (ws.stomp && ws.stomp.connected) {
           ws.delTimetable(this.tripId, planId, delTimetableList);
+        }
+      }
+    },
+    setTimetableOrders(planId, setTimetableOrdersList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setTimetableOrders(this.tripId, planId, setTimetableOrdersList);
         }
       }
     },

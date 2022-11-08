@@ -2,6 +2,7 @@
   <div>
     <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
     <!-- 이전 일정은 자정 전에 끝났는데 이동시간 땜에 시작 시간이 자정 이후가 되면 어떡하져..? -->
+    <!-- 일정이 딱 0시에 끝나면 이거 안 띄워짐 -->
     <div
       v-if="
         this.calTime[this.timetable.orders - 1] < 1440 &&
@@ -11,7 +12,10 @@
       0시 이후의 일정입니다.
     </div>
     <v-card>
-      <v-card-title>{{ this.timetable.place }}</v-card-title>
+      <v-card-title
+        >{{ this.timetable.place }} =>
+        {{ this.timetable.orders }}번</v-card-title
+      >
       <v-icon @click="delTimetable">mdi-close</v-icon>
       <v-card-text>
         <div>
@@ -71,8 +75,6 @@ export default {
     // this.$emit("changeCalTime", this.endTime);
     this.costHour = Math.floor(this.timetable.costTime / 60);
     this.costMin = this.timetable.costTime % 60;
-
-    console.log("transit 출력 - " + this.timetable.transit);
   },
   methods: {
     clickChangeCostTime() {
