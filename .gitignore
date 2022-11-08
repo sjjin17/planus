@@ -350,5 +350,6 @@ gradle-app.setting
 *.hprof
 
 privateKey.properties
+application.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java,redis,vuejs,gradle,windows,intellij+all,visualstudiocode
