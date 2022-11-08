@@ -25,13 +25,16 @@ public class GoogleApiController {
 
     @PostMapping("/direction")
     public ResponseEntity getDirection(@RequestBody String url){
-        Map<String, Object> result = new HashMap<>();
-        System.out.println(url);
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+
         headers.add("Accept-Language","ko");
+        
         HttpEntity<?> entity = new HttpEntity<>(headers);
+
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+googleMapKey).build();
+
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
 
         return resultMap;
