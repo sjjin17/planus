@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
+    <!-- 이전 일정은 자정 전에 끝났는데 이동시간 땜에 시작 시간이 자정 이후가 되면 어떡하져..? -->
     <div
       v-if="
         this.calTime[this.timetable.orders - 1] < 1440 &&
@@ -66,11 +67,12 @@ export default {
     calTime: Array,
   },
   mounted() {
-    console.log("props로 받은 calTime : " + this.calTime);
     // this.endTime = this.startTime + this.timetable.costTime;
     // this.$emit("changeCalTime", this.endTime);
     this.costHour = Math.floor(this.timetable.costTime / 60);
     this.costMin = this.timetable.costTime % 60;
+
+    console.log("transit 출력 - " + this.timetable.transit);
   },
   methods: {
     clickChangeCostTime() {

@@ -1,5 +1,5 @@
 package com.planus.db.entity;
 
 public enum Transit {
-    BUS, CAR, WALK
+    BUS, CAR, WALK, NONE
 }

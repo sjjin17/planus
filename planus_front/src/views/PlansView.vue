@@ -89,6 +89,7 @@
               :tripId="tripId"
               :WebSocketStartTime="startTime"
               :deletedTimetableList="deletedTimetableList"
+              :addedTimetable="addedTimetable"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
@@ -278,6 +279,9 @@ export default {
             orders: content.orders,
             fromBucket: content.fromBucket,
             address: content.address,
+            planId: content.planId,
+            transit: content.transit,
+            moveTime: content.moveTime,
           };
           break;
         case 6:
@@ -408,8 +412,6 @@ export default {
       this.timeTableLength = length;
     },
     async saveTimetableList(planId) {
-      console.log("----");
-      console.log(planId);
       // let savePlanIdList = [];
       // this.planIdList.forEach((p) => {
       //   savePlanIdList.push(p.planId);

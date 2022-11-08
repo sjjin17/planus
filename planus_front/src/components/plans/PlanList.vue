@@ -50,6 +50,7 @@ export default {
     plan: Object,
     WebSocketStartTime: Object,
     deletedTimetableList: Object,
+    addedTimetable: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
@@ -78,7 +79,26 @@ export default {
       deep: true,
     },
     deletedTimetableList(newVal) {
-      this.timetableList = newVal.timetableList;
+      if (this.plan.planId == newVal.planId) {
+        this.timetableList = newVal.timetableList;
+      }
+    },
+    addedTimetable(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        let newTimetable = {
+          timetableId: newVal.timetableId,
+          orders: newVal.orders,
+          place: newVal.place,
+          lat: newVal.lat,
+          lng: newVal.lng,
+          costTime: newVal.costTime,
+          moveTime: newVal.moveTime,
+          transit: newVal.transit,
+        };
+        this.timetableList.push(newTimetable);
+        console.log(this.timetableList);
+        this.updateOrders(this.timetableList);
+      }
     },
   },
   methods: {
@@ -147,10 +167,32 @@ export default {
           moveTime: this.timetableList[i].moveTime,
           transit: this.timetableList[i].transit,
         };
+
+        // orders가 delOrders-1이면 transit, moveTime을 초기화
+        if (this.timetableList[i].orders == delOrders - 1) {
+          delTimetable.transit = "NONE";
+          delTimetable.moveTime = 0;
+        }
+
         delTimetableList.push(delTimetable);
       }
+
+      //delTimetableList를 돌면서 orders를 갱신
+      // for (let i = 0; i < delTimetableList.length; i++) {
+      //   delTimetableList[i].orders = i + 1;
+      // }
+      this.updateOrders(delTimetableList);
+
       //emit으로 delTimetableList를 올려보내기
       this.$emit("delTimetable", this.plan.planId, delTimetableList);
+    },
+    // Timetable이 추가돼도 삭제돼도 orders가 제대로 안 들어가서.. orders 갱신하는 함수 따로 뺌
+    updateOrders(list) {
+      console.log("updateOrders로 들어옴");
+      for (let i = 0; i < list.length; i++) {
+        list[i].orders = i + 1;
+        console.log("순서 " + list[i].orders);
+      }
     },
   },
 };
