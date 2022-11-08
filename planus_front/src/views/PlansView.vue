@@ -37,7 +37,15 @@
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
-            <div id="leftTab">장소검색 컴포넌트</div>
+            <search-place-tab
+              :mapLat="lat"
+              :mapLng="lng"
+              :size="size"
+              :isRecommendClick="isRecommendClick"
+              @addBucket="addBucket"
+              @addTimetable="addTimetable"
+              id="leftTab"
+            ></search-place-tab>
           </v-tab-item>
           <v-tab-item>
             <bucket-list
@@ -111,6 +119,7 @@ import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
 import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
+import SearchPlaceTab from "@/components/searchPlace/SearchPlaceTab.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -125,6 +134,7 @@ export default {
     PlanList,
     PlanSaveButton,
     CompleteDialog,
+    SearchPlaceTab,
   },
   data() {
     return {

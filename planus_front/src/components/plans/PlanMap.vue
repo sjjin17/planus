@@ -4,42 +4,55 @@
       <v-btn
         v-for="(area, areaIdx) in tripArea"
         :key="areaIdx"
-        @click="buttonClick(area)"
+        @click="clickLocation(area, 12)"
         >{{ area.siName }}</v-btn
       >
     </div>
     <gmap-map
-      :zoom="10"
+      :zoom="zoom"
       :center="center"
       style="width: 100%; height: 85vh"
-      @bounds_changed="moveCenter"
+      @zoom_changed="getCurrentZoom"
+      @center_changed="getCurrentCenter"
     >
       <gmap-marker
         :icon="{
-          url: require('@/assets/GreenMarker.png'),
+          url: require('@/assets/BucketMarker.png'),
           scaledSize: { width: 40, height: 40 },
           labelOrigin: { x: 20, y: -10 },
         }"
-        :key="index + 'i'"
-        v-for="(m, index) in locationMarkers"
+        :key="index + 'b'"
+        v-for="(m, index) in bucketList"
         :position="m"
-        :label="m.label"
-        @click="center = m"
+        :label="{
+          text: m.name.substring(0, 2),
+          color: '#4A8072',
+          fontWeight: 'bold',
+        }"
+        @click="clickLocation(m, 15)"
+        id="bucket"
       ></gmap-marker>
       <gmap-marker
-        :key="idx + 'd'"
-        v-for="(m, idx) in locPlaces"
+        :key="index + 'p'"
+        v-for="(m, index) in planList"
         :position="m"
-        :label="m.label"
-        @click="center = m"
+        :label="{
+          text: m.name.substring(0, 2),
+          color: '#FF1744',
+          fontWeight: 'bold',
+        }"
+        @click="clickLocation(m, 15)"
         :icon="{
-          url: require('@/assets/RedMarker.png'),
+          url: require('@/assets/PlanMarker.png'),
           scaledSize: { width: 40, height: 40 },
           labelOrigin: { x: 20, y: -10 },
         }"
-        class="plan"
+        id="plan"
       ></gmap-marker>
-      <gmap-polyline :path.sync="locPlaces" :options="{ strokeColor: 'red' }">
+      <gmap-polyline
+        :path.sync="planList"
+        :options="{ strokeColor: '#FF1744', strokeWeight: 2 }"
+      >
       </gmap-polyline>
     </gmap-map>
   </div>
@@ -58,14 +71,15 @@ export default {
         scaledSize: { width: 30, height: 30 },
       },
       center: { lat: 37.5400456, lng: 126.9921017 },
+      zoom: 12,
       nowCenter: {},
-      locationMarkers: [
+      bucketList: [
         { label: "C", name: "코엑스몰", lat: 37.5115557, lng: 127.0595261 },
         { label: "G", name: "고투몰", lat: 37.5062379, lng: 127.0050378 },
         { label: "D", name: "동대문시장", lat: 37.566596, lng: 127.007702 },
         { label: "I", name: "IFC몰", lat: 37.5251644, lng: 126.9255491 },
       ],
-      locPlaces: [
+      planList: [
         {
           label: "L",
           name: "롯데월드타워몰",
@@ -75,35 +89,27 @@ export default {
         { label: "M", name: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
         { label: "T", name: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
       ],
-      existingPlace: null,
     };
   },
   props: {
     tripArea: Array,
   },
   methods: {
-    moveCenter(newCoordinates) {
-      if (!newCoordinates) return;
-      this.nowCenter = {
-        lat: newCoordinates.eb.center(),
-        lng: newCoordinates.Ha.center(),
-      };
-      this.$emit(
-        "getCenter",
-        newCoordinates.eb.center(),
-        newCoordinates.Ha.center()
-      );
-    },
-    async buttonClick(area) {
-      console.log(this.center);
-      await setTimeout(() => {
+    clickLocation(loc, zoom) {
+      setTimeout(() => {
         this.center = this.nowCenter;
-        console.log(this.center);
-      }, 2);
-      await setTimeout(() => {
-        this.center = area;
-        console.log(this.center);
-      }, 2);
+      }, 50);
+      setTimeout(() => {
+        this.center = loc;
+        this.zoom = zoom;
+      }, 50);
+    },
+    getCurrentCenter(center) {
+      this.nowCenter = center;
+      this.$emit("getCenter", center.lat(), center.lng());
+    },
+    getCurrentZoom(zoom) {
+      this.zoom = zoom;
     },
   },
 };
@@ -131,9 +137,6 @@ a[href^="https://maps.google.com/maps"]
 }
 .gm-fullscreen-control {
   display: none;
-}
-.gm-style div {
-  color: #ff1744 !important;
 }
 .mapAreaBtn {
   width: 80px;
