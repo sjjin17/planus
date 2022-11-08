@@ -6,10 +6,16 @@ import com.planus.user.service.UserService;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/login")
@@ -63,5 +69,18 @@ public class LoginController {
             e.printStackTrace();
         }
         return;
+    }
+
+    @PatchMapping
+    public ResponseEntity refresh(@RequestBody Map<String, Object> data) {
+        Map<String, String> resultMap = new HashMap<>();
+        String refreshToken = (String) data.get("refreshToken");
+        String newAccessToken = userService.makeNewAccessToken(refreshToken);
+        if(newAccessToken!=null){
+            resultMap.put("newToken", newAccessToken);
+            return new ResponseEntity(resultMap,HttpStatus.OK);
+        }else{
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
     }
 }
