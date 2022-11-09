@@ -26,7 +26,6 @@ public class OpenApiController {
 
     @PostMapping("/google")
     public ResponseEntity getGoogle(@RequestBody String url){
-        logger.info(url);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
@@ -38,14 +37,12 @@ public class OpenApiController {
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
 
-        logger.info(resultMap.toString());
 
-        return new ResponseEntity(resultMap.toString(), HttpStatus.OK);
+        return resultMap;
     }
     @PostMapping("/naver")
     public ResponseEntity getNaver(@RequestBody String url){
 
-        logger.info(url);
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -58,8 +55,6 @@ public class OpenApiController {
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
-        logger.info(uri.toString());
-        logger.info(resultMap.toString());
         return resultMap;
     }
 }
