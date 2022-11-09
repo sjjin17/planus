@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container class="mx-0 px-0">
+    <v-container class="mx-0 px-0 search-tap">
       <v-text-field
         v-model="keyword"
         outlined
@@ -15,15 +15,15 @@
       ></v-text-field>
     </v-container>
     <search-place-card
-      v-for="recommendPlace in recommendList"
-      :key="recommendPlace.recommendId"
-      :recommendPlace="recommendPlace"
+      v-for="(searchedPlace, index) in searchedResults"
+      :key="index + 's'"
+      :searchedPlace="searchedPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
       :fromBucket="false"
     ></search-place-card>
     <v-container>
-      <infinite-loading @infinite="getRecommend">
+      <infinite-loading v-if="isSearched" @infinite="getNextResults">
         <div slot="no-results"></div>
         <div slot="no-more"></div>
       </infinite-loading>
@@ -46,82 +46,79 @@ export default {
   data: () => {
     return {
       keyword: null,
-      recommendList: [],
-      page: 0,
-      pageLength: 0,
+      searchedResults: [],
+      nextPageToken: null,
+      isSearched: false,
     };
   },
   props: {
     mapLat: Number,
     mapLng: Number,
-    size: Number,
-    isRecommendClick: Boolean,
-  },
-  mounted() {
-    this.loadRecommend();
-  },
-  watch: {
-    isRecommendClick() {
-      this.recommendList = [];
-      this.page = 0;
-      this.loadRecommend();
-      this.getRecommend();
-    },
   },
   methods: {
-    searchPlace() {
+    async searchPlace() {
+      this.isSearched = false;
       this.keyword.trim();
       console.log("검색");
       if (this.keyword.length == 0) return;
+      let data = await api.googleApi(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
+      );
+      console.log(data);
+      if (data.next_page_token) this.nextPageToken = data.next_page_token;
+      this.searchedResults = data.results;
+      this.isSearched = true;
+      // axios
+      //   .post(
+      //     process.env.VUE_APP_API_URL + "/google",
+      //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
+      //   )
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     if (res.data.next_page_token)
+      //       this.nextPageToken = res.data.next_page_token;
+      //     this.searchedResults = res.data.results;
+      //     this.isSearched = true;
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+    },
+    getNextResults($state) {
+      if (!this.isSearched) return;
       axios
         .post(
           process.env.VUE_APP_API_URL + "/google",
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=${this.nextPageToken}&key=`
         )
         .then((res) => {
           console.log(res.data);
+          let tmp = this.searchedResults;
+          res.data.results.forEach((element) => {
+            tmp.push(element);
+          });
+          this.searchedResults = tmp;
+          if ($state) {
+            if (!res.data.next_page_token) {
+              this.nextPageToken = null;
+              $state.complete();
+              console.log("a");
+            } else {
+              this.nextPageToken = res.data.next_page_token;
+              $state.loaded();
+              console.log("b");
+            }
+          }
         })
         .catch(function (error) {
           console.log(error);
         });
     },
-    getCenter() {
-      console.log("포커스");
-    },
+
     async loadRecommend() {
       this.lat = this.mapLat;
       this.lng = this.mapLng;
       await this.getPageLength();
-    },
-    async getPageLength() {
-      let data = await api.getRecommendPageLength(
-        this.lat,
-        this.lng,
-        this.size
-      );
-      this.pageLength = data.pageLength;
-    },
-    async getRecommend($state) {
-      await api
-        .getRecommend(this.lat, this.lng, this.page, this.size)
-        .then((res) => {
-          let recommendList = this.recommendList;
-          res.recommendList.forEach((recommend) => {
-            recommendList.push(recommend);
-          });
-          this.recommendList = recommendList;
-          this.page += 1;
-          if ($state) {
-            if (this.pageLength < this.page) {
-              $state.complete();
-            } else {
-              $state.loaded();
-            }
-          }
-        });
-    },
-    click() {
-      this.getRecommend(this.lat, this.lng, this.page, this.size);
     },
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
@@ -133,4 +130,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.search-tap {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+}
+</style>

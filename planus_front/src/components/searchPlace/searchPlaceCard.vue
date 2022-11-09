@@ -4,15 +4,15 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mb-1">
-            {{ recommendPlace.place }}
+            {{ searchedPlace.name }}
           </v-list-item-title>
           <v-list-item-subtitle>{{
-            recommendPlace.address
+            searchedPlace.vicinity
           }}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-avatar tile size="80"
-          ><v-img :src="recommendPlace.imgUrl" />
+          ><v-img :src="searchedPlace.photos[0]" />
         </v-list-item-avatar>
       </v-list-item>
 
@@ -51,25 +51,25 @@ export default {
     PlanModal,
   },
   props: {
-    recommendPlace: Object,
+    searchedPlace: Object,
   },
   methods: {
     bucketClick() {
       this.$emit(
         "addBucket",
-        this.recommendPlace.place,
-        this.recommendPlace.address,
-        this.recommendPlace.lat,
-        this.recommendPlace.lng
+        this.searchedPlace.place,
+        this.searchedPlace.address,
+        this.searchedPlace.lat,
+        this.searchedPlace.lng
       );
     },
     planSubmit(costTime, fromBucket) {
       this.$emit(
         "addTimetable",
         costTime,
-        this.recommendPlace.place,
-        this.recommendPlace.lat,
-        this.recommendPlace.lng,
+        this.searchedPlace.place,
+        this.searchedPlace.lat,
+        this.searchedPlace.lng,
         fromBucket
       );
     },

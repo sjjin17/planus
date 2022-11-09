@@ -128,6 +128,11 @@ const API = {
     });
     return response.data;
   },
+
+  async googleApi(url) {
+    const response = await this.instance.get("/google", url);
+    return response.data;
+  },
 };
 
 export default API;
