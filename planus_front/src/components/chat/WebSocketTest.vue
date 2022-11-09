@@ -11,9 +11,15 @@
             label="Select"
             return-object
             single-line
+            :disabled="!searchClick"
           ></v-select>
         </v-col>
-        <v-col><v-btn @click="search">검색</v-btn></v-col>
+        <v-col
+          ><v-btn v-if="searchClick" @click="search">검색</v-btn
+          ><v-btn v-if="!searchClick" @click="searchClick = !searchClick"
+            >수정</v-btn
+          ></v-col
+        >
       </v-row>
       <div v-if="moveRoute">
         <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
@@ -58,6 +64,7 @@ export default {
       moveRoute: "",
       calTime: [480, 600],
       tripDate: [2022, 11, 30],
+      searchClick: false,
     };
   },
   mounted() {
@@ -103,6 +110,7 @@ export default {
   },
   methods: {
     search() {
+      this.searchClick = !this.searchClick;
       let transit = this.select.value;
       console.log(transit);
       if (transit == "NONE") {
