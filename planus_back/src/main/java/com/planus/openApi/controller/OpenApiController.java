@@ -1,6 +1,8 @@
 package com.planus.openApi.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OpenApiController {
 
+    private static final Logger logger = LoggerFactory.getLogger(OpenApiController.class);
     @Value("${google.map.key}")
     private String googleMapKey;
 
@@ -26,7 +29,7 @@ public class OpenApiController {
 
     @PostMapping("/google")
     public ResponseEntity getGoogle(@RequestBody String url){
-
+        logger.info(url);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
@@ -37,11 +40,14 @@ public class OpenApiController {
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+googleMapKey).build();
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
-
+        logger.info(resultMap.toString());
         return resultMap;
     }
     @PostMapping("/naver")
     public ResponseEntity getNaver(@RequestBody String url){
+
+        logger.info(url);
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
@@ -54,6 +60,7 @@ public class OpenApiController {
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
 
+        logger.info(resultMap.toString());
         return resultMap;
     }
 }
