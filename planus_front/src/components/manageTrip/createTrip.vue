@@ -253,15 +253,16 @@ export default {
       }
     },
     addArea(area) {
-      console.log(area);
       if (!this.areaId.includes(area.areaId)) {
         this.areaId.push(area.areaId);
         this.areas.push(area.siName);
       }
     },
     clearArea() {
-      this.areaId = [];
-      this.areas = [];
+      if (!this.areaMenu) {
+        this.areaId = [];
+        this.areas = [];
+      }
     },
     disablePastDates(val) {
       return val >= new Date().toISOString().substr(0, 10);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-article></search-article>
+    <search-article @goSearch="goSearch"></search-article>
     <v-row>
       <v-col v-for="(article, i) in articleList" :key="i" cols="6">
         <v-card
@@ -84,18 +84,23 @@ export default {
       this.res = await api.getArticleListByTitle(this.title, page - 1);
       this.articleList = this.res.searchList.articleList;
       this.totalPage = this.res.searchList.totalPage;
-      console.log("글목록: " + this.articleList);
-      console.log("페이지수: " + this.totalPage);
+      console.log("제목으로 검색 페이지수: " + this.totalPage);
     },
     async getArticleListByArea(page) {
       this.res = await api.getArticleListByArea(this.area, page - 1);
       this.articleList = this.res.searchList.articleList;
       this.totalPage = this.res.searchList.totalPage;
-      console.log("글목록: " + this.articleList);
-      console.log("페이지수: " + this.totalPage);
+      console.log("지역으록 검색 페이지수: " + this.totalPage);
     },
     goToArticle(articleId) {
       this.$router.push("/article/" + articleId);
+    },
+    goSearch(val) {
+      if (val == 1) {
+        this.getArticleListByTitle(1);
+      } else {
+        this.getArticleListByArea(1);
+      }
     },
   },
 };
