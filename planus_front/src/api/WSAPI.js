@@ -88,6 +88,7 @@ const WSAPI = {
 
       transit: "NONE",
       moveTime: 0,
+      moveRoute: "",
     };
     this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
   },
@@ -120,6 +121,7 @@ const WSAPI = {
     costTime,
     moveTime,
     transit,
+    moveRoute,
     fromBucket
   ) {
     let timetable = {
@@ -132,6 +134,7 @@ const WSAPI = {
       costTime: costTime,
       moveTime: moveTime,
       transit: transit,
+      moveRoute: moveRoute,
       fromBucket: fromBucket,
     };
     this.stomp.send("/app/setTimetable", JSON.stringify(timetable));

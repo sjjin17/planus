@@ -118,6 +118,7 @@ export default {
           costTime: newVal.costTime,
           moveTime: newVal.moveTime,
           transit: newVal.transit,
+          moveRoute: newVal.moveRoute,
         };
         this.timetableList.push(newTimetable);
         this.updateOrders(this.timetableList);
@@ -189,12 +190,14 @@ export default {
           costTime: this.timetableList[i].costTime,
           moveTime: this.timetableList[i].moveTime,
           transit: this.timetableList[i].transit,
+          moveRoute: this.timetableList[i].moveRoute,
         };
 
-        // orders가 delOrders-1이면 transit, moveTime을 초기화
+        // orders가 delOrders-1이면 transit, moveTime, moveRoute를 초기화
         if (this.timetableList[i].orders == delOrders - 1) {
           delTimetable.transit = "NONE";
           delTimetable.moveTime = 0;
+          delTimetable.moveRoute = "";
         }
 
         delTimetableList.push(delTimetable);
@@ -211,7 +214,6 @@ export default {
       console.log("updateOrders로 들어옴");
       for (let i = 0; i < list.length; i++) {
         list[i].orders = i + 1;
-        console.log("순서 " + list[i].orders + list[i].place);
       }
     },
     onEnd(event) {
@@ -228,15 +230,15 @@ export default {
       this.dragging = false;
     },
     changeDraggedOrders(oldIdx, newIdx) {
-      console.log("oldIdx " + oldIdx);
-      console.log("newIdx " + newIdx);
-      //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime 초기화
+      //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime, moveRoute 초기화
       if (oldIdx != 0) {
         this.timetableList[oldIdx - 1].transit = "NONE";
         this.timetableList[oldIdx - 1].moveTime = 0;
+        this.timetableList[oldIdx - 1].moveRoute = "";
       }
       this.timetableList[newIdx].transit = "NONE";
       this.timetableList[newIdx].moveTime = 0;
+      this.timetableList[newIdx].moveRoute = "";
 
       //splice로 oldIdx -> newIdx 배열 내 위치 변경
       // let selectedTimetable = this.timetableList[oldIdx];
@@ -247,6 +249,7 @@ export default {
       if (newIdx != 0) {
         this.timetableList[newIdx - 1].transit = "NONE";
         this.timetableList[newIdx - 1].moveTime = 0;
+        this.timetableList[newIdx - 1].moveRoute = "";
       }
 
       this.updateOrders(this.timetableList);
@@ -262,6 +265,7 @@ export default {
           costTime: this.timetableList[i].costTime,
           moveTime: this.timetableList[i].moveTime,
           transit: this.timetableList[i].transit,
+          moveRoute: this.timetableList[i].moveRoute,
         };
         setTimetableOrdersList.push(timetable);
       }

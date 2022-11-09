@@ -11,8 +11,8 @@ import java.util.List;
 public interface PlanService {
     List<PlanIdResDTO> readPlanId(long tripId);
     List<PlanResDTO> readPlanList(List<Long> planIdList);
-    void savePlan(long planId);
-    void saveTimetable(long planId);
+    void savePlan(long planId, boolean complete);
+    void saveTimetable(long planId, boolean complete);
 
     // ws methods
     void setPlan(long planId, WebSocketPlan plan);

@@ -12,10 +12,7 @@
       0시 이후의 일정입니다.
     </div>
     <v-card>
-      <v-card-title
-        >{{ this.timetable.place }} =>
-        {{ this.timetable.orders }}번</v-card-title
-      >
+      <v-card-title>{{ this.timetable.place }}</v-card-title>
       <v-icon @click="delTimetable">mdi-close</v-icon>
       <v-card-text>
         <div>
@@ -71,8 +68,6 @@ export default {
     calTime: Array,
   },
   mounted() {
-    // this.endTime = this.startTime + this.timetable.costTime;
-    // this.$emit("changeCalTime", this.endTime);
     this.costHour = Math.floor(this.timetable.costTime / 60);
     this.costMin = this.timetable.costTime % 60;
   },
@@ -90,12 +85,29 @@ export default {
         costTime: changedCost,
         moveTime: this.timetable.moveTime,
         transit: this.timetable.transit,
+        moveRoute: this.timetable.moveRoute,
       };
       this.dialog = false;
       this.$emit("setTimetable", newTimetable);
     },
     delTimetable() {
       this.$emit("delTimetable", this.timetable.orders);
+    },
+    changeTransit(newTransit, moveRoute) {
+      if (newTransit != "BUS") {
+        moveRoute = "";
+      }
+      let newTimetable = {
+        orders: this.timetable.orders,
+        place: this.timetable.place,
+        lat: this.timetable.lat,
+        lng: this.timetable.lng,
+        costTime: this.timetable.costTime,
+        moveTime: this.timetable.moveTime,
+        transit: newTransit,
+        moveRoute: moveRoute,
+      };
+      this.$emit("setTimetable", newTimetable);
     },
   },
 };

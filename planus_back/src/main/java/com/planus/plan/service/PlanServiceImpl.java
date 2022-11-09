@@ -35,17 +35,9 @@ import java.util.Map;
 public class PlanServiceImpl implements PlanService {
     private final PlanRepository planRepository;
     private final TimetableRepository timetableRepository;
-    private final TripRepository tripRepository;
-    private final RedisTemplate<String, String> redisTemplate;
     private final RedisUtil redisUtil;
 
-//    public PlanServiceImpl(PlanRepository planRepository, TimetableRepository timetableRepository) {
-//        this.planRepository = planRepository;
-//        this.timetableRepository = timetableRepository;
-//    }
-
     // redis에 plan 정보가 있으면 redis, 없으면 mysql에서 plan 읽어오기
-
     @Override
     public List<PlanIdResDTO> readPlanId(long tripId) {
         List<PlanIdResDTO> planIdResDTOList = new ArrayList<>();
@@ -74,10 +66,11 @@ public class PlanServiceImpl implements PlanService {
 
             // redis에 값이 있으면 redis에서 가져오고,
             if (redisUtil.isExists(planKey)) {
-                System.out.println(planId+"를 redis에서 값을 가져옵니다.");
+                System.out.println("redis에서 " + planKey);
 
                 //planList::planId 를 key로 가진 hash에서 startTime, tripDate를 가져올 수 있음
                 Map<String, String> map = redisUtil.getHashData(planKey);
+                // 이 때 mysql의 Timetable 테이블에 해당 planId의 정보가 없으면 아예 redis에 timetableList::planId가 안 만들어짐
                 List list = redisUtil.getListData(timetableKey);
 
                 // "timetableList::(planId)" : "{"orders":"1","place":"서울","transit":"CAR"}", "{"orders":"2","place":"부산","transit":"CAR"}"
@@ -96,6 +89,7 @@ public class PlanServiceImpl implements PlanService {
                                 .transit(Transit.valueOf(jsonObject.get("transit").toString()))
                                 .costTime((int) (long) jsonObject.get("cost_time"))
                                 .moveTime((int) (long) jsonObject.get("move_time"))
+                                .moveRoute(jsonObject.get("move_route").toString())
                                 .build();
 
                         timetableListResDTOList.add(timetableListResDTO);
@@ -134,7 +128,7 @@ public class PlanServiceImpl implements PlanService {
                 List<TimetableListResDTO> timetableListResDTOList = new ArrayList<>();
 
                 for (Timetable t : timetableList) {
-                    //timetable Builder
+                    //timetable Builder (프론트로 보낼 값 저장)
                     TimetableListResDTO timetableListResDTO = TimetableListResDTO.builder()
                             .timetableId(t.getTimetableId())
                             .orders(t.getOrders())
@@ -144,6 +138,7 @@ public class PlanServiceImpl implements PlanService {
                             .costTime(t.getCostTime())
                             .transit(t.getTransit())
                             .moveTime(t.getMoveTime())
+                            .moveRoute(t.getMoveRoute())
                             .build();
 
                     timetableListResDTOList.add(timetableListResDTO);
@@ -157,6 +152,7 @@ public class PlanServiceImpl implements PlanService {
                     jsonObject.put("cost_time", t.getCostTime());
                     jsonObject.put("move_time", t.getMoveTime());
                     jsonObject.put("transit", t.getTransit().toString());
+                    jsonObject.put("move_route", t.getMoveRoute());
 
                     String timetableStr = jsonObject.toJSONString();
                     System.out.println("timetableStr => "+timetableStr);
@@ -189,21 +185,19 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
 //    @CacheEvict(cacheNames = "planList", key = "#planId")
-    public void savePlan(long planId) {
+    public void savePlan(long planId, boolean complete) {
 //        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         String key = "planList::" + planId;
 
-        if(redisUtil.isExists(key)){
-            System.out.println("key가 있음");
+        if(!redisUtil.isExists(key)){
+            System.out.println(key+"번 key가 없음(planList)");
+            return;
         }
         else {
-            System.out.println("key가 없음");
-            return;
+            System.out.println(key+"번 key가 있음(planList)");
         }
 
         Map<String, String> map = redisUtil.getHashData(key);
-
-        System.out.println("trip_date출력"+map.get("trip_date"));
 
         Plan plan = Plan.builder()
                 .planId(planId)
@@ -213,13 +207,19 @@ public class PlanServiceImpl implements PlanService {
                 .build();
 
         planRepository.save(plan);
+
+        //complete가 false면 redis 삭제 안 하고, true면 redis에서 삭제함(일정 완료)
+        if(complete) {
+            System.out.println(key+" redis에서 삭제");
+            redisUtil.deleteData(key);
+        }
     }
 
     //redis에서 여행정보를 가져와서 mysql에 저장
     @Override
     @Transactional
 //    @CacheEvict(cacheNames = "timetableList", key = "#planId")
-    public void saveTimetable(long planId) {
+    public void saveTimetable(long planId, boolean complete) {
         //일별일정 수정(저장)
         //기존의 timetable 삭제
         //새로운 timetable로 저장
@@ -228,14 +228,11 @@ public class PlanServiceImpl implements PlanService {
         String key = "timetableList::" + planId;
 
         if(!redisUtil.isExists(key)){
-            System.out.println("timetableListKey가 없음");
+            System.out.println(key+"번 key가 없음(timetableList)");
             return;
         }
 
         List list = redisUtil.getListData(key);
-
-        System.out.println(planId+"출력문~timetableList");
-        System.out.println(list.get(0).toString());
 
         //mysql에 저장되어 있는 timetable을 전부 삭제
         timetableRepository.deleteByPlanPlanId(planId);
@@ -246,6 +243,7 @@ public class PlanServiceImpl implements PlanService {
 //            JSONObject jsonObj = (JSONObject) parser.parse(jsonString);
 //            JSONArray timetables = (JSONArray) jsonObj.get("timetables");
 
+            // redis에 저장되어있던 Timetable을 꺼내와서 mysql에 저장
             for (int i = 0; i < list.size(); i++) {
                 JSONObject jsonObject = (JSONObject) parser.parse((String) list.get(i));
                 Timetable timetable = Timetable.builder()
@@ -256,10 +254,17 @@ public class PlanServiceImpl implements PlanService {
                         .transit(Transit.valueOf(jsonObject.get("transit").toString()))
                         .costTime((int) (long) jsonObject.get("cost_time"))
                         .moveTime((int) (long) jsonObject.get("move_time"))
+                        .moveRoute(jsonObject.get("move_route").toString())
                         .plan(planRepository.findByPlanId(planId).orElseThrow())
                         .build();
 
                 timetableRepository.save(timetable);
+            }
+
+            //complete가 false면 redis 삭제 안 하고, true면 redis에서 삭제함(일정 완료)
+            if(complete) {
+                System.out.println(key+" redis에서 삭제");
+                redisUtil.deleteData(key);
             }
 
         } catch (ParseException e) {
@@ -267,6 +272,8 @@ public class PlanServiceImpl implements PlanService {
         }
 
     }
+
+    //웹소켓 요청 처리
 
     @Override
     public void setPlan(long planId, WebSocketPlan plan) {
@@ -298,6 +305,7 @@ public class PlanServiceImpl implements PlanService {
         jsonObject.put("cost_time", timetable.getCostTime());
         jsonObject.put("move_time", timetable.getMoveTime());
         jsonObject.put("transit", timetable.getTransit());
+        jsonObject.put("move_route", timetable.getMoveRoute());
 
         String timetableStr = jsonObject.toJSONString();
 
@@ -321,6 +329,7 @@ public class PlanServiceImpl implements PlanService {
             jsonObject.put("cost_time", item.getCostTime());
             jsonObject.put("move_time", item.getMoveTime());
             jsonObject.put("transit", item.getTransit());
+            jsonObject.put("move_route", item.getMoveRoute());
 
             String timetableStr = jsonObject.toJSONString();
 
@@ -349,6 +358,7 @@ public class PlanServiceImpl implements PlanService {
                     timetableObject.put("cost_time", timetable.getCostTime());
                     timetableObject.put("move_time", timetable.getMoveTime());
                     timetableObject.put("transit", timetable.getTransit());
+                    timetableObject.put("move_route", timetable.getMoveRoute());
 
                     String timetableStr = timetableObject.toJSONString();
 
@@ -378,6 +388,7 @@ public class PlanServiceImpl implements PlanService {
             jsonObject.put("cost_time", item.getCostTime());
             jsonObject.put("move_time", item.getMoveTime());
             jsonObject.put("transit", item.getTransit());
+            jsonObject.put("move_route", item.getMoveRoute());
 
             String timetableStr = jsonObject.toJSONString();
 

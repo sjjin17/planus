@@ -21,7 +21,11 @@
         :connector="connector"
         @getConnector="getConnector"
       ></invite-dialog>
-      <complete-dialog :tripId="tripId" class="mr-3"></complete-dialog>
+      <complete-dialog
+        :tripId="tripId"
+        :planIdList="planIdList"
+        class="mr-3"
+      ></complete-dialog>
     </v-container>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
@@ -196,7 +200,9 @@ export default {
         return;
       }
       console.log("oldVal:" + oldVal);
-      api.savePlan([oldVal]);
+      //탭 변경이므로 false
+      let complete = false;
+      api.savePlan([oldVal], complete);
       newVal;
     },
   },
@@ -304,6 +310,7 @@ export default {
             planId: content.planId,
             transit: content.transit,
             moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
           };
           break;
         case 6:
@@ -416,7 +423,6 @@ export default {
             newPlan.tripDate,
             newPlan.startTime
           );
-          console.log("새Plan" + newPlan.planId);
         }
       }
     },
@@ -433,6 +439,7 @@ export default {
             newTimetable.costTime,
             newTimetable.moveTime,
             newTimetable.transit,
+            newTimetable.moveRoute,
             false
           );
         }
@@ -442,11 +449,8 @@ export default {
       this.timeTableLength = length;
     },
     async saveTimetableList(planId) {
-      // let savePlanIdList = [];
-      // this.planIdList.forEach((p) => {
-      //   savePlanIdList.push(p.planId);
-      // });
-      // await api.savePlan(savePlanIdList);
+      //planId에 변경사항이 생겼으므로 watch로
+      //같은 탭을 누를 경우 planId가 동일하므로 변경사항이 생기지 않음
       this.planId = planId;
     },
     delTimetable(planId, delTimetableList) {
