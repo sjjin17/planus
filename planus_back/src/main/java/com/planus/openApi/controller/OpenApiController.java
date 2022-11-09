@@ -40,7 +40,7 @@ public class OpenApiController {
 
         logger.info(resultMap.toString());
 
-        return new ResponseEntity("gkgkgk", HttpStatus.OK);
+        return new ResponseEntity(resultMap.toString(), HttpStatus.OK);
     }
     @PostMapping("/naver")
     public ResponseEntity getNaver(@RequestBody String url){
