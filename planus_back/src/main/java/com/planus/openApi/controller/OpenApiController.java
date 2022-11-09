@@ -1,6 +1,5 @@
-package com.planus.google.controller;
+package com.planus.openApi.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,19 +11,21 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
-@RequestMapping("/google")
 @RequiredArgsConstructor
-public class GoogleApiController {
+public class OpenApiController {
 
     @Value("${google.map.key}")
     private String googleMapKey;
 
-    @PostMapping("/direction")
-    public ResponseEntity getDirection(@RequestBody String url){
+    @Value("${naver.map.key}")
+    private String NaverMapKey;
+
+    @Value("${naver.map.id}")
+    private String NaverMapId;
+
+    @PostMapping("/google")
+    public ResponseEntity getGoogle(@RequestBody String url){
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -34,6 +35,22 @@ public class GoogleApiController {
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+googleMapKey).build();
+
+        ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
+
+        return resultMap;
+    }
+    @PostMapping("/naver")
+    public ResponseEntity getNaver(@RequestBody String url){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("X-NCP-APIGW-API-KEY-ID",NaverMapId);
+        headers.add("X-NCP-APIGW-API-KEY",NaverMapKey);
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
 
