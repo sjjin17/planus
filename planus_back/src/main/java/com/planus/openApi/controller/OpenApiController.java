@@ -58,7 +58,7 @@ public class OpenApiController {
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).build();
 
         ResponseEntity<?> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET,entity,Object.class);
-
+        logger.info(uri.toString());
         logger.info(resultMap.toString());
         return resultMap;
     }
