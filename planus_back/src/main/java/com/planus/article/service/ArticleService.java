@@ -17,6 +17,6 @@ public interface ArticleService {
 
     //ArticleResDTO findOneArticle(long articleId);
 
-    SearchResDTO getArticleListByTitle(String title, Pageable pageable);
-    SearchResDTO getArticleListByArea(int[] area, Pageable pageable);
+    SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable);
+    SearchResDTO getArticleListByArea(String token, int[] area, Pageable pageable);
 }

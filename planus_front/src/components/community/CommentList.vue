@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      token: "Bearer " + this.$cookies.get("token"),
+      token: this.$cookies.get("token"),
       nickname: "",
       userId: 0,
       currentPage: 1,
@@ -58,18 +58,18 @@ export default {
       this.res = await api.getArticleComment(this.articleId, page - 1);
       this.commentList = this.res.commentPage.commentList;
       this.totalPage = this.res.commentPage.totalPage;
-      console.log("댓글목록: " + this.commentList);
-      console.log("페이지수: " + this.totalPage);
+      console.log("댓글 페이지수: " + this.totalPage);
     },
     async delComment(commentId) {
       this.res = await api.delComment(commentId);
       await this.getCommentList(1);
     },
     decoding() {
-      let decode = jwt_decode(this.token);
-      this.nickname = decode.nickname;
-      this.userId = decode.userId;
-      console.log("userId: " + this.userId);
+      if (this.token) {
+        let decode = jwt_decode(this.token);
+        this.nickname = decode.nickname;
+        this.userId = decode.userId;
+      }
     },
   },
 };

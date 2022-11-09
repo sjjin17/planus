@@ -51,34 +51,38 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public SearchResDTO getArticleListByTitle(String title, Pageable pageable) {
+    public SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable) {
         Page<Article> articleList = articleRepository.findByTitleContains(title, pageable);
 
         return SearchResDTO.builder()
                 .currentPage(articleList.getNumber())
                 .totalPage(articleList.getTotalPages())
-                .articleList(setArticleList(articleList))
+                .articleList(setArticleList(token, articleList))
                 .build();
     }
 
     @Override
-    public SearchResDTO getArticleListByArea(int[] area, Pageable pageable) {
+    public SearchResDTO getArticleListByArea(String token, int[] area, Pageable pageable) {
         Page<Article> articleList = articleRepository.findByArea(area, pageable);
 
         return SearchResDTO.builder()
                 .currentPage(articleList.getNumber())
                 .totalPage(articleList.getTotalPages())
-                .articleList(setArticleList(articleList))
+                .articleList(setArticleList(token, articleList))
                 .build();
     }
 
-    private List<SearchDTO> setArticleList(Page<Article> articleList) {
+    private List<SearchDTO> setArticleList(String token, Page<Article> articleList) {
+        long userId = -1;
+        if(token!=null){
+            userId = tokenProvider.getUserId(token.split(" ")[1]);
+        }
+
         List<SearchDTO> searchDTOList = new ArrayList<>();
 
         for (Article article : articleList){
             long articleId = article.getArticleId();
             long tripId = article.getTrip().getTripId();
-            long userId = article.getUser().getUserId();
 
             SearchDTO searchDTO = SearchDTO.builder()
                     .articleId(articleId)
@@ -86,7 +90,7 @@ public class ArticleServiceImpl implements ArticleService {
                     .areaList(areaRepository.findAllByTripAreaList_Trip_TripId(tripId).stream().map(Area::getSiName).collect(Collectors.toList()))
                     .imageUrl(areaRepository.findTop1ByTripAreaList_Trip_TripId(tripId).getImageUrl())
                     .period(article.getTrip().getPeriod())
-                    .userId(userId)
+                    .userId(article.getUser().getUserId())
                     .name(article.getUser().getName())
                     .title(article.getTitle())
                     .regDate(article.getRegDate().toString())

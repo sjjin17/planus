@@ -7,30 +7,42 @@
           outlined
           class="mx-10 mt-2"
           @click="goToArticle(article.articleId)"
-          height="19vh"
         >
-          <v-list-item>
-            <v-list-item-avatar tile class="my-0 img-avatar"
-              ><v-img :src="article.imageUrl"></v-img>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <div class="text-overline mb-4 d-flex justify-space-between">
-                <span class="txt_line"
-                  >{{ article.period }}박{{ article.period + 1 }}일</span
-                >
-              </div>
-              <v-list-item-title class="text-h5 mb-1">
-                {{ article.title }}
-              </v-list-item-title>
-              <v-list-item-subtitle
-                class="d-flex align-end flex-column my-0 py-0"
-              >
-                <span v-for="(area, idx) in article.areaList" :key="idx + 'a'"
-                  >{{ area }} |
-                </span>
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+          <v-row>
+            <v-col cols="3">
+              <v-img :src="article.imageUrl"> </v-img>
+            </v-col>
+            <v-col>
+              <v-row>
+                <v-col>
+                  {{ article.title }}
+                </v-col>
+                <v-col cols="2">
+                  <v-icon>mdi-eye</v-icon>{{ article.hits }}
+                </v-col>
+                <v-col cols="2">
+                  <v-icon>mdi-heart</v-icon>{{ article.likes }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-chip-group column>
+                    <v-chip
+                      v-for="(area, idx) in article.areaList"
+                      :key="idx + 'a'"
+                      >{{ area }}
+                    </v-chip>
+                  </v-chip-group>
+                </v-col>
+                <v-col cols="6">
+                  {{ article.period }}박{{ article.period + 1 }}일
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col> {{ article.name }}({{ article.regDate }}) </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
