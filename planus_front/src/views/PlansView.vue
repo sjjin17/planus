@@ -100,7 +100,10 @@
       <v-container
         style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
       >
-        <v-tabs-items v-model="planTabs">
+        <v-tabs-items
+          v-model="planTabs"
+          style="overflow-y: scroll; max-height: 80vh"
+        >
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
             <plan-list
               :plan="plan"
@@ -109,6 +112,7 @@
               :deletedTimetableList="deletedTimetableList"
               :setOrdersTimetableList="setOrdersTimetableList"
               :addedTimetable="addedTimetable"
+              :changedTimetable="changedTimetable"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
@@ -178,6 +182,8 @@ export default {
       deletedTimetableList: {},
       //순서 변경 완료된 timetableList
       setOrdersTimetableList: {},
+      //변경된 timetable
+      changedTimetable: {},
 
       planIdList: [],
       planTabs: null,
@@ -327,6 +333,21 @@ export default {
           this.setOrdersTimetableList = {
             planId: content.planId,
             timetableList: content.timetableList,
+          };
+          break;
+        case 8:
+          console.log(content);
+          // TODO: 일정(timetable) 수정
+          this.changedTimetable = {
+            costTime: content.costTime,
+            place: content.place,
+            lat: content.lat,
+            lng: content.lng,
+            orders: content.orders,
+            transit: content.transit,
+            moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
+            planId: content.planId,
           };
           break;
       }

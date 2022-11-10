@@ -5,6 +5,7 @@ import com.planus.db.repository.MemberRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
 import com.planus.trip.dto.MemberResDTO;
+import com.planus.util.RedisUtil;
 import com.planus.util.TokenProvider;
 import com.planus.websocket.model.WebSocketMember;
 import org.springframework.beans.factory.annotation.Autowired;

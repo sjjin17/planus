@@ -20,6 +20,17 @@
       <timetable-card
         v-for="timetable in timetableList"
         :key="timetable.orders"
+        :nextLat="
+          timetableList[timetable.orders]
+            ? timetableList[timetable.orders].lat
+            : 0
+        "
+        :nextLng="
+          timetableList[timetable.orders]
+            ? timetableList[timetable.orders].lng
+            : 0
+        "
+        :tripDate="plan.tripDate"
         :timetable="timetable"
         :calTime="calTime"
         :startTime="startTime"
@@ -65,13 +76,11 @@ export default {
     deletedTimetableList: Object,
     addedTimetable: Object,
     setOrdersTimetableList: Object,
+    changedTimetable: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
   },
-  // mounted() {
-  //   console.log(this.plan.planId + "번의 plan-list입니다.");
-  // },
   watch: {
     WebSocketStartTime(newVal) {
       if (newVal.planId == this.plan.planId) {
@@ -124,6 +133,13 @@ export default {
         this.updateOrders(this.timetableList);
       }
     },
+    changedTimetable(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        // this.timetableList[newVal.orders - 1] = newVal;
+        //re-rendering을 위해 배열 splice
+        this.timetableList.splice(newVal.orders - 1, 1, newVal);
+      }
+    },
   },
   methods: {
     async getPlanList(planIdList) {
@@ -154,7 +170,10 @@ export default {
         if (i == 0) {
           calTime[0] = startTime;
         } else {
-          calTime[i] = calTime[i - 1] + timetableList[i - 1].costTime;
+          calTime[i] =
+            calTime[i - 1] +
+            timetableList[i - 1].costTime +
+            timetableList[i - 1].moveTime;
         }
       }
     },
@@ -174,6 +193,8 @@ export default {
       //해당 timetable 객체의 costTime을 수동으로 바꿔줌 .. ...왜..?
       this.timetableList[newTimetable.orders - 1].costTime =
         newTimetable.costTime;
+      console.log("PlanList");
+      console.log(newTimetable);
     },
     delTimetable(delOrders) {
       //delOrder의 Timetable만 빼고 새로운 timetableList를 구성

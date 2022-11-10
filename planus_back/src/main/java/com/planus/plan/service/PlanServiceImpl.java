@@ -227,6 +227,9 @@ public class PlanServiceImpl implements PlanService {
 
         String key = "timetableList::" + planId;
 
+
+        //사용자가 화면에서 timetable을 다 지워버려서 없는 경우와,
+        //사용자가 아예 그 탭을 눌러보지도 않아서 없는 경우가 있음.
         if(!redisUtil.isExists(key)){
             System.out.println(key+"번 key가 없음(timetableList)");
             return;
@@ -377,7 +380,9 @@ public class PlanServiceImpl implements PlanService {
     public void delTimetable(long planId, WebSocketTimetableList timetableList) {
         String key = "timetableList::" + planId;
         //redis에서 timetableList::planId를 찾고, 전부 삭제한 후 새 timetableList 넣기
-        redisUtil.deleteData(key);
+        if(redisUtil.isExists(key)){
+            redisUtil.deleteData(key);
+        }
 
         for (WebSocketTimetableItem item:timetableList.getTimetableList()) {
             JSONObject jsonObject = new JSONObject();
