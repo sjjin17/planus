@@ -202,6 +202,12 @@ const API = {
     );
     return response.data;
   },
+  async getArticleListByAreaLength(area) {
+    const response = await this.instance.get(
+      "/articles/area/length" + "?area=" + area
+    );
+    return response.data;
+  },
   async logout() {
     const response = await this.instance
       .get("/login/logout")
