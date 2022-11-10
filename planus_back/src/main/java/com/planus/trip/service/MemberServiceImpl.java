@@ -35,20 +35,23 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public long addMember(String token, long tripId) {
-        if(memberRepository.existsByTripTripIdAndUserUserId(tripId, tokenProvider.getUserId(token.split(" ")[1]))){
-            return -2;
-        }else if(memberRepository.countByTripTripId(tripId)>9){
-            return -1;
-        }else{
-            Member member = Member.builder()
-                    .user(userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1])))
-                    .trip(tripRepository.findByTripId(tripId))
-                    .build();
+        if(token!=null && tokenProvider.getUserId(token.split(" ")[1])!=-1 && userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1]))!=null){
+            if(memberRepository.existsByTripTripIdAndUserUserId(tripId, tokenProvider.getUserId(token.split(" ")[1]))){
+                return -2;
+            }else if(memberRepository.countByTripTripId(tripId)>9){
+                return -1;
+            }else{
+                Member member = Member.builder()
+                        .user(userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1])))
+                        .trip(tripRepository.findByTripId(tripId))
+                        .build();
 
-            memberRepository.save(member);
+                memberRepository.save(member);
 
-            return member.getMemberId();
+                return member.getMemberId();
+            }
         }
+        return 0;
     }
 
     @Override

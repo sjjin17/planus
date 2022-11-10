@@ -58,7 +58,7 @@ public class CommentController {
     public ResponseEntity getArticleComment(@RequestParam long articleId, @PageableDefault(size = 10, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            resultMap.put("commentList", commentService.getArticleComment(articleId, pageable));
+            resultMap.put("commentPage", commentService.getArticleComment(articleId, pageable));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
