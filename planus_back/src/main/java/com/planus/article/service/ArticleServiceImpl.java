@@ -2,10 +2,7 @@ package com.planus.article.service;
 
 
 import com.planus.article.dto.*;
-import com.planus.db.entity.Area;
-import com.planus.db.entity.Article;
-import com.planus.db.entity.Trip;
-import com.planus.db.entity.User;
+import com.planus.db.entity.*;
 import com.planus.db.repository.*;
 import com.planus.exception.CustomException;
 import com.planus.db.repository.ArticleRepository;
@@ -83,6 +80,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public ArticleDetailResDTO findOneArticle(Long articleId) {
+        // 조회수 올려주기!
+        return null;
+    }
+
+
+    @Override
     public SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable) {
         Page<Article> articleList = articleRepository.findByTitleContains(title, pageable);
 
@@ -103,6 +107,8 @@ public class ArticleServiceImpl implements ArticleService {
                 .articleList(setArticleList(token, articleList))
                 .build();
     }
+
+
 
     private List<SearchDTO> setArticleList(String token, Page<Article> articleList) {
         long userId = -1;
@@ -137,17 +143,24 @@ public class ArticleServiceImpl implements ArticleService {
         return searchDTOList;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public ArticleResDTO findOneArticle(long articleId) {
-//        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
-//
-//        // entity -> ResDTO
-//        // planResDTOList 만들기
-//
-//        ArticleResDTO.toResDTO(article, timetableList);
-//
-//
-//
-//    }
+    @Override
+    @Transactional
+    public long likeArticle(String token, long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        if (articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, userId)) {
+            articleLikeRepository.deleteByArticleArticleIdAndUserUserId(articleId, userId);
+
+
+        } else {
+            ArticleLike articleLike = ArticleLike.builder()
+                    .article(article)
+                    .user(userRepository.findByUserId(userId))
+                    .build();
+            articleLikeRepository.save(articleLike);
+        }
+        return articleLikeRepository.countByArticleArticleId(articleId);
+    }
+
+
 }
