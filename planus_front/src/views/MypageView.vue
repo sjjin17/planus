@@ -42,9 +42,7 @@ export default {
       this.$router.push(newVal.link).catch(() => {});
     },
   },
-  created() {
-    this.tab = this.items[0];
-  },
+  created() {},
 };
 </script>
 

@@ -1,8 +1,9 @@
 <template>
-  <div class="mainPage">
+  <div>
     <div class="mainHeaderDiv">
-      <mypage-button></mypage-button>
       <login-button></login-button>
+      <v-btn class="mainPageBtn" @click="goToCommunity">커뮤니티</v-btn>
+      <v-btn class="mainPageBtn" @click="goToMypage"> 마이페이지 </v-btn>
     </div>
     <div class="mainLogoDiv">Planus</div>
     <create-trip class="mainTripDiv"></create-trip>
@@ -11,39 +12,41 @@
 </template>
 
 <script>
-import MypageButton from "@/components/mypage/MypageButton.vue";
 import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
-import CreateTrip from "@/components/manageTrip/createTrip.vue";
-import FestivalList from "@/components/mainPage/festivalList.vue";
+import CreateTrip from "@/components/manageTrip/CreateTrip.vue";
+import FestivalList from "@/components/mainPage/FestivalList.vue";
 
 export default {
   name: "HomeView",
   components: {
-    MypageButton,
     LoginButton,
     CreateTrip,
     FestivalList,
+  },
+  methods: {
+    goToCommunity() {
+      this.$router.push("/community");
+    },
+    goToMypage() {
+      this.$router.push("/mypage");
+    },
   },
 };
 </script>
 
 <style>
-.mainPage {
-  height: 100%;
-}
 .mainHeaderDiv {
   display: flex;
-  height: 10%;
   justify-content: flex-end;
 }
 .mainLogoDiv {
   display: flex;
-  height: 20%;
+  height: 30%;
   width: 80%;
-  margin: 0 auto;
+  margin: 2% auto 0;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
+  border-radius: 12px 12px 0px 0px;
   background-color: #b8dbc6;
   font-size: 6rem;
   font-weight: 800;
@@ -51,18 +54,21 @@ export default {
   text-shadow: 1px 2px gray;
 }
 .mainTripDiv {
-  height: 20%;
+  height: 12%;
   width: 80%;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: 0px 0px 12px 12px;
   background-color: #b8dbc6;
 }
 .mainFestivalDiv {
-  height: 40%;
+  min-height: 300px;
   width: 80%;
-  margin: 0 auto;
-  margin-top: 2%;
+  margin: 2% auto;
   border-radius: 12px;
   background-color: #88c7af;
+}
+.mainPageBtn {
+  height: 45px !important;
+  width: 120px !important;
 }
 </style>

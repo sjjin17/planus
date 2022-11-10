@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity getMyComment(@RequestHeader(name="Authorization") String token, @PageableDefault(size = 10, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            resultMap.put("commentList", commentService.getMyComment(token, pageable));
+            resultMap.put("commentPage", commentService.getMyComment(token, pageable));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
