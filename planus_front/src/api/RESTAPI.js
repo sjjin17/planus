@@ -9,9 +9,20 @@ const baseAxios = axios.create({
     "Content-Type": "application/json",
   },
 });
-baseAxios.interceptors.request.use((request) => {
+baseAxios.interceptors.request.use(async (request) => {
   if (VueCookies.get("token") != null) {
     request.headers.Authorization = "Bearer " + VueCookies.get("token");
+  } else {
+    if (VueCookies.get("refresh") != null) {
+      var temp = axios.create();
+      await temp
+        .patch(baseURL + "/login", { refreshToken: VueCookies.get("refresh") })
+        .then((res) => {
+          VueCookies.set("token", res.data.newToken);
+          request.headers.Authorization = "Bearer " + VueCookies.get("token");
+        })
+        .catch((error) => console.log(error));
+    }
   }
   return request;
 });
@@ -22,8 +33,7 @@ baseAxios.interceptors.response.use(
   (error) => {
     if (error.response.data.status == 403) {
       console.log("권한인증 실패");
-      window.location.href = "/login/redirect";
-      // temp.$router.push("/login/redirect");
+      window.location.href = "/";
     }
   }
 );
@@ -178,6 +188,16 @@ const API = {
       }
     );
     return response.data;
+  },
+  async logout() {
+    const response = await this.instance
+      .get("/login/logout")
+      .catch((error) => console.log(error));
+    return response;
+  },
+  async dummy() {
+    const response = await this.instance.get("/login/dummy");
+    return response;
   },
 };
 

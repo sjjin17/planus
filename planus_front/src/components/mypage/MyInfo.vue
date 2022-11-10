@@ -62,7 +62,9 @@ export default {
   },
   methods: {
     async getMyInfo() {
+      await api.dummy();
       var jwt = jwt_decode(this.$cookies.get("token"));
+      console.log(jwt);
       this.userNickname = jwt.nickname;
       this.originNickname = jwt.nickname;
       this.imgUrl = jwt.imageUrl;

@@ -63,6 +63,8 @@ public class User {
         this.name = name;
     }
 
-
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
 
