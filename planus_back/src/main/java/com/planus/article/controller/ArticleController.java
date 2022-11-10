@@ -27,15 +27,29 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping
-    public ResponseEntity getAllArticles() {
+    public ResponseEntity getAllArticles(@PageableDefault(size = 6, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(articleService.findAllArticles());
+                .body(articleService.findAllArticles(pageable));
     }
 
     @PostMapping
-    public ResponseEntity createArticle(@RequestBody @Valid ArticleReqDTO articleReqDTO) {
+    public ResponseEntity createArticle(@RequestHeader(name="Authorization") String token, @RequestBody @Valid ArticleReqDTO articleReqDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(articleService.createArticle(articleReqDTO));
+                .body(articleService.createArticle(token, articleReqDTO));
+    }
+
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity deleteArticle(@RequestHeader(name="Authorization") String token, @PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.deleteArticle(token, articleId));
+
+    }
+
+    @PutMapping("/{articleId}")
+    public ResponseEntity updateArticle(@RequestHeader(name="Authorization")String token, @RequestBody ArticleReqDTO articleReqDTO, @PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.updateArticle(token, articleReqDTO, articleId));
+
     }
 
 //    @GetMapping("/{article_id}")
@@ -43,6 +57,7 @@ public class ArticleController {
 //        return ResponseEntity.status(HttpStatus.OK)
 //                .body(articleService.findOneArticle(articleId));
 //    }
+
 
     @GetMapping("/title")
     public ResponseEntity getArticleListByTitle(@RequestHeader(required = false) String token, @RequestParam String title, @PageableDefault(size = 6, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
