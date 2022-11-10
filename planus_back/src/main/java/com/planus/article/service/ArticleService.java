@@ -25,7 +25,8 @@ public interface ArticleService {
     ArticleDetailResDTO findOneArticle(Long articleId);
 
     SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable);
-    SearchResDTO getArticleListByArea(String token, int[] area, Pageable pageable);
+    List<SearchDTO> getArticleListByArea(String token, int[] area, Pageable pageable);
+    int countPage(int[] area);
 
     long likeArticle(String token, long articleId);
 }
