@@ -54,6 +54,20 @@
         :options="{ strokeColor: '#FF1744', strokeWeight: 2 }"
       >
       </gmap-polyline>
+      <gmap-marker
+        :icon="{
+          url: require('@/assets/logo.png'),
+          scaledSize: { width: 40, height: 40 },
+        }"
+        v-if="spotInfo"
+        :position="spotInfo"
+        @click="clickLocation(spotInfo, 15)"
+        id="bucket"
+      >
+        <gmap-info-window :opened="spotInfo != null">
+          {{ spotInfo.place }}
+        </gmap-info-window></gmap-marker
+      >
     </gmap-map>
   </div>
 </template>
@@ -89,10 +103,12 @@ export default {
         { label: "M", name: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
         { label: "T", name: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
       ],
+      spot: { place: "여기여기", lat: 37.51256, lng: 127.10254 },
     };
   },
   props: {
     tripArea: Array,
+    spotInfo: Object,
   },
   methods: {
     clickLocation(loc, zoom) {
@@ -110,6 +126,11 @@ export default {
     },
     getCurrentZoom(zoom) {
       this.zoom = zoom;
+    },
+  },
+  watch: {
+    spotInfo(newVal) {
+      this.clickLocation(newVal, 15);
     },
   },
 };

@@ -220,7 +220,7 @@ const API = {
   },
 
   async googleApi(url) {
-    const response = await this.instance.get("/google", url);
+    const response = await this.instance.post("/google", url);
     return response.data;
   },
 };

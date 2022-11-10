@@ -10,8 +10,8 @@
         append-icon="mdi-magnify"
         @click:append="searchPlace"
         @keydown.enter.prevent="searchPlace"
-        @focus="getCenter"
         hide-details
+        id="search-bar"
       ></v-text-field>
     </v-container>
     <search-place-card
@@ -20,10 +20,11 @@
       :searchedPlace="searchedPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
+      @addMarker="addMarker"
       :fromBucket="false"
     ></search-place-card>
     <v-container>
-      <infinite-loading v-if="isSearched" @infinite="getNextResults">
+      <infinite-loading v-if="nextPageToken" @infinite="getNextResults">
         <div slot="no-results"></div>
         <div slot="no-more"></div>
       </infinite-loading>
@@ -33,11 +34,9 @@
 
 <script>
 import InfiniteLoading from "vue-infinite-loading";
-import API from "@/api/RESTAPI";
 import axios from "axios";
 import SearchPlaceCard from "@/components/searchPlace/searchPlaceCard.vue";
 
-const api = API;
 export default {
   components: {
     SearchPlaceCard,
@@ -48,7 +47,6 @@ export default {
       keyword: null,
       searchedResults: [],
       nextPageToken: null,
-      isSearched: false,
     };
   },
   props: {
@@ -57,56 +55,91 @@ export default {
   },
   methods: {
     async searchPlace() {
-      this.isSearched = false;
-      this.keyword.trim();
-      console.log("검색");
+      this.nextPageToken = null;
+      this.searchedResults = [];
+      this.keyword = this.keyword.trim();
+
       if (this.keyword.length == 0) return;
-      let data = await api.googleApi(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
-      );
-      console.log(data);
-      if (data.next_page_token) this.nextPageToken = data.next_page_token;
-      this.searchedResults = data.results;
-      this.isSearched = true;
-      // axios
-      //   .post(
-      //     process.env.VUE_APP_API_URL + "/google",
-      //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
-      //   )
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     if (res.data.next_page_token)
-      //       this.nextPageToken = res.data.next_page_token;
-      //     this.searchedResults = res.data.results;
-      //     this.isSearched = true;
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+
+      axios
+        .post(
+          process.env.VUE_APP_API_URL + "/google",
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=50000&keyword=${this.keyword}&key=`
+        )
+        .then((res) => {
+          document.getElementById("search-bar").blur();
+          let searchedResults = [];
+
+          res.data.results.forEach((item) => {
+            searchedResults.push({
+              place: item.name,
+              address: item.plus_code
+                ? item.plus_code.compound_code.split(" ")[
+                    item.plus_code.compound_code.split(" ").length - 1
+                  ] +
+                  " " +
+                  item.vicinity
+                : item.vicinity,
+              lat: item.geometry.location.lat,
+              lng: item.geometry.location.lng,
+              photo: item.photos
+                ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" +
+                  item.photos[0].photo_reference +
+                  "&key=" +
+                  process.env.VUE_APP_GOOGLE_MAP_KEY
+                : "",
+            });
+          });
+
+          this.searchedResults = searchedResults;
+          if (res.data.next_page_token)
+            this.nextPageToken = res.data.next_page_token;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     getNextResults($state) {
-      if (!this.isSearched) return;
+      if (!this.nextPageToken) return;
+
       axios
         .post(
           process.env.VUE_APP_API_URL + "/google",
           `https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=${this.nextPageToken}&key=`
         )
         .then((res) => {
-          console.log(res.data);
-          let tmp = this.searchedResults;
-          res.data.results.forEach((element) => {
-            tmp.push(element);
+          let nextResults = this.searchedResults;
+
+          res.data.results.forEach((item) => {
+            nextResults.push({
+              place: item.name,
+              address: item.plus_code
+                ? item.plus_code.compound_code.split(" ")[
+                    item.plus_code.compound_code.split(" ").length - 1
+                  ] +
+                  " " +
+                  item.vicinity
+                : item.vicinity,
+              lat: item.geometry.location.lat,
+              lng: item.geometry.location.lng,
+              photo: item.photos
+                ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" +
+                  item.photos[0].photo_reference +
+                  "&key=" +
+                  process.env.VUE_APP_GOOGLE_MAP_KEY
+                : "",
+            });
           });
-          this.searchedResults = tmp;
+
+          this.searchedResults = nextResults;
+
           if ($state) {
             if (!res.data.next_page_token) {
               this.nextPageToken = null;
               $state.complete();
-              console.log("a");
             } else {
               this.nextPageToken = res.data.next_page_token;
               $state.loaded();
-              console.log("b");
             }
           }
         })
@@ -114,17 +147,14 @@ export default {
           console.log(error);
         });
     },
-
-    async loadRecommend() {
-      this.lat = this.mapLat;
-      this.lng = this.mapLng;
-      await this.getPageLength();
-    },
     addBucket(place, address, lat, lng) {
       this.$emit("addBucket", place, address, lat, lng);
     },
     addTimetable(costTime, place, lat, lng, fromBucket) {
       this.$emit("addTimetable", costTime, place, lat, lng, fromBucket);
+    },
+    addMarker(place, address, lat, lng) {
+      this.$emit("addMarker", place, address, lat, lng);
     },
   },
 };
