@@ -108,8 +108,8 @@
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
-      </v-container> </v-container
-    >@/components/manageTrip/InviteDialog.vue
+      </v-container>
+    </v-container>
   </div>
 </template>
 
