@@ -10,9 +10,10 @@ import com.planus.db.entity.User;
 import com.planus.db.repository.ArticleRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
-import com.planus.exception.CustomException;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,19 +32,20 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ArticleListResDTO> findAllArticles() {
-        List<Article> articles = articleRepository.findAll();
+    public ArticleResDTO findAllArticles(Pageable pageable) {
+        Page<Article> articles = articleRepository.findAllByOrderByRegDateDesc(pageable);
+        System.out.println(pageable);
         System.out.println(articles);
-        List<ArticleListResDTO> articleResDTO = articles.stream().map(article -> ArticleListResDTO.toResDTO(article)).collect(Collectors.toList());
-        System.out.println(articleResDTO);
-        return articleResDTO;
+        List<ArticleListResDTO> articleList = articles.stream().map(article -> ArticleListResDTO.toResDTO(article)).collect(Collectors.toList());
+
+        return ArticleResDTO.toDTO(pageable, articleList);
     }
 
     @Override
-    public long createArticle(ArticleReqDTO articleReqDTO) {
-        // 내 모든 여행이 조회 가능해야 함 -> 따로 api 만들어야 함
-        // articleReqDTO -> article
-        Article article = ArticleReqDTO.toEntity(articleReqDTO);
+    public long createArticle(String token, ArticleReqDTO articleReqDTO) {
+        Trip trip = tripRepository.findByTripId(articleReqDTO.getTripId());
+        User user = userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1]));
+        Article article = ArticleReqDTO.toEntity(articleReqDTO, trip, user);
         articleRepository.save(article);
         return article.getArticleId();
     }
