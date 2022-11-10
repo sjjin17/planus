@@ -25,10 +25,11 @@
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import UserVideo from "@/components/chat/UserVideo.vue";
-axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OPENVIDU_SERVER_SECRET;
+const api = axios;
+api.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
   data() {
@@ -149,7 +150,7 @@ export default {
     },
     createSession(sessionId) {
       return new Promise((resolve, reject) => {
-        axios
+        api
           .post(
             `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
             JSON.stringify({
@@ -186,7 +187,7 @@ export default {
 
     createToken(sessionId) {
       return new Promise((resolve, reject) => {
-        axios
+        api
           .post(
             `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
             {},
