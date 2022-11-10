@@ -68,4 +68,8 @@ public class Article {
         this.trip = trip;
         this.regDate = regDate;
     }
+
+    public void addHits() {
+        this.hits += 1;
+    }
 }

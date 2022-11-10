@@ -1,5 +1,6 @@
 package com.planus.plan.dto;
 
+import com.planus.db.entity.Timetable;
 import com.planus.db.entity.Transit;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,5 +31,16 @@ public class TimetableListResDTO {
         this.moveTime = moveTime;
     }
 
-
+    public static TimetableListResDTO toResDTO(Timetable timetable) {
+        return TimetableListResDTO.builder()
+                .timetableId(timetable.getTimetableId())
+                .orders(timetable.getOrders())
+                .place(timetable.getPlace())
+                .lat(timetable.getLat())
+                .lng(timetable.getLng())
+                .costTime(timetable.getCostTime())
+                .transit(timetable.getTransit())
+                .moveTime(timetable.getMoveTime())
+                .build();
+    }
 }

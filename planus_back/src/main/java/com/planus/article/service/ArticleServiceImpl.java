@@ -8,6 +8,10 @@ import com.planus.exception.CustomException;
 import com.planus.db.repository.ArticleRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
+import com.planus.mytrip.dto.MyTripResDTO;
+import com.planus.plan.dto.PlanResDTO;
+import com.planus.plan.dto.TimetableListResDTO;
+import com.planus.user.dto.UserResDTO;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -81,9 +85,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDetailResDTO findOneArticle(Long articleId) {
-        // 조회수 올려주기!
-        return null;
+    public ArticleDetailResDTO findOneArticle(long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
+        article.addHits();
+        int likeCount = articleLikeRepository.countByArticleArticleId(articleId);
+        UserResDTO user = UserResDTO.toResDto(article.getUser());
+        MyTripResDTO trip = MyTripResDTO.toResDTO(article.getTrip());
+        List<Plan> plans = article.getTrip().getPlanList();
+        List<PlanResDTO> planList = plans.stream().map(plan -> PlanResDTO.toResDTO(plan)).collect(Collectors.toList());
+        return ArticleDetailResDTO.toEntity(article, likeCount, user, trip, planList);
+
     }
 
     @Override
@@ -215,17 +226,5 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public ArticleResDTO findOneArticle(long articleId) {
-//        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
-//
-//        // entity -> ResDTO
-//        // planResDTOList 만들기
-//
-//        ArticleResDTO.toResDTO(article, timetableList);
-//
-//
-//
-//    }
+
 }
