@@ -11,6 +11,7 @@ import CompleteView from "../views/CompleteView.vue";
 import Chat from "@/components/chat/WebSocketTest.vue";
 import CommunityView from "../views/CommunityView.vue";
 import ArticleView from "../views/ArticleView.vue";
+import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
 
 Vue.use(VueRouter);
 
@@ -94,6 +95,11 @@ const routes = [
     path: "/article/:articleId",
     name: "article",
     component: ArticleView,
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: TokenTestButton,
   },
 ];
 

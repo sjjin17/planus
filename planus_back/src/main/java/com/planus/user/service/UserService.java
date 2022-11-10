@@ -16,4 +16,6 @@ public interface UserService {
 
     User findUserByKakaoId(Long kakaoId);
 
+    String makeNewAccessToken(String refreshToken);
+
 }
