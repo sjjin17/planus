@@ -14,7 +14,7 @@
           <v-combobox
             v-model="areas"
             label="여행지 선택"
-            allowOverflow="false"
+            allow-overflow
             multiple
             chips
             dense
@@ -29,9 +29,9 @@
           >
           </v-combobox>
         </template>
-        <v-card v-model="areaMenu">
-          <v-card-title
-            ><v-tabs v-model="tabs" fixed-tabs>
+        <v-card v-model="areaMenu" style="width: 700px">
+          <v-card-title>
+            <v-tabs v-model="tabs" fixed-tabs>
               <v-tab style="padding: 0">서울/인천</v-tab>
               <v-tab>경기도</v-tab>
               <v-tab>강원도</v-tab>
@@ -44,77 +44,91 @@
           <v-card-text
             ><v-tabs-items v-model="tabs"
               ><v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup1"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup1"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup2"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup2"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup3"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup3"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup4"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup4"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup5"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup5"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup6"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup6"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip
-                  v-for="(area, i) in areaGroup7"
-                  :key="i"
-                  :area="area"
-                  @click="addArea(area)"
-                >
-                  {{ area.siName }}
-                </v-chip>
-              </v-tab-item></v-tabs-items
-            ></v-card-text
-          >
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(area, i) in areaGroup7"
+                    :key="i"
+                    :area="area"
+                    @click="addArea(area)"
+                  >
+                    {{ area.siName }}
+                  </v-chip>
+                </v-chip-group>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card-text>
         </v-card>
       </v-menu>
     </div>
@@ -132,7 +146,6 @@
           <v-combobox
             v-model="dates"
             label="여행 일정 선택"
-            allowOverflow="false"
             multiple
             chips
             dense
@@ -163,7 +176,7 @@
         </v-date-picker>
       </v-menu>
     </div>
-    <v-btn @click="createTrip">일정 짜기</v-btn>
+    <v-btn class="createTripBtn" @click="createTrip">일정 짜기</v-btn>
   </div>
 </template>
 
@@ -215,24 +228,24 @@ export default {
 
       if (this.areaId.length == 0 || this.dates.length == 0) {
         window.alert("여행지와 여행 일정을 선택해주세요!");
-      }
-
-      if (this.dates.length < 2) {
-        this.period = 0;
       } else {
-        let a = new Date(this.dates[0]);
-        let b = new Date(this.dates[1]);
-        this.period = (b - a) / 86400000;
+        if (this.dates.length < 2) {
+          this.period = 0;
+        } else {
+          let a = new Date(this.dates[0]);
+          let b = new Date(this.dates[1]);
+          this.period = (b - a) / 86400000;
+        }
+
+        this.res = await api.createTrip(
+          this.dates[0],
+          this.period,
+          this.areaId
+        );
+        this.tripId = this.res.result.tripId;
+        this.tripUrl = this.res.result.tripUrl;
+        this.$router.push("/plans/" + this.tripUrl);
       }
-
-      console.log(this.dates[0]);
-      console.log(this.period);
-      console.log(this.areaId);
-
-      this.res = await api.createTrip(this.dates[0], this.period, this.areaId);
-      this.tripId = this.res.result.tripId;
-      this.tripUrl = this.res.result.tripUrl;
-      this.$router.push("/plans/" + this.tripUrl);
     },
     isLogin() {
       if (!this.$cookies.get("token")) {
@@ -240,18 +253,25 @@ export default {
       }
     },
     addArea(area) {
-      console.log(area);
       if (!this.areaId.includes(area.areaId)) {
         this.areaId.push(area.areaId);
         this.areas.push(area.siName);
       }
     },
     clearArea() {
-      this.areaId = [];
-      this.areas = [];
+      if (!this.areaMenu) {
+        this.areaId = [];
+        this.areas = [];
+      }
     },
     disablePastDates(val) {
-      return val >= new Date().toISOString().substr(0, 10);
+      let today = new Date();
+      return (
+        val >=
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+          .toISOString()
+          .substr(0, 10)
+      );
     },
     dateSort() {
       if (this.dates.length > 1) {
@@ -265,11 +285,15 @@ export default {
 <style>
 .createTripDiv {
   display: flex;
+  justify-content: center;
 }
 .selectAreaMenu {
-  width: 40%;
+  width: 30%;
 }
 .selectDateMenu {
-  width: 40%;
+  width: 30%;
+}
+.createTripBtn {
+  height: 40px !important;
 }
 </style>

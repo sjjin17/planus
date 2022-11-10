@@ -131,7 +131,7 @@ import API from "@/api/RESTAPI";
 import WSAPI from "@/api/WSAPI";
 import RecommendPlaceTab from "@/components/recommend/RecommendPlaceTab.vue";
 import PlanMap from "@/components/plans/PlanMap.vue";
-import InviteDialog from "@/components/manageTrip/inviteDialog.vue";
+import InviteDialog from "@/components/manageTrip/InviteDialog.vue";
 import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";

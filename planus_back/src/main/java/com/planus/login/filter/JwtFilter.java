@@ -39,19 +39,6 @@ public class JwtFilter extends GenericFilterBean {
             return;
         }
         String jwt = resolveToken(httpServletRequest);
-//        if (jwt.equals("null")) {
-//            System.out.println("필터 작동");
-//            String refreshToken = httpServletRequest.getHeader("refreshToken");
-//            if (refreshToken != null) {
-//                System.out.println("리프레시 체크");
-//                User user = userRepository.findByRefreshTokenContains(refreshToken);
-//                if (user != null) {
-//                    jwt = tokenProvider.createNewAccessToken(user);
-//                    System.out.println(jwt);
-//                    ((HttpServletResponse) response).addHeader("Authorization", "Bearer " + jwt);
-//                }
-//            }
-//        }
         try {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);

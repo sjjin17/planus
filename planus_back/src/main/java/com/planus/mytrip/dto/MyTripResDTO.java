@@ -26,11 +26,6 @@ public class MyTripResDTO {
     // entity -> ResDTO
     public static MyTripResDTO toResDTO(Trip trip) {
 
-        System.out.println("시작");
-        System.out.println(Long.valueOf(trip.getMemberList().size()));
-        System.out.println(trip.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        System.out.println(trip.getStartDate().plusDays(trip.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        System.out.println(trip.getTripAreaList().stream().map(tripArea -> tripArea.getArea().getSiName()).collect(Collectors.toList()));
         return MyTripResDTO.builder()
                 .tripId(trip.getTripId())
                 .tripUrl(trip.getTripUrl())

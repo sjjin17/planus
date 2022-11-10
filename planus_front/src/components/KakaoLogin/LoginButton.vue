@@ -4,12 +4,12 @@
       <img src="@/assets/kakao_login_medium_narrow.png" />
     </a>
   </div>
-  <div v-else>
-    <h3 @click="logout">로그아웃</h3>
-  </div>
+  <v-btn class="mainPageBtn" v-else @click="logout">로그아웃</v-btn>
 </template>
 
 <script>
+import API from "@/api/RESTAPI";
+const api = API;
 export default {
   name: "LoginButton",
   created() {
@@ -28,7 +28,8 @@ export default {
       }
       return true;
     },
-    logout() {
+    async logout() {
+      await api.logout();
       this.$cookies.remove("token");
       this.$cookies.remove("refresh");
       this.isLogin = false;

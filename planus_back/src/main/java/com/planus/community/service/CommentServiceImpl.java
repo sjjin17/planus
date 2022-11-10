@@ -90,10 +90,10 @@ public class CommentServiceImpl implements CommentService {
         for(Comment comment : commentList){
             CommentDTO commentDTO = CommentDTO.builder()
                     .commentId(comment.getCommentId())
+                    .userId(comment.getUser().getUserId())
+                    .name(comment.getUser().getName())
                     .content(comment.getContent())
                     .regDate(comment.getRegDate().toString())
-                    .articleId(comment.getArticle().getArticleId())
-                    .userId(comment.getUser().getUserId())
                     .build();
 
             commentDTOList.add(commentDTO);
