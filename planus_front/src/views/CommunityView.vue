@@ -71,15 +71,13 @@ export default {
   data() {
     return {
       isSearchByTitle: true,
-      title: "",
-      area: [3, 4],
       currentPage: 1,
       articleList: [],
       totalPage: 0,
     };
   },
   async created() {
-    await this.getArticleListByTitle(1);
+    await this.getArticleListByTitle("", 1);
   },
   watch: {
     currentPage(newVal) {
@@ -92,14 +90,14 @@ export default {
     },
   },
   methods: {
-    async getArticleListByTitle(page) {
-      this.res = await api.getArticleListByTitle(this.title, page - 1);
+    async getArticleListByTitle(keword, page) {
+      this.res = await api.getArticleListByTitle(keword, page - 1);
       this.articleList = this.res.searchList.articleList;
       this.totalPage = this.res.searchList.totalPage;
       console.log("제목으로 검색 페이지수: " + this.totalPage);
     },
-    async getArticleListByArea(page) {
-      this.res = await api.getArticleListByArea(this.area, page - 1);
+    async getArticleListByArea(area, page) {
+      this.res = await api.getArticleListByArea(area, page - 1);
       this.articleList = this.res.searchList.articleList;
       this.totalPage = this.res.searchList.totalPage;
       console.log("지역으록 검색 페이지수: " + this.totalPage);
@@ -107,11 +105,11 @@ export default {
     goToArticle(articleId) {
       this.$router.push("/article/" + articleId);
     },
-    goSearch(val) {
+    goSearch(val, data) {
       if (val == 1) {
-        this.getArticleListByTitle(1);
+        this.getArticleListByTitle(data, 1);
       } else {
-        this.getArticleListByArea(1);
+        this.getArticleListByArea(data, 1);
       }
     },
   },
