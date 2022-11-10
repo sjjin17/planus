@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import API from "@/api/RESTAPI";
+const api = API;
 export default {
   name: "LoginButton",
   created() {
@@ -28,7 +30,8 @@ export default {
       }
       return true;
     },
-    logout() {
+    async logout() {
+      await api.logout();
       this.$cookies.remove("token");
       this.$cookies.remove("refresh");
       this.isLogin = false;

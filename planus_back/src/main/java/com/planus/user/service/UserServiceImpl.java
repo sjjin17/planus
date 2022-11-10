@@ -30,6 +30,9 @@ public class UserServiceImpl implements UserService{
                     .imageUrl(imageUrl)
                     .build();
             userRepository.save(user);
+        }else if(user.getRefreshToken()==null){
+            user.setRefreshToken(tokenProvider.createRefreshToken());
+            userRepository.save(user);
         }
         return user;
     }
@@ -80,4 +83,12 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    @Transactional
+    public void logout(String token) {
+        System.out.println("서비스단 호출");
+        long userId = tokenProvider.getUserId(token);
+        User user = userRepository.findByUserId(userId);
+        user.setRefreshToken(null);
+    }
 }
