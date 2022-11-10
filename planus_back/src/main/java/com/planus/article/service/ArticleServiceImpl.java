@@ -4,10 +4,7 @@ package com.planus.article.service;
 import com.planus.article.dto.*;
 import com.planus.db.entity.Area;
 import com.planus.db.entity.Article;
-import com.planus.db.entity.Trip;
-import com.planus.db.entity.User;
 import com.planus.db.repository.*;
-import com.planus.exception.CustomException;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,17 +60,57 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public SearchResDTO getArticleListByArea(String token, int[] area, Pageable pageable) {
-        Page<Article> articleList = articleRepository.findByArea(area, pageable);
+    public List<SearchDTO> getArticleListByArea(String token, int[] area, Pageable pageable) {
+        System.out.println(Arrays.toString(area));
+        List<Article> articleList = articleRepository.findByArea(area, pageable);
 
-        return SearchResDTO.builder()
-                .currentPage(articleList.getNumber())
-                .totalPage(articleList.getTotalPages())
-                .articleList(setArticleList(token, articleList))
-                .build();
+        return setArticleList(token, articleList);
+    }
+
+    @Override
+    public int countPage(int[] area){
+        int count = articleRepository.countPage(area);
+        int countPage = count/6;
+        if(count%6!=0){
+            countPage+=1;
+        }
+        return countPage;
     }
 
     private List<SearchDTO> setArticleList(String token, Page<Article> articleList) {
+        long userId = -1;
+        if(token!=null){
+            userId = tokenProvider.getUserId(token.split(" ")[1]);
+        }
+
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        for (Article article : articleList){
+            long articleId = article.getArticleId();
+            long tripId = article.getTrip().getTripId();
+
+            SearchDTO searchDTO = SearchDTO.builder()
+                    .articleId(articleId)
+                    .tripId(article.getTrip().getTripId())
+                    .areaList(areaRepository.findAllByTripAreaList_Trip_TripId(tripId).stream().map(Area::getSiName).collect(Collectors.toList()))
+                    .imageUrl(areaRepository.findTop1ByTripAreaList_Trip_TripId(tripId).getImageUrl())
+                    .period(article.getTrip().getPeriod())
+                    .userId(article.getUser().getUserId())
+                    .name(article.getUser().getName())
+                    .title(article.getTitle())
+                    .regDate(article.getRegDate().toString())
+                    .hits(article.getHits())
+                    .likes(article.getArticleLikeList().size())
+                    .isLiked(articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId,userId))
+                    .build();
+
+            searchDTOList.add(searchDTO);
+        }
+
+        return searchDTOList;
+    }
+
+    private List<SearchDTO> setArticleList(String token, List<Article> articleList) {
         long userId = -1;
         if(token!=null){
             userId = tokenProvider.getUserId(token.split(" ")[1]);
