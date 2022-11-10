@@ -76,7 +76,6 @@ export default {
     async saveChange() {
       if (this.userNickname != this.originNickname) {
         var result = await api.changeMyInfo(this.userNickname);
-        console.log(result);
         var token = result.newToken;
         this.$cookies.set("token", token);
         this.originNickname = this.userNickname;
