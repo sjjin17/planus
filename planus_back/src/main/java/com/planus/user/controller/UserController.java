@@ -1,5 +1,6 @@
 package com.planus.user.controller;
 
+import com.planus.article.service.ArticleService;
 import com.planus.community.service.CommentService;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.user.service.UserService;
@@ -21,11 +22,13 @@ public class UserController {
     private final UserService userService;
     private final CommentService commentService;
     private final TokenProvider tokenProvider;
+    private final ArticleService articleService;
 
-    public UserController(UserService userService, CommentService commentService, TokenProvider tokenProvider) {
+    public UserController(UserService userService, CommentService commentService, TokenProvider tokenProvider, ArticleService articleService) {
         this.userService = userService;
         this.commentService = commentService;
         this.tokenProvider = tokenProvider;
+        this.articleService = articleService;
     }
 
     @GetMapping
@@ -71,5 +74,11 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/articles")
+    public ResponseEntity getMyArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=6, sort="regDate",direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.getMyArticles(token, pageable));
     }
 }

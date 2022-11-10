@@ -11,6 +11,8 @@ public interface ArticleLikeRepository extends JpaRepository<ArticleLike, Long> 
     void deleteByArticleArticleIdAndUserUserId(long articleId, long userId);
     int countByArticleArticleId(long articleId);
 
+    int countByUserUserId(long userId);
+
 
 
 }

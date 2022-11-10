@@ -29,4 +29,6 @@ public interface ArticleService {
     int countPage(int[] area);
 
     long likeArticle(String token, long articleId);
+
+    ArticleResDTO getMyArticles(String token, Pageable pageable);
 }
