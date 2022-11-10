@@ -16,7 +16,7 @@ baseAxios.interceptors.request.use(async (request) => {
     if (VueCookies.get("refresh") != null) {
       var temp = axios.create();
       await temp
-        .patch("/login", { refreshToken: VueCookies.get("refresh") })
+        .patch(baseURL + "/login", { refreshToken: VueCookies.get("refresh") })
         .then((res) => {
           VueCookies.set("token", res.data.newToken);
           request.headers.Authorization = "Bearer " + VueCookies.get("token");
@@ -34,7 +34,6 @@ baseAxios.interceptors.response.use(
     if (error.response.data.status == 403) {
       console.log("권한인증 실패");
       window.location.href = "/";
-      // temp.$router.push("/login/redirect");
     }
   }
 );
@@ -140,10 +139,13 @@ const API = {
     return response.data;
   },
   async logout() {
-    console.log("api logout 호출");
     const response = await this.instance
       .get("/login/logout")
       .catch((error) => console.log(error));
+    return response;
+  },
+  async dummy() {
+    const response = await this.instance.get("/login/dummy");
     return response;
   },
 };
