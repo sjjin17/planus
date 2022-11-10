@@ -11,25 +11,15 @@
     <v-row class="d-flex justify-center">
       <v-col cols="4">
         <v-text-field
-          v-if="modify"
           v-model="userNickname"
           rounded
           outlined
+          :readonly="!modify"
           dense
           color="#4a8072"
           class="centered-input font-weight-bold"
         >
         </v-text-field>
-        <v-text-field
-          v-else
-          :placeholder="userNickname"
-          rounded
-          outlined
-          disabled
-          dense
-          color="#4a8072"
-          class="centered-input font-weight-bold"
-        ></v-text-field>
       </v-col>
     </v-row>
     <v-row class="d-flex justify-center">
@@ -62,7 +52,9 @@ export default {
   },
   methods: {
     async getMyInfo() {
+      await api.dummy();
       var jwt = jwt_decode(this.$cookies.get("token"));
+      console.log(jwt);
       this.userNickname = jwt.nickname;
       this.originNickname = jwt.nickname;
       this.imgUrl = jwt.imageUrl;
@@ -74,9 +66,8 @@ export default {
     async saveChange() {
       if (this.userNickname != this.originNickname) {
         var result = await api.changeMyInfo(this.userNickname);
-        console.log(result);
         var token = result.newToken;
-        this.$cookies.set("token", token);
+        this.$cookies.set("token", token, 30 * 60);
         this.originNickname = this.userNickname;
       }
       this.toModify();

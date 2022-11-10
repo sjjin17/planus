@@ -1,5 +1,6 @@
 package com.planus.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,10 +39,12 @@ public class Article {
     private List<ArticleLike> articleLikeList;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="trip_id")
     private Trip trip;
 
@@ -58,12 +61,11 @@ public class Article {
         this.hits = 0;
     }
 
-    //== 연관관계 편의 메서드 ==//
-    public void setTrip(Trip trip) {
+
+    public void updateArticle(String title, String content, Trip trip, LocalDateTime regDate) {
+        this.title = title;
+        this.content = content;
         this.trip = trip;
-        trip.getArticleList().add(this);
+        this.regDate = regDate;
     }
-
-
-
 }

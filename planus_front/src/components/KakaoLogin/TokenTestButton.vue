@@ -8,7 +8,9 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-axios.interceptors.request.use(async (request) => {
+const tempAxios = axios.create();
+
+tempAxios.interceptors.request.use(async (request) => {
   if (VueCookies.get("token") != null) {
     request.headers.Authorization = "Bearer " + VueCookies.get("token");
     return request;
@@ -31,13 +33,12 @@ axios.interceptors.request.use(async (request) => {
 
 export default {
   name: "TokenTestButton.vue",
-
   methods: {
     test() {
       // var temp = this;
-      axios.defaults.headers.common["Authorization"] =
+      tempAxios.defaults.headers.common["Authorization"] =
         "Bearer " + this.$cookies.get("token");
-      axios
+      tempAxios
         //로컬
         .get("http://localhost:8080/planus/login/test")
         .then((res) => {

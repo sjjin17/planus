@@ -43,7 +43,6 @@ public class LoginController {
     @GetMapping("/test")
     public void Test(@RequestHeader String Authorization){
         String token=Authorization.split(" ")[1];
-        //TODO jwtprovider와 jwtUtil 통합할것
         long userIdFromToken = tokenProvider.getUserId(token);
         UserInfoResDTO userInfo = userService.findUserInfo(userIdFromToken);
         System.out.println("Welcome! "+ userInfo.getNickname());
@@ -82,5 +81,25 @@ public class LoginController {
         }else{
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(@RequestHeader String Authorization){
+        Map<String, String> resultMap = new HashMap<>();
+        String token = Authorization.split(" ")[1];
+        try{
+            userService.logout(token);
+            resultMap.put("message", "success");
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        }catch(Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "로그아웃에서 문제 발생");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/dummy")
+    public ResponseEntity dummy(){
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
