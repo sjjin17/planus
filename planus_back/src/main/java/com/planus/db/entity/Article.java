@@ -68,7 +68,4 @@ public class Article {
         this.trip = trip;
         this.regDate = regDate;
     }
-
-
-
 }

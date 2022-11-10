@@ -26,12 +26,5 @@ public class PlanResDTO {
         this.timetableList = timetableList;
     }
 
-    public static PlanResDTO toResDTO(Plan plan,List<TimetableListResDTO> timetableList) {
-        return PlanResDTO.builder()
-                .planId(plan.getPlanId())
-                .tripDate(plan.getTripDate())
-                .startTime(plan.getStartTime())
-                .timetableList(timetableList)
-                .build();
-    }
+
 }

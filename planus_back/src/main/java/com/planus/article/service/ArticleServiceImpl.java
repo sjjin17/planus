@@ -2,10 +2,7 @@ package com.planus.article.service;
 
 
 import com.planus.article.dto.*;
-import com.planus.db.entity.Area;
-import com.planus.db.entity.Article;
-import com.planus.db.entity.Trip;
-import com.planus.db.entity.User;
+import com.planus.db.entity.*;
 import com.planus.db.repository.*;
 import com.planus.exception.CustomException;
 import com.planus.db.repository.ArticleRepository;
@@ -77,6 +74,12 @@ public class ArticleServiceImpl implements ArticleService {
             System.out.println("실패!");
         }
         return articleId;
+    }
+
+    @Override
+    public ArticleDetailResDTO findOneArticle(Long articleId) {
+        // 조회수 올려주기!
+        return null;
     }
 
     @Override
@@ -172,6 +175,25 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         return searchDTOList;
+    }
+
+    @Override
+    @Transactional
+    public long likeArticle(String token, long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        if (articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, userId)) {
+            articleLikeRepository.deleteByArticleArticleIdAndUserUserId(articleId, userId);
+
+
+        } else {
+            ArticleLike articleLike = ArticleLike.builder()
+                    .article(article)
+                    .user(userRepository.findByUserId(userId))
+                    .build();
+            articleLikeRepository.save(articleLike);
+        }
+        return articleLikeRepository.countByArticleArticleId(articleId);
     }
 
 //    @Override

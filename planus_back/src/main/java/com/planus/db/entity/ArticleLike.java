@@ -1,11 +1,17 @@
 package com.planus.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity
 @Getter
+@ToString
+@NoArgsConstructor
 public class ArticleLike {
 
     @Id
@@ -20,4 +26,12 @@ public class ArticleLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+
+
+    @Builder
+    public ArticleLike(Article article, User user) {
+        this.article = article;
+        this.user = user;
+    }
+
 }

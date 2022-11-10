@@ -92,4 +92,10 @@ public class ArticleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/like/{articleId}")
+    public ResponseEntity likeArticle(@RequestHeader(name="Authorization") String token, @PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.likeArticle(token, articleId));
+    }
 }

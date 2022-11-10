@@ -33,19 +33,7 @@ public class ArticleDetailResDTO {
         this.planList = planList;
     }
 
-    // entity -> ResDTO
-//    public static ArticleResDTO toResDTO(Article article, List<TimetableListResDTO> timetableList) {
-//        return ArticleResDTO.builder()
-//                .articleId(article.getArticleId())
-//                .title(article.getTitle())
-//                .content(article.getContent())
-//                .regDate(article.getRegDate())
-//                .hits(article.getHits())
-//                .user(UserResDTO.toResDto(article.getUser()))
-//                .trip(MyTripResDTO.toResDTO(article.getTrip()))
-//                .planList(article.getTrip().getPlanList().stream().map(plan-> PlanResDTO.toResDTO(plan, timetableList).collect(Collectors.toList())))
-//                .build();
-//
-//    }
+    // Article -> ArticleDetailResDTO
+    // article에서 가져온 tripId로...
 
 }
