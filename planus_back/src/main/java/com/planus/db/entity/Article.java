@@ -58,10 +58,12 @@ public class Article {
         this.hits = 0;
     }
 
-    //== 연관관계 편의 메서드 ==//
-    public void setTrip(Trip trip) {
+
+    public void updateArticle(String title, String content, Trip trip, LocalDateTime regDate) {
+        this.title = title;
+        this.content = content;
         this.trip = trip;
-        trip.getArticleList().add(this);
+        this.regDate = regDate;
     }
 
 

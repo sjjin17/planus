@@ -34,11 +34,26 @@ public class ArticleController {
                 .body(articleService.createArticle(token, articleReqDTO));
     }
 
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity deleteArticle(@RequestHeader(name="Authorization") String token, @PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.deleteArticle(token, articleId));
+
+    }
+
+    @PutMapping("/{articleId}")
+    public ResponseEntity updateArticle(@RequestHeader(name="Authorization")String token, @RequestBody ArticleReqDTO articleReqDTO, @PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.updateArticle(token, articleReqDTO, articleId));
+
+    }
+
 //    @GetMapping("/{article_id}")
 //    public ResponseEntity getArticle(@PathVariable long articleId) {
 //        return ResponseEntity.status(HttpStatus.OK)
 //                .body(articleService.findOneArticle(articleId));
 //    }
+
 
     @GetMapping("/title")
     public ResponseEntity getArticleListByTitle(@RequestHeader(required = false) String token, @RequestParam String title, @PageableDefault(size = 6, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
