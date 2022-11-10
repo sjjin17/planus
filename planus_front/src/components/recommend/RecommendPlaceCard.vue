@@ -4,18 +4,32 @@
       <v-container>
         <v-row class="row-9" align="center">
           <v-col cols="7" align="left">
-            <v-row>
-              <span class="dark--text">{{ recommendPlace.place }}</span>
+            <v-row style="margin: -6px" id="hovering">
+              <div class="dark--text textCutting">
+                {{ recommendPlace.place }}
+              </div>
+              <div id="hovering-content" style="margin-top: -28px">
+                {{ recommendPlace.place }}
+              </div>
               <v-chip class="semidark--text"
                 >{{ recommendPlace.contentType }}
               </v-chip>
             </v-row>
-            <v-row style="font-size: 0.8rem">{{
-              recommendPlace.address
-            }}</v-row>
+            <v-row
+              id="hovering"
+              style="font-size: 0.8rem; margin: -6px; margin-top: 12px"
+            >
+              <div class="textCutting">
+                {{ recommendPlace.address }}
+              </div>
+              <div id="hovering-content" style="margin-top: -20px">
+                {{ recommendPlace.address }}
+              </div>
+            </v-row>
           </v-col>
-          <v-col cols="5">
-            <v-img :src="recommendPlace.imgUrl" max-> </v-img>
+          <v-col cols="5" class="pa-1">
+            <v-img :src="recommendPlace.imgUrl" style="max-height: 100px">
+            </v-img>
           </v-col>
         </v-row>
         <v-row class="row-3">
@@ -67,4 +81,31 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.textCutting {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+#hovering {
+  width: inherit;
+  position: relative;
+  display: inline-block;
+}
+
+#hovering-content {
+  display: none !important;
+  position: absolute;
+  z-index: 1; /*다른 요소들보다 앞에 배치*/
+  width: max-content;
+  background-color: #4a8072;
+  color: white;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+#hovering:hover #hovering-content {
+  display: block !important;
+}
+</style>
