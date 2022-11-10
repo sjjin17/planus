@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User join(String nickname, String email, Long kakaoId, String imageUrl) {
         User user = userRepository.findOneByKakaoId(kakaoId);
+
         if(user==null){
             user = User.builder()
                     .name(nickname)
@@ -30,8 +31,9 @@ public class UserServiceImpl implements UserService{
                     .imageUrl(imageUrl)
                     .build();
             userRepository.save(user);
-        }else if(user.getRefreshToken()==null){
+        }else{
             user.setRefreshToken(tokenProvider.createRefreshToken());
+            user.setImageUrl(imageUrl);
             userRepository.save(user);
         }
         return user;
