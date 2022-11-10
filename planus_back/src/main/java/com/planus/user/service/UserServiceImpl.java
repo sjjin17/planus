@@ -1,22 +1,38 @@
 package com.planus.user.service;
 
+import com.planus.db.entity.Member;
+import com.planus.db.entity.Trip;
 import com.planus.db.entity.User;
+import com.planus.db.repository.*;
+import com.planus.mytrip.service.MyTripService;
+import com.planus.plan.dto.PlanResDTO;
 import com.planus.user.dto.UserInfoResDTO;
-import com.planus.db.repository.UserRepository;
 import com.planus.util.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(TokenProvider tokenProvider, UserRepository userRepository) {
-        this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
-    }
+    private final TripRepository tripRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final TripAreaRepository tripAreaRepository;
+
+    private final BucketRepository bucketRepository;
+
+    private final TimetableRepository timetableRepository;
+
+    private final PlanRepository planRepository;
 
     @Override
     public User join(String nickname, String email, Long kakaoId, String imageUrl) {
@@ -92,5 +108,47 @@ public class UserServiceImpl implements UserService{
         long userId = tokenProvider.getUserId(token);
         User user = userRepository.findByUserId(userId);
         user.setRefreshToken(null);
+    }
+
+    @Override
+    @Transactional
+    //TODO: 로직 다시 정리
+    public void changeAdminForSignOut(long userId) {
+        User user = userRepository.findByUserId(userId);
+        List<Member> memberList = user.getMemberList();
+        List<Trip> tripList = new ArrayList<>();
+        for (Member member : memberList) {
+            tripList.add(member.getTrip());
+        }
+        for (Trip trip : tripList) {
+            long tripId = trip.getTripId();
+            if(trip.isComplete()) {
+                memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+                if(trip.getAdmin() == userId)
+                    trip.changeAdmin(0);
+                continue;
+            }
+            // 진행중 일정 - 참가자 (참가자에서만 삭제)
+            if(trip.getAdmin() != userId) {
+                memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+                continue;
+            }
+            //(완료) 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
+            if(memberRepository.countByTripTripId(tripId) > 1) {
+                memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+                trip.changeAdmin(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
+                continue;
+            }
+            // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
+            //TODO: CASCADE 설정하면 한번에 삭제될거 같은데 다 필요한가?
+            memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+            tripAreaRepository.deleteAllByTripTripId(trip.getTripId());
+            bucketRepository.deleteAllByTripTripId(trip.getTripId());
+            timetableRepository.deleteAllByPlan_Trip_TripId(trip.getTripId());
+            planRepository.deleteAllByTripTripId(trip.getTripId());
+            tripRepository.deleteById(tripId);
+            continue;
+        }
+
     }
 }

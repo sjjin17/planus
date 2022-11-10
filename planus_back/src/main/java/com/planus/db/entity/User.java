@@ -30,7 +30,7 @@ public class User {
     @Column(name="image_url")
     private String imageUrl;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Member> memberList;
 
     @OneToMany(mappedBy="user", cascade=CascadeType.ALL)

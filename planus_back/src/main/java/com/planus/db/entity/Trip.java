@@ -42,19 +42,19 @@ public class Trip {
     private String imageUrl;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Member> memberList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Bucket> bucketList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<TripArea> tripAreaList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Plan> planList;
 
     @OneToMany(mappedBy = "trip")
