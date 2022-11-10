@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class ArticleListResDTO {
     private long articleId;
     private String title;
-    private LocalDateTime regDate;
+    private String regDate;
     private long hits;
 
     private UserResDTO user;
@@ -27,7 +27,7 @@ public class ArticleListResDTO {
 
 
     @Builder
-    public ArticleListResDTO(long articleId, String title, LocalDateTime regDate, long hits, UserResDTO user, MyTripResDTO trip) {
+    public ArticleListResDTO(long articleId, String title, String regDate, long hits, UserResDTO user, MyTripResDTO trip) {
         this.articleId = articleId;
         this.title = title;
         this.regDate = regDate;
@@ -38,11 +38,10 @@ public class ArticleListResDTO {
 
     // entity -> ResDTO
     public static ArticleListResDTO toResDTO(Article article) {
-        System.out.println(UserResDTO.toResDto(article.getUser()));
         return ArticleListResDTO.builder()
                 .articleId(article.getArticleId())
                 .title(article.getTitle())
-                .regDate(article.getRegDate())
+                .regDate(article.getRegDate().toString())
                 .hits(article.getHits())
                 .user(UserResDTO.toResDto(article.getUser()))
                 .trip(MyTripResDTO.toResDTO(article.getTrip()))

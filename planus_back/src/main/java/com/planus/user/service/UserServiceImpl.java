@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User join(String nickname, String email, Long kakaoId, String imageUrl) {
         User user = userRepository.findOneByKakaoId(kakaoId);
+
         if(user==null){
             user = User.builder()
                     .name(nickname)
@@ -29,6 +30,10 @@ public class UserServiceImpl implements UserService{
                     .refreshToken(tokenProvider.createRefreshToken())
                     .imageUrl(imageUrl)
                     .build();
+            userRepository.save(user);
+        }else{
+            user.setRefreshToken(tokenProvider.createRefreshToken());
+            user.setImageUrl(imageUrl);
             userRepository.save(user);
         }
         return user;
@@ -80,4 +85,12 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    @Transactional
+    public void logout(String token) {
+        System.out.println("서비스단 호출");
+        long userId = tokenProvider.getUserId(token);
+        User user = userRepository.findByUserId(userId);
+        user.setRefreshToken(null);
+    }
 }
