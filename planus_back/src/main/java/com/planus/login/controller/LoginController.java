@@ -97,4 +97,9 @@ public class LoginController {
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/dummy")
+    public ResponseEntity dummy(){
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
