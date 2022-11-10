@@ -265,7 +265,13 @@ export default {
       }
     },
     disablePastDates(val) {
-      return val >= new Date().toISOString().substr(0, 10);
+      let today = new Date();
+      return (
+        val >=
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+          .toISOString()
+          .substr(0, 10)
+      );
     },
     dateSort() {
       if (this.dates.length > 1) {
