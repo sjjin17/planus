@@ -34,7 +34,7 @@
       ></gmap-marker>
       <gmap-marker
         :key="index + 'p'"
-        v-for="(m, index) in planList"
+        v-for="(m, index) in timetableList"
         :position="m"
         :label="{
           text: m.place.substring(0, 2),
@@ -50,6 +50,7 @@
         id="plan"
       ></gmap-marker>
       <gmap-polyline
+        v-if="planList"
         :path.sync="planList"
         :options="{ strokeColor: '#FF1744', strokeWeight: 2 }"
       >
@@ -94,22 +95,14 @@ export default {
       center: {},
       zoom: 12,
       nowCenter: {},
-      planList: [
-        {
-          label: "L",
-          place: "롯데월드타워몰",
-          lat: 37.5125585,
-          lng: 127.1025353,
-        },
-        { label: "M", place: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
-        { label: "T", place: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
-      ],
+      planList: [],
       isInfo: true,
     };
   },
   props: {
     tripArea: Array,
     bucketList: Array,
+    timetableList: Array,
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),
@@ -143,6 +136,9 @@ export default {
     // },
     tripArea(newVal) {
       this.center = newVal[0];
+    },
+    timetableList(newVal) {
+      this.planList = newVal;
     },
   },
 };

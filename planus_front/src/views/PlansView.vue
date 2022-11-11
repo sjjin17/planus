@@ -103,6 +103,7 @@
         :tripArea="tripArea"
         @getCenter="getCenter"
         :bucketList="bucketList"
+        :timetableList="timetableList"
       />
       <v-container
         class="ma-0"
@@ -124,6 +125,7 @@
               @countTimetable="countTimetable"
               @delTimetable="delTimetable"
               @setTimetableOrders="setTimetableOrders"
+              @changeTimetableList="changeTimetableList"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -200,6 +202,7 @@ export default {
       planId: 0,
 
       bucketList: [],
+      timetableList: [],
     };
   },
   async created() {
@@ -498,6 +501,9 @@ export default {
     },
     changeBucketList(bucketList) {
       this.bucketList = bucketList;
+    },
+    changeTimetableList(timtableList) {
+      this.timetableList = timtableList;
     },
   },
 };
