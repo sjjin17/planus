@@ -15,6 +15,7 @@ import com.planus.user.dto.UserResDTO;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -221,10 +222,20 @@ public class ArticleServiceImpl implements ArticleService {
                 .totalPage(articleList.getTotalPages())
                 .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article, articleLikeRepository.countByArticleArticleId(article.getArticleId()))).collect(Collectors.toList()))
                 .build();
-//        return ArticleResDTO.toDTO(articleList, articleLikeRepository.countByUserUserId(userId));
-
     }
 
+    @Override
+    public ArticleResDTO getMyLikedArticles(String token, Pageable pageable) {
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        List<ArticleLike> articleLikes = articleLikeRepository.findByUserUserId(userId);
+        List<Article> articles = articleLikes.stream().map(articleLike -> articleLike.getArticle()).collect(Collectors.toList());
+        Page<Article> articleList = new PageImpl<>(articles);
+        return ArticleResDTO.builder()
+                .currentPage(articleList.getNumber())
+                .totalPage(articleList.getTotalPages())
+                .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article, articleLikeRepository.countByArticleArticleId(article.getArticleId()))).collect(Collectors.toList()))
+                .build();
+    }
 
 
 }

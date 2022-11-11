@@ -1,6 +1,7 @@
 package com.planus.article.service;
 
 import com.planus.article.dto.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.planus.db.entity.Article;
 import org.springframework.data.domain.Pageable;
@@ -31,4 +32,6 @@ public interface ArticleService {
     long likeArticle(String token, long articleId);
 
     ArticleResDTO getMyArticles(String token, Pageable pageable);
+
+    ArticleResDTO getMyLikedArticles(String token, Pageable pageable);
 }

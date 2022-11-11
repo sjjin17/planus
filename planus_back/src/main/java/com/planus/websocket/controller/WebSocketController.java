@@ -144,5 +144,6 @@ public class WebSocketController {
 
         //웹소켓세션 비우기
         headerAccessor.getSessionAttributes().clear();
+        //System.out.println(headerAccessor.getSessionAttributes().size());
     }
 }
