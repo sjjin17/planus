@@ -43,11 +43,24 @@
         style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
         <v-tabs v-model="tabs" fixed-tabs>
-          <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
+          <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
+          <v-tab-item>
+            <bucket-list
+              :tripId="tripId"
+              @delBucket="delBucket"
+              :deletedBucket="deletedBucket"
+              :addedBucket="addedBucket"
+              :memberOrAdmin="memberOrAdmin"
+              @addTimetable="addTimetable"
+              :addedTimetable="addedTimetable"
+              @changeBucketList="changeBucketList"
+              id="leftTab"
+            ></bucket-list>
+          </v-tab-item>
           <v-tab-item>
             <search-place-tab
               :mapLat="lat"
@@ -58,18 +71,6 @@
               @addTimetable="addTimetable"
               id="leftTab"
             ></search-place-tab>
-          </v-tab-item>
-          <v-tab-item>
-            <bucket-list
-              :tripId="tripId"
-              @delBucket="delBucket"
-              :deletedBucket="deletedBucket"
-              :addedBucket="addedBucket"
-              :memberOrAdmin="memberOrAdmin"
-              @addTimetable="addTimetable"
-              :addedTimetable="addedTimetable"
-              id="leftTab"
-            ></bucket-list>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
@@ -99,6 +100,7 @@
         style="width: 60%; background-color: blue"
         :tripArea="tripArea"
         @getCenter="getCenter"
+        :bucketList="bucketList"
       />
       <v-container
         class="ma-0"
@@ -194,6 +196,8 @@ export default {
       timeTableLength: 0,
 
       planId: 0,
+
+      bucketList: [],
     };
   },
   async created() {
@@ -489,6 +493,9 @@ export default {
           ws.setTimetableOrders(this.tripId, planId, setTimetableOrdersList);
         }
       }
+    },
+    changeBucketList(bucketList) {
+      this.bucketList = bucketList;
     },
   },
 };

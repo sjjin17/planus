@@ -33,9 +33,9 @@ export default {
     memberOrAdmin: Number,
     addedTimetable: Object,
   },
-  mounted() {
-    this.getBucketList();
-  },
+  // mounted() {
+  //   this.getBucketList();
+  // },
   watch: {
     deletedBucket() {
       // 삭제 로직
@@ -82,6 +82,12 @@ export default {
         }
       }
     },
+    bucketList(newVal) {
+      this.$emit("changeBucketList", newVal);
+    },
+    tripId() {
+      this.getBucketList();
+    },
   },
   methods: {
     async getBucketList() {
@@ -101,6 +107,9 @@ export default {
         address
       );
     },
+  },
+  created() {
+    // this.getBucketList();
   },
 };
 </script>
