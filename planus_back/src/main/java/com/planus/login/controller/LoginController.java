@@ -62,6 +62,7 @@ public class LoginController {
         long userIdFromToken = tokenProvider.getUserId(token);
         long kakaoId = userService.findKakaoIdByUserId(userIdFromToken);
         try {
+            userService.changeAdminForSignOut(userIdFromToken);
             kakaoUtil.kakaoSignOut(kakaoId);
             userService.deleteUser(userIdFromToken);
         }catch(Exception e){
