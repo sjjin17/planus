@@ -11,9 +11,13 @@
     >
       0시 이후의 일정입니다.
     </div>
-    <v-card>
-      <v-card-title>{{ this.timetable.place }}</v-card-title>
-      <v-icon @click="delTimetable">mdi-close</v-icon>
+    <v-card outlined color="#ffb4c2" class="my-4 ps-2">
+      <v-card-title class="card-title"
+        >{{ this.timetable.place }}
+        <v-icon @click="delTimetable" v-show="memberOrAdmin == 2"
+          >mdi-close</v-icon
+        >
+      </v-card-title>
       <v-card-text>
         <div>
           {{ Math.floor(this.calTime[this.timetable.orders - 1] / 60) }} :
@@ -33,7 +37,12 @@
           }}
           ( {{ Math.floor(this.timetable.costTime / 60) }} 시간
           {{ this.timetable.costTime % 60 }} 분 )
-          <v-icon small @click.native="clickChangeCostTime">mdi-pencil</v-icon>
+          <v-icon
+            small
+            @click.native="clickChangeCostTime"
+            v-show="memberOrAdmin == 2"
+            >mdi-pencil</v-icon
+          >
           <v-dialog v-model="dialog">
             <form>
               <v-text-field outlined v-model="costHour"></v-text-field>
@@ -46,41 +55,43 @@
         </div>
       </v-card-text>
     </v-card>
-    <div>
-      {{ this.timetable.transit }}
-    </div>
 
-    <v-container fluid>
-      <v-row align="center">
-        <v-col cols="6">
+    <v-container fluid v-show="nextLat != 0">
+      <v-row align="center" style="justify-content: space-between">
+        <v-col cols="8" class="pa-1">
           <v-select
             v-model="select"
             :items="selectList"
             item-text="text"
             item-value="value"
-            label="Select"
+            label="Solo field"
             return-object
             single-line
             :disabled="!searchClick"
+            solo
+            dense
+            hide-details
           ></v-select>
         </v-col>
-        <v-col
+        <v-col v-show="memberOrAdmin == 2" class="pa-1"
           ><v-btn v-if="searchClick" @click="search">검색</v-btn
           ><v-btn v-if="!searchClick" @click="searchClick = !searchClick"
             >수정</v-btn
           ></v-col
         >
       </v-row>
-      <div v-if="timetable.moveRoute">
-        <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
-          {{ route.text }}
-          <span style="color: red">
-            {{ route.duration }}
-          </span>
-        </div>
-      </div>
     </v-container>
-    <div v-if="timetable.moveTime">{{ this.timetable.moveTime }} 분 소요</div>
+    <div v-if="timetable.moveRoute">
+      <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
+        {{ route.text }}
+        <span style="color: red">
+          {{ route.duration }}
+        </span>
+      </div>
+    </div>
+    <h3 v-if="timetable.moveTime" style="text-align: center">
+      {{ this.timetable.moveTime }} 분 소요
+    </h3>
   </div>
 </template>
 
@@ -120,6 +131,7 @@ export default {
   props: {
     timetable: Object,
     calTime: Array,
+    memberOrAdmin: Number,
 
     //다음 Timetable의 Lat, Lng
     //plan의 tripdate
@@ -138,6 +150,16 @@ export default {
         // console.log(this.select);
       }
     });
+  },
+  watch: {
+    //draggable로 순서 변경 시 select를 선택안함으로 변경
+    timetableTransit() {
+      this.selectList.forEach((select) => {
+        if (select.value == this.valueEnum[this.timetable.transit]) {
+          this.select = select;
+        }
+      });
+    },
   },
   computed: {
     //timetable의 moveRoute 쪼개기..?아마도
@@ -171,6 +193,9 @@ export default {
           1000 +
         this.calTime[this.timetable.orders - 1] * 60
       );
+    },
+    timetableTransit() {
+      return this.timetable.transit;
     },
   },
   methods: {
@@ -326,4 +351,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.card-title {
+  justify-content: space-between;
+}
+</style>

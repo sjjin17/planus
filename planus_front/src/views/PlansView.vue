@@ -115,6 +115,7 @@
               :setOrdersTimetableList="setOrdersTimetableList"
               :addedTimetable="addedTimetable"
               :changedTimetable="changedTimetable"
+              :memberOrAdmin="memberOrAdmin"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"

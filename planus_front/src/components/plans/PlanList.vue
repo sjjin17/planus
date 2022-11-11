@@ -1,26 +1,53 @@
 <template>
   <div>
     <div>
-      <form>
-        <v-text-field
-          outlined
-          v-model="startHour"
-          type="number"
-          :disabled="!startBtnClick"
-        ></v-text-field>
-        시
-        <v-text-field
-          :disabled="!startBtnClick"
-          outlined
-          v-model="startMin"
-          type="number"
-        ></v-text-field>
-        분
-        <v-icon v-if="!startBtnClick" @click="startBtn">mdi-pencil</v-icon>
-        <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
-          >mdi-pencil</v-icon
-        >
-      </form>
+      <v-container style="justify-content: center">
+        <v-row class="pa-0 ma-0">
+          <v-col cols="3" class="ma-0 pa-0 mr-3" style="align-self: center">
+            <v-text-field
+              class="centered-input"
+              outlined
+              v-model="startHour"
+              type="number"
+              :disabled="!startBtnClick"
+              hide-details
+              :min="0"
+              :max="11"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
+            >시</v-col
+          >
+          <v-spacer />
+          <v-col cols="3" class="ma-0 pa-0 mr-3">
+            <v-text-field
+              class="centered-input"
+              :disabled="!startBtnClick"
+              outlined
+              v-model="startMin"
+              type="number"
+              hide-details
+              :min="0"
+              :max="59"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
+            >분</v-col
+          >
+          <v-spacer />
+          <v-col cols="1" class="ma-0 pa-0 ml-2" style="align-self: center">
+            <v-icon
+              v-if="!startBtnClick"
+              @click="startBtn"
+              v-show="memberOrAdmin == 2"
+              >mdi-pencil</v-icon
+            >
+            <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
+              >mdi-pencil</v-icon
+            >
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
     <draggable
       :list="timetableList"
@@ -45,6 +72,7 @@
         :timetable="timetable"
         :calTime="calTime"
         :startTime="startTime"
+        :memberOrAdmin="memberOrAdmin"
         @changeCalTime="changeCalTime"
         @setTimetable="setTimetable"
         @delTimetable="delTimetable"
@@ -78,6 +106,7 @@ export default {
       //드래그용
       enabled: true,
       dragging: false,
+
       startBtnClick: false,
     };
   },
@@ -89,9 +118,15 @@ export default {
     addedTimetable: Object,
     setOrdersTimetableList: Object,
     changedTimetable: Object,
+    memberOrAdmin: Number,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
+    if (this.memberOrAdmin == 2) {
+      this.enabled = true;
+    } else {
+      this.enabled = false;
+    }
   },
   watch: {
     WebSocketStartTime(newVal) {
@@ -193,6 +228,11 @@ export default {
       this.startBtnClick = !this.startBtnClick;
     },
     changeStartTime(plan, startHour, startMin) {
+      if (startHour > 12 || startMin > 59) {
+        alert("시는 0 ~ 12, 분은 0 ~ 59의 숫자만 가능");
+        return;
+      }
+
       this.startTime = parseInt(startHour) * 60 + parseInt(startMin);
       let newPlan = {
         planId: plan.planId,
