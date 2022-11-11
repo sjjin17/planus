@@ -135,12 +135,16 @@ const API = {
     const response = await this.instance.post("/plans/planlist", planIdList);
     return response.data;
   },
+  //안 써서 지워야 할 수도
   async savePlanStart(planId) {
     const response = await this.instance.get("/plans/start/" + planId);
     return response.data;
   },
-  async savePlan(planIdList) {
-    const response = await this.instance.post("/plans", planIdList);
+  async savePlan(planIdList, complete) {
+    const response = await this.instance.post("/plans", {
+      planIdList: planIdList,
+      complete: complete,
+    });
     return response.data;
   },
   async deleteTrip(tripId) {

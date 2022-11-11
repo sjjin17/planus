@@ -85,11 +85,31 @@ const WSAPI = {
       orders: orders,
       fromBucket: fromBucket,
       address: address,
+
+      transit: "NONE",
+      moveTime: 0,
+      moveRoute: "",
     };
     this.stomp.send("/app/addTimetable", JSON.stringify(timetable));
   },
-  delTimetable(timetableList) {
-    this.stomp.send("/app/delTimetable", JSON.stringify(timetableList));
+  delTimetable(tripId, planId, timetableList) {
+    let delTimetableList = {
+      tripId: tripId,
+      planId: planId,
+      timetableList: timetableList,
+    };
+    this.stomp.send("/app/delTimetable", JSON.stringify(delTimetableList));
+  },
+  setTimetableOrders(tripId, planId, timetableList) {
+    let setTimetableOrdersList = {
+      tripId: tripId,
+      planId: planId,
+      timetableList: timetableList,
+    };
+    this.stomp.send(
+      "/app/setTimetableOrders",
+      JSON.stringify(setTimetableOrdersList)
+    );
   },
   setTimetable(
     tripId,
@@ -101,6 +121,7 @@ const WSAPI = {
     costTime,
     moveTime,
     transit,
+    moveRoute,
     fromBucket
   ) {
     let timetable = {
@@ -113,6 +134,7 @@ const WSAPI = {
       costTime: costTime,
       moveTime: moveTime,
       transit: transit,
+      moveRoute: moveRoute,
       fromBucket: fromBucket,
     };
     this.stomp.send("/app/setTimetable", JSON.stringify(timetable));

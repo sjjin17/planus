@@ -18,9 +18,10 @@ public class TimetableListResDTO {
     int costTime;
     Transit transit;
     int moveTime;
+    String moveRoute;
 
     @Builder
-    public TimetableListResDTO(long timetableId, int orders, String place, double lat, double lng, int costTime, Transit transit, int moveTime) {
+    public TimetableListResDTO(long timetableId, int orders, String place, double lat, double lng, int costTime, Transit transit, int moveTime, String moveRoute) {
         this.timetableId = timetableId;
         this.orders = orders;
         this.place = place;
@@ -29,6 +30,7 @@ public class TimetableListResDTO {
         this.costTime = costTime;
         this.transit = transit;
         this.moveTime = moveTime;
+        this.moveRoute = moveRoute;
     }
 
     public static TimetableListResDTO toResDTO(Timetable timetable) {

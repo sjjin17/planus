@@ -17,6 +17,7 @@ public class WebSocketTimetable {
     private int costTime;
     private int moveTime;
     private String transit;
+    private String moveRoute;
     private Boolean fromBucket;
     private String address;
 
