@@ -1,38 +1,53 @@
 <template>
   <v-col>
-    <v-dialog v-model="dialog" max-width="600px">
+    <v-dialog v-model="dialog" max-width="300px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn style="margin: 0" v-bind="attrs" v-on="on"> 일정에 추가 </v-btn>
       </template>
       <v-card>
-        <v-card-text>
+        <v-card-text class="pa-3">
           <v-container>
-            <v-row>
-              <v-col>
+            <v-row class="pa-0">
+              <v-col class="ma-0 pa-0" cols="3">
                 <v-text-field
+                  class="centered-input"
+                  :rules="[rules.required]"
                   type="number"
                   required
                   v-model="hours"
                   :min="0"
                   :max="11"
+                  outlined
+                  hide-details
+                  color="#4A8072"
                 ></v-text-field>
               </v-col>
-              <v-col> 시간 </v-col>
-              <v-col>
+              <v-col class="ma-0 pa-0" cols="2" style="align-self: center">
+                <h2>시간</h2>
+              </v-col>
+              <v-col class="ma-0 pa-0" cols="3">
                 <v-text-field
+                  class="centered-input"
+                  :rules="[rules.required]"
+                  outlined
                   type="number"
                   required
                   v-model="minutes"
                   :min="0"
                   :max="59"
+                  color="#4A8072"
+                  hide-details
                 ></v-text-field>
               </v-col>
-              <v-col> 분 </v-col>
-              <v-col>
+              <v-col class="ma-0 pa-0" style="align-self: center">
+                <h2>분</h2>
+              </v-col>
+              <v-col class="ma-0 pa-0" style="align-self: center">
                 <v-btn
-                  color="blue darken-1"
+                  color="#4A8072"
                   @click="submit"
                   :disabled="!timeFlag"
+                  style="color: white"
                 >
                   등록
                 </v-btn>
@@ -50,6 +65,9 @@ export default {
     dialog: false,
     hours: 2,
     minutes: 0,
+    rules: {
+      required: (value) => value.length > 0,
+    },
   }),
   props: {
     fromBucket: Boolean,
@@ -101,4 +119,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.centered-input input {
+  text-align: center;
+}
+</style>
