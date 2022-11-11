@@ -61,14 +61,17 @@
         }"
         v-if="spotInfo"
         :position="spotInfo"
-        @click="clickLocation(spotInfo, 15)"
+        @click="clickLocation(spotInfo, 15), (isInfo = !isInfo)"
         id="bucket"
       >
-        <gmap-info-window>
+        <gmap-info-window
+          v-if="spotInfo"
+          :opened="isInfo"
+          @closeclick="isInfo = false"
+        >
           <h3>{{ spotInfo.place }}</h3>
           <h6>{{ spotInfo.address }}</h6>
         </gmap-info-window>
-        <div>안녕</div>
       </gmap-marker>
     </gmap-map>
   </div>
@@ -88,7 +91,7 @@ export default {
         url: imgpath,
         scaledSize: { width: 30, height: 30 },
       },
-      center: { lat: 37.5168415735, lng: 127.0341090296 },
+      center: {},
       zoom: 12,
       nowCenter: {},
       planList: [
@@ -101,6 +104,7 @@ export default {
         { label: "M", place: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
         { label: "T", place: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
       ],
+      isInfo: true,
     };
   },
   props: {
@@ -133,11 +137,10 @@ export default {
     spotInfo(newVal) {
       this.clickLocation(newVal, 15);
     },
-    bucketList(newVal) {
-      if (!newVal.length) return;
-      this.clickLocation(newVal[newVal.length - 1], 15);
-      console.log(newVal);
-    },
+    // bucketList(newVal) {
+    //   if (!newVal.length) return;
+    //   this.clickLocation(newVal[newVal.length - 1], 15);
+    // },
     tripArea(newVal) {
       this.center = newVal[0];
     },

@@ -21,6 +21,7 @@
       @addBucket="addBucket"
       @addTimetable="addTimetable"
       :fromBucket="false"
+      :memberOrAdmin="memberOrAdmin"
     ></search-place-card>
     <v-container>
       <infinite-loading v-if="nextPageToken" @infinite="getNextResults">
@@ -53,6 +54,7 @@ export default {
   props: {
     mapLat: Number,
     mapLng: Number,
+    memberOrAdmin: Number,
   },
   methods: {
     ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
