@@ -11,7 +11,6 @@
               <v-col class="ma-0 pa-0" cols="3">
                 <v-text-field
                   class="centered-input"
-                  :rules="[rules.required]"
                   type="number"
                   required
                   v-model="hours"
@@ -28,7 +27,6 @@
               <v-col class="ma-0 pa-0" cols="3">
                 <v-text-field
                   class="centered-input"
-                  :rules="[rules.required]"
                   outlined
                   type="number"
                   required
@@ -65,9 +63,6 @@ export default {
     dialog: false,
     hours: 2,
     minutes: 0,
-    rules: {
-      required: (value) => value.length > 0,
-    },
   }),
   props: {
     fromBucket: Boolean,
