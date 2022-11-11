@@ -15,7 +15,6 @@ export default {
   },
   methods: {
     saveToken(token, refreshToken) {
-      // var expire = new Date(new Date().getTime() + 30 * 60 * 1000);
       this.$cookies.set("token", token, 60 * 30);
       this.$cookies.set("refresh", refreshToken, 60 * 60 * 24 * 30);
       this.$router.push("/");

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container class="px-1">
     <bucket-card
       v-for="bucket in bucketList"
       :key="bucket.place"
@@ -8,7 +8,7 @@
       @delBucket="delBucket"
       @addTimetable="addTimetable"
     ></bucket-card>
-  </div>
+  </v-container>
 </template>
 
 <script>

@@ -6,7 +6,6 @@ import MypageView from "../views/MypageView.vue";
 import PlanView from "../views/PlansView.vue";
 import Recommend from "@/components/recommend/RecommendPlace.vue";
 import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
-import NotLoginRedirect from "@/components/KakaoLogin/NotLoginRedirect.vue";
 import CompleteView from "../views/CompleteView.vue";
 import Chat from "@/components/chat/WebSocketTest.vue";
 import CommunityView from "../views/CommunityView.vue";
@@ -49,11 +48,6 @@ const routes = [
     path: "/login/getkakaotoken",
     name: "getKakaoToken",
     component: getKakaoToken,
-  },
-  {
-    path: "/login/redirect",
-    name: "NotLoginRedirect",
-    component: NotLoginRedirect,
   },
   // {
   //   path: "/about",

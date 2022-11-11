@@ -62,6 +62,7 @@ public class LoginController {
         long userIdFromToken = tokenProvider.getUserId(token);
         long kakaoId = userService.findKakaoIdByUserId(userIdFromToken);
         try {
+            userService.changeAdminForSignOut(userIdFromToken);
             kakaoUtil.kakaoSignOut(kakaoId);
             userService.deleteUser(userIdFromToken);
         }catch(Exception e){
@@ -71,7 +72,7 @@ public class LoginController {
     }
 
     @PatchMapping
-    public ResponseEntity refresh(@RequestBody Map<String, Object> data) {
+    public ResponseEntity refresh(@RequestBody Map<String, Object> data, HttpServletResponse response) throws IOException {
         Map<String, String> resultMap = new HashMap<>();
         String refreshToken = (String) data.get("refreshToken");
         String newAccessToken = userService.makeNewAccessToken(refreshToken);
@@ -79,7 +80,9 @@ public class LoginController {
             resultMap.put("newToken", newAccessToken);
             return new ResponseEntity(resultMap,HttpStatus.OK);
         }else{
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+            return null;
         }
     }
 
