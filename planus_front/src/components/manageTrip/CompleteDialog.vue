@@ -14,11 +14,17 @@ export default {
   },
   props: {
     tripId: Number,
+    planIdList: Array,
   },
   methods: {
     saveTrip() {
       api.saveBucketList(this.tripId);
-      // 전체 일정 저장 api 연결
+      // 전체 일정 저장 api 연결 - complete = true; (redis에서 삭제)
+      let savePlanIdList = [];
+      this.planIdList.forEach((plan) => {
+        savePlanIdList.push(plan.planId);
+      });
+      api.savePlan(savePlanIdList, true);
     },
   },
 };

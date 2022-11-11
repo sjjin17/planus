@@ -38,12 +38,16 @@ public class Timetable {
     @Column(name="move_time")
     private int moveTime;
 
+    @Column(name="move_route")
+    private String moveRoute;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="plan_id")
     private Plan plan;
 
     @Builder
-    public Timetable(long timetableId, int orders, String place, double lat, double lng, int costTime, Transit transit, int moveTime, Plan plan) {
+
+    public Timetable(long timetableId, int orders, String place, double lat, double lng, int costTime, Transit transit, int moveTime, String moveRoute, Plan plan) {
         this.timetableId = timetableId;
         this.orders = orders;
         this.place = place;
@@ -52,7 +56,7 @@ public class Timetable {
         this.costTime = costTime;
         this.transit = transit;
         this.moveTime = moveTime;
+        this.moveRoute = moveRoute;
         this.plan = plan;
     }
-
 }
