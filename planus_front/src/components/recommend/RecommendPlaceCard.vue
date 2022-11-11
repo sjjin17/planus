@@ -3,7 +3,7 @@
     <v-card>
       <v-container>
         <v-row class="row-9" align="center">
-          <v-col cols="7" align="left">
+          <v-col cols="7" align="left" class="pb-0">
             <v-row style="margin: -6px" id="hovering">
               <div class="dark--text textCutting">
                 {{ recommendPlace.place }}
@@ -28,7 +28,7 @@
             </v-row>
           </v-col>
           <v-col cols="5" class="pa-1">
-            <v-img :src="recommendPlace.imgUrl" style="max-height: 100px">
+            <v-img :src="recommendPlace.imgUrl" style="max-height: 90px">
             </v-img>
           </v-col>
         </v-row>
