@@ -377,6 +377,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
+    @Transactional
     public void delTimetable(long planId, WebSocketTimetableList timetableList) {
         String key = "timetableList::" + planId;
         //redis에서 timetableList::planId를 찾고, 전부 삭제한 후 새 timetableList 넣기
@@ -399,5 +400,11 @@ public class PlanServiceImpl implements PlanService {
 
             redisUtil.addListData(key, timetableStr);
         }
+
+        if(!redisUtil.isExists(key)){
+            System.out.println(key+"에서 타임테이블을 다 삭제해버려서 얘도 없어짐");
+            // 타임테이블을 모두 삭제하면 redis에서 timetableList도 삭제되어 이후 saveTimetable할 때 정상적으로 반영이 안 되므로 여기서 mysql 저장
+            timetableRepository.deleteByPlanPlanId(planId);
+        };
     }
 }
