@@ -73,7 +73,6 @@ export default {
   watch: {
     currentPage(newVal) {
       this.getMadeTripList(newVal);
-      console.log(newVal);
     },
   },
   methods: {
@@ -86,7 +85,6 @@ export default {
       this.$router.push("/plans/" + tripUrl);
     },
     async deleteTrip(tripId) {
-      console.log(tripId);
       await api.deleteTrip(tripId);
       await this.getMadeTripList(this.currentPage);
       if (this.currentPage > this.totalPage) this.currentPage--;
