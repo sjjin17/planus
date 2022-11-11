@@ -1,10 +1,7 @@
 package com.planus.article.service;
 
-import com.planus.article.dto.ArticleListResDTO;
-import com.planus.article.dto.ArticleReqDTO;
-import com.planus.article.dto.ArticleResDTO;
+import com.planus.article.dto.*;
 import org.springframework.data.domain.Pageable;
-import com.planus.article.dto.SearchResDTO;
 import com.planus.db.entity.Article;
 import org.springframework.data.domain.Pageable;
 
@@ -25,6 +22,11 @@ public interface ArticleService {
     // article상세 조회 끝나고 returnType 변경
     long updateArticle(String token, ArticleReqDTO articleReqDTO, long articleId);
 
+    ArticleDetailResDTO findOneArticle(Long articleId);
+
     SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable);
-    SearchResDTO getArticleListByArea(String token, int[] area, Pageable pageable);
+    List<SearchDTO> getArticleListByArea(String token, int[] area, Pageable pageable);
+    int countPage(int[] area);
+
+    long likeArticle(String token, long articleId);
 }

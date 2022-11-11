@@ -5,14 +5,18 @@
         <v-select
           v-model="select"
           :items="items"
-          item-text="state"
+          item-text="kind"
           item-value="val"
           return-object
           single-line
         ></v-select>
       </v-col>
       <v-col cols="5">
-        <v-text-field v-if="select.val == 1"></v-text-field>
+        <v-text-field
+          v-model="keword"
+          placeholder="검색어를 입력하세요"
+          v-if="select.val == 1"
+        ></v-text-field>
         <v-menu
           v-else
           ref="areaMenu"
@@ -26,7 +30,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-combobox
               v-model="areas"
-              label="여행지 선택"
+              label="여행지를 선택하세요"
               allow-overflow
               multiple
               chips
@@ -146,7 +150,7 @@
         </v-menu>
       </v-col>
       <v-col cols="1">
-        <v-btn @click="goSearch()">검색</v-btn>
+        <v-btn @click="goSearch(select.val)">검색</v-btn>
       </v-col>
     </v-row>
   </div>
@@ -159,11 +163,12 @@ const api = API;
 export default {
   data() {
     return {
-      select: { state: "제목", val: 1 },
+      select: { kind: "제목", val: 1 },
       items: [
-        { state: "제목", val: 1 },
-        { state: "지역", val: 2 },
+        { kind: "제목", val: 1 },
+        { kind: "지역", val: 2 },
       ],
+      keword: "",
       areaId: [],
       areaGroup1: [],
       areaGroup2: [],
@@ -205,8 +210,12 @@ export default {
         this.areas = [];
       }
     },
-    goSearch() {
-      this.$emit("goSearch", this.select.val);
+    goSearch(val) {
+      if (val == 1) {
+        this.$emit("goSearch", val, this.keword);
+      } else {
+        this.$emit("goSearch", val, this.areaId);
+      }
     },
   },
 };

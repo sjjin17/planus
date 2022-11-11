@@ -2,6 +2,7 @@ package com.planus.plan.controller;
 
 import com.planus.plan.dto.PlanIdResDTO;
 import com.planus.plan.dto.PlanResDTO;
+import com.planus.plan.dto.PlanSaveReqDTO;
 import com.planus.plan.service.PlanService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.Response;
@@ -48,8 +49,6 @@ public class PlanController {
             List<PlanResDTO> planResDTOList = planService.readPlanList(planIdList);
             resultMap.put("planList", planResDTOList);
             resultMap.put("message", "success");
-
-            System.out.println("getPlanList출력문");
             
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
@@ -60,13 +59,14 @@ public class PlanController {
     }
 
     //redis에 먼저 출발시간 변경사항을 저장한 후, 이 api를 호출해야 함
+    //아마도 사용 안함 추후 삭제
     @GetMapping("/start/{planId}")
     @ApiOperation(value = "Plan 출발시간만 저장")
     public ResponseEntity savePlanStart(@PathVariable long planId) {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            planService.savePlan(planId);
+//            planService.savePlan(planId);
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {
@@ -79,27 +79,16 @@ public class PlanController {
 
     @PostMapping
     @ApiOperation(value = "Plan 및 Timetable 저장")
-    public ResponseEntity savePlan(@RequestBody List<Long> planIdList) {
-        System.out.println("savePlan 들어옴1");
-
-        // 더미데이터 만드는 구간
-//        for (long planId:planIdList) {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("trip_date", "");
-//            map.put("start_time", "480");
-//            //JSON으로 String화한 문자열을 저장해야 함
-//            map.put("timetables", "");
-//        }
-
-        // 더미데이터 만드는 구간 끝
-
+    public ResponseEntity savePlan(@RequestBody PlanSaveReqDTO planSaveReqDTO) {
+        List<Long> planIdList = planSaveReqDTO.getPlanIdList();
+        boolean complete = planSaveReqDTO.isComplete();
 
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
             for (long planId:planIdList) {
-                planService.savePlan(planId);
-                planService.saveTimetable(planId);
+                planService.savePlan(planId, complete);
+                planService.saveTimetable(planId, complete);
             }
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
