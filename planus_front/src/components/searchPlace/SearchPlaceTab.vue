@@ -20,7 +20,6 @@
       :searchedPlace="searchedPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
-      @addMarker="addMarker"
       :fromBucket="false"
     ></search-place-card>
     <v-container>
@@ -36,6 +35,8 @@
 import InfiniteLoading from "vue-infinite-loading";
 import axios from "axios";
 import SearchPlaceCard from "@/components/searchPlace/searchPlaceCard.vue";
+import { mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   components: {
@@ -54,12 +55,14 @@ export default {
     mapLng: Number,
   },
   methods: {
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     async searchPlace() {
+      this.keyword = this.keyword.trim();
+      if (this.keyword.length == 0) return;
+
       this.nextPageToken = null;
       this.searchedResults = [];
-      this.keyword = this.keyword.trim();
-
-      if (this.keyword.length == 0) return;
+      this.SET_SPOT_INFO(null);
 
       axios
         .post(
@@ -152,9 +155,6 @@ export default {
     },
     addTimetable(costTime, place, lat, lng, fromBucket) {
       this.$emit("addTimetable", costTime, place, lat, lng, fromBucket);
-    },
-    addMarker(place, address, lat, lng) {
-      this.$emit("addMarker", place, address, lat, lng);
     },
   },
 };

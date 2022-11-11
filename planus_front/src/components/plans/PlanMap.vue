@@ -56,7 +56,7 @@
       </gmap-polyline>
       <gmap-marker
         :icon="{
-          url: require('@/assets/logo.png'),
+          url: require('@/assets/InfoMarker.png'),
           scaledSize: { width: 40, height: 40 },
         }"
         v-if="spotInfo"
@@ -64,16 +64,20 @@
         @click="clickLocation(spotInfo, 15)"
         id="bucket"
       >
-        <gmap-info-window :opened="spotInfo != null">
-          {{ spotInfo.place }}
-        </gmap-info-window></gmap-marker
-      >
+        <gmap-info-window :opened="spotInfo">
+          <h3>{{ spotInfo.place }}</h3>
+          <h6>{{ spotInfo.address }}</h6>
+        </gmap-info-window>
+        <div>안녕</div>
+      </gmap-marker>
     </gmap-map>
   </div>
 </template>
 
 <script>
 import imgpath from "@/assets/logo.png";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   name: "PlanMap",
@@ -103,12 +107,14 @@ export default {
         { label: "M", name: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
         { label: "T", name: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
       ],
-      spot: { place: "여기여기", lat: 37.51256, lng: 127.10254 },
     };
   },
   props: {
     tripArea: Array,
-    spotInfo: Object,
+  },
+  computed: {
+    ...mapState(mapStore, ["spotInfo"]),
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
   },
   methods: {
     clickLocation(loc, zoom) {

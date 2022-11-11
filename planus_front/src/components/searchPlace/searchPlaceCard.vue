@@ -42,6 +42,8 @@
 <script>
 import PlanModal from "@/components/searchPlace/PlanModal.vue";
 import Black from "@/assets/default_image.png";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   components: { PlanModal },
@@ -56,9 +58,12 @@ export default {
   props: {
     searchedPlace: Object,
   },
+  computed: {
+    ...mapState(mapStore, ["spotInfo"]),
+  },
   methods: {
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     bucketClick() {
-      this.$emit("removeMarker");
       this.$emit(
         "addBucket",
         this.searchedPlace.place,
@@ -66,6 +71,12 @@ export default {
         this.searchedPlace.lat,
         this.searchedPlace.lng
       );
+
+      if (
+        this.spotInfo.lat == this.searchedPlace.lat &&
+        this.spotInfo.lng == this.searchedPlace.lng
+      )
+        this.SET_SPOT_INFO(null);
     },
     planSubmit(costTime, fromBucket) {
       this.$emit(
@@ -76,15 +87,21 @@ export default {
         this.searchedPlace.lng,
         fromBucket
       );
+
+      if (
+        this.spotInfo.lat == this.searchedPlace.lat &&
+        this.spotInfo.lng == this.searchedPlace.lng
+      )
+        this.SET_SPOT_INFO(null);
     },
     addMarker() {
-      this.$emit(
-        "addMarker",
-        this.searchedPlace.place,
-        this.searchedPlace.address,
-        this.searchedPlace.lat,
-        this.searchedPlace.lng
-      );
+      this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO({
+        place: this.searchedPlace.place,
+        address: this.searchedPlace.address,
+        lat: this.searchedPlace.lat,
+        lng: this.searchedPlace.lng,
+      });
     },
   },
 };

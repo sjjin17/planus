@@ -58,7 +58,6 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
-              @addMarker="addMarker"
               id="leftTab"
             ></search-place-tab>
           </v-tab-item>
@@ -100,7 +99,6 @@
       <plan-map
         style="width: 60%; background-color: blue"
         :tripArea="tripArea"
-        :spotInfo="spotInfo"
         @getCenter="getCenter"
       />
       <v-container
@@ -185,7 +183,6 @@ export default {
       timeTableLength: 0,
 
       planId: 0,
-      spotInfo: null,
     };
   },
   async created() {
@@ -439,9 +436,6 @@ export default {
       // });
       // await api.savePlan(savePlanIdList);
       this.planId = planId;
-    },
-    addMarker(place, address, lat, lng) {
-      this.spotInfo = { place, address, lat, lng };
     },
   },
 };
