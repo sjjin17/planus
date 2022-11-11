@@ -28,7 +28,7 @@ public class Plan {
     @JoinColumn(name="trip_id")
     private Trip trip;
 
-    @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     List<Timetable> timetableList;
 
     @Builder

@@ -16,6 +16,7 @@
     <recommend-place-card
       v-for="recommendPlace in recommendList"
       :key="recommendPlace.recommendId"
+      :memberOrAdmin="memberOrAdmin"
       :recommendPlace="recommendPlace"
       @addBucket="addBucket"
       @addTimetable="addTimetable"
@@ -53,6 +54,7 @@ export default {
     mapLng: Number,
     size: Number,
     isRecommendClick: Boolean,
+    memberOrAdmin: Number,
   },
   mounted() {
     this.loadRecommend();

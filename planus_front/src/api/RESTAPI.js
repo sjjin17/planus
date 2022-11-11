@@ -13,8 +13,6 @@ const baseAxios = axios.create({
 
 function needRefresh() {
   var token = VueCookies.get("token");
-  // var lefttime = jwt_decode(token).exp - Date.now() / 1000;
-  // console.log(lefttime);
   if (token == null || jwt_decode(token).exp - Date.now() / 1000 < 180) {
     return true;
   }
@@ -33,7 +31,14 @@ baseAxios.interceptors.request.use(async (request) => {
           VueCookies.set("token", res.data.newToken, 60 * 30);
           request.headers.Authorization = "Bearer " + VueCookies.get("token");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          if (error.response.data.status == 403) {
+            VueCookies.remove("refresh");
+            window.location.href = "/";
+          } else {
+            console.log(error);
+          }
+        });
     }
   }
   return request;

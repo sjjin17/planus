@@ -25,7 +25,7 @@
         v-for="(m, index) in bucketList"
         :position="m"
         :label="{
-          text: m.name.substring(0, 2),
+          text: m.place.substring(0, 2),
           color: '#4A8072',
           fontWeight: 'bold',
         }"
@@ -34,10 +34,10 @@
       ></gmap-marker>
       <gmap-marker
         :key="index + 'p'"
-        v-for="(m, index) in planList"
+        v-for="(m, index) in timetableList"
         :position="m"
         :label="{
-          text: m.name.substring(0, 2),
+          text: m.place.substring(0, 2),
           color: '#FF1744',
           fontWeight: 'bold',
         }"
@@ -50,6 +50,7 @@
         id="plan"
       ></gmap-marker>
       <gmap-polyline
+        v-if="planList"
         :path.sync="planList"
         :options="{ strokeColor: '#FF1744', strokeWeight: 2 }"
       >
@@ -61,14 +62,17 @@
         }"
         v-if="spotInfo"
         :position="spotInfo"
-        @click="clickLocation(spotInfo, 15)"
+        @click="clickLocation(spotInfo, 15), (isInfo = !isInfo)"
         id="bucket"
       >
-        <gmap-info-window :opened="spotInfo">
+        <gmap-info-window
+          v-if="spotInfo"
+          :opened="isInfo"
+          @closeclick="isInfo = false"
+        >
           <h3>{{ spotInfo.place }}</h3>
           <h6>{{ spotInfo.address }}</h6>
         </gmap-info-window>
-        <div>안녕</div>
       </gmap-marker>
     </gmap-map>
   </div>
@@ -88,29 +92,17 @@ export default {
         url: imgpath,
         scaledSize: { width: 30, height: 30 },
       },
-      center: { lat: 37.5400456, lng: 126.9921017 },
+      center: {},
       zoom: 12,
       nowCenter: {},
-      bucketList: [
-        { label: "C", name: "코엑스몰", lat: 37.5115557, lng: 127.0595261 },
-        { label: "G", name: "고투몰", lat: 37.5062379, lng: 127.0050378 },
-        { label: "D", name: "동대문시장", lat: 37.566596, lng: 127.007702 },
-        { label: "I", name: "IFC몰", lat: 37.5251644, lng: 126.9255491 },
-      ],
-      planList: [
-        {
-          label: "L",
-          name: "롯데월드타워몰",
-          lat: 37.5125585,
-          lng: 127.1025353,
-        },
-        { label: "M", name: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
-        { label: "T", name: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
-      ],
+      planList: [],
+      isInfo: true,
     };
   },
   props: {
     tripArea: Array,
+    bucketList: Array,
+    timetableList: Array,
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),
@@ -118,9 +110,9 @@ export default {
   },
   methods: {
     clickLocation(loc, zoom) {
-      setTimeout(() => {
-        this.center = this.nowCenter;
-      }, 50);
+      // setTimeout(() => {
+      //   this.center = this.nowCenter;
+      // }, 50);
       setTimeout(() => {
         this.center = loc;
         this.zoom = zoom;
@@ -137,6 +129,16 @@ export default {
   watch: {
     spotInfo(newVal) {
       this.clickLocation(newVal, 15);
+    },
+    // bucketList(newVal) {
+    //   if (!newVal.length) return;
+    //   this.clickLocation(newVal[newVal.length - 1], 15);
+    // },
+    tripArea(newVal) {
+      this.center = newVal[0];
+    },
+    timetableList(newVal) {
+      this.planList = newVal;
     },
   },
 };

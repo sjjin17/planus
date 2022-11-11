@@ -19,4 +19,6 @@ public interface UserService {
     String makeNewAccessToken(String refreshToken);
 
     void logout(String token);
+
+    void changeAdminForSignOut(long userId);
 }
