@@ -1,6 +1,9 @@
 <template>
   <div style="position: relative; display: flex">
-    <v-btn v-if="!joinClick" @click="joinBtnClick">참여</v-btn>
+    <v-icon @click="goHome">mdi-home</v-icon>
+    <v-btn v-if="!joinClick" @click="joinBtnClick" class="pa-1"
+      >음성채팅참여</v-btn
+    >
     <v-btn v-if="joinClick" @click="micBtnHandler">
       <v-icon v-if="micOn">mdi-microphone</v-icon>
       <v-icon v-if="!micOn">mdi-microphone-off</v-icon>
@@ -54,6 +57,9 @@ export default {
     // this.joinSession();
   },
   methods: {
+    goHome() {
+      this.$router.push("/");
+    },
     joinBtnClick() {
       this.joinClick = true;
       this.joinSession();

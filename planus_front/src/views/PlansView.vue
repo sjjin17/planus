@@ -21,7 +21,11 @@
         :connector="connector"
         @getConnector="getConnector"
       ></invite-dialog>
-      <complete-dialog :tripId="tripId" class="mr-3"></complete-dialog>
+      <complete-dialog
+        :tripId="tripId"
+        :planIdList="planIdList"
+        class="mr-3"
+      ></complete-dialog>
     </v-container>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
@@ -32,22 +36,16 @@
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
-      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
     </div>
-    <v-container d-flex style="margin: 0; max-width: 100%">
+    <v-container d-flex class="ma-0 pt-0" style="max-width: 100%">
       <v-container
-        style="
-          width: 20%;
-          margin: 0;
-          min-width: 300px;
-          height: 85vh;
-          position: relative;
-        "
+        class="ma-0 pt-0"
+        style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
@@ -81,6 +79,7 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              @recommendClick="recommendClick"
               id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
@@ -104,15 +103,24 @@
       <v-container
         style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
       >
-        <v-tabs-items v-model="planTabs">
+        <v-tabs-items
+          v-model="planTabs"
+          style="overflow-y: scroll; max-height: 80vh"
+        >
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
             <plan-list
               :plan="plan"
               :tripId="tripId"
               :WebSocketStartTime="startTime"
+              :deletedTimetableList="deletedTimetableList"
+              :setOrdersTimetableList="setOrdersTimetableList"
+              :addedTimetable="addedTimetable"
+              :changedTimetable="changedTimetable"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
+              @delTimetable="delTimetable"
+              @setTimetableOrders="setTimetableOrders"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -131,7 +139,6 @@ import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
-import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 import VoiceChat from "@/components/chat/VoiceChat.vue";
 import SearchPlaceTab from "@/components/searchPlace/SearchPlaceTab.vue";
@@ -147,7 +154,6 @@ export default {
     BucketList,
     ChatTab,
     PlanList,
-    PlanSaveButton,
     CompleteDialog,
     VoiceChat,
     SearchPlaceTab,
@@ -175,6 +181,12 @@ export default {
       addedBucket: {},
       // plan
       addedTimetable: {},
+      //삭제된 것을 제외한 timetableList
+      deletedTimetableList: {},
+      //순서 변경 완료된 timetableList
+      setOrdersTimetableList: {},
+      //변경된 timetable
+      changedTimetable: {},
 
       planIdList: [],
       planTabs: null,
@@ -197,7 +209,9 @@ export default {
         return;
       }
       console.log("oldVal:" + oldVal);
-      api.savePlan([oldVal]);
+      //탭 변경이므로 false
+      let complete = false;
+      api.savePlan([oldVal], complete);
       newVal;
     },
   },
@@ -302,11 +316,42 @@ export default {
             orders: content.orders,
             fromBucket: content.fromBucket,
             address: content.address,
+            planId: content.planId,
+            transit: content.transit,
+            moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
           };
           break;
         case 6:
           console.log(content);
           // TODO: 일정(timetable)삭제
+          this.deletedTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
+          break;
+        case 7:
+          console.log(content);
+          // TODO: 일정(timetable) 순서 변경
+          this.setOrdersTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
+          break;
+        case 8:
+          console.log(content);
+          // TODO: 일정(timetable) 수정
+          this.changedTimetable = {
+            costTime: content.costTime,
+            place: content.place,
+            lat: content.lat,
+            lng: content.lng,
+            orders: content.orders,
+            transit: content.transit,
+            moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
+            planId: content.planId,
+          };
           break;
       }
     },
@@ -402,7 +447,6 @@ export default {
             newPlan.tripDate,
             newPlan.startTime
           );
-          console.log("새Plan" + newPlan.planId);
         }
       }
     },
@@ -419,6 +463,7 @@ export default {
             newTimetable.costTime,
             newTimetable.moveTime,
             newTimetable.transit,
+            newTimetable.moveRoute,
             false
           );
         }
@@ -428,14 +473,23 @@ export default {
       this.timeTableLength = length;
     },
     async saveTimetableList(planId) {
-      console.log("----");
-      console.log(planId);
-      // let savePlanIdList = [];
-      // this.planIdList.forEach((p) => {
-      //   savePlanIdList.push(p.planId);
-      // });
-      // await api.savePlan(savePlanIdList);
+      //planId에 변경사항이 생겼으므로 watch로
+      //같은 탭을 누를 경우 planId가 동일하므로 변경사항이 생기지 않음
       this.planId = planId;
+    },
+    delTimetable(planId, delTimetableList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delTimetable(this.tripId, planId, delTimetableList);
+        }
+      }
+    },
+    setTimetableOrders(planId, setTimetableOrdersList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setTimetableOrders(this.tripId, planId, setTimetableOrdersList);
+        }
+      }
     },
   },
 };
