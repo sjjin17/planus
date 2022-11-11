@@ -36,22 +36,16 @@
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
-      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
     </div>
-    <v-container d-flex style="margin: 0; max-width: 100%">
+    <v-container d-flex class="ma-0 pt-0" style="max-width: 100%">
       <v-container
-        style="
-          width: 20%;
-          margin: 0;
-          min-width: 300px;
-          height: 85vh;
-          position: relative;
-        "
+        class="ma-0 pt-0"
+        style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
@@ -77,6 +71,7 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              @recommendClick="recommendClick"
               id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
@@ -136,7 +131,6 @@ import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
-import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 import VoiceChat from "@/components/chat/VoiceChat.vue";
 
@@ -151,7 +145,6 @@ export default {
     BucketList,
     ChatTab,
     PlanList,
-    PlanSaveButton,
     CompleteDialog,
     VoiceChat,
   },

@@ -1,5 +1,18 @@
 <template>
   <div>
+    <v-btn
+      icon
+      @click="recommendClick"
+      style="
+        position: absolute;
+        right: 15px;
+        top: 5px;
+        z-index: 1;
+        background-color: #b8dbc6;
+      "
+    >
+      <v-icon>mdi-cached</v-icon>
+    </v-btn>
     <recommend-place-card
       v-for="recommendPlace in recommendList"
       :key="recommendPlace.recommendId"
@@ -93,6 +106,9 @@ export default {
     },
     addTimetable(costTime, place, lat, lng, fromBucket) {
       this.$emit("addTimetable", costTime, place, lat, lng, fromBucket);
+    },
+    recommendClick() {
+      this.$emit("recommendClick");
     },
   },
 };
