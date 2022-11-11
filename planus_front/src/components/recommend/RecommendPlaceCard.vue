@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card @click="addMarker">
       <v-container>
         <v-row class="row-9" align="center">
           <v-col cols="7" align="left" class="pb-0">
@@ -32,11 +32,22 @@
             </v-img>
           </v-col>
         </v-row>
-        <v-row class="row-3">
-          <v-col>
-            <v-btn @click="bucketClick">버킷</v-btn>
+        <v-row class="row-3 pt-0" justify="center">
+          <plan-modal
+            @planSubmit="planSubmit"
+            :fromBucket="false"
+            class="ma-0 col-5 pa-2"
+          ></plan-modal>
+          <v-spacer></v-spacer>
+          <v-col class="col-6 pa-2">
+            <v-btn
+              @click="bucketClick"
+              small
+              color="#4A8072"
+              class="white--text ma-0 pa-1"
+              >버킷리스트 추가</v-btn
+            >
           </v-col>
-          <plan-modal @planSubmit="planSubmit" :fromBucket="false"></plan-modal>
         </v-row>
       </v-container>
     </v-card>
@@ -45,17 +56,19 @@
 
 <script>
 import PlanModal from "@/components/recommend/PlanModal.vue";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   components: { PlanModal },
   data: () => {
     return {};
   },
-  comments: {
-    PlanModal,
-  },
   props: {
     recommendPlace: Object,
+  },
+  computed: {
+    ...mapState(mapStore, ["spotInfo"]),
   },
   methods: {
     bucketClick() {
@@ -76,6 +89,16 @@ export default {
         this.recommendPlace.lng,
         fromBucket
       );
+    },
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
+    addMarker() {
+      this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO({
+        place: this.recommendPlace.place,
+        address: this.recommendPlace.address,
+        lat: this.recommendPlace.lat,
+        lng: this.recommendPlace.lng,
+      });
     },
   },
 };

@@ -2,7 +2,15 @@
   <v-col>
     <v-dialog v-model="dialog" max-width="300px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn style="margin: 0" v-bind="attrs" v-on="on"> 일정에 추가 </v-btn>
+        <v-btn
+          small
+          color="#FF1744"
+          class="white--text ma-0"
+          v-bind="attrs"
+          v-on="on"
+        >
+          일정에 추가
+        </v-btn>
       </template>
       <v-card>
         <v-card-text class="pa-3">
