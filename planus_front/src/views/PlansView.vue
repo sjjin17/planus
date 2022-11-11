@@ -78,6 +78,7 @@
               :mapLng="lng"
               :size="size"
               :isRecommendClick="isRecommendClick"
+              :memberOrAdmin="memberOrAdmin"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
               @recommendClick="recommendClick"
