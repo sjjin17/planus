@@ -23,6 +23,7 @@ public class ArticleResDTO {
 
     }
 
+
     public static ArticleResDTO toDTO(Page<Article> articleList) {
         return ArticleResDTO.builder()
                 .currentPage(articleList.getNumber())

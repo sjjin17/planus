@@ -222,6 +222,11 @@ const API = {
     const response = await this.instance.get("/login/dummy");
     return response;
   },
+
+  async googleApi(url) {
+    const response = await this.instance.post("/google", url);
+    return response.data;
+  },
 };
 
 export default API;

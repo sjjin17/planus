@@ -36,26 +36,28 @@
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
-      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
     </div>
-    <v-container d-flex style="margin: 0; max-width: 100%">
+    <v-container d-flex class="ma-0 pt-0" style="max-width: 100%">
       <v-container
-        style="
-          width: 20%;
-          margin: 0;
-          min-width: 300px;
-          height: 85vh;
-          position: relative;
-        "
+        class="ma-0 pt-0"
+        style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
-            <div id="leftTab">장소검색 컴포넌트</div>
+            <search-place-tab
+              :mapLat="lat"
+              :mapLng="lng"
+              :size="size"
+              :isRecommendClick="isRecommendClick"
+              @addBucket="addBucket"
+              @addTimetable="addTimetable"
+              id="leftTab"
+            ></search-place-tab>
           </v-tab-item>
           <v-tab-item>
             <bucket-list
@@ -77,6 +79,7 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              @recommendClick="recommendClick"
               id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
@@ -98,14 +101,13 @@
         @getCenter="getCenter"
       />
       <v-container
-        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+        class="ma-0"
+        style="width: 20%; min-width: 300px; height: 85vh"
       >
-        <v-tabs-items
-          v-model="planTabs"
-          style="overflow-y: scroll; max-height: 80vh"
-        >
+        <v-tabs-items v-model="planTabs">
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
             <plan-list
+              class="rightTab"
               :plan="plan"
               :tripId="tripId"
               :WebSocketStartTime="startTime"
@@ -136,9 +138,9 @@ import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
-import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 import VoiceChat from "@/components/chat/VoiceChat.vue";
+import SearchPlaceTab from "@/components/searchPlace/SearchPlaceTab.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -151,9 +153,9 @@ export default {
     BucketList,
     ChatTab,
     PlanList,
-    PlanSaveButton,
     CompleteDialog,
     VoiceChat,
+    SearchPlaceTab,
   },
   data() {
     return {
@@ -508,6 +510,21 @@ export default {
   width: 10px;
 }
 #leftTab::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-color: #00000000;
+}
+.rightTab {
+  overflow-y: scroll;
+  height: 85vh;
+}
+.rightTab::-webkit-scrollbar {
+  color: "#00000000";
+  width: 10px;
+}
+.rightTab::-webkit-scrollbar-thumb {
   background-color: #544c4c;
   border-radius: 10px;
   background-clip: padding-box;

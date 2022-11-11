@@ -1,51 +1,46 @@
 <template>
-  <v-col>
-    <v-dialog v-model="dialog" max-width="300px">
+  <div>
+    <v-dialog v-model="dialog" max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn style="margin: 0" v-bind="attrs" v-on="on"> 일정에 추가 </v-btn>
+        <v-btn
+          small
+          color="#FF1744"
+          class="white--text ma-0"
+          v-bind="attrs"
+          v-on="on"
+        >
+          일정에 추가
+        </v-btn>
       </template>
       <v-card>
-        <v-card-text class="pa-3">
+        <v-card-text>
           <v-container>
-            <v-row class="pa-0">
-              <v-col class="ma-0 pa-0" cols="3">
+            <v-row>
+              <v-col>
                 <v-text-field
-                  class="centered-input"
                   type="number"
                   required
                   v-model="hours"
                   :min="0"
                   :max="11"
-                  outlined
-                  hide-details
-                  color="#4A8072"
                 ></v-text-field>
               </v-col>
-              <v-col class="ma-0 pa-0" cols="2" style="align-self: center">
-                <h2>시간</h2>
-              </v-col>
-              <v-col class="ma-0 pa-0" cols="3">
+              <v-col> 시간 </v-col>
+              <v-col>
                 <v-text-field
-                  class="centered-input"
-                  outlined
                   type="number"
                   required
                   v-model="minutes"
                   :min="0"
                   :max="59"
-                  color="#4A8072"
-                  hide-details
                 ></v-text-field>
               </v-col>
-              <v-col class="ma-0 pa-0" style="align-self: center">
-                <h2>분</h2>
-              </v-col>
-              <v-col class="ma-0 pa-0" style="align-self: center">
+              <v-col> 분 </v-col>
+              <v-col>
                 <v-btn
-                  color="#4A8072"
+                  color="blue darken-1"
                   @click="submit"
                   :disabled="!timeFlag"
-                  style="color: white"
                 >
                   등록
                 </v-btn>
@@ -55,7 +50,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </v-col>
+  </div>
 </template>
 <script>
 export default {
@@ -114,8 +109,4 @@ export default {
 };
 </script>
 
-<style>
-.centered-input input {
-  text-align: center;
-}
-</style>
+<style scoped></style>

@@ -52,11 +52,11 @@ public class ArticleController {
 
     }
 
-//    @GetMapping("/{article_id}")
-//    public ResponseEntity getArticle(@PathVariable long articleId) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(articleService.findOneArticle(articleId));
-//    }
+    @GetMapping("/{articleId}")
+    public ResponseEntity getArticle(@PathVariable long articleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(articleService.findOneArticle(articleId));
+    }
 
 
     @GetMapping("/title")
@@ -98,4 +98,6 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.likeArticle(token, articleId));
     }
+
+
 }
