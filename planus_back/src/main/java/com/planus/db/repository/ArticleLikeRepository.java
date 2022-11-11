@@ -1,6 +1,8 @@
 package com.planus.db.repository;
 
 import com.planus.db.entity.ArticleLike;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,6 +13,9 @@ public interface ArticleLikeRepository extends JpaRepository<ArticleLike, Long> 
     void deleteByArticleArticleIdAndUserUserId(long articleId, long userId);
     int countByArticleArticleId(long articleId);
 
+    int countByUserUserId(long userId);
+
+    List<ArticleLike> findByUserUserId(long userId);
 
 
 }

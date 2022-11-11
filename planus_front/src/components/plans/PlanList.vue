@@ -2,11 +2,22 @@
   <div>
     <div>
       <form>
-        <v-text-field outlined v-model="startHour" type="number"></v-text-field>
+        <v-text-field
+          outlined
+          v-model="startHour"
+          type="number"
+          :disabled="!startBtnClick"
+        ></v-text-field>
         시
-        <v-text-field outlined v-model="startMin" type="number"></v-text-field>
+        <v-text-field
+          :disabled="!startBtnClick"
+          outlined
+          v-model="startMin"
+          type="number"
+        ></v-text-field>
         분
-        <v-icon @click="changeStartTime(plan, startHour, startMin)"
+        <v-icon v-if="!startBtnClick" @click="startBtn">mdi-pencil</v-icon>
+        <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
           >mdi-pencil</v-icon
         >
       </form>
@@ -67,6 +78,7 @@ export default {
       //드래그용
       enabled: true,
       dragging: false,
+      startBtnClick: false,
     };
   },
   props: {
@@ -177,6 +189,9 @@ export default {
         }
       }
     },
+    startBtn() {
+      this.startBtnClick = !this.startBtnClick;
+    },
     changeStartTime(plan, startHour, startMin) {
       this.startTime = parseInt(startHour) * 60 + parseInt(startMin);
       let newPlan = {
@@ -186,6 +201,7 @@ export default {
       };
       //emit으로 newPlan을 PlansView로 보내기
       this.$emit("setPlan", newPlan);
+      this.startBtnClick = !this.startBtnClick;
     },
     setTimetable(newTimetable) {
       //emit으로 올라온 newTimetable의 costTime 값으로 timetable 값을 수정

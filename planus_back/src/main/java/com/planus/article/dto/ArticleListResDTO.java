@@ -21,28 +21,31 @@ public class ArticleListResDTO {
     private String regDate;
     private long hits;
 
+    private long likeCount;
     private UserResDTO user;
     private MyTripResDTO trip;
 
 
 
     @Builder
-    public ArticleListResDTO(long articleId, String title, String regDate, long hits, UserResDTO user, MyTripResDTO trip) {
+    public ArticleListResDTO(long articleId, String title, String regDate, long hits, long likeCount, UserResDTO user, MyTripResDTO trip) {
         this.articleId = articleId;
         this.title = title;
         this.regDate = regDate;
         this.hits = hits;
+        this.likeCount = likeCount;
         this.user = user;
         this.trip = trip;
     }
 
-    // entity -> ResDTO
+    // article -> articleListResDTO
     public static ArticleListResDTO toResDTO(Article article) {
         return ArticleListResDTO.builder()
                 .articleId(article.getArticleId())
                 .title(article.getTitle())
                 .regDate(article.getRegDate().toString())
                 .hits(article.getHits())
+                .likeCount(article.getArticleLikeList().size())
                 .user(UserResDTO.toResDto(article.getUser()))
                 .trip(MyTripResDTO.toResDTO(article.getTrip()))
                 .build();
