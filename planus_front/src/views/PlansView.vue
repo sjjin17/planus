@@ -101,14 +101,13 @@
         @getCenter="getCenter"
       />
       <v-container
-        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+        class="ma-0"
+        style="width: 20%; min-width: 300px; height: 85vh"
       >
-        <v-tabs-items
-          v-model="planTabs"
-          style="overflow-y: scroll; max-height: 80vh"
-        >
+        <v-tabs-items v-model="planTabs">
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
             <plan-list
+              class="rightTab"
               :plan="plan"
               :tripId="tripId"
               :WebSocketStartTime="startTime"
@@ -511,6 +510,21 @@ export default {
   width: 10px;
 }
 #leftTab::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-color: #00000000;
+}
+.rightTab {
+  overflow-y: scroll;
+  height: 85vh;
+}
+.rightTab::-webkit-scrollbar {
+  color: "#00000000";
+  width: 10px;
+}
+.rightTab::-webkit-scrollbar-thumb {
   background-color: #544c4c;
   border-radius: 10px;
   background-clip: padding-box;
