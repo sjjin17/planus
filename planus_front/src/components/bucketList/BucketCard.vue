@@ -1,11 +1,13 @@
 <template>
   <div>
-    <v-card outlined color="#b8dbc6" class="my-4 ps-2">
+    <v-card outlined color="#b8dbc6" class="my-4">
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
-      <p class="text-h5 font-weight-bold box mt-5" style="color: #544c4c">
-        {{ bucket.place }}
-      </p>
-      <p>{{ bucket.address }}</p>
+      <v-card-title
+        class="text-h5 font-weight-bold box"
+        style="color: #544c4c"
+        >{{ bucket.place }}</v-card-title
+      >
+      <v-card-text>{{ bucket.address }}</v-card-text>
       <plan-modal
         class="d-flex justify-end"
         v-show="memberOrAdmin == 2"
@@ -60,6 +62,7 @@ export default {
   float: right;
 }
 .box {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
