@@ -26,18 +26,9 @@ public class UserServiceImpl implements UserService{
 
     private final MemberRepository memberRepository;
 
-    private final TripAreaRepository tripAreaRepository;
-
-    private final BucketRepository bucketRepository;
-
-    private final TimetableRepository timetableRepository;
-
-    private final PlanRepository planRepository;
-
     @Override
     public User join(String nickname, String email, Long kakaoId, String imageUrl) {
         User user = userRepository.findOneByKakaoId(kakaoId);
-
         if(user==null){
             user = User.builder()
                     .name(nickname)
@@ -104,7 +95,6 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void logout(String token) {
-        System.out.println("서비스단 호출");
         long userId = tokenProvider.getUserId(token);
         User user = userRepository.findByUserId(userId);
         user.setRefreshToken(null);
@@ -112,15 +102,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    //TODO: 로직 다시 정리
     public void changeAdminForSignOut(long userId) {
         User user = userRepository.findByUserId(userId);
         List<Member> memberList = user.getMemberList();
-        List<Trip> tripList = new ArrayList<>();
         for (Member member : memberList) {
-            tripList.add(member.getTrip());
-        }
-        for (Trip trip : tripList) {
+            Trip trip = member.getTrip();
             long tripId = trip.getTripId();
             if(trip.isComplete()) {
                 memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
@@ -135,19 +121,16 @@ public class UserServiceImpl implements UserService{
             }
             //(완료) 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
             if(memberRepository.countByTripTripId(tripId) > 1) {
+                System.out.println("==================================");
+                System.out.println("33333333333333333333333333333333333");
                 memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
+                System.out.println("==================================");
+                System.out.println(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
                 trip.changeAdmin(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
                 continue;
             }
             // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
-            //TODO: CASCADE 설정하면 한번에 삭제될거 같은데 다 필요한가?
-            memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
-            tripAreaRepository.deleteAllByTripTripId(trip.getTripId());
-            bucketRepository.deleteAllByTripTripId(trip.getTripId());
-            timetableRepository.deleteAllByPlan_Trip_TripId(trip.getTripId());
-            planRepository.deleteAllByTripTripId(trip.getTripId());
             tripRepository.deleteById(tripId);
-            continue;
         }
 
     }
