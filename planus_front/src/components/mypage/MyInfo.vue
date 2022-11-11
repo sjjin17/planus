@@ -3,7 +3,7 @@
     <v-row class="d-flex justify-center mt-12">
       <img :src="imgUrl" width="160px" height="160px" />
     </v-row>
-    <v-row class="d-flext justify-center mt-10">
+    <v-row class="d-flex justify-center mt-10">
       <h3>
         <span class="font-weight-bold" style="color: #4a8072">닉네임</span>
       </h3>
@@ -14,10 +14,14 @@
           v-model="userNickname"
           rounded
           outlined
+          :rules="[rules.special, rules.required, rules.space, rules.maxCount]"
           :readonly="!modify"
           dense
+          counter
+          maxlength="20"
           color="#4a8072"
           class="centered-input font-weight-bold"
+          @keyup.enter="saveChange"
         >
         </v-text-field>
       </v-col>
@@ -48,6 +52,21 @@ export default {
       userNickname: "",
       modify: false,
       imgUrl: "",
+      validateMessage: "12345",
+      rules: {
+        space: (value) => {
+          return value.indexOf(" ") == -1 || "공백 ㄴㄴ";
+        },
+        required: (value) => {
+          return !!value || "뭐함??";
+        },
+        special: (value) => {
+          return !/[~!@#$%^&*()_+|<>?:{}]/.test(value) || "특수문자 ㄴㄴ";
+        },
+        maxCount: (value) => {
+          return value.length <= 20 || "20자 초과 ㄴㄴ";
+        },
+      },
     };
   },
   methods: {
@@ -64,13 +83,34 @@ export default {
     },
 
     async saveChange() {
-      if (this.userNickname != this.originNickname) {
-        var result = await api.changeMyInfo(this.userNickname);
-        var token = result.newToken;
-        this.$cookies.set("token", token, 30 * 60);
-        this.originNickname = this.userNickname;
+      if (this.userNickname == this.originNickname) {
+        this.toModify();
+      } else {
+        if (
+          this.space(this.userNickname) &&
+          this.required(this.userNickname) &&
+          this.special(this.userNickname) &&
+          this.maxCount(this.userNickname)
+        ) {
+          var result = await api.changeMyInfo(this.userNickname);
+          var token = result.newToken;
+          this.$cookies.set("token", token, 30 * 60);
+          this.originNickname = this.userNickname;
+          this.toModify();
+        }
       }
-      this.toModify();
+    },
+    space: (value) => {
+      return value.indexOf(" ") == -1;
+    },
+    required: (value) => {
+      return !!value;
+    },
+    special: (value) => {
+      return !/[~!@#$%^&*()_+|<>?:{}]/.test(value);
+    },
+    maxCount: (value) => {
+      return value.length <= 20;
     },
   },
 };
