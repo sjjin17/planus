@@ -69,6 +69,7 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              :memberOrAdmin="memberOrAdmin"
               id="leftTab"
             ></search-place-tab>
           </v-tab-item>

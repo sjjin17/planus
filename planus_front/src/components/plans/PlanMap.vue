@@ -61,10 +61,14 @@
         }"
         v-if="spotInfo"
         :position="spotInfo"
-        @click="clickLocation(spotInfo, 15)"
+        @click="clickLocation(spotInfo, 15), (isInfo = !isInfo)"
         id="bucket"
       >
-        <gmap-info-window>
+        <gmap-info-window
+          v-if="spotInfo"
+          :opened="isInfo"
+          @closeclick="isInfo = false"
+        >
           <h3>{{ spotInfo.place }}</h3>
           <h6>{{ spotInfo.address }}</h6>
         </gmap-info-window>
@@ -100,6 +104,7 @@ export default {
         { label: "M", place: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
         { label: "T", place: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
       ],
+      isInfo: true,
     };
   },
   props: {
