@@ -39,13 +39,13 @@ public class ArticleListResDTO {
     }
 
     // article -> articleListResDTO
-    public static ArticleListResDTO toResDTO(Article article, long likeCount) {
+    public static ArticleListResDTO toResDTO(Article article) {
         return ArticleListResDTO.builder()
                 .articleId(article.getArticleId())
                 .title(article.getTitle())
                 .regDate(article.getRegDate().toString())
                 .hits(article.getHits())
-                .likeCount(likeCount)
+                .likeCount(article.getArticleLikeList().size())
                 .user(UserResDTO.toResDto(article.getUser()))
                 .trip(MyTripResDTO.toResDTO(article.getTrip()))
                 .build();

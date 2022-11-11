@@ -24,11 +24,11 @@ public class ArticleResDTO {
     }
 
 
-    public static ArticleResDTO toDTO(Page<Article> articleList, long likeCount) {
+    public static ArticleResDTO toDTO(Page<Article> articleList) {
         return ArticleResDTO.builder()
                 .currentPage(articleList.getNumber())
                 .totalPage(articleList.getTotalPages())
-                .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article, likeCount)).collect(Collectors.toList()))
+                .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article)).collect(Collectors.toList()))
                 .build();
     }
 }

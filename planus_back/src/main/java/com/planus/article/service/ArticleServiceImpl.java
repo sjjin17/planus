@@ -39,11 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleResDTO findAllArticles(Pageable pageable) {
         Page<Article> articles = articleRepository.findAllByOrderByRegDateDesc(pageable);
-        return ArticleResDTO.builder()
-                .currentPage(articles.getNumber())
-                .totalPage(articles.getTotalPages())
-                .articleList(articles.stream().map(article -> ArticleListResDTO.toResDTO(article, articleLikeRepository.countByArticleArticleId(article.getArticleId()))).collect(Collectors.toList()))
-                .build();
+        return ArticleResDTO.toDTO(articles);
     }
 
     @Override
@@ -216,12 +212,8 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDTO getMyArticles(String token, Pageable pageable) {
         long userId = tokenProvider.getUserId(token.split(" ")[1]);
         Page<Article> articleList = articleRepository.findByUserUserIdOrderByRegDateDesc(userId, pageable);
-
-        return ArticleResDTO.builder()
-                .currentPage(articleList.getNumber())
-                .totalPage(articleList.getTotalPages())
-                .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article, articleLikeRepository.countByArticleArticleId(article.getArticleId()))).collect(Collectors.toList()))
-                .build();
+        System.out.println(articleList);
+        return ArticleResDTO.toDTO(articleList);
     }
 
     @Override
@@ -230,11 +222,7 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleLike> articleLikes = articleLikeRepository.findByUserUserId(userId);
         List<Article> articles = articleLikes.stream().map(articleLike -> articleLike.getArticle()).collect(Collectors.toList());
         Page<Article> articleList = new PageImpl<>(articles);
-        return ArticleResDTO.builder()
-                .currentPage(articleList.getNumber())
-                .totalPage(articleList.getTotalPages())
-                .articleList(articleList.stream().map(article -> ArticleListResDTO.toResDTO(article, articleLikeRepository.countByArticleArticleId(article.getArticleId()))).collect(Collectors.toList()))
-                .build();
+        return ArticleResDTO.toDTO(articleList);
     }
 
 
