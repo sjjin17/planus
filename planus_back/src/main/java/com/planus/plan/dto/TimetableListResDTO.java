@@ -43,6 +43,7 @@ public class TimetableListResDTO {
                 .costTime(timetable.getCostTime())
                 .transit(timetable.getTransit())
                 .moveTime(timetable.getMoveTime())
+                .moveRoute(timetable.getMoveRoute())
                 .build();
     }
 }
