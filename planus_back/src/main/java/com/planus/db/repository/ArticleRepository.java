@@ -18,5 +18,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(nativeQuery = true,value = "select count(distinct ac.article_id) from Article ac, TripArea ta where ac.trip_id = ta.trip_id and ta.area_id in (:areas)")
     int countPage(@Param("areas") int[] area);
 
-    Page<Article> findByUserUserIdOrderByRegDateDesc(long userId, Pageable pageable);
+    Page<Article> findByUserUserIdOrderByArticleIdDesc(long userId, Pageable pageable);
 }

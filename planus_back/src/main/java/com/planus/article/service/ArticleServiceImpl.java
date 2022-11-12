@@ -211,7 +211,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleResDTO getMyArticles(String token, Pageable pageable) {
         long userId = tokenProvider.getUserId(token.split(" ")[1]);
-        Page<Article> articleList = articleRepository.findByUserUserIdOrderByRegDateDesc(userId, pageable);
+        Page<Article> articleList = articleRepository.findByUserUserIdOrderByArticleIdDesc(userId, pageable);
         System.out.println(articleList);
         return ArticleResDTO.toDTO(articleList);
     }
