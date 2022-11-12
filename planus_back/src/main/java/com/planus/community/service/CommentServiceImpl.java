@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResDTO getArticleComment(long articleId, Pageable pageable) {
-        Page<Comment> commentList = commentRepository.findByArticleArticleIdOrderByRegDateDesc(articleId, pageable);
+        Page<Comment> commentList = commentRepository.findByArticleArticleIdOrderByCommentIdDesc(articleId, pageable);
 
         return CommentResDTO.builder()
                 .currentPage(commentList.getNumber())
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResDTO getMyComment(String token, Pageable pageable) {
-        Page<Comment> commentList = commentRepository.findByUserUserIdOrderByRegDateDesc(tokenProvider.getUserId(token.split(" ")[1]), pageable);
+        Page<Comment> commentList = commentRepository.findByUserUserIdOrderByCommentIdDesc(tokenProvider.getUserId(token.split(" ")[1]), pageable);
 
         return CommentResDTO.builder()
                 .currentPage(commentList.getNumber())

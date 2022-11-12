@@ -158,16 +158,16 @@ const API = {
     });
     return response.data;
   },
-  async addComment(articleId, content) {
+  async addComment(id, content) {
     const response = await this.instance.post("/comment", {
-      articleId: articleId,
+      id: id,
       content: content,
     });
     return response.data;
   },
-  async modifyComment(commentId, content) {
+  async modifyComment(id, content) {
     const response = await this.instance.put("/comment", {
-      commentId: commentId,
+      id: id,
       content: content,
     });
     return response.data;
