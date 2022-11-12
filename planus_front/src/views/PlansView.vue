@@ -69,6 +69,7 @@
               :isRecommendClick="isRecommendClick"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              :memberOrAdmin="memberOrAdmin"
               id="leftTab"
             ></search-place-tab>
           </v-tab-item>
@@ -78,6 +79,7 @@
               :mapLng="lng"
               :size="size"
               :isRecommendClick="isRecommendClick"
+              :memberOrAdmin="memberOrAdmin"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
               @recommendClick="recommendClick"
@@ -101,6 +103,7 @@
         :tripArea="tripArea"
         @getCenter="getCenter"
         :bucketList="bucketList"
+        :timetableList="timetableList"
       />
       <v-container
         class="ma-0"
@@ -122,6 +125,7 @@
               @countTimetable="countTimetable"
               @delTimetable="delTimetable"
               @setTimetableOrders="setTimetableOrders"
+              @changeTimetableList="changeTimetableList"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -198,6 +202,7 @@ export default {
       planId: 0,
 
       bucketList: [],
+      timetableList: [],
     };
   },
   async created() {
@@ -496,6 +501,9 @@ export default {
     },
     changeBucketList(bucketList) {
       this.bucketList = bucketList;
+    },
+    changeTimetableList(timtableList) {
+      this.timetableList = timtableList;
     },
   },
 };

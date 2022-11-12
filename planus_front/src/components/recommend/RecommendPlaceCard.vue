@@ -34,6 +34,7 @@
         </v-row>
         <v-row class="row-3 pt-0" justify="center">
           <plan-modal
+            v-show="memberOrAdmin == 2"
             @planSubmit="planSubmit"
             :fromBucket="false"
             class="ma-0 col-5 pa-2"
@@ -66,6 +67,7 @@ export default {
   },
   props: {
     recommendPlace: Object,
+    memberOrAdmin: Number,
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),
