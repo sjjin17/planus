@@ -2,37 +2,69 @@
   <div>
     <div>
       <form>
-        <v-text-field outlined v-model="startHour" type="number"></v-text-field>
+        <v-text-field
+          outlined
+          v-model="startHour"
+          type="number"
+          :disabled="!startBtnClick"
+        ></v-text-field>
         시
-        <v-text-field outlined v-model="startMin" type="number"></v-text-field>
+        <v-text-field
+          :disabled="!startBtnClick"
+          outlined
+          v-model="startMin"
+          type="number"
+        ></v-text-field>
         분
-        <v-icon @click="changeStartTime(plan, startHour, startMin)"
+        <v-icon v-if="!startBtnClick" @click="startBtn">mdi-pencil</v-icon>
+        <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
           >mdi-pencil</v-icon
         >
       </form>
     </div>
-    <timetable-card
-      v-for="timetable in timetableList"
-      :key="timetable.orders"
-      :timetable="timetable"
-      :calTime="calTime"
-      :startTime="startTime"
-      @changeCalTime="changeCalTime"
-      @setTimetable="setTimetable"
+    <draggable
+      :list="timetableList"
+      :disabled="!enabled"
+      @start="dragging = true"
+      @end="onEnd"
     >
-    </timetable-card>
+      <timetable-card
+        v-for="timetable in timetableList"
+        :key="timetable.orders"
+        :nextLat="
+          timetableList[timetable.orders]
+            ? timetableList[timetable.orders].lat
+            : 0
+        "
+        :nextLng="
+          timetableList[timetable.orders]
+            ? timetableList[timetable.orders].lng
+            : 0
+        "
+        :tripDate="plan.tripDate"
+        :timetable="timetable"
+        :calTime="calTime"
+        :startTime="startTime"
+        @changeCalTime="changeCalTime"
+        @setTimetable="setTimetable"
+        @delTimetable="delTimetable"
+      >
+      </timetable-card>
+    </draggable>
   </div>
 </template>
 
 <script>
 import API from "@/api/RESTAPI";
 import TimetableCard from "@/components/plans/TimetableCard.vue";
+import draggable from "vuedraggable";
 
 const api = API;
 
 export default {
   components: {
     TimetableCard,
+    draggable,
   },
   data() {
     return {
@@ -42,12 +74,21 @@ export default {
 
       startHour: 0,
       startMin: 0,
+
+      //드래그용
+      enabled: true,
+      dragging: false,
+      startBtnClick: false,
     };
   },
   props: {
     tripId: Number,
     plan: Object,
     WebSocketStartTime: Object,
+    deletedTimetableList: Object,
+    addedTimetable: Object,
+    setOrdersTimetableList: Object,
+    changedTimetable: Object,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
@@ -72,8 +113,45 @@ export default {
         //re-rendering을 위해 배열 splice 필요
         this.calTime.splice(0, 1, this.startTime);
         this.$emit("countTimetable", this.timetableList.length);
+        this.$emit("changeTimetableList", this.timetableList);
       },
       deep: true,
+    },
+    deletedTimetableList(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        this.timetableList = newVal.timetableList;
+      }
+    },
+    setOrdersTimetableList(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        this.timetableList = newVal.timetableList;
+      }
+      // //re-rendering을 위해 배열 splice
+      // this.timetableList.splice(0, 1, this.timetableList[0]);
+    },
+    addedTimetable(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        let newTimetable = {
+          timetableId: newVal.timetableId,
+          orders: newVal.orders,
+          place: newVal.place,
+          lat: newVal.lat,
+          lng: newVal.lng,
+          costTime: newVal.costTime,
+          moveTime: newVal.moveTime,
+          transit: newVal.transit,
+          moveRoute: newVal.moveRoute,
+        };
+        this.timetableList.push(newTimetable);
+        this.updateOrders(this.timetableList);
+      }
+    },
+    changedTimetable(newVal) {
+      if (this.plan.planId == newVal.planId) {
+        // this.timetableList[newVal.orders - 1] = newVal;
+        //re-rendering을 위해 배열 splice
+        this.timetableList.splice(newVal.orders - 1, 1, newVal);
+      }
     },
   },
   methods: {
@@ -105,9 +183,15 @@ export default {
         if (i == 0) {
           calTime[0] = startTime;
         } else {
-          calTime[i] = calTime[i - 1] + timetableList[i - 1].costTime;
+          calTime[i] =
+            calTime[i - 1] +
+            timetableList[i - 1].costTime +
+            timetableList[i - 1].moveTime;
         }
       }
+    },
+    startBtn() {
+      this.startBtnClick = !this.startBtnClick;
     },
     changeStartTime(plan, startHour, startMin) {
       this.startTime = parseInt(startHour) * 60 + parseInt(startMin);
@@ -118,6 +202,7 @@ export default {
       };
       //emit으로 newPlan을 PlansView로 보내기
       this.$emit("setPlan", newPlan);
+      this.startBtnClick = !this.startBtnClick;
     },
     setTimetable(newTimetable) {
       //emit으로 올라온 newTimetable의 costTime 값으로 timetable 값을 수정
@@ -125,6 +210,109 @@ export default {
       //해당 timetable 객체의 costTime을 수동으로 바꿔줌 .. ...왜..?
       this.timetableList[newTimetable.orders - 1].costTime =
         newTimetable.costTime;
+      console.log("PlanList");
+      console.log(newTimetable);
+    },
+    delTimetable(delOrders) {
+      //delOrder의 Timetable만 빼고 새로운 timetableList를 구성
+      let delTimetableList = [];
+      for (let i = 0; i < this.timetableList.length; i++) {
+        if (this.timetableList[i].orders == delOrders) {
+          continue;
+        }
+        let delTimetable = {
+          place: this.timetableList[i].place,
+          lat: this.timetableList[i].lat,
+          lng: this.timetableList[i].lng,
+          orders: this.timetableList[i].orders,
+          costTime: this.timetableList[i].costTime,
+          moveTime: this.timetableList[i].moveTime,
+          transit: this.timetableList[i].transit,
+          moveRoute: this.timetableList[i].moveRoute,
+        };
+
+        // orders가 delOrders-1이면 transit, moveTime, moveRoute를 초기화
+        if (this.timetableList[i].orders == delOrders - 1) {
+          delTimetable.transit = "NONE";
+          delTimetable.moveTime = 0;
+          delTimetable.moveRoute = "";
+        }
+
+        delTimetableList.push(delTimetable);
+      }
+
+      //delTimetableList를 돌면서 orders를 갱신
+      this.updateOrders(delTimetableList);
+
+      //emit으로 delTimetableList를 올려보내기
+      this.$emit("delTimetable", this.plan.planId, delTimetableList);
+    },
+    // Timetable이 추가돼도 삭제돼도 orders가 제대로 안 들어가서.. orders 갱신하는 함수 따로 뺌
+    updateOrders(list) {
+      console.log("updateOrders로 들어옴");
+      for (let i = 0; i < list.length; i++) {
+        list[i].orders = i + 1;
+      }
+    },
+    onEnd(event) {
+      //oldIndex : 이동 전 인덱스
+      //newIndex : 이동 후 인덱스
+
+      let oldIdx = event.oldIndex;
+      let newIdx = event.newIndex;
+
+      if (oldIdx != newIdx) {
+        this.changeDraggedOrders(oldIdx, newIdx);
+      }
+
+      this.dragging = false;
+    },
+    changeDraggedOrders(oldIdx, newIdx) {
+      //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime, moveRoute 초기화
+      if (oldIdx != 0) {
+        this.timetableList[oldIdx - 1].transit = "NONE";
+        this.timetableList[oldIdx - 1].moveTime = 0;
+        this.timetableList[oldIdx - 1].moveRoute = "";
+      }
+      this.timetableList[newIdx].transit = "NONE";
+      this.timetableList[newIdx].moveTime = 0;
+      this.timetableList[newIdx].moveRoute = "";
+
+      //splice로 oldIdx -> newIdx 배열 내 위치 변경
+      // let selectedTimetable = this.timetableList[oldIdx];
+
+      // this.timetableList.splice(oldIdx, 1);
+      // this.timetableList.splice(newIdx, 0, selectedTimetable);
+
+      if (newIdx != 0) {
+        this.timetableList[newIdx - 1].transit = "NONE";
+        this.timetableList[newIdx - 1].moveTime = 0;
+        this.timetableList[newIdx - 1].moveRoute = "";
+      }
+
+      this.updateOrders(this.timetableList);
+
+      //웹소켓 형식에 맞게 재구성
+      let setTimetableOrdersList = [];
+      for (let i = 0; i < this.timetableList.length; i++) {
+        let timetable = {
+          place: this.timetableList[i].place,
+          lat: this.timetableList[i].lat,
+          lng: this.timetableList[i].lng,
+          orders: this.timetableList[i].orders,
+          costTime: this.timetableList[i].costTime,
+          moveTime: this.timetableList[i].moveTime,
+          transit: this.timetableList[i].transit,
+          moveRoute: this.timetableList[i].moveRoute,
+        };
+        setTimetableOrdersList.push(timetable);
+      }
+
+      this.$emit(
+        "setTimetableOrders",
+        this.plan.planId,
+        setTimetableOrdersList
+      );
     },
   },
 };

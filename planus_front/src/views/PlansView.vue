@@ -21,7 +21,11 @@
         :connector="connector"
         @getConnector="getConnector"
       ></invite-dialog>
-      <complete-dialog :tripId="tripId" class="mr-3"></complete-dialog>
+      <complete-dialog
+        :tripId="tripId"
+        :planIdList="planIdList"
+        class="mr-3"
+      ></complete-dialog>
     </v-container>
     <div>
       <v-tabs v-model="planTabs" fixed-tabs>
@@ -32,27 +36,18 @@
           >{{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}</v-tab
         >
       </v-tabs>
-      <plan-save-button :tripId="tripId" :planIdList="planIdList" />
     </div>
-    <v-container d-flex style="margin: 0; max-width: 100%">
+    <v-container d-flex class="ma-0 pt-0" style="max-width: 100%">
       <v-container
-        style="
-          width: 20%;
-          margin: 0;
-          min-width: 300px;
-          height: 85vh;
-          position: relative;
-        "
+        class="ma-0 pt-0"
+        style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
         <v-tabs v-model="tabs" fixed-tabs>
-          <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0" @click="recommendClick">추천관광지 </v-tab>
+          <v-tab style="padding: 0">장소검색</v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
-          <v-tab-item>
-            <div id="leftTab">장소검색 컴포넌트</div>
-          </v-tab-item>
           <v-tab-item>
             <bucket-list
               :tripId="tripId"
@@ -62,8 +57,21 @@
               :memberOrAdmin="memberOrAdmin"
               @addTimetable="addTimetable"
               :addedTimetable="addedTimetable"
+              @changeBucketList="changeBucketList"
               id="leftTab"
             ></bucket-list>
+          </v-tab-item>
+          <v-tab-item>
+            <search-place-tab
+              :mapLat="lat"
+              :mapLng="lng"
+              :size="size"
+              :isRecommendClick="isRecommendClick"
+              @addBucket="addBucket"
+              @addTimetable="addTimetable"
+              :memberOrAdmin="memberOrAdmin"
+              id="leftTab"
+            ></search-place-tab>
           </v-tab-item>
           <v-tab-item>
             <recommend-place-tab
@@ -71,8 +79,10 @@
               :mapLng="lng"
               :size="size"
               :isRecommendClick="isRecommendClick"
+              :memberOrAdmin="memberOrAdmin"
               @addBucket="addBucket"
               @addTimetable="addTimetable"
+              @recommendClick="recommendClick"
               id="leftTab"
             ></recommend-place-tab>
           </v-tab-item>
@@ -92,19 +102,30 @@
         style="width: 60%; background-color: blue"
         :tripArea="tripArea"
         @getCenter="getCenter"
+        :bucketList="bucketList"
+        :timetableList="timetableList"
       />
       <v-container
-        style="width: 20%; margin: 0; min-width: 300px; max-height: 100%"
+        class="ma-0"
+        style="width: 20%; min-width: 300px; height: 85vh"
       >
         <v-tabs-items v-model="planTabs">
           <v-tab-item v-for="plan in planIdList" :key="plan.planId">
             <plan-list
+              class="rightTab"
               :plan="plan"
               :tripId="tripId"
               :WebSocketStartTime="startTime"
+              :deletedTimetableList="deletedTimetableList"
+              :setOrdersTimetableList="setOrdersTimetableList"
+              :addedTimetable="addedTimetable"
+              :changedTimetable="changedTimetable"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
+              @delTimetable="delTimetable"
+              @setTimetableOrders="setTimetableOrders"
+              @changeTimetableList="changeTimetableList"
             ></plan-list>
           </v-tab-item>
         </v-tabs-items>
@@ -123,9 +144,9 @@ import BucketList from "@/components/bucketList/BucketList.vue";
 import jwt_decode from "jwt-decode";
 import ChatTab from "@/components/chat/ChatTab.vue";
 import PlanList from "@/components/plans/PlanList.vue";
-import PlanSaveButton from "@/components/plans/PlanSaveButton.vue";
 import CompleteDialog from "@/components/manageTrip/CompleteDialog.vue";
 import VoiceChat from "@/components/chat/VoiceChat.vue";
+import SearchPlaceTab from "@/components/searchPlace/SearchPlaceTab.vue";
 
 const ws = WSAPI;
 const api = API;
@@ -138,9 +159,9 @@ export default {
     BucketList,
     ChatTab,
     PlanList,
-    PlanSaveButton,
     CompleteDialog,
     VoiceChat,
+    SearchPlaceTab,
   },
   data() {
     return {
@@ -165,6 +186,12 @@ export default {
       addedBucket: {},
       // plan
       addedTimetable: {},
+      //삭제된 것을 제외한 timetableList
+      deletedTimetableList: {},
+      //순서 변경 완료된 timetableList
+      setOrdersTimetableList: {},
+      //변경된 timetable
+      changedTimetable: {},
 
       planIdList: [],
       planTabs: null,
@@ -173,6 +200,9 @@ export default {
       timeTableLength: 0,
 
       planId: 0,
+
+      bucketList: [],
+      timetableList: [],
     };
   },
   async created() {
@@ -187,7 +217,9 @@ export default {
         return;
       }
       console.log("oldVal:" + oldVal);
-      api.savePlan([oldVal]);
+      //탭 변경이므로 false
+      let complete = false;
+      api.savePlan([oldVal], complete);
       newVal;
     },
   },
@@ -292,11 +324,42 @@ export default {
             orders: content.orders,
             fromBucket: content.fromBucket,
             address: content.address,
+            planId: content.planId,
+            transit: content.transit,
+            moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
           };
           break;
         case 6:
           console.log(content);
           // TODO: 일정(timetable)삭제
+          this.deletedTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
+          break;
+        case 7:
+          console.log(content);
+          // TODO: 일정(timetable) 순서 변경
+          this.setOrdersTimetableList = {
+            planId: content.planId,
+            timetableList: content.timetableList,
+          };
+          break;
+        case 8:
+          console.log(content);
+          // TODO: 일정(timetable) 수정
+          this.changedTimetable = {
+            costTime: content.costTime,
+            place: content.place,
+            lat: content.lat,
+            lng: content.lng,
+            orders: content.orders,
+            transit: content.transit,
+            moveTime: content.moveTime,
+            moveRoute: content.moveRoute,
+            planId: content.planId,
+          };
           break;
       }
     },
@@ -392,7 +455,6 @@ export default {
             newPlan.tripDate,
             newPlan.startTime
           );
-          console.log("새Plan" + newPlan.planId);
         }
       }
     },
@@ -409,6 +471,7 @@ export default {
             newTimetable.costTime,
             newTimetable.moveTime,
             newTimetable.transit,
+            newTimetable.moveRoute,
             false
           );
         }
@@ -418,14 +481,29 @@ export default {
       this.timeTableLength = length;
     },
     async saveTimetableList(planId) {
-      console.log("----");
-      console.log(planId);
-      // let savePlanIdList = [];
-      // this.planIdList.forEach((p) => {
-      //   savePlanIdList.push(p.planId);
-      // });
-      // await api.savePlan(savePlanIdList);
+      //planId에 변경사항이 생겼으므로 watch로
+      //같은 탭을 누를 경우 planId가 동일하므로 변경사항이 생기지 않음
       this.planId = planId;
+    },
+    delTimetable(planId, delTimetableList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.delTimetable(this.tripId, planId, delTimetableList);
+        }
+      }
+    },
+    setTimetableOrders(planId, setTimetableOrdersList) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.setTimetableOrders(this.tripId, planId, setTimetableOrdersList);
+        }
+      }
+    },
+    changeBucketList(bucketList) {
+      this.bucketList = bucketList;
+    },
+    changeTimetableList(timtableList) {
+      this.timetableList = timtableList;
     },
   },
 };
@@ -447,6 +525,21 @@ export default {
   width: 10px;
 }
 #leftTab::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-color: #00000000;
+}
+.rightTab {
+  overflow-y: scroll;
+  height: 85vh;
+}
+.rightTab::-webkit-scrollbar {
+  color: "#00000000";
+  width: 10px;
+}
+.rightTab::-webkit-scrollbar-thumb {
   background-color: #544c4c;
   border-radius: 10px;
   background-clip: padding-box;

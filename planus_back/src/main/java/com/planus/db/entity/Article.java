@@ -69,6 +69,7 @@ public class Article {
         this.regDate = regDate;
     }
 
-
-
+    public void addHits() {
+        this.hits += 1;
+    }
 }

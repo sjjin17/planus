@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,12 +27,15 @@ public class PlanResDTO {
         this.timetableList = timetableList;
     }
 
-    public static PlanResDTO toResDTO(Plan plan,List<TimetableListResDTO> timetableList) {
+    public static PlanResDTO toResDTO(Plan plan) {
         return PlanResDTO.builder()
                 .planId(plan.getPlanId())
                 .tripDate(plan.getTripDate())
                 .startTime(plan.getStartTime())
-                .timetableList(timetableList)
+                .timetableList(plan.getTimetableList().stream().map(timetable -> TimetableListResDTO.toResDTO(timetable)).collect(Collectors.toList()))
                 .build();
+
     }
+
+
 }

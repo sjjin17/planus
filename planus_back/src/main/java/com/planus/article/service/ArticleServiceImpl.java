@@ -2,18 +2,20 @@ package com.planus.article.service;
 
 
 import com.planus.article.dto.*;
-import com.planus.db.entity.Area;
-import com.planus.db.entity.Article;
-import com.planus.db.entity.Trip;
-import com.planus.db.entity.User;
+import com.planus.db.entity.*;
 import com.planus.db.repository.*;
 import com.planus.exception.CustomException;
 import com.planus.db.repository.ArticleRepository;
 import com.planus.db.repository.TripRepository;
 import com.planus.db.repository.UserRepository;
+import com.planus.mytrip.dto.MyTripResDTO;
+import com.planus.plan.dto.PlanResDTO;
+import com.planus.plan.dto.TimetableListResDTO;
+import com.planus.user.dto.UserResDTO;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +79,19 @@ public class ArticleServiceImpl implements ArticleService {
             System.out.println("실패!");
         }
         return articleId;
+    }
+
+    @Override
+    public ArticleDetailResDTO findOneArticle(long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
+        article.addHits();
+        int likeCount = articleLikeRepository.countByArticleArticleId(articleId);
+        UserResDTO user = UserResDTO.toResDto(article.getUser());
+        MyTripResDTO trip = MyTripResDTO.toResDTO(article.getTrip());
+        List<Plan> plans = article.getTrip().getPlanList();
+        List<PlanResDTO> planList = plans.stream().map(plan -> PlanResDTO.toResDTO(plan)).collect(Collectors.toList());
+        return ArticleDetailResDTO.toEntity(article, likeCount, user, trip, planList);
+
     }
 
     @Override
@@ -174,17 +189,41 @@ public class ArticleServiceImpl implements ArticleService {
         return searchDTOList;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public ArticleResDTO findOneArticle(long articleId) {
-//        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
-//
-//        // entity -> ResDTO
-//        // planResDTOList 만들기
-//
-//        ArticleResDTO.toResDTO(article, timetableList);
-//
-//
-//
-//    }
+    @Override
+    @Transactional
+    public long likeArticle(String token, long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        if (articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, userId)) {
+            articleLikeRepository.deleteByArticleArticleIdAndUserUserId(articleId, userId);
+
+
+        } else {
+            ArticleLike articleLike = ArticleLike.builder()
+                    .article(article)
+                    .user(userRepository.findByUserId(userId))
+                    .build();
+            articleLikeRepository.save(articleLike);
+        }
+        return articleLikeRepository.countByArticleArticleId(articleId);
+    }
+
+    @Override
+    public ArticleResDTO getMyArticles(String token, Pageable pageable) {
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        Page<Article> articleList = articleRepository.findByUserUserIdOrderByRegDateDesc(userId, pageable);
+        System.out.println(articleList);
+        return ArticleResDTO.toDTO(articleList);
+    }
+
+    @Override
+    public ArticleResDTO getMyLikedArticles(String token, Pageable pageable) {
+        long userId = tokenProvider.getUserId(token.split(" ")[1]);
+        List<ArticleLike> articleLikes = articleLikeRepository.findByUserUserId(userId);
+        List<Article> articles = articleLikes.stream().map(articleLike -> articleLike.getArticle()).collect(Collectors.toList());
+        Page<Article> articleList = new PageImpl<>(articles);
+        return ArticleResDTO.toDTO(articleList);
+    }
+
+
 }

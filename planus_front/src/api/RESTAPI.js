@@ -13,8 +13,6 @@ const baseAxios = axios.create({
 
 function needRefresh() {
   var token = VueCookies.get("token");
-  // var lefttime = jwt_decode(token).exp - Date.now() / 1000;
-  // console.log(lefttime);
   if (token == null || jwt_decode(token).exp - Date.now() / 1000 < 180) {
     return true;
   }
@@ -33,7 +31,14 @@ baseAxios.interceptors.request.use(async (request) => {
           VueCookies.set("token", res.data.newToken, 60 * 30);
           request.headers.Authorization = "Bearer " + VueCookies.get("token");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          if (error.response.data.status == 403) {
+            VueCookies.remove("refresh");
+            window.location.href = "/";
+          } else {
+            console.log(error);
+          }
+        });
     }
   }
   return request;
@@ -135,12 +140,16 @@ const API = {
     const response = await this.instance.post("/plans/planlist", planIdList);
     return response.data;
   },
+  //안 써서 지워야 할 수도
   async savePlanStart(planId) {
     const response = await this.instance.get("/plans/start/" + planId);
     return response.data;
   },
-  async savePlan(planIdList) {
-    const response = await this.instance.post("/plans", planIdList);
+  async savePlan(planIdList, complete) {
+    const response = await this.instance.post("/plans", {
+      planIdList: planIdList,
+      complete: complete,
+    });
     return response.data;
   },
   async deleteTrip(tripId) {
@@ -217,6 +226,11 @@ const API = {
   async dummy() {
     const response = await this.instance.get("/login/dummy");
     return response;
+  },
+
+  async googleApi(url) {
+    const response = await this.instance.post("/google", url);
+    return response.data;
   },
 };
 

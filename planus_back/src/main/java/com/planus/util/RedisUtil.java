@@ -30,6 +30,14 @@ public class RedisUtil {
         //return (String) redisTemplate.opsForValue().get(key);
     }
 
+    public long getListDataSize(String key) {
+        ListOperations<String, ?> listOperations = redisTemplate.opsForList();
+
+        long size = listOperations.size(key) == null ? 0 : listOperations.size(key);
+
+        return size;
+    }
+
     public void setDto(String key, BucketResDTO bucketResDTO) {
 
     }
