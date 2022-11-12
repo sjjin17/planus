@@ -11,7 +11,7 @@ import Chat from "@/components/chat/WebSocketTest.vue";
 import CommunityView from "../views/CommunityView.vue";
 import ArticleView from "../views/ArticleView.vue";
 import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
-import NewArticleView from "@/views/NewArticleView";
+import ArticleNewView from "@/views/ArticleNewView";
 
 Vue.use(VueRouter);
 
@@ -100,7 +100,7 @@ const routes = [
   {
     path: "/newArticle",
     name: "newArticle",
-    component: NewArticleView,
+    component: ArticleNewView,
   },
 ];
 

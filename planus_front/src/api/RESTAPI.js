@@ -238,8 +238,12 @@ const API = {
     return response.data;
   },
 
-  async createArticle() {
-    const response = await this.instance.post("/articles");
+  async createArticle(title, content, tripId) {
+    const response = await this.instance.post("/articles", {
+      title: title,
+      content: content,
+      tripId: tripId,
+    });
     return response.data;
   },
 
@@ -269,6 +273,10 @@ const API = {
     const response = await this.instance.get("/mypage/articles/like", {
       params: { page },
     });
+    return response.data;
+  },
+  async getMyAllTrip() {
+    const response = await this.instance.get("/mytrip/all");
     return response.data;
   },
 };
