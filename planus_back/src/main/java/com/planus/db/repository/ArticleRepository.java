@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     Article findByArticleId(long articleId);
-    Page<Article> findAllByOrderByRegDateDesc(Pageable pageable);
+    Page<Article> findAllByOrderByArticleIdDesc(Pageable pageable);
     Page<Article> findByTitleContains(String title, Pageable pageable);
     @Query(nativeQuery = true,value = "select distinct ac.* from Article ac, TripArea ta where ac.trip_id = ta.trip_id and ta.area_id in (:areas)")
     List<Article> findByArea(@Param("areas") int[] area, Pageable pageable);

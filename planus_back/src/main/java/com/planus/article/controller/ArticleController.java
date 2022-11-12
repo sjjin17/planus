@@ -27,7 +27,7 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping
-    public ResponseEntity getAllArticles(@PageableDefault(size = 6, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getAllArticles(@PageableDefault(size = 6, sort = "articleId", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.findAllArticles(pageable));
     }
@@ -60,7 +60,7 @@ public class ArticleController {
 
 
     @GetMapping("/title")
-    public ResponseEntity getArticleListByTitle(@RequestHeader(required = false) String token, @RequestParam String title, @PageableDefault(size = 6, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity getArticleListByTitle(@RequestHeader(required = false) String token, @RequestParam String title, @PageableDefault(size = 6, sort = "articleId", direction = Sort.Direction.DESC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("searchList", articleService.getArticleListByTitle(token, title, pageable));
@@ -71,7 +71,7 @@ public class ArticleController {
     }
 
     @GetMapping("/area")
-    public ResponseEntity getArticleListByArea(@RequestHeader(required = false) String token, @RequestParam(value = "area") int[] area, @PageableDefault(size = 6, sort = "reg_date", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity getArticleListByArea(@RequestHeader(required = false) String token, @RequestParam(value = "area") int[] area, @PageableDefault(size = 6, sort = "article_id", direction = Sort.Direction.DESC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("articleList", articleService.getArticleListByArea(token, area, pageable));

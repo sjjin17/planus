@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleResDTO findAllArticles(Pageable pageable) {
-        Page<Article> articles = articleRepository.findAllByOrderByRegDateDesc(pageable);
+        Page<Article> articles = articleRepository.findAllByOrderByArticleIdDesc(pageable);
         return ArticleResDTO.toDTO(articles);
     }
 
