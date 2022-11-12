@@ -80,7 +80,6 @@ export default {
         this.content,
         this.tripId
       );
-
       this.$router.push("/article/" + this.articleId);
     },
     async getMyAllTrip() {
