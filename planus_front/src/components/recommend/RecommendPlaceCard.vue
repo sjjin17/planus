@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-card @click="addMarker">
+    <v-card
+      @click="addMarker"
+      outlined
+      style="border: thin solid; border-color: #4a8072"
+    >
       <v-container>
         <v-row class="row-9" align="center">
           <v-col cols="7" align="left" class="pb-0">
