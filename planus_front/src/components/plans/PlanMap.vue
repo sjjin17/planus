@@ -96,7 +96,7 @@ export default {
       zoom: 12,
       nowCenter: {},
       planList: [],
-      isInfo: true,
+      isInfo: false,
     };
   },
   props: {
@@ -106,20 +106,20 @@ export default {
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),
-    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
   },
   methods: {
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     clickLocation(loc, zoom) {
-      // setTimeout(() => {
-      //   this.center = this.nowCenter;
-      // }, 50);
+      setTimeout(() => {
+        this.center = this.nowCenter;
+      }, 50);
       setTimeout(() => {
         this.center = loc;
         this.zoom = zoom;
       }, 50);
     },
     getCurrentCenter(center) {
-      this.nowCenter = center;
+      this.nowCenter = { lat: center.lat(), lng: center.lng() };
       this.$emit("getCenter", center.lat(), center.lng());
     },
     getCurrentZoom(zoom) {
@@ -128,18 +128,23 @@ export default {
   },
   watch: {
     spotInfo(newVal) {
+      if (!newVal) {
+        this.isInfo = false;
+        return;
+      }
+      this.isInfo = true;
       this.clickLocation(newVal, 15);
     },
-    // bucketList(newVal) {
-    //   if (!newVal.length) return;
-    //   this.clickLocation(newVal[newVal.length - 1], 15);
-    // },
     tripArea(newVal) {
       this.center = newVal[0];
+      this.nowCenter = newVal[0];
     },
     timetableList(newVal) {
       this.planList = newVal;
     },
+  },
+  destroyed() {
+    this.SET_SPOT_INFO(null);
   },
 };
 </script>

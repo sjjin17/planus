@@ -210,6 +210,8 @@ export default {
     await this.getTripInfo();
     await this.getPlanId(this.tripId);
     this.decoding();
+    this.lat = this.tripArea[0].lat;
+    this.lng = this.tripArea[0].lng;
   },
   watch: {
     planId(newVal, oldVal) {
