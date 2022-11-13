@@ -1,6 +1,7 @@
 <template>
   <div>
     {{ articleId }}번 게시글
+    <article-detail :articleId="articleId"></article-detail>
     <comment-list :articleId="articleId"></comment-list>
   </div>
 </template>
@@ -8,12 +9,13 @@
 <script>
 // import API from "@/api/RESTAPI";
 import CommentList from "@/components/community/CommentList.vue";
-
+import ArticleDetail from "@/components/community/ArticleDetail.vue";
 // const api = API;
 export default {
   name: "CommunityView",
   components: {
     CommentList,
+    ArticleDetail,
   },
   data() {
     return {
