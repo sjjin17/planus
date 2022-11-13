@@ -182,7 +182,7 @@ const API = {
     return response.data;
   },
   async getMyComment(page) {
-    const response = await this.instance.get("/comment", {
+    const response = await this.instance.get("/mypage/comment", {
       params: { page },
     });
     return response.data;

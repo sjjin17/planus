@@ -7,6 +7,7 @@
           outlined
           class="mx-10 mt-2"
           @click="goToArticle(article.articleId)"
+          style="border-color: #4a8072"
         >
           <v-row>
             <v-col cols="3">

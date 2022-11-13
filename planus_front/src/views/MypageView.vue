@@ -3,7 +3,7 @@
     <h1>마이페이지</h1>
     <v-container class="d-flex justify-center">
       <v-sheet height="80vh" class="content">
-        <router-view style="width: 80vw" />
+        <router-view style="width: 80vw; max-width: 80vw" />
       </v-sheet>
       <div style="padding-top: 3%">
         <v-btn-toggle v-model="tab" mandatory style="display: grid">
