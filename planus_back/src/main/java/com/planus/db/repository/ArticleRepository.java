@@ -19,4 +19,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     int countPage(@Param("areas") int[] area);
 
     Page<Article> findByUserUserIdOrderByArticleIdDesc(long userId, Pageable pageable);
+
+    @Query(nativeQuery = true, value="select Article.* from ArticleLike, Article  where Article.article_id = ArticleLike.article_id and ArticleLike.user_id=(:userId)")
+    Page<Article> findArticleByUserUserId(@Param("userId") long userId, Pageable pageable);
 }

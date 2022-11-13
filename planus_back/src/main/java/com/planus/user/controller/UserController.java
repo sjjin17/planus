@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @GetMapping("/articles/like")
-    public ResponseEntity getMyLikedArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=10, sort="articleId", direction=Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getMyLikedArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=10, sort="article_id", direction=Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.getMyLikedArticles(token, pageable));
     }
