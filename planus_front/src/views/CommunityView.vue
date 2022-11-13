@@ -47,6 +47,7 @@
       </v-col>
     </v-row>
     <v-spacer></v-spacer>
+    <v-btn @click="goToNewArticle()">게시글 작성</v-btn>
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
         v-model="currentPage"
@@ -117,6 +118,9 @@ export default {
         this.getArticleListByAreaLength();
         this.getArticleListByArea(1);
       }
+    },
+    goToNewArticle() {
+      this.$router.push("/newArticle");
     },
   },
 };
