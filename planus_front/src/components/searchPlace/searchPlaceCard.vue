@@ -75,12 +75,7 @@ export default {
         this.searchedPlace.lng
       );
 
-      if (!this.spotInfo) return;
-      if (
-        this.spotInfo.lat == this.searchedPlace.lat &&
-        this.spotInfo.lng == this.searchedPlace.lng
-      )
-        this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO(null);
     },
     planSubmit(costTime, fromBucket) {
       this.$emit(
@@ -92,11 +87,7 @@ export default {
         fromBucket
       );
 
-      if (
-        this.spotInfo.lat == this.searchedPlace.lat &&
-        this.spotInfo.lng == this.searchedPlace.lng
-      )
-        this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO(null);
     },
     addMarker() {
       this.SET_SPOT_INFO(null);
