@@ -12,8 +12,10 @@
       0시 이후의 일정입니다.
     </div>
     <v-card outlined color="#ffb4c2" class="my-4 ps-2">
-      <v-card-title class="card-title"
-        >{{ this.timetable.place }}
+      <v-card-title class="card-title">
+        <div class="textCutting">
+          {{ this.timetable.place }}
+        </div>
         <v-icon @click="delTimetable" v-show="memberOrAdmin == 2"
           >mdi-close</v-icon
         >
@@ -37,20 +39,56 @@
           }}
           ( {{ Math.floor(this.timetable.costTime / 60) }} 시간
           {{ this.timetable.costTime % 60 }} 분 )
-          <v-icon
-            small
-            @click.native="clickChangeCostTime"
-            v-show="memberOrAdmin == 2"
+          <v-icon small @click="clickChangeCostTime" v-show="memberOrAdmin == 2"
             >mdi-pencil</v-icon
           >
-          <v-dialog v-model="dialog">
-            <form>
+          <v-dialog
+            v-model="dialog"
+            max-width="300px"
+            style="z-index: 300"
+          >
+            <v-container>
+              <v-row class="pa-0">
+                <v-col class="ma-0 pa-0" cols="3">
+                  <v-text-field
+                    type="number"
+                    :min="0"
+                    :max="11"
+                    outlined
+                    hide-details
+                    v-model="costHour"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="ma-0 pa-0" cols="2" style="align-self: center"
+                  ><h3>시간</h3></v-col
+                >
+                <v-col class="ma-0 pa-0" cols="3">
+                  <v-text-field
+                    type="number"
+                    :min="0"
+                    :max="59"
+                    outlined
+                    hide-details
+                    v-model="costMin"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="ma-0 pa-0" style="align-self: center"
+                  ><h3>분</h3></v-col
+                >
+                <v-col class="ma-0 pa-0" style="align-self: center"
+                  ><v-btn @click="changeCostTime(costHour, costMin)"
+                    >등록</v-btn
+                  ></v-col
+                >
+              </v-row>
+            </v-container>
+            <!-- <form>
               <v-text-field outlined v-model="costHour"></v-text-field>
               시간
               <v-text-field outlined v-model="costMin"></v-text-field>
               분
               <v-btn @click="changeCostTime(costHour, costMin)">등록</v-btn>
-            </form>
+            </form> -->
           </v-dialog>
         </div>
       </v-card-text>
@@ -58,39 +96,47 @@
 
     <v-container fluid v-show="nextLat != 0">
       <v-row align="center" style="justify-content: space-between">
-        <v-col cols="8" class="pa-1">
+        <v-col cols="8" class="pa-0">
           <v-select
             v-model="select"
             :items="selectList"
             item-text="text"
             item-value="value"
-            label="Solo field"
+            label="Outlined style"
             return-object
             single-line
             :disabled="!searchClick"
-            solo
+            outlined
             dense
             hide-details
           ></v-select>
         </v-col>
-        <v-col v-show="memberOrAdmin == 2" class="pa-1"
-          ><v-btn v-if="searchClick" @click="search">검색</v-btn
-          ><v-btn v-if="!searchClick" @click="searchClick = !searchClick"
+        <v-col v-show="memberOrAdmin == 2" class="pa-0" cols="3"
+          ><v-btn outlined class="TransitBtn" v-if="searchClick" @click="search"
+            >검색</v-btn
+          ><v-btn
+            outlined
+            class="TransitBtn"
+            v-if="!searchClick"
+            @click="searchClick = !searchClick"
             >수정</v-btn
           ></v-col
         >
       </v-row>
     </v-container>
-    <div v-if="timetable.moveRoute">
+    <div v-if="timetable.moveRoute" class="pt-2">
       <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
         {{ route.text }}
-        <span style="color: red">
+        <span style="color: #ff1744">
           {{ route.duration }}
         </span>
       </div>
     </div>
-    <h3 v-if="timetable.moveTime" style="text-align: center">
-      {{ this.timetable.moveTime }} 분 소요
+    <h3 v-if="timetable.moveTime" style="text-align: center" class="pt-2">
+      <span v-if="Math.floor(timetable.moveTime / 60) > 0"
+        >{{ Math.floor(this.timetable.moveTime / 60) }} 시간</span
+      >
+      <span> {{ this.timetable.moveTime % 60 }} 분 </span>
     </h3>
   </div>
 </template>
@@ -165,7 +211,7 @@ export default {
     //timetable의 moveRoute 쪼개기..?아마도
     routeList() {
       let list = this.timetable.moveRoute.split("/");
-      console.log(list);
+      // console.log(list);
       let last = list[list.length - 2].split(" ");
       list.pop();
       list.pop();
@@ -354,5 +400,16 @@ export default {
 <style scoped>
 .card-title {
   justify-content: space-between;
+  padding-bottom: 5px;
+}
+.textCutting {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
+}
+.TransitBtn {
+  color: #ff1744;
 }
 </style>

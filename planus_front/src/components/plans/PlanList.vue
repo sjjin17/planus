@@ -16,7 +16,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
-            >시</v-col
+            ><h3>시</h3></v-col
           >
           <v-spacer />
           <v-col cols="3" class="ma-0 pa-0 mr-3">
@@ -32,7 +32,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
-            >분</v-col
+            ><h3>분</h3></v-col
           >
           <v-spacer />
           <v-col cols="1" class="ma-0 pa-0 ml-2" style="align-self: center">
