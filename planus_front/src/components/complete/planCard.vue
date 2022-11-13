@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TimeTableCard from "@/components/completetemp/TimeTableCard.vue";
+import TimeTableCard from "@/components/complete/TimeTableCard.vue";
 export default {
   name: "PlanCard",
   mounted() {

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import CompletePage from "@/components/completetemp/CompletePage.vue";
+// import CompletePage from "@/components/completetemp/CompletePage.vue";
 import HomeView from "../views/HomeView.vue";
 import MypageView from "../views/MypageView.vue";
 import PlanView from "../views/PlansView.vue";
@@ -91,11 +91,11 @@ const routes = [
     name: "chat",
     component: Chat,
   },
-  {
-    path: "/completetest/:url",
-    name: "completePage",
-    component: CompletePage,
-  },
+  // {
+  //   path: "/completetest/:url",
+  //   name: "completePage",
+  //   component: CompletePage,
+  // },
   {
     path: "/community",
     name: "community",

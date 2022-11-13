@@ -6,7 +6,7 @@
 
 <script>
 import API from "@/api/RESTAPI";
-import PlanCard from "@/components/completetemp/planCard.vue";
+import PlanCard from "@/components/complete/planCard.vue";
 const api = API;
 export default {
   name: "CompletePage",

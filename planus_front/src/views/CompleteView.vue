@@ -2,16 +2,22 @@
   <div class="home">
     <h1>{{ this.tripId }}번 방</h1>
     <h1>완료 페이지입니다.</h1>
+    <v-container>
+      <complete-page></complete-page>
+    </v-container>
   </div>
 </template>
 
 <script>
 import API from "@/api/RESTAPI";
+import CompletePage from "@/components/complete/CompletePage.vue";
 const api = API;
 
 export default {
   name: "CompleteView",
-  components: {},
+  components: {
+    CompletePage,
+  },
   data() {
     return {
       tripId: 0,
