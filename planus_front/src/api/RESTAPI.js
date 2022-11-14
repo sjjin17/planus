@@ -253,8 +253,7 @@ const API = {
   },
 
   async deleteArticle(articleId) {
-    const response = await this.instance.delete("/articles/" + articleId);
-    return response.data;
+    await this.instance.delete("/articles/" + articleId);
   },
 
   async likeArticle(articleId) {
