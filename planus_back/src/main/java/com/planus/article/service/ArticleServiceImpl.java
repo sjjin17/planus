@@ -69,7 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Transactional     // 게시글 하나를 조회할 때 쓰는 로직이지만 조회할 때마다 조회수를 올려줘야 하므로 Transactional(readOnly=True)가 아닌 Transactional로 해야 db에 자동 변경된다.
+    @Transactional
     public long updateArticle(String token, ArticleReqDTO articleReqDTO, long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
         if (tokenProvider.getUserId(token.split(" ")[1]) == article.getUser().getUserId()) {
@@ -93,8 +93,8 @@ public class ArticleServiceImpl implements ArticleService {
         MyTripResDTO trip = MyTripResDTO.toResDTO(article.getTrip());
         List<Plan> plans = article.getTrip().getPlanList();
         List<PlanResDTO> planList = plans.stream().map(plan -> PlanResDTO.toResDTO(plan)).collect(Collectors.toList());
-
-        return ArticleDetailResDTO.toEntity(article, likeCount, user, trip, planList);
+        System.out.println(article.getContent());
+        return ArticleDetailResDTO.toEntity(article, likeCount, articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, user.getUserId()), user, trip, planList);
 
     }
 
@@ -216,7 +216,6 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDTO getMyArticles(String token, Pageable pageable) {
         long userId = tokenProvider.getUserId(token.split(" ")[1]);
         Page<Article> articleList = articleRepository.findByUserUserIdOrderByArticleIdDesc(userId, pageable);
-        System.out.println(articleList);
         return ArticleResDTO.toDTO(articleList);
     }
 
@@ -224,7 +223,6 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDTO getMyLikedArticles(String token, Pageable pageable) {
         long userId = tokenProvider.getUserId(token.split(" ")[1]);
         Page<Article> articles = articleRepository.findArticleByUserUserId(userId, pageable);
-        System.out.println(articles);
         return ArticleResDTO.toDTO(articles);
 //        List<ArticleLike> articleLikes = articleLikeRepository.findByUserUserId(userId);
 //        List<Article> articles = articleLikes.stream().map(articleLike -> articleLike.getArticle()).collect(Collectors.toList());

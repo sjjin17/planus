@@ -68,6 +68,28 @@ public class TripController {
         }
     }
 
+    @GetMapping("/bestarea")
+    public ResponseEntity getBestArea(){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("areaList", areaService.findBestArea());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/festival")
+    public ResponseEntity getFestival(){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("festivalList", areaService.findFestival());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/member")
     public ResponseEntity addMember(@RequestHeader(name="Authorization") String token, @RequestParam long tripId){
         Map<String, Object> resultMap = new HashMap<>();
@@ -112,6 +134,5 @@ public class TripController {
             e.printStackTrace();
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
-
     }
 }

@@ -34,13 +34,9 @@ public class SecurityConfig {
             CorsConfiguration cors = new CorsConfiguration();
             //로컬
             cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://k7a505.p.ssafy.io", "https://k7a505.p.ssafy.io/planus", "https://planus.co.kr", "https://planus.co.kr/planus"));
-//            cors.setAllowedOriginPatterns(Collections.singletonList("*"));
             cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD", "PATCH"));
-//            cors.setAllowedMethods(Arrays.asList("*"));
             cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization", "refreshToken"));
-//            cors.setAllowedHeaders(Arrays.asList("*"));
             cors.setExposedHeaders(Arrays.asList("token", "refresh"));
-//            cors.setExposedHeaders(Arrays.asList("*"));
             cors.setAllowCredentials(true);
             return cors;
         })
@@ -53,14 +49,14 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/login/test").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
                 .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint().userService(userOauth2Service).and()
                 .and().apply(new JwtSecurityConfig(tokenProvider))
                 .and().build();
-
     }
 
 }

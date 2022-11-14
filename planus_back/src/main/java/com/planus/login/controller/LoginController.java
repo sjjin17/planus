@@ -28,18 +28,6 @@ public class LoginController {
 
     private final KakaoUtil kakaoUtil;
 
-
-//    @GetMapping("/oauth2/kakao")
-//    public ResponseEntity<String> Login(@RequestParam(name="code") String code){
-//        System.out.println(code);
-////        String accessToken = kakaoUtil.getAccessToken(code);
-////        Map<String, Object> userInfo = kakaoUtil.getUserInfo(accessToken);
-////        User loginUser = userService.join((String) userInfo.get("nickname"), (String) userInfo.get("email"), (Long) userInfo.get("id"));
-////        String token = jwtUtil.createToken(loginUser.getUserId(), loginUser.getName(), loginUser.getEmail());
-////        return new ResponseEntity<>(token, OK);
-//        return null;
-//    }
-
     @GetMapping("/test")
     public void Test(@RequestHeader String Authorization){
         String token=Authorization.split(" ")[1];
@@ -81,7 +69,6 @@ public class LoginController {
             return new ResponseEntity(resultMap,HttpStatus.OK);
         }else{
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
-//            return new ResponseEntity(HttpStatus.FORBIDDEN);
             return null;
         }
     }
@@ -95,7 +82,6 @@ public class LoginController {
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         }catch(Exception e) {
-            e.printStackTrace();
             resultMap.put("message", "로그아웃에서 문제 발생");
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
