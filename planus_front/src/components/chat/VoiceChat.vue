@@ -13,7 +13,7 @@
       v-if="isConnected"
       @click="micBtnHandler"
       style="box-shadow: 1px 1px 1px 1px #544c4c50; margin-top: 3px"
-      class="ml-5"
+      class="ml-3 mr-1"
     >
       <v-icon v-if="micOn">mdi-microphone</v-icon>
       <v-icon v-if="!micOn">mdi-microphone-off</v-icon>
