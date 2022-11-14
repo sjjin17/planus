@@ -550,7 +550,6 @@ export default {
   border: 2px solid transparent;
   border-color: #00000000;
 }
-
 .v-tabs-slider {
   color: #4a8072;
 }
