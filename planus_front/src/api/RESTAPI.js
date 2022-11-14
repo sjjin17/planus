@@ -66,6 +66,10 @@ const API = {
     const response = await this.instance.get("/trip/bestarea");
     return response.data;
   },
+  async getFestival() {
+    const response = await this.instance.get("/trip/festival");
+    return response.data;
+  },
   async createTrip(startDate, period, areaId) {
     const response = await this.instance.post("/trip", {
       startDate: startDate,
@@ -258,7 +262,6 @@ const API = {
       content: content,
       tripId: tripId,
     });
-    //return response.data;
   },
 
   async deleteArticle(articleId) {

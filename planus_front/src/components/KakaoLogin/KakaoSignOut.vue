@@ -14,9 +14,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn outlined color="#4a8072" @click="dialog = false"> 취소</v-btn>
-        <v-btn color="#ff1744" @click="signOut"
-          ><span style="color: white">탈퇴</span></v-btn
-        >
+        <v-btn outlined color="#ff1744" @click="signOut">탈퇴</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
