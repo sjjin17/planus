@@ -3,98 +3,141 @@
     <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
     <!-- 이전 일정은 자정 전에 끝났는데 이동시간 땜에 시작 시간이 자정 이후가 되면 어떡하져..? -->
     <!-- 일정이 딱 0시에 끝나면 이거 안 띄워짐 -->
-    <div
+    <h5
       v-if="
         this.calTime[this.timetable.orders - 1] < 1440 &&
         this.calTime[this.timetable.orders - 1] + this.timetable.costTime > 1440
       "
     >
       0시 이후의 일정입니다.
-    </div>
-    <v-card>
-      <v-card-title>{{ this.timetable.place }}</v-card-title>
-      <v-icon @click="delTimetable">mdi-close</v-icon>
-      <v-card-text>
-        <div>
-          {{ Math.floor(this.calTime[this.timetable.orders - 1] / 60) }} :
-          {{ this.calTime[this.timetable.orders - 1] % 60 }} ~
-          {{
-            Math.floor(
-              (this.calTime[this.timetable.orders - 1] +
-                this.timetable.costTime) /
-                60
-            )
-          }}
-          :
-          {{
-            (this.calTime[this.timetable.orders - 1] +
-              this.timetable.costTime) %
-            60
-          }}
-          ( {{ Math.floor(this.timetable.costTime / 60) }} 시간
-          {{ this.timetable.costTime % 60 }} 분 )
-          <v-icon small @click.native="clickChangeCostTime">mdi-pencil</v-icon>
-          <v-dialog v-model="dialog">
-            <form>
-              <v-text-field outlined v-model="costHour"></v-text-field>
-              시간
-              <v-text-field outlined v-model="costMin"></v-text-field>
-              분
-              <v-btn @click="changeCostTime(costHour, costMin)">등록</v-btn>
-            </form>
-          </v-dialog>
+    </h5>
+    <v-card outlined color="#ffb4c2" class="my-4 ps-2">
+      <v-card-title class="card-title">
+        <div class="textCutting">
+          {{ this.timetable.place }}
         </div>
+        <v-icon @click="delTimetable" v-show="memberOrAdmin == 2"
+          >mdi-close</v-icon
+        >
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row class="pa-0" style="justify-content: space-between">
+            <v-col class="ma-0 pa-0" cols="11">
+              <span>
+                {{
+                  Math.floor(this.calTime[this.timetable.orders - 1] / 60) > 24
+                    ? Math.floor(this.calTime[this.timetable.orders - 1] / 60) -
+                      24
+                    : Math.floor(this.calTime[this.timetable.orders - 1] / 60)
+                }}
+                :
+                {{ this.calTime[this.timetable.orders - 1] % 60 }}
+                ~
+                {{
+                  Math.floor(
+                    (this.calTime[this.timetable.orders - 1] +
+                      this.timetable.costTime) /
+                      60
+                  ) > 24
+                    ? Math.floor(
+                        (this.calTime[this.timetable.orders - 1] +
+                          this.timetable.costTime) /
+                          60
+                      ) - 24
+                    : Math.floor(
+                        (this.calTime[this.timetable.orders - 1] +
+                          this.timetable.costTime) /
+                          60
+                      )
+                }}
+                :
+                {{
+                  (this.calTime[this.timetable.orders - 1] +
+                    this.timetable.costTime) %
+                  60
+                }}
+              </span>
+              <span>
+                ({{ Math.floor(this.timetable.costTime / 60) }}시간
+                {{ this.timetable.costTime % 60 }}분)
+              </span>
+            </v-col>
+            <v-col class="ma-0 pa-0" cols="1">
+              <timetable-cost-time-modal
+                :timetable="timetable"
+                @changeCostTime="changeCostTime"
+                class="ma-0 col-5 pa-2"
+                v-if="memberOrAdmin == 2"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-text>
     </v-card>
-    <div>
-      {{ this.timetable.transit }}
-    </div>
 
-    <v-container fluid>
-      <v-row align="center">
-        <v-col cols="6">
+    <v-container fluid v-show="nextLat != 0">
+      <v-row align="center" style="justify-content: space-between">
+        <v-col cols="8" class="pa-0">
           <v-select
             v-model="select"
             :items="selectList"
             item-text="text"
             item-value="value"
-            label="Select"
+            label="Outlined style"
             return-object
             single-line
             :disabled="!searchClick"
+            outlined
+            dense
+            hide-details
           ></v-select>
         </v-col>
-        <v-col
-          ><v-btn v-if="searchClick" @click="search">검색</v-btn
-          ><v-btn v-if="!searchClick" @click="searchClick = !searchClick"
+        <v-col v-show="memberOrAdmin == 2" class="pa-0" cols="3"
+          ><v-btn outlined class="TransitBtn" v-if="searchClick" @click="search"
+            >검색</v-btn
+          ><v-btn
+            outlined
+            class="TransitBtn"
+            v-if="!searchClick"
+            @click="searchClick = !searchClick"
             >수정</v-btn
           ></v-col
         >
       </v-row>
-      <div v-if="timetable.moveRoute">
-        <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
-          {{ route.text }}
-          <span style="color: red">
-            {{ route.duration }}
-          </span>
-        </div>
-      </div>
     </v-container>
-    <div v-if="timetable.moveTime">{{ this.timetable.moveTime }} 분 소요</div>
+    <div v-if="timetable.moveRoute" class="pt-2">
+      <div v-for="(route, idx) in routeToJsonList" :key="idx + route">
+        {{ route.text }}
+        <span style="color: #ff1744">
+          {{ route.duration }}
+        </span>
+      </div>
+    </div>
+    <h3 v-if="timetable.moveTime" style="text-align: center" class="pt-2">
+      <span v-if="Math.floor(timetable.moveTime / 60) > 0"
+        >{{ Math.floor(this.timetable.moveTime / 60) }} 시간</span
+      >
+      <span> {{ this.timetable.moveTime % 60 }} 분 </span>
+    </h3>
   </div>
 </template>
 
 <script>
+import TimetableCostTimeModal from "./TimetableCostTimeModal.vue";
 import axios from "axios";
 
 export default {
   name: "TimetableCard",
+  components: {
+    TimetableCostTimeModal,
+  },
   data() {
     return {
       endTime: 0,
-      dialog: false,
-      costHour: 0,
-      costMin: 0,
+      // dialog: false,
+      // costHour: 0,
+      // costMin: 0,
 
       valueEnum: {
         BUS: "transit",
@@ -120,6 +163,7 @@ export default {
   props: {
     timetable: Object,
     calTime: Array,
+    memberOrAdmin: Number,
 
     //다음 Timetable의 Lat, Lng
     //plan의 tripdate
@@ -128,9 +172,6 @@ export default {
     tripDate: Array,
   },
   mounted() {
-    this.costHour = Math.floor(this.timetable.costTime / 60);
-    this.costMin = this.timetable.costTime % 60;
-
     //timetable의 transit에 따라 select 값을 변경..아마도
     this.selectList.forEach((select) => {
       if (select.value == this.valueEnum[this.timetable.transit]) {
@@ -139,11 +180,21 @@ export default {
       }
     });
   },
+  watch: {
+    //draggable로 순서 변경 시 select를 선택안함으로 변경
+    timetableTransit() {
+      this.selectList.forEach((select) => {
+        if (select.value == this.valueEnum[this.timetable.transit]) {
+          this.select = select;
+        }
+      });
+    },
+  },
   computed: {
     //timetable의 moveRoute 쪼개기..?아마도
     routeList() {
       let list = this.timetable.moveRoute.split("/");
-      console.log(list);
+      // console.log(list);
       let last = list[list.length - 2].split(" ");
       list.pop();
       list.pop();
@@ -172,24 +223,12 @@ export default {
         this.calTime[this.timetable.orders - 1] * 60
       );
     },
+    timetableTransit() {
+      return this.timetable.transit;
+    },
   },
   methods: {
-    clickChangeCostTime() {
-      this.dialog = true;
-    },
-    changeCostTime(costHour, costMin) {
-      let changedCost = parseInt(costHour) * 60 + parseInt(costMin);
-      let newTimetable = {
-        orders: this.timetable.orders,
-        place: this.timetable.place,
-        lat: this.timetable.lat,
-        lng: this.timetable.lng,
-        costTime: changedCost,
-        moveTime: this.timetable.moveTime,
-        transit: this.timetable.transit,
-        moveRoute: this.timetable.moveRoute,
-      };
-      this.dialog = false;
+    changeCostTime(newTimetable) {
       this.$emit("setTimetable", newTimetable);
     },
     delTimetable() {
@@ -326,4 +365,34 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.card-title {
+  justify-content: space-between;
+  padding-bottom: 5px;
+}
+.textCutting {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
+}
+.TransitBtn {
+  color: #ff1744;
+}
+
+h5 {
+  display: flex;
+  flex-direction: row;
+  color: #ff1744;
+  margin-top: 8px;
+}
+
+h5:before,
+h5:after {
+  content: "";
+  flex: 1 1;
+  border-bottom: 2px solid #ff1744;
+  margin: auto;
+}
+</style>
