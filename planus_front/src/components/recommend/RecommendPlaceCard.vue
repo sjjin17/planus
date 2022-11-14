@@ -43,6 +43,7 @@
             :fromBucket="false"
             class="ma-0 col-6 pa-2"
           ></plan-modal>
+          <v-spacer />
           <v-col class="col-6 pa-2">
             <v-btn
               width="100%"
