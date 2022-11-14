@@ -62,6 +62,10 @@ const API = {
     const response = await this.instance.get("/trip/area");
     return response.data;
   },
+  async getBestArea() {
+    const response = await this.instance.get("/trip/bestarea");
+    return response.data;
+  },
   async createTrip(startDate, period, areaId) {
     const response = await this.instance.post("/trip", {
       startDate: startDate,
@@ -248,18 +252,21 @@ const API = {
     return response.data;
   },
 
-  async updateArticle(articleId) {
-    const response = await this.instance.put("/articles/" + articleId);
-    return response.data;
+  async updateArticle(articleId, title, content, tripId) {
+    await this.instance.put("/articles/" + articleId, {
+      title: title,
+      content: content,
+      tripId: tripId,
+    });
+    //return response.data;
   },
 
   async deleteArticle(articleId) {
-    const response = await this.instance.delete("/articles/" + articleId);
-    return response.data;
+    await this.instance.delete("/articles/" + articleId);
   },
 
   async likeArticle(articleId) {
-    const response = await this.instance.posts("/articles/like/" + articleId);
+    const response = await this.instance.post("/articles/like/" + articleId);
     return response.data;
   },
 

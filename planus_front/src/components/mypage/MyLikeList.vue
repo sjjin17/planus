@@ -1,12 +1,12 @@
 <template>
   <v-container class="made-container">
-    <v-row justify="center" height="70vh" class="mt-3">
+    <v-row justify="center" height="75vh" class="mt-3">
       <v-simple-table>
         <template v-slot:default>
           <thead>
             <tr>
               <th class="text-left">여행날짜</th>
-              <th class="text-left">여행지역</th>
+              <th class="text-left">인원,지역</th>
               <th class="text-left" style="width: 35vw">제목</th>
               <th class="text-left">좋아요</th>
               <th class="text-left">조회수</th>
@@ -20,19 +20,21 @@
               :key="article.articleId"
               @click="goToArticle(article.articleId)"
             >
-              <td>
-                {{ article.trip.startDate + "~" + article.trip.endDate }}
+              <td class="textCutting">
+                {{ article.trip.startDate }} <br />
+                {{ "~" + article.trip.endDate }}
               </td>
-              <td>
-                {{ article.trip.participants + "명 " + article.trip.areaList }}
+              <td class="textCutting">
+                {{ article.trip.participants + "명" }}<br />
+                {{ article.trip.areaList + "" }}
               </td>
-              <td>{{ article.title }}</td>
+              <td class="textCutting">
+                {{ article.title }}
+              </td>
               <td>{{ article.likeCount }}</td>
               <td>{{ article.hits }}</td>
-              <td>
-                {{
-                  article.regDate.split("T")[0] +
-                  " " +
+              <td class="textCutting">
+                {{ article.regDate.split("T")[0] }}<br />{{
                   article.regDate.split("T")[1].split(".")[0]
                 }}
               </td>
