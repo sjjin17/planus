@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn @click="saveTrip">완료</v-btn>
+    <v-btn depressed color="#4A8072" outlined @click="saveTrip">완료</v-btn>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   },
   props: {
     tripId: Number,
+    tripUrl: String,
     planIdList: Array,
   },
   methods: {
@@ -24,7 +25,9 @@ export default {
       this.planIdList.forEach((plan) => {
         savePlanIdList.push(plan.planId);
       });
-      api.savePlan(savePlanIdList, true);
+      api.savePlan(this.tripId, savePlanIdList, true);
+      //router.push - CompleteView로 보내면 PlansView로 되돌아옴
+      this.$router.go();
     },
   },
 };

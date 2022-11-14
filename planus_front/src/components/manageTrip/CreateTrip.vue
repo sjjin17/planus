@@ -248,7 +248,7 @@ export default {
       }
     },
     isLogin() {
-      if (!this.$cookies.get("token")) {
+      if (!this.$cookies.get("refresh")) {
         window.alert("로그인 해주세요!");
       }
     },

@@ -149,8 +149,9 @@ const API = {
     const response = await this.instance.get("/plans/start/" + planId);
     return response.data;
   },
-  async savePlan(planIdList, complete) {
+  async savePlan(tripId, planIdList, complete) {
     const response = await this.instance.post("/plans", {
+      tripId: tripId,
       planIdList: planIdList,
       complete: complete,
     });
@@ -251,9 +252,13 @@ const API = {
     return response.data;
   },
 
-  async updateArticle(articleId) {
-    const response = await this.instance.put("/articles/" + articleId);
-    return response.data;
+  async updateArticle(articleId, title, content, tripId) {
+    await this.instance.put("/articles/" + articleId, {
+      title: title,
+      content: content,
+      tripId: tripId,
+    });
+    //return response.data;
   },
 
   async deleteArticle(articleId) {
