@@ -36,11 +36,14 @@
                   </v-chip-group>
                 </v-col>
                 <v-col cols="6">
-                  {{ article.period }}박{{ article.period + 1 }}일
+                  {{ article.period }}박 {{ article.period + 1 }}일
                 </v-col>
               </v-row>
               <v-row>
-                <v-col> {{ article.name }}({{ article.regDate }}) </v-col>
+                <v-col>
+                  {{ article.name }} ({{ article.regDate.split("T")[0] }}
+                  {{ article.regDate.split("T")[1].split(".")[0] }})
+                </v-col>
               </v-row>
             </v-col>
           </v-row>

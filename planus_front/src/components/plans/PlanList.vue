@@ -1,26 +1,53 @@
 <template>
   <div>
     <div>
-      <form>
-        <v-text-field
-          outlined
-          v-model="startHour"
-          type="number"
-          :disabled="!startBtnClick"
-        ></v-text-field>
-        시
-        <v-text-field
-          :disabled="!startBtnClick"
-          outlined
-          v-model="startMin"
-          type="number"
-        ></v-text-field>
-        분
-        <v-icon v-if="!startBtnClick" @click="startBtn">mdi-pencil</v-icon>
-        <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
-          >mdi-pencil</v-icon
-        >
-      </form>
+      <v-container style="justify-content: center">
+        <v-row class="pa-0 ma-0">
+          <v-col cols="3" class="ma-0 pa-0 mr-3" style="align-self: center">
+            <v-text-field
+              class="centered-input"
+              outlined
+              v-model="startHour"
+              type="number"
+              :disabled="!startBtnClick"
+              hide-details
+              :min="0"
+              :max="11"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
+            ><h3>시</h3></v-col
+          >
+          <v-spacer />
+          <v-col cols="3" class="ma-0 pa-0 mr-3">
+            <v-text-field
+              class="centered-input"
+              :disabled="!startBtnClick"
+              outlined
+              v-model="startMin"
+              type="number"
+              hide-details
+              :min="0"
+              :max="59"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
+            ><h3>분</h3></v-col
+          >
+          <v-spacer />
+          <v-col cols="1" class="ma-0 pa-0 ml-2" style="align-self: center">
+            <v-icon
+              v-if="!startBtnClick"
+              @click="startBtn"
+              v-show="memberOrAdmin == 2"
+              >mdi-pencil</v-icon
+            >
+            <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
+              >mdi-pencil</v-icon
+            >
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
     <draggable
       :list="timetableList"
@@ -30,7 +57,7 @@
     >
       <timetable-card
         v-for="timetable in timetableList"
-        :key="timetable.orders"
+        :key="`tt` + timetable.orders"
         :nextLat="
           timetableList[timetable.orders]
             ? timetableList[timetable.orders].lat
@@ -45,6 +72,7 @@
         :timetable="timetable"
         :calTime="calTime"
         :startTime="startTime"
+        :memberOrAdmin="memberOrAdmin"
         @changeCalTime="changeCalTime"
         @setTimetable="setTimetable"
         @delTimetable="delTimetable"
@@ -78,6 +106,7 @@ export default {
       //드래그용
       enabled: true,
       dragging: false,
+
       startBtnClick: false,
     };
   },
@@ -89,9 +118,15 @@ export default {
     addedTimetable: Object,
     setOrdersTimetableList: Object,
     changedTimetable: Object,
+    memberOrAdmin: Number,
   },
   async created() {
     await this.getPlanList([this.plan.planId]);
+    if (this.memberOrAdmin == 2) {
+      this.enabled = true;
+    } else {
+      this.enabled = false;
+    }
   },
   watch: {
     WebSocketStartTime(newVal) {
@@ -194,6 +229,11 @@ export default {
       this.startBtnClick = !this.startBtnClick;
     },
     changeStartTime(plan, startHour, startMin) {
+      if (startHour > 12 || startMin > 59) {
+        alert("시는 0 ~ 12, 분은 0 ~ 59의 숫자만 가능");
+        return;
+      }
+
       this.startTime = parseInt(startHour) * 60 + parseInt(startMin);
       let newPlan = {
         planId: plan.planId,
@@ -269,20 +309,30 @@ export default {
     },
     changeDraggedOrders(oldIdx, newIdx) {
       //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime, moveRoute 초기화
-      if (oldIdx != 0) {
-        this.timetableList[oldIdx - 1].transit = "NONE";
-        this.timetableList[oldIdx - 1].moveTime = 0;
-        this.timetableList[oldIdx - 1].moveRoute = "";
+
+      // 밑->위 : oldIdx만 변경
+      // 위->밑 : oldIdx-1만 변경
+      if (oldIdx > newIdx) {
+        this.timetableList[oldIdx].transit = "NONE";
+        this.timetableList[oldIdx].moveTime = 0;
+        this.timetableList[oldIdx].moveRoute = "";
+      } else {
+        if (oldIdx != 0) {
+          this.timetableList[oldIdx - 1].transit = "NONE";
+          this.timetableList[oldIdx - 1].moveTime = 0;
+          this.timetableList[oldIdx - 1].moveRoute = "";
+        }
       }
-      this.timetableList[newIdx].transit = "NONE";
-      this.timetableList[newIdx].moveTime = 0;
-      this.timetableList[newIdx].moveRoute = "";
 
       //splice로 oldIdx -> newIdx 배열 내 위치 변경
       // let selectedTimetable = this.timetableList[oldIdx];
 
       // this.timetableList.splice(oldIdx, 1);
       // this.timetableList.splice(newIdx, 0, selectedTimetable);
+
+      this.timetableList[newIdx].transit = "NONE";
+      this.timetableList[newIdx].moveTime = 0;
+      this.timetableList[newIdx].moveRoute = "";
 
       if (newIdx != 0) {
         this.timetableList[newIdx - 1].transit = "NONE";

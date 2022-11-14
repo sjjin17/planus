@@ -149,4 +149,25 @@ public class TripServiceImpl implements TripService {
             return userId;
         }
     }
+
+    @Override
+    public boolean changeComplete(long tripId, boolean complete) {
+        Trip PreTrip = tripRepository.findByTripId(tripId);
+        Trip trip = Trip.builder()
+                .tripId(PreTrip.getTripId())
+                .tripUrl(PreTrip.getTripUrl())
+                .admin(PreTrip.getAdmin())
+                .createTime(PreTrip.getCreateTime())
+                .startDate(PreTrip.getStartDate())
+                .period(PreTrip.getPeriod())
+                .complete(complete)
+                .imageUrl(PreTrip.getImageUrl())
+                .memberList(PreTrip.getMemberList())
+                .bucketList(PreTrip.getBucketList())
+                .tripAreaList(PreTrip.getTripAreaList())
+                .planList(PreTrip.getPlanList())
+                .build();
+        tripRepository.save(trip);
+        return true;
+    }
 }

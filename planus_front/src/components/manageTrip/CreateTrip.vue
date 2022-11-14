@@ -248,8 +248,8 @@ export default {
       }
     },
     isLogin() {
-      if (!this.$cookies.get("token")) {
-        window.alert("로그인 해주세요!");
+      if (!this.$cookies.get("refresh")) {
+        this.$emit("alert");
       }
     },
     addArea(area) {

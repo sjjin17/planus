@@ -3,11 +3,12 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         depressed
-        color="primary"
+        color="#4A8072"
         outlined
         v-bind="attrs"
         v-on="on"
         @click="getMemberList"
+        class="mr-1"
       >
         초대
       </v-btn>

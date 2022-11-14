@@ -1,11 +1,15 @@
 package com.planus.plan.controller;
 
+import com.planus.db.entity.Trip;
+import com.planus.db.repository.TripRepository;
 import com.planus.plan.dto.PlanIdResDTO;
 import com.planus.plan.dto.PlanResDTO;
 import com.planus.plan.dto.PlanSaveReqDTO;
 import com.planus.plan.service.PlanService;
+import com.planus.trip.service.TripService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,8 @@ import java.util.Map;
 public class PlanController {
     @Autowired
     PlanService planService;
+    @Autowired
+    TripService tripService;
 
     @GetMapping("/{tripId}")
     @ApiOperation(value = "planId 목록 조회", notes = "tripId를 이용해 일정 정보를 불러오는 데 필요한 planId의 목록들을 받아옵니다.")
@@ -80,6 +86,7 @@ public class PlanController {
     @PostMapping
     @ApiOperation(value = "Plan 및 Timetable 저장")
     public ResponseEntity savePlan(@RequestBody PlanSaveReqDTO planSaveReqDTO) {
+        long tripId = planSaveReqDTO.getTripId();
         List<Long> planIdList = planSaveReqDTO.getPlanIdList();
         boolean complete = planSaveReqDTO.isComplete();
 
@@ -90,6 +97,10 @@ public class PlanController {
                 planService.savePlan(planId, complete);
                 planService.saveTimetable(planId, complete);
             }
+
+            //Trip의 complete를 변경
+            tripService.changeComplete(tripId, complete);
+
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
         } catch (Exception e) {

@@ -15,7 +15,7 @@
           </thead>
           <tbody>
             <tr
-              class="listTable"
+              style="cursor: pointer"
               v-for="article in articleList"
               :key="article.articleId"
               @click="goToArticle(article.articleId)"
