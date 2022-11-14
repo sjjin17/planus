@@ -7,6 +7,7 @@
           outlined
           class="mx-10 mt-2"
           @click="goToArticle(article.articleId)"
+          style="border-color: #4a8072"
         >
           <v-row>
             <v-col cols="3">
@@ -47,6 +48,7 @@
       </v-col>
     </v-row>
     <v-spacer></v-spacer>
+    <v-btn @click="goToNewArticle()">게시글 작성</v-btn>
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
         v-model="currentPage"
@@ -117,6 +119,9 @@ export default {
         this.getArticleListByAreaLength();
         this.getArticleListByArea(1);
       }
+    },
+    goToNewArticle() {
+      this.$router.push("/newArticle");
     },
   },
 };

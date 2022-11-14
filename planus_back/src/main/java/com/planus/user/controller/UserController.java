@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/comment")
-    public ResponseEntity getMyComment(@RequestHeader(name="Authorization") String token, @PageableDefault(size = 10, sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity getMyComment(@RequestHeader(name="Authorization") String token, @PageableDefault(size = 10, sort = "commentId", direction = Sort.Direction.DESC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try{
             resultMap.put("commentPage", commentService.getMyComment(token, pageable));
@@ -77,13 +77,13 @@ public class UserController {
     }
 
     @GetMapping("/articles")
-    public ResponseEntity getMyArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=6, sort="regDate",direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getMyArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=10, sort="articleId",direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.getMyArticles(token, pageable));
     }
 
     @GetMapping("/articles/like")
-    public ResponseEntity getMyLikedArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=6, sort="regDate", direction=Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getMyLikedArticles(@RequestHeader(name="Authorization") String token, @PageableDefault(size=10, sort="article_id", direction=Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(articleService.getMyLikedArticles(token, pageable));
     }
