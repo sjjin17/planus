@@ -1,12 +1,14 @@
 <template>
   <v-container class="made-container">
-    <v-row justify="center" height="70vh" class="mt-3">
+    <v-row justify="center" height="75vh" class="mt-3">
       <v-simple-table>
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="text-left" style="width: 50vw">댓글</th>
+              <th class="text-left" style="width: 20vw">게시글 제목</th>
+              <th class="text-left" style="width: 45vw">댓글</th>
               <th class="text-left">등록(수정)시간</th>
+              <th class="text-left" style="width: 60px">삭제</th>
             </tr>
           </thead>
           <tbody>
@@ -14,14 +16,20 @@
               class="listTable"
               v-for="comment in commentList"
               :key="comment.commentId"
+              @click="goToArticle(comment.articleId)"
             >
-              <td>{{ comment.content }}</td>
-              <td>
-                {{
-                  comment.regDate.split("T")[0] +
-                  " " +
+              <td class="textCutting">{{ comment.title }}</td>
+              <td class="textCutting">{{ comment.content }}</td>
+              <td class="textCutting">
+                {{ comment.regDate.split("T")[0] }}<br />{{
                   comment.regDate.split("T")[1].split(".")[0]
                 }}
+              </td>
+              <td>
+                <comment-delete
+                  :commentId="comment.commentId"
+                  @deleteComment="delComment"
+                ></comment-delete>
               </td>
             </tr>
           </tbody>
@@ -41,9 +49,13 @@
 </template>
 
 <script>
+import CommentDelete from "@/components/community/CommentDelete.vue";
 import API from "@/api/RESTAPI";
 const api = API;
 export default {
+  components: {
+    CommentDelete,
+  },
   data() {
     return {
       commentList: [],
@@ -69,6 +81,11 @@ export default {
     },
     goToArticle(articleId) {
       this.$router.push("/article/" + articleId);
+    },
+    async delComment(commentId) {
+      await api.delComment(commentId);
+      this.currentPage = 1;
+      this.getMyCommentList();
     },
   },
 };

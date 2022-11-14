@@ -2,7 +2,7 @@
   <v-container>
     <h1>마이페이지</h1>
     <v-container class="d-flex justify-center">
-      <v-sheet height="80vh" class="content">
+      <v-sheet height="85vh" class="content">
         <router-view style="width: 80vw; max-width: 80vw" />
       </v-sheet>
       <div style="padding-top: 3%">
