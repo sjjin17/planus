@@ -258,7 +258,7 @@ const API = {
   },
 
   async likeArticle(articleId) {
-    const response = await this.instance.posts("/articles/like/" + articleId);
+    const response = await this.instance.post("/articles/like/" + articleId);
     return response.data;
   },
 

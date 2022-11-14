@@ -94,7 +94,7 @@ public class ArticleServiceImpl implements ArticleService {
         List<Plan> plans = article.getTrip().getPlanList();
         List<PlanResDTO> planList = plans.stream().map(plan -> PlanResDTO.toResDTO(plan)).collect(Collectors.toList());
         System.out.println(article.getContent());
-        return ArticleDetailResDTO.toEntity(article, likeCount, user, trip, planList);
+        return ArticleDetailResDTO.toEntity(article, likeCount, articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, user.getUserId()), user, trip, planList);
 
     }
 
