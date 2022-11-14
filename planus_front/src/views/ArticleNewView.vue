@@ -88,6 +88,7 @@ export default {
       console.log(this.myAllTrip);
     },
   },
+
   created() {
     this.getMyAllTrip();
   },
