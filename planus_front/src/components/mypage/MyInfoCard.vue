@@ -42,7 +42,7 @@ import API from "@/api/RESTAPI";
 import jwt_decode from "jwt-decode";
 const api = API;
 export default {
-  name: "MyInfo",
+  name: "MyInfoCard",
   created() {
     this.getMyInfo();
   },
