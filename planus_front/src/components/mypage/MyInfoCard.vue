@@ -84,7 +84,6 @@ export default {
     toModify() {
       this.modify = !this.modify;
     },
-
     async saveChange() {
       var nickname = this.userNickname;
       if (nickname == this.originNickname) {
@@ -99,19 +98,19 @@ export default {
         }
       }
     },
-    space: (value) => {
+    space(value) {
       return value.indexOf(" ") == -1;
     },
-    required: (value) => {
+    required(value) {
       return !!value;
     },
-    special: (value) => {
+    special(value) {
       return !/[~!@#$%^&*()_+|<>?:{}]/.test(value);
     },
-    maxCount: (value) => {
+    maxCount(value) {
       return value.length <= 20;
     },
-    validate: (value) => {
+    validate(value) {
       return (
         this.space(value) &&
         this.required(value) &&

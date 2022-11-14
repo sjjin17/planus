@@ -16,7 +16,7 @@
           </thead>
           <tbody>
             <tr
-              class="listTable"
+              style="cursor: pointer"
               v-for="article in articleList"
               :key="article.articleId"
               @click="goToArticle(article.articleId)"
@@ -41,8 +41,8 @@
               </td>
               <td>
                 <article-delete
-                  :articleId="article.articleId"
                   @deleteArticle="deleteArticle"
+                  :articleId="article.articleId"
                 ></article-delete>
               </td>
             </tr>
@@ -123,8 +123,5 @@ table {
   width: 100%;
   position: absolute;
   bottom: 0;
-}
-.listTable {
-  cursor: pointer;
 }
 </style>
