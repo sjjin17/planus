@@ -6,6 +6,16 @@
       <v-btn class="mainPageBtn" @click="goToMypage"> 마이페이지 </v-btn>
     </div>
     <div class="mainLogoDiv">Planus</div>
+    <v-dialog v-model="alert" max-width="450">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <create-trip class="mainTripDiv"></create-trip>
     <festival-list class="mainFestivalDiv"></festival-list>
   </div>
@@ -23,12 +33,21 @@ export default {
     CreateTrip,
     FestivalList,
   },
+  data: () => {
+    return {
+      alert: false,
+    };
+  },
   methods: {
     goToCommunity() {
       this.$router.push("/community");
     },
     goToMypage() {
-      this.$router.push("/mypage");
+      if (this.$cookies.get("refresh") == null) {
+        this.alert = !this.alert;
+      } else {
+        this.$router.push("/mypage");
+      }
     },
   },
 };
