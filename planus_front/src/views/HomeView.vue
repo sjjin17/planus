@@ -63,7 +63,7 @@ export default {
 }
 .mainLogoDiv {
   display: flex;
-  height: 30%;
+  height: 300px;
   width: 80%;
   margin: 2% auto 0;
   justify-content: center;
@@ -76,7 +76,7 @@ export default {
   text-shadow: 1px 2px gray;
 }
 .mainTripDiv {
-  height: 12%;
+  height: 140px;
   width: 80%;
   margin: 0 auto;
   border-radius: 0px 0px 12px 12px;
