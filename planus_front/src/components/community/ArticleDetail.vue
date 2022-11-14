@@ -71,7 +71,7 @@ export default {
       this.likeCount = await api.likeArticle(this.articleId);
     },
     goToEditArticle() {
-      this.$router.push("/editArticle");
+      this.$router.push("/editArticle/" + this.articleId);
     },
     goToCommunity() {
       this.$router.push("/community");
