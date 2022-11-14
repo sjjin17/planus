@@ -75,6 +75,7 @@ export default {
   methods: {
     async createNewArticle() {
       this.tripId = this.select.tripId;
+      console.log(this.select);
       this.articleId = await api.createArticle(
         this.title,
         this.content,
@@ -87,6 +88,7 @@ export default {
       console.log(this.myAllTrip);
     },
   },
+
   created() {
     this.getMyAllTrip();
   },

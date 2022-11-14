@@ -69,7 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Transactional     // 게시글 하나를 조회할 때 쓰는 로직이지만 조회할 때마다 조회수를 올려줘야 하므로 Transactional(readOnly=True)가 아닌 Transactional로 해야 db에 자동 변경된다.
+    @Transactional
     public long updateArticle(String token, ArticleReqDTO articleReqDTO, long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
         if (tokenProvider.getUserId(token.split(" ")[1]) == article.getUser().getUserId()) {

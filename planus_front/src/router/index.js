@@ -119,7 +119,7 @@ const routes = [
     component: ArticleNewView,
   },
   {
-    path: "/editArticle",
+    path: "/editArticle/:articleId",
     name: "editArticle",
     component: ArticleEditView,
   },
