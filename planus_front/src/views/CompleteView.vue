@@ -1,28 +1,40 @@
 <template>
-  <div class="home">
-    <h1>{{ this.tripId }}번 방</h1>
-    <h1>완료 페이지입니다.</h1>
-    <v-container>
-      <complete-page></complete-page>
+  <v-container>
+    <h1>완료페이지</h1>
+    <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
+      <complete-map
+        :tripArea="tripInfo.tripArea"
+        :completeList="completeList"
+      ></complete-map>
+      <complete-page :completeList="completeList"></complete-page>
+    </v-sheet>
+    <v-container class="d-flex justify-center">
+      <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
+        >저장</v-btn
+      >
+      <v-btn outlined large class="mx-4" color="#4a8072">공유</v-btn>
+      <v-btn outlined large class="mx-4" color="#4a8072">복사</v-btn>
     </v-container>
-  </div>
+  </v-container>
 </template>
 
 <script>
+import html2canvas from "html2canvas";
 import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
+import CompleteMap from "@/components/complete/CompleteMap.vue";
 const api = API;
 
 export default {
   name: "CompleteView",
   components: {
     CompletePage,
+    CompleteMap,
   },
   data() {
     return {
-      tripId: 0,
       tripUrl: "",
-      result: {
+      tripInfo: {
         tripId: 0,
         admin: 0,
         startDate: "",
@@ -47,12 +59,14 @@ export default {
           email: "",
         },
       ],
+      completeList: [],
     };
   },
   async created() {
     this.tripUrl = this.$route.params.tripUrl;
     await this.getTripInfo();
     await this.getMemberList();
+    await this.getCompleteInfo();
   },
   methods: {
     async getTripInfo() {
@@ -60,16 +74,50 @@ export default {
         window.alert("존재하지 않는 url입니다!");
         this.$router.push("/");
       });
-      this.result = this.res.result;
-      this.tripId = this.result.tripId;
-      if (!this.result.complete) {
+      this.tripInfo = this.res.result;
+      if (!this.tripInfo.complete) {
         this.$router.push("/plans/" + this.tripUrl);
       }
     },
     async getMemberList() {
-      this.res = await api.getMemberList(this.tripId);
+      this.res = await api.getMemberList(this.tripInfo.tripId);
       this.memberList = this.res.memberList;
     },
+    async getCompleteInfo() {
+      this.res = await api.getComplete(this.tripUrl);
+      this.completeList = this.res.result.planResDTOList;
+    },
+    captureImg() {
+      html2canvas(document.getElementById("capture")).then((canvas) => {
+        var base64image = canvas.toDataURL("image/png");
+        window.open(base64image, "_blank");
+      });
+    },
   },
+  // mounted() {
+  //   html2canvas(self.$refs.capture.$el).then((canvas) => {
+  //     canvas.toBlob((blob) =>
+  //       navigator.clipboard.write([window.ClipboardItem({ "image/png": blob })])
+  //     );
+  //   });
+  // },
 };
 </script>
+
+<style scoped>
+.content {
+  border: solid;
+  border-width: 5px;
+  border-color: #4a8072;
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+.content::-webkit-scrollbar {
+  color: #544c4c;
+  width: 10px;
+}
+.content::-webkit-scrollbar-thumb {
+  background-color: #544c4c;
+  border-radius: 10px;
+}
+</style>

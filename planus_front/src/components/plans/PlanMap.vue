@@ -47,6 +47,7 @@
           scaledSize: { width: 40, height: 40 },
           labelOrigin: { x: 20, y: -10 },
         }"
+        :zIndex="999999"
         id="plan"
       ></gmap-marker>
       <gmap-polyline
@@ -79,7 +80,6 @@
 </template>
 
 <script>
-import imgpath from "@/assets/logo.png";
 import { mapState, mapMutations } from "vuex";
 const mapStore = "mapStore";
 
@@ -88,10 +88,6 @@ export default {
 
   data() {
     return {
-      img: {
-        url: imgpath,
-        scaledSize: { width: 30, height: 30 },
-      },
       center: {},
       zoom: 12,
       nowCenter: {},
@@ -115,12 +111,12 @@ export default {
       }, 50);
       setTimeout(() => {
         this.center = loc;
+        this.nowCenter = loc;
         this.zoom = zoom;
       }, 50);
     },
     getCurrentCenter(center) {
       this.nowCenter = { lat: center.lat(), lng: center.lng() };
-      this.$emit("getCenter", center.lat(), center.lng());
     },
     getCurrentZoom(zoom) {
       this.zoom = zoom;
@@ -132,6 +128,18 @@ export default {
         this.isInfo = false;
         return;
       }
+      this.bucketList.forEach((bucket) => {
+        if (bucket.lat == newVal.lat && bucket.lng == newVal.lng) {
+          this.SET_SPOT_INFO(null);
+          return;
+        }
+      });
+      this.timetableList.forEach((timetable) => {
+        if (timetable.lat == newVal.lat && timetable.lng == newVal.lng) {
+          this.SET_SPOT_INFO(null);
+          return;
+        }
+      });
       this.isInfo = true;
       this.clickLocation(newVal, 15);
     },
@@ -141,6 +149,9 @@ export default {
     },
     timetableList(newVal) {
       this.planList = newVal;
+    },
+    nowCenter(newVal) {
+      this.$emit("getCenter", newVal);
     },
   },
   destroyed() {

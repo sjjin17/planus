@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-1">
-    <v-card color="#B8DBC6" class="mx-0 my-1" @click="addMarker">
+    <v-card outlined flat class="mx-0 my-1" @click="addMarker">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mb-1">
@@ -102,4 +102,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.theme--light.v-sheet--outlined {
+  border: solid 1px #4a8072;
+}
+</style>
