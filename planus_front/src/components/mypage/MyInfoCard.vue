@@ -55,16 +55,19 @@ export default {
       validateMessage: "12345",
       rules: {
         space: (value) => {
-          return value.indexOf(" ") == -1 || "공백 ㄴㄴ";
+          return value.indexOf(" ") == -1 || "공백은 사용할 수 없습니다.";
         },
         required: (value) => {
-          return !!value || "뭐함??";
+          return !!value || "닉네임을 입력해주세요.";
         },
         special: (value) => {
-          return !/[~!@#$%^&*()_+|<>?:{}]/.test(value) || "특수문자 ㄴㄴ";
+          return (
+            !/[~!@#$%^&*()_+|<>?/:{}]/.test(value) ||
+            "특수문자는 사용할 수 없습니다."
+          );
         },
         maxCount: (value) => {
-          return value.length <= 20 || "20자 초과 ㄴㄴ";
+          return value.length <= 20 || "닉네임은 20자를 초과할 수 없습니다.";
         },
       },
     };
