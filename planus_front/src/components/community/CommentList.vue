@@ -6,47 +6,59 @@
           v-model="commentInput"
           counter="200"
           placeholder="댓글을 입력하세요"
+          outlined
           no-resize
         ></v-textarea>
       </v-col>
       <v-col cols="1">
-        <v-btn @click="goComment()">입력</v-btn>
+        <v-btn class="addCommentBtn" @click="goComment()">입력</v-btn>
       </v-col>
     </v-row>
     <div v-for="(comment, i) in commentList" :key="i">
-      <v-row>
-        <v-col cols="2"> {{ comment.name }}: </v-col>
-        <v-col cols="6">
+      <v-row align="center" justify="center">
+        <v-col cols="8">
+          <div class="commentNameLine">
+            <div>
+              {{ comment.name }} ({{ comment.regDate.split("T")[0] }}
+              {{ comment.regDate.split("T")[1].split(".")[0] }})
+            </div>
+            <div v-if="userId == comment.userId">
+              <button
+                v-if="isEditing == comment.commentId"
+                @click="modifyComment(comment.commentId)"
+              >
+                저장
+              </button>
+              <button
+                v-else
+                @click="goEdit(comment.commentId, comment.content)"
+              >
+                수정
+              </button>
+              <span> | </span>
+              <button
+                v-if="userId == comment.userId"
+                @click="
+                  dialog = true;
+                  delCommentId = comment.commentId;
+                "
+              >
+                삭제
+              </button>
+            </div>
+          </div>
           <v-textarea
             v-model="commentInput2"
             counter="200"
             value="commentInput2"
+            outlined
             no-resize
             v-if="isEditing == comment.commentId"
           ></v-textarea>
           <span v-else>{{ comment.content }}</span>
         </v-col>
-        <v-col cols="2"> ({{ comment.regDate }}) </v-col>
-        <v-col>
-          <div v-if="userId == comment.userId">
-            <button
-              v-if="isEditing == comment.commentId"
-              @click="modifyComment(comment.commentId)"
-            >
-              저장
-            </button>
-            <button v-else @click="goEdit(comment.commentId, comment.content)">
-              수정
-            </button>
-            <button
-              v-if="userId == comment.userId"
-              @click="delComment(comment.commentId)"
-            >
-              삭제
-            </button>
-          </div>
-        </v-col>
       </v-row>
+      <v-divider style="margin: 1% 12%"></v-divider>
     </div>
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
@@ -56,6 +68,19 @@
         color="#4a8072"
       ></v-pagination>
     </v-row>
+    <v-dialog v-model="dialog" persistent max-width="300">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text>정말로 삭제하시겠습니까?</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn outlined color="#4a8072" @click="dialog = false"> 취소</v-btn>
+          <v-btn color="#ff1744" @click="delComment()"
+            ><span style="color: white">삭제</span></v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -80,6 +105,8 @@ export default {
       commentInput: "",
       commentInput2: "",
       isEditing: 0,
+      delCommentId: 0,
+      dialog: false,
     };
   },
   async created() {
@@ -112,8 +139,9 @@ export default {
       this.commentList = this.res.commentPage.commentList;
       this.totalPage = this.res.commentPage.totalPage;
     },
-    async delComment(commentId) {
-      this.res = await api.delComment(commentId);
+    async delComment() {
+      this.res = await api.delComment(this.delCommentId);
+      this.dialog = false;
       await this.getCommentList(1);
     },
     decoding() {
@@ -135,4 +163,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.addCommentBtn {
+  margin-bottom: 22px;
+  height: 60px !important;
+  background-color: #4a8072 !important;
+  font-size: 1.2rem !important;
+  font-weight: 700;
+  color: white !important;
+}
+.commentNameLine {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
