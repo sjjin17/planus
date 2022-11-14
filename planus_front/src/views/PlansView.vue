@@ -23,6 +23,7 @@
       ></invite-dialog>
       <complete-dialog
         :tripId="tripId"
+        :tripUrl="tripUrl"
         :planIdList="planIdList"
         class="mr-3"
       ></complete-dialog>
@@ -110,7 +111,7 @@
         style="width: 20%; min-width: 300px; height: 85vh"
       >
         <v-tabs-items v-model="planTabs">
-          <v-tab-item v-for="plan in planIdList" :key="plan.planId">
+          <v-tab-item v-for="plan in planIdList" :key="`plan` + plan.planId">
             <plan-list
               class="rightTab"
               :plan="plan"
@@ -120,6 +121,7 @@
               :setOrdersTimetableList="setOrdersTimetableList"
               :addedTimetable="addedTimetable"
               :changedTimetable="changedTimetable"
+              :memberOrAdmin="memberOrAdmin"
               @setPlan="setPlan"
               @setTimetable="setTimetable"
               @countTimetable="countTimetable"
@@ -221,7 +223,7 @@ export default {
       console.log("oldVal:" + oldVal);
       //탭 변경이므로 false
       let complete = false;
-      api.savePlan([oldVal], complete);
+      api.savePlan(this.tripId, [oldVal], complete);
       newVal;
     },
   },
@@ -547,5 +549,11 @@ export default {
   background-clip: padding-box;
   border: 2px solid transparent;
   border-color: #00000000;
+}
+.v-tabs-slider {
+  color: #4a8072;
+}
+.v-tab--active {
+  color: #4a8072 !important;
 }
 </style>
