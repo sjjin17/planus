@@ -16,7 +16,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <create-trip class="mainTripDiv"></create-trip>
+    <create-trip class="mainTripDiv" @alert="change"></create-trip>
     <festival-list class="mainFestivalDiv"></festival-list>
   </div>
 </template>
@@ -48,6 +48,9 @@ export default {
       } else {
         this.$router.push("/mypage");
       }
+    },
+    change() {
+      this.alert = !this.alert;
     },
   },
 };
