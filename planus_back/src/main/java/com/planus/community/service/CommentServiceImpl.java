@@ -2,6 +2,8 @@ package com.planus.community.service;
 
 import com.planus.community.dto.CommentDTO;
 import com.planus.community.dto.CommentResDTO;
+import com.planus.community.dto.MyCommentDTO;
+import com.planus.community.dto.MyCommentResDTO;
 import com.planus.db.entity.Article;
 import com.planus.db.entity.Comment;
 import com.planus.db.repository.ArticleRepository;
@@ -74,13 +76,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResDTO getMyComment(String token, Pageable pageable) {
+    public MyCommentResDTO getMyComment(String token, Pageable pageable) {
         Page<Comment> commentList = commentRepository.findByUserUserIdOrderByCommentIdDesc(tokenProvider.getUserId(token.split(" ")[1]), pageable);
 
-        return CommentResDTO.builder()
+        return MyCommentResDTO.builder()
                 .currentPage(commentList.getNumber())
                 .totalPage(commentList.getTotalPages())
-                .commentList(setCommentList(commentList))
+                .commentList(setMyCommentList(commentList))
                 .build();
     }
 
@@ -97,6 +99,24 @@ public class CommentServiceImpl implements CommentService {
                     .build();
 
             commentDTOList.add(commentDTO);
+        }
+
+        return commentDTOList;
+    }
+
+    private List<MyCommentDTO> setMyCommentList(Page<Comment> commentList) {
+        List<MyCommentDTO> commentDTOList = new ArrayList<>();
+
+        for(Comment comment : commentList){
+            MyCommentDTO myCommentDTO = MyCommentDTO.builder()
+                    .articleId(comment.getArticle().getArticleId())
+                    .title(comment.getArticle().getTitle())
+                    .commentId(comment.getCommentId())
+                    .content(comment.getContent())
+                    .regDate(comment.getRegDate().toString())
+                    .build();
+
+            commentDTOList.add(myCommentDTO);
         }
 
         return commentDTOList;
