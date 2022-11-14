@@ -35,7 +35,7 @@ public class Article {
 
     private long hits;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleLike> articleLikeList;
 
     @ManyToOne(fetch = FetchType.LAZY)
