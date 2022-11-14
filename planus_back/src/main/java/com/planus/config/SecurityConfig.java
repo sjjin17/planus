@@ -53,14 +53,14 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/login/test").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
                 .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint().userService(userOauth2Service).and()
                 .and().apply(new JwtSecurityConfig(tokenProvider))
                 .and().build();
-
     }
 
 }

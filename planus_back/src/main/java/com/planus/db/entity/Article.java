@@ -48,7 +48,7 @@ public class Article {
     @JoinColumn(name="trip_id")
     private Trip trip;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade =CascadeType.REMOVE)
     private List<Comment> commentList;
 
 

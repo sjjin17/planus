@@ -86,15 +86,11 @@ export default {
     },
 
     async saveChange() {
-      if (this.userNickname == this.originNickname) {
+      var nickname = this.userNickname;
+      if (nickname == this.originNickname) {
         this.toModify();
       } else {
-        if (
-          this.space(this.userNickname) &&
-          this.required(this.userNickname) &&
-          this.special(this.userNickname) &&
-          this.maxCount(this.userNickname)
-        ) {
+        if (this.validate(this.userNickname)) {
           var result = await api.changeMyInfo(this.userNickname);
           var token = result.newToken;
           this.$cookies.set("token", token, 30 * 60);
@@ -114,6 +110,14 @@ export default {
     },
     maxCount: (value) => {
       return value.length <= 20;
+    },
+    validate: (value) => {
+      return (
+        this.space(value) &&
+        this.required(value) &&
+        this.special(value) &&
+        this.maxCount(value)
+      );
     },
   },
 };
