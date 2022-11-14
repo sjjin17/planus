@@ -114,18 +114,12 @@ public class UserServiceImpl implements UserService{
                     trip.changeAdmin(0);
                 continue;
             }
-            // 진행중 일정 - 참가자 (참가자에서만 삭제)
             if(trip.getAdmin() != userId) {
                 memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
                 continue;
             }
-            //(완료) 진행중 일정 - 방장 - 잔여 참가자 O (참가자에서 삭제, 방장 위임)
             if(memberRepository.countByTripTripId(tripId) > 1) {
-                System.out.println("==================================");
-                System.out.println("33333333333333333333333333333333333");
                 memberRepository.deleteByTripTripIdAndUserUserId(tripId, userId);
-                System.out.println("==================================");
-                System.out.println(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
                 trip.changeAdmin(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
                 continue;
             }
