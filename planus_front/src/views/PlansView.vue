@@ -23,6 +23,7 @@
       ></invite-dialog>
       <complete-dialog
         :tripId="tripId"
+        :tripUrl="tripUrl"
         :planIdList="planIdList"
         class="mr-3"
       ></complete-dialog>
@@ -44,8 +45,8 @@
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding: 0">장소검색</v-tab>
-          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
+          <v-tab style="padding">장소검색</v-tab>
+          <v-tab style="padding" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
@@ -110,7 +111,7 @@
         style="width: 20%; min-width: 300px; height: 85vh"
       >
         <v-tabs-items v-model="planTabs">
-          <v-tab-item v-for="plan in planIdList" :key="plan.planId">
+          <v-tab-item v-for="plan in planIdList" :key="`plan` + plan.planId">
             <plan-list
               class="rightTab"
               :plan="plan"
@@ -222,7 +223,7 @@ export default {
       console.log("oldVal:" + oldVal);
       //탭 변경이므로 false
       let complete = false;
-      api.savePlan([oldVal], complete);
+      api.savePlan(this.tripId, [oldVal], complete);
       newVal;
     },
   },
@@ -548,5 +549,12 @@ export default {
   background-clip: padding-box;
   border: 2px solid transparent;
   border-color: #00000000;
+}
+
+.v-tabs-slider {
+  color: #4a8072;
+}
+.v-tab--active {
+  color: #4a8072 !important;
 }
 </style>

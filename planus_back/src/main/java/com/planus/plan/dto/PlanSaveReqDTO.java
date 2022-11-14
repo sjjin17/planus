@@ -10,11 +10,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanSaveReqDTO {
+    long tripId;
     List<Long> planIdList;
     boolean complete;
 
     @Builder
-    public PlanSaveReqDTO(List<Long> planIdList, boolean complete) {
+    public PlanSaveReqDTO(long tripId, List<Long> planIdList, boolean complete) {
+        this.tripId = tripId;
         this.planIdList = planIdList;
         this.complete = complete;
     }

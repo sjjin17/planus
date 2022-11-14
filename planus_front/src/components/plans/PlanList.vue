@@ -57,7 +57,7 @@
     >
       <timetable-card
         v-for="timetable in timetableList"
-        :key="timetable.orders"
+        :key="`tt` + timetable.orders"
         :nextLat="
           timetableList[timetable.orders]
             ? timetableList[timetable.orders].lat
@@ -309,20 +309,30 @@ export default {
     },
     changeDraggedOrders(oldIdx, newIdx) {
       //기존 위치-1, 자기자신, 현재 위치-1의 transit, moveTime, moveRoute 초기화
-      if (oldIdx != 0) {
-        this.timetableList[oldIdx - 1].transit = "NONE";
-        this.timetableList[oldIdx - 1].moveTime = 0;
-        this.timetableList[oldIdx - 1].moveRoute = "";
+
+      // 밑->위 : oldIdx만 변경
+      // 위->밑 : oldIdx-1만 변경
+      if (oldIdx > newIdx) {
+        this.timetableList[oldIdx].transit = "NONE";
+        this.timetableList[oldIdx].moveTime = 0;
+        this.timetableList[oldIdx].moveRoute = "";
+      } else {
+        if (oldIdx != 0) {
+          this.timetableList[oldIdx - 1].transit = "NONE";
+          this.timetableList[oldIdx - 1].moveTime = 0;
+          this.timetableList[oldIdx - 1].moveRoute = "";
+        }
       }
-      this.timetableList[newIdx].transit = "NONE";
-      this.timetableList[newIdx].moveTime = 0;
-      this.timetableList[newIdx].moveRoute = "";
 
       //splice로 oldIdx -> newIdx 배열 내 위치 변경
       // let selectedTimetable = this.timetableList[oldIdx];
 
       // this.timetableList.splice(oldIdx, 1);
       // this.timetableList.splice(newIdx, 0, selectedTimetable);
+
+      this.timetableList[newIdx].transit = "NONE";
+      this.timetableList[newIdx].moveTime = 0;
+      this.timetableList[newIdx].moveRoute = "";
 
       if (newIdx != 0) {
         this.timetableList[newIdx - 1].transit = "NONE";
