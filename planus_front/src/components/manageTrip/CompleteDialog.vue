@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn @click="saveTrip">완료</v-btn>
+    <v-btn depressed color="#4A8072" outlined @click="saveTrip">완료</v-btn>
   </div>
 </template>
 

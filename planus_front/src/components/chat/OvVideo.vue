@@ -5,6 +5,7 @@
       disabled
       fab
       small
+      outlined
       style="
         margin: 3px 0px 0px 10px;
         font-size: 1.5rem;
@@ -37,7 +38,7 @@ export default {
         "#FFF3CF",
       ],
       talkingCss:
-        "border-color: #544C4C; border-style: groove; border-radius:100px;",
+        "border-color: #544C4C; border-style: groove; border-radius:50%;",
     };
   },
   props: {
@@ -69,12 +70,10 @@ export default {
     isTalking(boolean) {
       if (boolean) {
         this.talkingCss =
-          "border-color: #FF1744; border-style: groove; border-radius:100px;" +
-          this.backgroundColorCSS;
+          "border-color: #FF1744; border-radius:50%;" + this.backgroundColorCSS;
       } else {
         this.talkingCss =
-          "border-color: #544C4C; border-style: groove; border-radius:100px;" +
-          this.backgroundColorCSS;
+          "border-color: #544C4C; border-radius:50%;" + this.backgroundColorCSS;
       }
     },
   },

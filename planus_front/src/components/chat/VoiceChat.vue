@@ -1,13 +1,28 @@
 <template>
   <div style="position: relative; display: flex">
     <v-icon @click="goHome">mdi-home</v-icon>
-    <v-btn v-if="!isConnected" @click="joinBtnClick" class="pa-2"
+    <v-btn
+      depressed
+      color="#4A8072"
+      outlined
+      v-if="!isConnected"
+      @click="joinBtnClick"
+      class="pa-2"
       >음성채팅 참여</v-btn
     >
-    <v-btn v-if="isConnected" @click="exitBtnClick" class="pa-1"
+    <v-btn
+      depressed
+      color="#4A8072"
+      outlined
+      v-if="isConnected"
+      @click="exitBtnClick"
+      class="pa-1"
       >음성채팅 나가기</v-btn
     >
     <v-btn
+      depressed
+      color="#4A8072"
+      outlined
       fab
       small
       v-if="isConnected"
