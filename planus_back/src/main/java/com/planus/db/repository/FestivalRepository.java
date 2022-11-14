@@ -1,7 +1,6 @@
 package com.planus.db.repository;
 
 import com.planus.db.entity.Festival;
-import com.planus.openApi.parser.FestivalParser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
