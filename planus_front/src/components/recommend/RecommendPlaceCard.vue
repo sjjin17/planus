@@ -41,11 +41,11 @@
             v-show="memberOrAdmin == 2"
             @planSubmit="planSubmit"
             :fromBucket="false"
-            class="ma-0 col-5 pa-2"
+            class="ma-0 col-6 pa-2"
           ></plan-modal>
-          <v-spacer></v-spacer>
           <v-col class="col-6 pa-2">
             <v-btn
+              width="100%"
               @click="bucketClick"
               small
               color="#4A8072"
