@@ -48,6 +48,7 @@ public class AreaServiceImpl implements AreaService{
             BestTripAreaDTO bestTripAreaDTO = BestTripAreaDTO.builder()
                     .areaId(tripArea.getArea().getAreaId())
                     .siName(tripArea.getArea().getSiName())
+                    .imageUrl(tripArea.getArea().getImageUrl())
                     .build();
 
             bestTripAreaDTOList.add(bestTripAreaDTO);

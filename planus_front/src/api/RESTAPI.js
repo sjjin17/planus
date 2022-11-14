@@ -62,6 +62,10 @@ const API = {
     const response = await this.instance.get("/trip/area");
     return response.data;
   },
+  async getBestArea() {
+    const response = await this.instance.get("/trip/bestarea");
+    return response.data;
+  },
   async createTrip(startDate, period, areaId) {
     const response = await this.instance.post("/trip", {
       startDate: startDate,
