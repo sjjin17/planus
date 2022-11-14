@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <my-info></my-info>
+      <my-info-card></my-info-card>
     </v-row>
     <v-container class="background-box"></v-container>
     <v-row class="d-flex justify-end mt-6 mb-6">
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import MyInfo from "@/components/mypage/MyInfo.vue";
+import MyInfoCard from "@/components/mypage/MyInfoCard.vue";
 import KakaoSignOut from "@/components/KakaoLogin/KakaoSignOut.vue";
 export default {
   name: "MyInfoFix",
   components: {
-    MyInfo,
+    MyInfoCard,
     KakaoSignOut,
   },
 };

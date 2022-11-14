@@ -35,7 +35,7 @@ public class Article {
 
     private long hits;
 
-    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleLike> articleLikeList;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +48,7 @@ public class Article {
     @JsonBackReference
     private Trip trip;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade =CascadeType.REMOVE)
     private List<Comment> commentList;
 
 
