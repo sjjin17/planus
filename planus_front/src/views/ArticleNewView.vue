@@ -70,10 +70,15 @@
         ></v-textarea>
       </v-col>
     </v-row>
-    <div class="d-flex justify-space-between">
-      <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
-      <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
-    </div>
+    <v-row justify="center">
+      <v-col justify="center" cols="2">
+        <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
+      </v-col>
+      <v-space></v-space>
+      <v-col>
+        <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

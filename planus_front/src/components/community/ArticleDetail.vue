@@ -5,13 +5,24 @@
     >
     <v-icon v-if="isLike" @click="likeArticle">mdi-heart</v-icon>
     {{ likeCount }}
+    <v-btn>복사하기</v-btn>
 
     <v-sheet color="white" elevation="1" height="auto" rounded width="1000">
-      <div class="d-flex justify-space-between title">
-        <p>{{ article.title }}</p>
-        <p>{{ article.regDate }}</p>
+      <div class="title">
+        {{ article.title }}
       </div>
       <hr />
+      <div class="d-flex flex-row-reverse">
+        <h5>
+          {{
+            nickname +
+            " " +
+            article.regDate.split("T")[0] +
+            " " +
+            article.regDate.split("T")[1].split(".")[0]
+          }}
+        </h5>
+      </div>
 
       <div class="img-center">
         <img :src="article.trip.imageUrl" alt="여행사진" />
@@ -105,6 +116,6 @@ hr {
   color: grey;
 }
 .title {
-  height: 40px;
+  text-align: center;
 }
 </style>
