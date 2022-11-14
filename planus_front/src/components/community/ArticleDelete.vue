@@ -9,9 +9,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn outlined color="#4a8072" @click="dialog = false"> 취소</v-btn>
-        <v-btn color="#ff1744" @click="deleteArticle"
-          ><span style="color: white">삭제</span></v-btn
-        >
+        <v-btn outlined color="#ff1744" @click="deleteArticle">삭제</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

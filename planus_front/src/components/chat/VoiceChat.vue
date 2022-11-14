@@ -2,7 +2,6 @@
   <div style="position: relative; display: flex">
     <v-icon @click="goHome">mdi-home</v-icon>
     <v-btn
-      depressed
       color="#4A8072"
       outlined
       v-if="!isConnected"
@@ -11,7 +10,6 @@
       >음성채팅 참여</v-btn
     >
     <v-btn
-      depressed
       color="#4A8072"
       outlined
       v-if="isConnected"
