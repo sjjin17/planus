@@ -79,6 +79,17 @@ public class TripController {
         }
     }
 
+    @GetMapping("/festival")
+    public ResponseEntity getFestival(){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("festivalList", areaService.findFestival());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/member")
     public ResponseEntity addMember(@RequestHeader(name="Authorization") String token, @RequestParam long tripId){
         Map<String, Object> resultMap = new HashMap<>();

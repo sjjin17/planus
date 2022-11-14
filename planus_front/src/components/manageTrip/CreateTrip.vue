@@ -176,7 +176,7 @@
         </v-date-picker>
       </v-menu>
     </div>
-    <v-btn class="createTripBtn" @click="createTrip">일정 짜기</v-btn>
+    <v-btn class="createTripBtn" @click="createTrip">시작하기</v-btn>
   </div>
 </template>
 
@@ -295,5 +295,9 @@ export default {
 }
 .createTripBtn {
   height: 40px !important;
+  background-color: #ff1744 !important;
+  color: white !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
 }
 </style>

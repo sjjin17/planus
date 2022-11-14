@@ -79,6 +79,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="alert" max-width="450">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="reLoadPage()">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -105,6 +115,7 @@ export default {
       isEditing: 0,
       delCommentId: 0,
       dialog: false,
+      alert: false,
     };
   },
   async created() {
@@ -155,7 +166,7 @@ export default {
         this.isEditing = commentId;
         this.commentInput2 = content;
       } else {
-        window.alert("로그인 해주세요!");
+        this.alert = true;
       }
     },
     deleteCommentPop(commentId) {
@@ -163,7 +174,7 @@ export default {
         this.dialog = true;
         this.delCommentId = commentId;
       } else {
-        window.alert("로그인 해주세요!");
+        this.alert = true;
       }
     },
     async goComment() {
@@ -171,8 +182,12 @@ export default {
         await this.addComment();
         this.getCommentList(1);
       } else {
-        window.alert("로그인 해주세요!");
+        this.alert = true;
       }
+    },
+    reLoadPage() {
+      this.alert = false;
+      this.$router.go();
     },
   },
 };
