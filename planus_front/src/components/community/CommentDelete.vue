@@ -1,7 +1,18 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="300">
     <template v-slot:activator="{ on, attrs }">
-      <h5 v-bind="attrs" v-on="on" style="color: #544c4c">삭제</h5>
+      <h5
+        v-bind="attrs"
+        v-on="on"
+        style="
+          color: #544c4c;
+          height: 48px;
+          text-align: center;
+          padding-top: 16px;
+        "
+      >
+        삭제
+      </h5>
     </template>
     <v-card>
       <v-card-title></v-card-title>
