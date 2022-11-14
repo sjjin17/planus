@@ -12,6 +12,7 @@ import CommunityView from "../views/CommunityView.vue";
 import ArticleView from "../views/ArticleView.vue";
 import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
 import ArticleNewView from "@/views/ArticleNewView";
+import ArticleEditView from "@/views/ArticleEditView";
 
 Vue.use(VueRouter);
 
@@ -116,6 +117,11 @@ const routes = [
     path: "/newArticle",
     name: "newArticle",
     component: ArticleNewView,
+  },
+  {
+    path: "/editArticle/:articleId",
+    name: "editArticle",
+    component: ArticleEditView,
   },
 ];
 

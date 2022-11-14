@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="10">
         <v-textarea
-          v-model="title"
+          v-model="article.title"
           label="제목"
           auto-grow
           outlined
@@ -43,7 +43,7 @@
       </v-col>
       <v-col cols="10">
         <v-textarea
-          v-model="content"
+          v-model="article.content"
           label="내용"
           auto-grow
           outlined
@@ -52,7 +52,7 @@
           shaped
         ></v-textarea>
       </v-col>
-      <v-btn @click="createNewArticle">제출</v-btn>
+      <v-btn @click="updateArticle">제출</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -60,11 +60,13 @@
 <script>
 import API from "@/api/RESTAPI";
 const api = API;
+
 export default {
-  name: "ArticleNewView",
-  data() {
+  name: "ArticleEditView",
+  data: function () {
     return {
-      articleId: "",
+      article: {},
+      articleId: 0,
       title: "",
       content: "",
       tripId: "",
@@ -73,25 +75,31 @@ export default {
     };
   },
   methods: {
-    async createNewArticle() {
+    async getArticleDetail() {
+      this.article = await api.getArticle(this.articleId);
+      this.select = this.article.trip;
+    },
+    async getMyAllTrip() {
+      this.myAllTrip = await api.getMyAllTrip();
+    },
+    async updateArticle() {
       this.tripId = this.select.tripId;
-      console.log(this.select);
-      this.articleId = await api.createArticle(
-        this.title,
-        this.content,
+
+      await api.updateArticle(
+        this.articleId,
+        this.article.title,
+        this.article.content,
         this.tripId
       );
       this.$router.push("/article/" + this.articleId);
     },
-    async getMyAllTrip() {
-      this.myAllTrip = await api.getMyAllTrip();
-      console.log(this.myAllTrip);
-    },
   },
-
-  created() {
-    this.getMyAllTrip();
+  async created() {
+    this.articleId = Number(this.$route.params.articleId);
+    await this.getMyAllTrip();
+    await this.getArticleDetail();
   },
 };
 </script>
+
 <style></style>

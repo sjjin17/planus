@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: "AriticleDelete",
+  name: "ArticleDelete",
   data: () => {
     return { dialog: false };
   },

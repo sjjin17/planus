@@ -16,4 +16,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+table {
+  table-layout: fixed !important;
+  border-color: #b8dbc6;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
+</style>

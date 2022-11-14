@@ -102,7 +102,7 @@ export default {
     async deleteArticle(articleId) {
       await api.deleteArticle(articleId);
       this.currentPage = 1;
-      this.getArticleList;
+      this.getArticleList();
     },
   },
 };
