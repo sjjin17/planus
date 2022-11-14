@@ -89,16 +89,29 @@ export default {
     },
     captureImg() {
       html2canvas(document.getElementById("capture")).then((canvas) => {
-        var base64image = canvas.toDataURL("image/png");
-        window.open(base64image, "_blank");
+        // var base64image = canvas.toDataURL("image/png");
+        // window.open(base64image, "_blank");
+        this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
       });
+    },
+    saveAs(uri, filename) {
+      let link = document.createElement("a");
+      if (typeof link.download === "string") {
+        link.href = uri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        window.open(uri);
+      }
     },
   },
   // mounted() {
-  //   html2canvas(self.$refs.capture.$el).then((canvas) => {
-  //     canvas.toBlob((blob) =>
-  //       navigator.clipboard.write([window.ClipboardItem({ "image/png": blob })])
-  //     );
+  //   html2canvas(document.getElementById("capture")).then((canvas) => {
+  //     // var base64image = canvas.toDataURL("image/png");
+  //     // window.open(base64image, "_blank");
+  //     this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
   //   });
   // },
 };

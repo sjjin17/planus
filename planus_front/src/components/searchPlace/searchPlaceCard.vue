@@ -22,14 +22,15 @@
             v-show="memberOrAdmin == 2"
             @planSubmit="planSubmit"
             :fromBucket="false"
-            class="mx-1 col-5"
+            class="col-6"
           ></plan-modal>
           <v-spacer></v-spacer>
           <v-col class="col-6">
             <v-btn
               small
+              width="100%"
               color="#4A8072"
-              class="white--text ma-0 pa-1"
+              class="white--text"
               @click="bucketClick"
               >버킷리스트 추가</v-btn
             >
