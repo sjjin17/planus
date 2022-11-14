@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row align="center" justify="center">
+    <v-row align="center" justify="center" v-if="isLogin">
       <v-col cols="8">
         <v-textarea
           v-model="commentInput"
@@ -19,8 +19,11 @@
         <v-col cols="8">
           <div class="commentNameLine">
             <div>
-              {{ comment.name }} ({{ comment.regDate.split("T")[0] }}
-              {{ comment.regDate.split("T")[1].split(".")[0] }})
+              <span style="font-weight: bold">{{ comment.name }}</span
+              ><span style="color: rgb(0, 0, 0, 50%)">
+                ({{ comment.regDate.split("T")[0] }}
+                {{ comment.regDate.split("T")[1].split(".")[0] }})</span
+              >
             </div>
             <div v-if="userId == comment.userId">
               <button
@@ -38,10 +41,7 @@
               <span> | </span>
               <button
                 v-if="userId == comment.userId"
-                @click="
-                  dialog = true;
-                  delCommentId = comment.commentId;
-                "
+                @click="deleteCommentPop(comment.commentId)"
               >
                 삭제
               </button>
@@ -58,7 +58,7 @@
           <span v-else>{{ comment.content }}</span>
         </v-col>
       </v-row>
-      <v-divider style="margin: 1% 12%"></v-divider>
+      <v-divider style="margin: 1% auto; width: 80%"></v-divider>
     </div>
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
@@ -74,10 +74,8 @@
         <v-card-text>정말로 삭제하시겠습니까?</v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn outlined color="#4a8072" @click="dialog = false"> 취소</v-btn>
-          <v-btn color="#ff1744" @click="delComment()"
-            ><span style="color: white">삭제</span></v-btn
-          >
+          <v-btn outlined color="#4a8072" @click="dialog = false">취소</v-btn>
+          <v-btn outlined color="#ff1744" @click="delComment()">삭제</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -96,7 +94,7 @@ export default {
   },
   data() {
     return {
-      token: this.$cookies.get("token"),
+      isLogin: false,
       nickname: "",
       userId: 0,
       currentPage: 1,
@@ -145,19 +143,36 @@ export default {
       await this.getCommentList(1);
     },
     decoding() {
-      if (this.token) {
-        let decode = jwt_decode(this.token);
+      if (this.$cookies.get("refresh")) {
+        this.isLogin = true;
+        let decode = jwt_decode(this.$cookies.get("token"));
         this.nickname = decode.nickname;
         this.userId = decode.userId;
       }
     },
     goEdit(commentId, content) {
-      this.isEditing = commentId;
-      this.commentInput2 = content;
+      if (this.$cookies.get("refresh")) {
+        this.isEditing = commentId;
+        this.commentInput2 = content;
+      } else {
+        window.alert("로그인 해주세요!");
+      }
+    },
+    deleteCommentPop(commentId) {
+      if (this.$cookies.get("refresh")) {
+        this.dialog = true;
+        this.delCommentId = commentId;
+      } else {
+        window.alert("로그인 해주세요!");
+      }
     },
     async goComment() {
-      await this.addComment();
-      this.getCommentList(1);
+      if (this.$cookies.get("refresh")) {
+        await this.addComment();
+        this.getCommentList(1);
+      } else {
+        window.alert("로그인 해주세요!");
+      }
     },
   },
 };
