@@ -18,20 +18,21 @@
 
       <v-card-actions>
         <v-row>
-          <v-col>
+          <plan-modal
+            v-show="memberOrAdmin == 2"
+            @planSubmit="planSubmit"
+            :fromBucket="false"
+            class="mx-1 col-5"
+          ></plan-modal>
+          <v-spacer></v-spacer>
+          <v-col class="col-6">
             <v-btn
               small
               color="#4A8072"
-              class="white--text ma-0"
-              @click.stop="bucketClick"
+              class="white--text ma-0 pa-1"
+              @click="bucketClick"
               >버킷리스트 추가</v-btn
             >
-          </v-col>
-          <v-col>
-            <plan-modal
-              @planSubmit="planSubmit"
-              :fromBucket="false"
-            ></plan-modal>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import PlanModal from "@/components/searchPlace/PlanModal.vue";
+import PlanModal from "@/components/recommend/PlanModal.vue";
 import Black from "@/assets/default_image.png";
 import { mapState, mapMutations } from "vuex";
 const mapStore = "mapStore";
@@ -57,6 +58,7 @@ export default {
   },
   props: {
     searchedPlace: Object,
+    memberOrAdmin: Number,
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),
@@ -64,6 +66,7 @@ export default {
   methods: {
     ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     bucketClick() {
+      console.log(this.searchedPlace);
       this.$emit(
         "addBucket",
         this.searchedPlace.place,
@@ -72,11 +75,7 @@ export default {
         this.searchedPlace.lng
       );
 
-      if (
-        this.spotInfo.lat == this.searchedPlace.lat &&
-        this.spotInfo.lng == this.searchedPlace.lng
-      )
-        this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO(null);
     },
     planSubmit(costTime, fromBucket) {
       this.$emit(
@@ -88,11 +87,7 @@ export default {
         fromBucket
       );
 
-      if (
-        this.spotInfo.lat == this.searchedPlace.lat &&
-        this.spotInfo.lng == this.searchedPlace.lng
-      )
-        this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO(null);
     },
     addMarker() {
       this.SET_SPOT_INFO(null);

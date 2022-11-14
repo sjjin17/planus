@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <v-container class="px-1">
     <bucket-card
-      v-for="bucket in bucketList"
-      :key="bucket.place"
+      v-for="(bucket, i) in bucketList"
+      :key="i + 'b'"
       :bucket="bucket"
       :memberOrAdmin="memberOrAdmin"
       @delBucket="delBucket"
       @addTimetable="addTimetable"
     ></bucket-card>
-  </div>
+  </v-container>
 </template>
 
 <script>

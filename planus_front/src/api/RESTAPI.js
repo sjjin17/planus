@@ -158,16 +158,16 @@ const API = {
     });
     return response.data;
   },
-  async addComment(articleId, content) {
+  async addComment(id, content) {
     const response = await this.instance.post("/comment", {
-      articleId: articleId,
+      id: id,
       content: content,
     });
     return response.data;
   },
-  async modifyComment(commentId, content) {
+  async modifyComment(id, content) {
     const response = await this.instance.put("/comment", {
-      commentId: commentId,
+      id: id,
       content: content,
     });
     return response.data;
@@ -182,7 +182,7 @@ const API = {
     return response.data;
   },
   async getMyComment(page) {
-    const response = await this.instance.get("/comment", {
+    const response = await this.instance.get("/mypage/comment", {
       params: { page },
     });
     return response.data;
@@ -230,6 +230,53 @@ const API = {
 
   async googleApi(url) {
     const response = await this.instance.post("/google", url);
+    return response.data;
+  },
+
+  async getArticle(articleId) {
+    const response = await this.instance.get("/articles/" + articleId);
+    return response.data;
+  },
+
+  async createArticle(title, content, tripId) {
+    const response = await this.instance.post("/articles", {
+      title: title,
+      content: content,
+      tripId: tripId,
+    });
+    return response.data;
+  },
+
+  async updateArticle(articleId) {
+    const response = await this.instance.put("/articles/" + articleId);
+    return response.data;
+  },
+
+  async deleteArticle(articleId) {
+    const response = await this.instance.delete("/articles/" + articleId);
+    return response.data;
+  },
+
+  async likeArticle(articleId) {
+    const response = await this.instance.posts("/articles/like/" + articleId);
+    return response.data;
+  },
+
+  async getMyArticle(page) {
+    const response = await this.instance.get("/mypage/articles", {
+      params: { page },
+    });
+    return response.data;
+  },
+
+  async getMyLikedArticle(page) {
+    const response = await this.instance.get("/mypage/articles/like", {
+      params: { page },
+    });
+    return response.data;
+  },
+  async getMyAllTrip() {
+    const response = await this.instance.get("/mytrip/all");
     return response.data;
   },
 };

@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-card @click="addMarker">
+    <v-card
+      @click="addMarker"
+      outlined
+      style="border: thin solid; border-color: #4a8072"
+    >
       <v-container>
         <v-row class="row-9" align="center">
           <v-col cols="7" align="left" class="pb-0">
@@ -34,6 +38,7 @@
         </v-row>
         <v-row class="row-3 pt-0" justify="center">
           <plan-modal
+            v-show="memberOrAdmin == 2"
             @planSubmit="planSubmit"
             :fromBucket="false"
             class="ma-0 col-5 pa-2"
@@ -66,6 +71,7 @@ export default {
   },
   props: {
     recommendPlace: Object,
+    memberOrAdmin: Number,
   },
   computed: {
     ...mapState(mapStore, ["spotInfo"]),

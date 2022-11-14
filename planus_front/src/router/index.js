@@ -11,6 +11,7 @@ import Chat from "@/components/chat/WebSocketTest.vue";
 import CommunityView from "../views/CommunityView.vue";
 import ArticleView from "../views/ArticleView.vue";
 import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
+import ArticleNewView from "@/views/ArticleNewView";
 
 Vue.use(VueRouter);
 
@@ -20,22 +21,37 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
-    redirect: "/mypage/myinfofix",
+    redirect: "/mypage/myinfo",
     children: [
       {
-        path: "myinfofix",
-        name: "myinfofix",
+        path: "myinfo",
+        name: "myinfo",
         component: () => import("@/components/mypage/MyInfoFix.vue"),
       },
       {
-        path: "made",
-        name: "made",
+        path: "mytrip",
+        name: "mytrip",
         component: () => import("@/components/mypage/MadeTripList.vue"),
       },
       {
-        path: "shared",
-        name: "shared",
+        path: "sharedtrip",
+        name: "sharedtrip",
         component: () => import("@/components/mypage/SharedTripList.vue"),
+      },
+      {
+        path: "myarticle",
+        name: "myarticle",
+        component: () => import("@/components/mypage/MyArticleList.vue"),
+      },
+      {
+        path: "mylike",
+        name: "mylike",
+        component: () => import("@/components/mypage/MyLikeList.vue"),
+      },
+      {
+        path: "mycomment",
+        name: "mycomment",
+        component: () => import("@/components/mypage/MyCommentList.vue"),
       },
     ],
   },
@@ -85,6 +101,7 @@ const routes = [
     name: "community",
     component: CommunityView,
   },
+
   {
     path: "/article/:articleId",
     name: "article",
@@ -94,6 +111,11 @@ const routes = [
     path: "/test",
     name: "test",
     component: TokenTestButton,
+  },
+  {
+    path: "/newArticle",
+    name: "newArticle",
+    component: ArticleNewView,
   },
 ];
 
