@@ -8,12 +8,15 @@
         >{{ bucket.place }}</v-card-title
       >
       <v-card-text>{{ bucket.address }}</v-card-text>
-      <plan-modal
-        class="d-flex justify-end"
-        v-show="memberOrAdmin == 2"
-        @planSubmit="planSubmit"
-        :fromBucket="true"
-      ></plan-modal>
+      <v-row>
+        <v-spacer />
+        <plan-modal
+          class="d-flex justify-end col-6 mb-2 mr-3"
+          v-show="memberOrAdmin == 2"
+          @planSubmit="planSubmit"
+          :fromBucket="true"
+        ></plan-modal>
+      </v-row>
     </v-card>
   </div>
 </template>
