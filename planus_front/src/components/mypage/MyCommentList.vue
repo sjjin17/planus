@@ -13,7 +13,7 @@
           </thead>
           <tbody>
             <tr
-              class="listTable"
+              style="cursor: pointer"
               v-for="comment in commentList"
               :key="comment.commentId"
               @click="goToArticle(comment.articleId)"
@@ -25,7 +25,7 @@
                   comment.regDate.split("T")[1].split(".")[0]
                 }}
               </td>
-              <td>
+              <td class="pa-0 align-center justify-center">
                 <comment-delete
                   :commentId="comment.commentId"
                   @deleteComment="delComment"
