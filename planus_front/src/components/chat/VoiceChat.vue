@@ -1,10 +1,20 @@
 <template>
   <div style="position: relative; display: flex">
     <v-icon @click="goHome">mdi-home</v-icon>
-    <v-btn v-if="!joinClick" @click="joinBtnClick" class="pa-1"
-      >음성채팅참여</v-btn
+    <v-btn v-if="!isConnected" @click="joinBtnClick" class="pa-2"
+      >음성채팅 참여</v-btn
     >
-    <v-btn v-if="joinClick" @click="micBtnHandler">
+    <v-btn v-if="isConnected" @click="exitBtnClick" class="pa-1"
+      >음성채팅 나가기</v-btn
+    >
+    <v-btn
+      fab
+      small
+      v-if="isConnected"
+      @click="micBtnHandler"
+      style="box-shadow: 1px 1px 1px 1px #544c4c50; margin-top: 3px"
+      class="ml-5"
+    >
       <v-icon v-if="micOn">mdi-microphone</v-icon>
       <v-icon v-if="!micOn">mdi-microphone-off</v-icon>
     </v-btn>
@@ -43,7 +53,6 @@ export default {
       subscribers: [],
       micOn: false,
       isConnected: false,
-      joinClick: false,
     };
   },
   props: {
@@ -61,11 +70,13 @@ export default {
       this.$router.push("/");
     },
     joinBtnClick() {
-      this.joinClick = true;
       this.joinSession();
     },
+    exitBtnClick() {
+      this.leaveSession();
+    },
     micBtnHandler() {
-      if (this.joinClick) {
+      if (this.isConnected) {
         this.micOn = !this.micOn;
         this.publisher.publishAudio(this.micOn);
       }
@@ -144,9 +155,6 @@ export default {
       this.isConnected = false;
       //   stompApi.disconnect();
       window.removeEventListener("beforeunload", this.leaveSession);
-      this.$router.replace("/").then(() => {
-        window.location.reload();
-      });
     },
 
     async getToken(mySessionId) {
