@@ -3,7 +3,7 @@
     <v-icon v-if="isLike === false" @click="likeArticle"
       >mdi-cards-heart-outline</v-icon
     >
-    <v-icon v-else @cilck="likeArticle">mdi-cards-heart</v-icon>
+    <v-icon v-if="isLike" @click="likeArticle">mdi-heart</v-icon>
     {{ likeCount }}
 
     <v-sheet color="white" elevation="1" height="auto" rounded width="1000">
@@ -62,15 +62,13 @@ export default {
       this.isLike = this.article.like;
     },
     async likeArticle() {
-      console.log(this.isLike);
       if (this.isLike) {
         this.isLike = false;
       } else {
         this.isLike = true;
       }
-      console.log(this.isLike);
+
       this.likeCount = await api.likeArticle(this.articleId);
-      console.log(this.likeCount);
     },
     goToEditArticle() {
       this.$router.push("/editArticle");
