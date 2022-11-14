@@ -45,8 +45,8 @@
       >
         <v-tabs v-model="tabs" fixed-tabs>
           <v-tab style="padding: 0">버킷리스트</v-tab>
-          <v-tab style="padding">장소검색</v-tab>
-          <v-tab style="padding" @click="recommendClick">추천장소 </v-tab>
+          <v-tab style="padding: 0">장소검색</v-tab>
+          <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs">
           <v-tab-item>
