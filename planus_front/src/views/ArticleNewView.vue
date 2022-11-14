@@ -1,25 +1,33 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="2" class="my-4">
-        <p>제목</p>
+    <v-row align="center">
+      <v-col cols="2" align="center" class="ma-0 box-center font-weight-bold">
+        제목
       </v-col>
       <v-col cols="10">
         <v-textarea
           v-model="title"
-          label="제목"
           auto-grow
           outlined
+          color="#4A8072"
           rows="1"
           row-height="15"
+          hide-details
         ></v-textarea>
       </v-col>
-      <v-col cols="2" class="my-4">
+    </v-row>
+    <v-row>
+      <v-col
+        cols="2"
+        align="center"
+        class="ma-0 box-center trip font-weight-bold"
+      >
         <p>여행</p>
       </v-col>
       <v-col cols="10">
         <v-select
           v-model="select"
+          prepend-inner-icon="mdi-airplane"
           :items="myAllTrip"
           :item-text="
             (item) =>
@@ -35,25 +43,37 @@
           item-value="tripId"
           :rules="[(v) => !!v || 'Item is required']"
           label="여행을 선택하세요"
+          color="#4A8072"
+          hide-details
           return-object
         ></v-select>
+        <img :src="select.imageUrl" alt="" />
       </v-col>
-      <v-col cols="2" class="my-4">
+    </v-row>
+    <v-row>
+      <v-col
+        cols="2"
+        align="center"
+        class="ma-0 box-center content font-weight-bold"
+      >
         <p>내용</p>
       </v-col>
       <v-col cols="10">
         <v-textarea
           v-model="content"
-          label="내용"
           auto-grow
           outlined
+          color="#4A8072"
           rows="3"
           row-height="25"
           shaped
         ></v-textarea>
       </v-col>
-      <v-btn @click="createNewArticle">제출</v-btn>
     </v-row>
+    <div class="d-flex justify-space-between">
+      <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
+      <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
+    </div>
   </v-container>
 </template>
 
@@ -87,6 +107,9 @@ export default {
       this.myAllTrip = await api.getMyAllTrip();
       console.log(this.myAllTrip);
     },
+    goToCommunity() {
+      this.$router.push("/community");
+    },
   },
 
   created() {
@@ -94,4 +117,15 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+.content {
+  line-height: 96px;
+}
+.trip {
+  line-height: 70px;
+}
+.box-center {
+  text-align: center;
+  color: #544c4c;
+}
+</style>

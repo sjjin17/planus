@@ -67,6 +67,7 @@ public class MyTripServiceImpl implements MyTripService {
                             .startDate(ml.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .endDate(ml.getStartDate().plusDays(ml.getPeriod()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                             .complete(ml.isComplete())
+                            .imageUrl(ml.getImageUrl())
                             .participants(memberRepository.countByTripTripId(ml.getTripId()))
                             .areaList(areaRepository.findAllByTripAreaList_Trip_TripId(ml.getTripId()).stream().map(Area::getSiName).collect(Collectors.toList()))
                             .build()

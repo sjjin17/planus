@@ -262,7 +262,6 @@ const API = {
       content: content,
       tripId: tripId,
     });
-    //return response.data;
   },
 
   async deleteArticle(articleId) {
