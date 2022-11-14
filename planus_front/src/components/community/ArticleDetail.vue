@@ -1,11 +1,16 @@
 <template>
   <v-container v-if="article.trip != undefined">
-    <v-icon v-if="isLike === false" @click="likeArticle"
-      >mdi-cards-heart-outline</v-icon
-    >
-    <v-icon v-if="isLike" @click="likeArticle">mdi-heart</v-icon>
-    {{ likeCount }}
-    <v-btn>복사하기</v-btn>
+    <div>
+      <v-btn @click="goToCommunity">목록으로</v-btn>
+      <div class="d-flex flex-row-reverse">
+        <v-icon v-if="isLike === false" @click="likeArticle"
+          >mdi-cards-heart-outline</v-icon
+        >
+        <v-icon v-if="isLike" @click="likeArticle">mdi-heart</v-icon>
+        {{ likeCount }}
+        <v-btn>복사하기</v-btn>
+      </div>
+    </div>
 
     <v-sheet color="white" elevation="1" height="auto" rounded width="1000">
       <div class="title">
@@ -39,9 +44,6 @@
         >삭제</v-btn
       >
     </div>
-    <v-btn class="d-flex flex-row-reverse" @click="goToCommunity"
-      >목록으로</v-btn
-    >
   </v-container>
 </template>
 

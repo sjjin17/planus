@@ -118,6 +118,9 @@ export default {
       );
       this.$router.push("/article/" + this.articleId);
     },
+    goToCommunity() {
+      this.$router.push("/community");
+    },
   },
   async created() {
     this.articleId = Number(this.$route.params.articleId);
