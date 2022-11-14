@@ -1,16 +1,17 @@
 <template>
   <v-container class="made-container">
-    <v-row justify="center">
-      <v-simple-table height="70vh" class="mt-3">
+    <v-row justify="center" height="75vh" class="mt-3">
+      <v-simple-table>
         <template v-slot:default>
           <thead>
             <tr>
               <th class="text-left">여행날짜</th>
               <th class="text-left">여행지역</th>
               <th class="text-left" style="width: 35vw">제목</th>
-              <th class="text-left">좋아요</th>
-              <th class="text-left">조회수</th>
+              <th class="text-left" style="width: 50px; padding: 0">좋아요</th>
+              <th class="text-left" style="width: 50px; padding: 0">조회수</th>
               <th class="text-left">등록(수정)시간</th>
+              <th class="text-left" style="width: 60px">삭제</th>
             </tr>
           </thead>
           <tbody>
@@ -20,21 +21,29 @@
               :key="article.articleId"
               @click="goToArticle(article.articleId)"
             >
-              <td>
-                {{ article.trip.startDate + "~" + article.trip.endDate }}
+              <td class="textCutting">
+                {{ article.trip.startDate }} <br />
+                {{ "~" + article.trip.endDate }}
               </td>
-              <td>
-                {{ article.trip.participants + "명 " + article.trip.areaList }}
+              <td class="textCutting">
+                {{ article.trip.participants + "명" }}<br />
+                {{ article.trip.areaList + "" }}
               </td>
-              <td>{{ article.title }}</td>
+              <td class="textCutting">
+                {{ article.title }}
+              </td>
               <td>{{ article.likeCount }}</td>
               <td>{{ article.hits }}</td>
-              <td>
-                {{
-                  article.regDate.split("T")[0] +
-                  " " +
+              <td class="textCutting">
+                {{ article.regDate.split("T")[0] }}<br />{{
                   article.regDate.split("T")[1].split(".")[0]
                 }}
+              </td>
+              <td>
+                <article-delete
+                  :articleId="article.articleId"
+                  @deleteArticle="deleteArticle"
+                ></article-delete>
               </td>
             </tr>
           </tbody>
@@ -54,9 +63,13 @@
 </template>
 
 <script>
+import ArticleDelete from "@/components/community/ArticleDelete.vue";
 import API from "@/api/RESTAPI";
 const api = API;
 export default {
+  components: {
+    ArticleDelete,
+  },
   data() {
     return {
       articleList: [],
@@ -86,11 +99,22 @@ export default {
     goToArticle(articleId) {
       this.$router.push("/article/" + articleId);
     },
+    async deleteArticle(articleId) {
+      await api.deleteArticle(articleId);
+      this.currentPage = 1;
+      this.getArticleList;
+    },
   },
 };
 </script>
 
 <style>
+table {
+  table-layout: fixed !important;
+  border-color: #b8dbc6;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
 .made-container {
   height: 100%;
   position: relative;
