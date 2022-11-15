@@ -28,7 +28,7 @@ public class FestivalParser {
     }
 
 //    @Scheduled(cron = "0 0 0/1 * * *") //한시간마다 실행
-    @Scheduled(cron = "0 0 0 * * ?") //자정마다 실행 "초 분 시 일 월 주 (년)"
+    @Scheduled(cron = "0 0 5 * * ?") //자정마다 실행 "초 분 시 일 월 주 (년)"
 //    @Scheduled(cron = "0 5 13 * * ?")
     public void getFestival(){
         try{
