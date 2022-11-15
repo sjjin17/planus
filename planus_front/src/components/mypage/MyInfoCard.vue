@@ -55,7 +55,10 @@ export default {
       validateMessage: "12345",
       rules: {
         space: (value) => {
-          return value.indexOf(" ") == -1 || "공백은 사용할 수 없습니다.";
+          return (
+            (value.indexOf(" ") == -1 && value.indexOf("　") == -1) ||
+            "공백은 사용할 수 없습니다."
+          );
         },
         required: (value) => {
           return !!value || "닉네임을 입력해주세요.";
@@ -99,7 +102,7 @@ export default {
       }
     },
     space(value) {
-      return value.indexOf(" ") == -1;
+      return value.indexOf(" ") == -1 && value.indexOf("　") == -1;
     },
     required(value) {
       return !!value;

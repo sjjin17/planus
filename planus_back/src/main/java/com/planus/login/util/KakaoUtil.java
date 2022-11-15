@@ -52,7 +52,6 @@ public class KakaoUtil {
 
         }catch(Exception e){
             System.out.println("탈퇴에서 에러 발생");
-//            e.printStackTrace();
             InputStream errorStream = conn.getErrorStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String error = "";
