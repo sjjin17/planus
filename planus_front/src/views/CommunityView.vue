@@ -51,7 +51,10 @@
       </v-col>
     </v-row>
     <v-spacer></v-spacer>
-    <v-btn @click="goToNewArticle()">게시글 작성</v-btn>
+    <br />
+    <v-btn outlined color="#4A8072" v-if="token" @click="goToNewArticle()"
+      >게시글 작성</v-btn
+    >
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
         v-model="currentPage"
@@ -80,6 +83,7 @@ export default {
       searchData: "",
       articleList: [],
       totalPage: 0,
+      token: this.$cookies.get("refresh"),
     };
   },
   async created() {
