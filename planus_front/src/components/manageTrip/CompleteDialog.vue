@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-btn depressed color="#4A8072" outlined @click="saveTrip">완료</v-btn>
+    <v-btn
+      depressed
+      color="#4A8072"
+      outlined
+      @click="saveTrip"
+      v-if="memberOrAdmin == 2"
+      >완료</v-btn
+    >
   </div>
 </template>
 
@@ -16,18 +23,19 @@ export default {
     tripId: Number,
     tripUrl: String,
     planIdList: Array,
+    memberOrAdmin: Number,
   },
   methods: {
-    saveTrip() {
-      api.saveBucketList(this.tripId);
+    async saveTrip() {
+      await api.saveBucketList(this.tripId);
       // 전체 일정 저장 api 연결 - complete = true; (redis에서 삭제)
       let savePlanIdList = [];
       this.planIdList.forEach((plan) => {
         savePlanIdList.push(plan.planId);
       });
-      api.savePlan(this.tripId, savePlanIdList, true);
-      //router.push - CompleteView로 보내면 PlansView로 되돌아옴
-      this.$router.go();
+      await api.savePlan(this.tripId, savePlanIdList, true);
+      //웹소켓으로 요청보내기
+      this.$emit("completeTrip");
     },
   },
 };
