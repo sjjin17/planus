@@ -1,14 +1,17 @@
 package com.planus.trip.service;
 
 import com.planus.db.entity.Area;
+import com.planus.db.entity.Festival;
 import com.planus.db.entity.TripArea;
 import com.planus.db.repository.AreaRepository;
+import com.planus.db.repository.FestivalRepository;
 import com.planus.db.repository.TripAreaRepository;
 import com.planus.trip.dto.AreaResDTO;
 import com.planus.trip.dto.BestTripAreaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +19,13 @@ import java.util.List;
 public class AreaServiceImpl implements AreaService{
     private AreaRepository areaRepository;
     private TripAreaRepository tripAreaRepository;
+    private FestivalRepository festivalRepository;
 
     @Autowired
-    public AreaServiceImpl(AreaRepository areaRepository, TripAreaRepository tripAreaRepository) {
+    public AreaServiceImpl(AreaRepository areaRepository, TripAreaRepository tripAreaRepository, FestivalRepository festivalRepository) {
         this.areaRepository = areaRepository;
         this.tripAreaRepository = tripAreaRepository;
+        this.festivalRepository = festivalRepository;
     }
 
     @Override
@@ -55,5 +60,14 @@ public class AreaServiceImpl implements AreaService{
         }
 
         return bestTripAreaDTOList;
+    }
+
+    @Override
+    public List<Festival> findFestival() {
+        LocalDate today = LocalDate.now();
+        LocalDate monthLater = today.plusMonths(1);
+        List<Festival> festivalList = festivalRepository.findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(today, monthLater);
+
+        return festivalList;
     }
 }
