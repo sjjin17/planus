@@ -13,4 +13,6 @@ public interface AreaRepository extends JpaRepository<Area, Long> {
     List<Area> findAllByTripAreaList_Trip_TripId(long TripId);
 
     Area findTop1ByTripAreaList_Trip_TripId(long TripId);
+
+    Area findByDoNameStartsWithAndSiNameStartsWith(String doName, String siName);
 }

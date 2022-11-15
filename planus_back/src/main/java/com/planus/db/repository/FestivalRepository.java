@@ -7,5 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FestivalRepository extends JpaRepository<Festival, Long> {
-    List<Festival> findAllByEndDateBefore(LocalDate targetDate);
+    Festival save(Festival festival);
+    List<Festival> findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(LocalDate today, LocalDate monthLater);
+    void deleteAllInBatch();
 }
