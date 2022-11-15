@@ -1,13 +1,14 @@
 package com.planus.db.repository;
 
 import com.planus.db.entity.Festival;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface FestivalRepository extends JpaRepository<Festival, Long> {
     Festival save(Festival festival);
-    List<Festival> findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(LocalDate today, LocalDate monthLater);
+    Page<Festival> findAllByEndDateAfterAndStartDateBefore(LocalDate today, LocalDate monthLater, Pageable pageable);
     void deleteAllInBatch();
 }

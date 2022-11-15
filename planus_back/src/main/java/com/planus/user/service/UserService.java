@@ -6,7 +6,7 @@ import com.planus.user.dto.UserInfoResDTO;
 public interface UserService {
 
 
-    UserInfoResDTO findUserInfo(long userId);
+    UserInfoResDTO findUserInfo(String token);
     String updateUser(String token, String nickname);
     long deleteUser(long userId);
 
