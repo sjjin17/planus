@@ -8,7 +8,7 @@
         :area="area"
         cols="2"
       >
-        <v-card>
+        <v-card @click="getAddArea(area.areaId, area.siName)">
           <v-img :src="area.imageUrl"> </v-img>
           <div class="textCutting bestAreaName">{{ area.siName }}</div>
         </v-card>
@@ -23,18 +23,16 @@
         :festival="festival"
         cols="3"
       >
-        <v-card>
-          <v-img :src="festival.imageUrl"> </v-img>
-          <v-card-title class="textCutting">{{ festival.title }}</v-card-title>
+        <v-card @click="getAddArea(festival.areaId, festival.siName)">
+          <v-img :src="festival.imageUrl" height="300px"> </v-img>
+          <v-card-title class="textCutting" style="display: block">{{
+            festival.title
+          }}</v-card-title>
           <v-card-subtitle class="textCutting">{{
             festival.address
           }}</v-card-subtitle>
           <v-card-text class="textCutting">
-            시작: {{ festival.startDate[0] }}-{{ festival.startDate[1] }}-{{
-              festival.startDate[2]
-            }}<br />종료: {{ festival.endDate[0] }}-{{ festival.endDate[1] }}-{{
-              festival.endDate[2]
-            }}
+            시작: {{ festival.startDate }}<br />종료: {{ festival.endDate }}
           </v-card-text>
         </v-card>
       </v-col>
@@ -65,6 +63,9 @@ export default {
       this.res = await api.getFestival();
       this.festivalList = this.res.festivalList;
       console.log(this.festivalList);
+    },
+    getAddArea(areaId, siName) {
+      this.$emit("getAddArea", areaId, siName);
     },
   },
 };

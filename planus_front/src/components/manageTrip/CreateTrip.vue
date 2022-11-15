@@ -258,6 +258,12 @@ export default {
         this.areas.push(area.siName);
       }
     },
+    addArea2(areaId, siName) {
+      if (!this.areaId.includes(areaId)) {
+        this.areaId.push(areaId);
+        this.areas.push(siName);
+      }
+    },
     clearArea() {
       if (!this.areaMenu) {
         this.areaId = [];
