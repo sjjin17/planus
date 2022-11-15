@@ -1,7 +1,9 @@
 <template>
   <div style="position: relative">
-    <div class="mapAreaBtn">
+    <div class="mapAreaBtnDiv">
       <v-btn
+        rounded
+        class="focusAreaBtn"
         v-for="(area, areaIdx) in tripArea"
         :key="areaIdx"
         @click="clickLocation(area, 12)"
@@ -183,11 +185,16 @@ a[href^="https://maps.google.com/maps"]
 .gm-fullscreen-control {
   display: none;
 }
-.mapAreaBtn {
+.mapAreaBtnDiv {
   width: 80px;
   position: absolute;
   left: 10px;
   top: 10px;
   z-index: 1;
+}
+.focusAreaBtn {
+  margin-bottom: 10px;
+  background-color: #4a8072 !important;
+  color: white !important;
 }
 </style>
