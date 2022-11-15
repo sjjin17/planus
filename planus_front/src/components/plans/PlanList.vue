@@ -13,6 +13,7 @@
               hide-details
               :min="0"
               :max="11"
+              color="#ff1744"
             ></v-text-field>
           </v-col>
           <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
@@ -29,6 +30,7 @@
               hide-details
               :min="0"
               :max="59"
+              color="#ff1744"
             ></v-text-field>
           </v-col>
           <v-col cols="1" class="ma-0 pa-0" style="align-self: center"
@@ -42,8 +44,12 @@
               v-show="memberOrAdmin == 2"
               >mdi-pencil</v-icon
             >
-            <v-icon v-else @click="changeStartTime(plan, startHour, startMin)"
-              >mdi-pencil</v-icon
+            <v-icon
+              v-else
+              @click="changeStartTime(plan, startHour, startMin)"
+              :disabled="!timeFlag"
+              color="#ff1744"
+              >mdi-check</v-icon
             >
           </v-col>
         </v-row>
@@ -72,6 +78,7 @@
         :timetable="timetable"
         :calTime="calTime"
         :startTime="startTime"
+        :checkMidnight="checkMidnight"
         :memberOrAdmin="memberOrAdmin"
         @changeCalTime="changeCalTime"
         @setTimetable="setTimetable"
@@ -99,6 +106,7 @@ export default {
       timetableList: [],
       startTime: 0,
       calTime: [],
+      checkMidnight: [],
 
       startHour: 0,
       startMin: 0,
@@ -140,6 +148,7 @@ export default {
       this.calculateCalTime(this.calTime, this.timetableList, this.startTime);
       //re-rendering을 위해 배열 splice 필요
       this.calTime.splice(0, 1, this.startTime);
+      this.checkMidnight.splice(0, 1, false);
     },
     timetableList: {
       handler() {
@@ -147,6 +156,7 @@ export default {
         this.calculateCalTime(this.calTime, this.timetableList, this.startTime);
         //re-rendering을 위해 배열 splice 필요
         this.calTime.splice(0, 1, this.startTime);
+        this.checkMidnight.splice(0, 1, false);
         this.$emit("countTimetable", this.timetableList.length);
         this.$emit("changeTimetableList", this.timetableList);
       },
@@ -189,6 +199,38 @@ export default {
       }
     },
   },
+  computed: {
+    timeFlag() {
+      if (
+        String(this.startHour).length > 2 ||
+        String(this.startMin).length > 2
+      ) {
+        return false;
+      }
+      if (this.startHour == 0 && this.startMin == 0) {
+        return false;
+      }
+      if (
+        !Number.isInteger(Number(this.startHour)) ||
+        !Number.isInteger(Number(this.startMin))
+      ) {
+        return false;
+      }
+      if (!this.startHour && !this.startMin) {
+        return false;
+      }
+      if (this.startHour < 0) {
+        return false;
+      }
+      if (this.startMin < 0 || this.startMin > 59) {
+        return false;
+      }
+      if (this.startHour === "" || this.startMin === "") {
+        return false;
+      }
+      return true;
+    },
+  },
   methods: {
     async getPlanList(planIdList) {
       api.getPlanList(planIdList).then((res) => {
@@ -222,6 +264,13 @@ export default {
             calTime[i - 1] +
             timetableList[i - 1].costTime +
             timetableList[i - 1].moveTime;
+          //1440을 넘는데 이전 값이 1440 이전 -> true값 주기
+          if (
+            calTime[i] > 1440 &&
+            calTime[i - 1] + timetableList[i - 1].costTime < 1440
+          ) {
+            this.checkMidnight[i] = true;
+          }
         }
       }
     },
@@ -229,11 +278,6 @@ export default {
       this.startBtnClick = !this.startBtnClick;
     },
     changeStartTime(plan, startHour, startMin) {
-      if (startHour > 12 || startMin > 59) {
-        alert("시는 0 ~ 12, 분은 0 ~ 59의 숫자만 가능");
-        return;
-      }
-
       this.startTime = parseInt(startHour) * 60 + parseInt(startMin);
       let newPlan = {
         planId: plan.planId,

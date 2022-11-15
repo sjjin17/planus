@@ -33,6 +33,7 @@
           ><v-btn
             color="#4A8072"
             @click="changeCostTime(costHour, costMin)"
+            :disabled="!timeFlag"
             style="color: white"
             >수정</v-btn
           ></v-col
@@ -55,6 +56,44 @@ export default {
   mounted() {
     this.costHour = Math.floor(this.timetable.costTime / 60);
     this.costMin = this.timetable.costTime % 60;
+  },
+  watch: {
+    timetable: {
+      handler() {
+        this.costHour = Math.floor(this.timetable.costTime / 60);
+        this.costMin = this.timetable.costTime % 60;
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    timeFlag() {
+      if (String(this.costHour).length > 2 || String(this.costMin).length > 2) {
+        return false;
+      }
+      if (this.costHour == 0 && this.costMin == 0) {
+        return false;
+      }
+      if (
+        !Number.isInteger(Number(this.costHour)) ||
+        !Number.isInteger(Number(this.costMin))
+      ) {
+        return false;
+      }
+      if (!this.costHour && !this.costMin) {
+        return false;
+      }
+      if (this.costHour < 0 || this.costHour > 11) {
+        return false;
+      }
+      if (this.costMin < 0 || this.costMin > 59) {
+        return false;
+      }
+      if (this.costHour === "" || this.costMin === "") {
+        return false;
+      }
+      return true;
+    },
   },
   methods: {
     changeCostTime(costHour, costMin) {
