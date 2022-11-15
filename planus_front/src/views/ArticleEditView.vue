@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <h1>게시글 수정 페이지</h1>
+    <br />
+
     <v-row align="center">
       <v-col cols="2" align="center" class="ma-0 box-center font-weight-bold">
         제목
@@ -74,9 +77,9 @@
       <v-col justify="center" cols="2">
         <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
       </v-col>
-      <v-space></v-space>
+
       <v-col>
-        <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
+        <v-btn outlined color="#4A8072" @click="updateArticle">제출</v-btn>
       </v-col>
     </v-row>
   </v-container>

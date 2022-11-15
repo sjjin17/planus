@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <h1>게시글 작성 페이지</h1>
+    <br />
     <v-row align="center">
       <v-col cols="2" align="center" class="ma-0 box-center font-weight-bold">
         제목
@@ -70,14 +72,12 @@
         ></v-textarea>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col justify="center" cols="2">
-        <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
-      </v-col>
-      <v-space></v-space>
-      <v-col>
-        <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
-      </v-col>
+    <v-row class="bottom-button">
+      <v-btn class="mr-2" outlined color="#4A8072" @click="goToCommunity"
+        >목록으로</v-btn
+      >
+
+      <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -132,5 +132,11 @@ export default {
 .box-center {
   text-align: center;
   color: #544c4c;
+}
+.my-container {
+  position: relative;
+}
+.bottom-button {
+  justify-content: flex-end;
 }
 </style>
