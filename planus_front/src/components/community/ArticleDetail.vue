@@ -51,7 +51,13 @@
         <div class="img-center">
           <img :src="article.trip.imageUrl" alt="여행사진" />
         </div>
-        <p style="white-space: pre-line">
+        <p
+          style="
+            white-space: pre-line;
+            word-wrap: break-word;
+            table-layout: fixed;
+          "
+        >
           {{ article.content }}
         </p>
       </v-sheet>

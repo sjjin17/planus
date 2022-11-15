@@ -73,14 +73,12 @@
         ></v-textarea>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col justify="center" cols="2">
-        <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
-      </v-col>
+    <v-row class="bottom-button">
+      <v-btn class="mr-2" outlined color="#4A8072" @click="goToCommunity"
+        >목록으로</v-btn
+      >
 
-      <v-col>
-        <v-btn outlined color="#4A8072" @click="updateArticle">제출</v-btn>
-      </v-col>
+      <v-btn outlined color="#4A8072" @click="updateArticle">제출</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -133,4 +131,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.bottom-button {
+  justify-content: flex-end;
+}
+</style>
