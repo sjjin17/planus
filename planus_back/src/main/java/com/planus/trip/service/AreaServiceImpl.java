@@ -8,8 +8,11 @@ import com.planus.db.repository.FestivalRepository;
 import com.planus.db.repository.TripAreaRepository;
 import com.planus.trip.dto.AreaResDTO;
 import com.planus.trip.dto.BestTripAreaDTO;
+import com.planus.trip.dto.FestivalDTO;
 import com.planus.trip.dto.FestivalResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -64,13 +67,24 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public List<FestivalResDTO> findFestival() {
+    public FestivalResDTO findFestival(Pageable pageable) {
         LocalDate today = LocalDate.now();
         LocalDate monthLater = today.plusMonths(1);
-        List<FestivalResDTO> festivalResDTOList = new ArrayList<>();
-        List<Festival> festivalList = festivalRepository.findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(today, monthLater);
+
+        Page<Festival> festivalList = festivalRepository.findAllByEndDateAfterAndStartDateBefore(today, monthLater, pageable);
+
+        return FestivalResDTO.builder()
+                .currentPage(festivalList.getNumber())
+                .totalPage(festivalList.getTotalPages())
+                .festivalList(setFestivalList(festivalList))
+                .build();
+    }
+
+    private List<FestivalDTO> setFestivalList(Page<Festival> festivalList) {
+        List<FestivalDTO> festivalDTOList = new ArrayList<>();
+
         for(Festival festival : festivalList){
-            FestivalResDTO festivalResDTO = FestivalResDTO.builder()
+            FestivalDTO festivalDTO = FestivalDTO.builder()
                     .title(festival.getTitle())
                     .address(festival.getAddress())
                     .imageUrl(festival.getImageUrl())
@@ -80,9 +94,9 @@ public class AreaServiceImpl implements AreaService{
                     .siName(festival.getArea().getSiName())
                     .build();
 
-            festivalResDTOList.add(festivalResDTO);
+            festivalDTOList.add(festivalDTO);
         }
 
-        return festivalResDTOList;
+        return festivalDTOList;
     }
 }
