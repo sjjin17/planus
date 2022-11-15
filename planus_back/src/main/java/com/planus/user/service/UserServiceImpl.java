@@ -34,17 +34,17 @@ public class UserServiceImpl implements UserService{
                     .refreshToken(tokenProvider.createRefreshToken())
                     .imageUrl(imageUrl)
                     .build();
-            userRepository.save(user);
         }else{
             user.setRefreshToken(tokenProvider.createRefreshToken());
             user.setImageUrl(imageUrl);
-            userRepository.save(user);
         }
+        userRepository.save(user);
         return user;
     }
 
     @Override
-    public UserInfoResDTO findUserInfo(long userId) {
+    public UserInfoResDTO findUserInfo(String token) {
+        long userId = tokenProvider.getUserId(token);
         User user = userRepository.findByUserId(userId);
         return new UserInfoResDTO(user.getName(), user.getEmail());
     }
@@ -122,6 +122,5 @@ public class UserServiceImpl implements UserService{
             }
             tripRepository.deleteById(tripId);
         }
-
     }
 }
