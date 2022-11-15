@@ -1,24 +1,24 @@
 <template>
-  <div>
-    <div>{{ plan.tripDate[1] }}/{{ plan.tripDate[2] }}</div>
-    <time-table-card
-      v-for="(timeTable, i) in plan.timetableList"
-      :key="i"
-      :timeTable="timeTable"
-      :startTime="startTime[i]"
-      :endTime="endTime[i]"
-      :moveTime="plan.timetableList[i].moveTime"
-    ></time-table-card>
-  </div>
+  <v-container>
+    <div class="font-weight-bold">
+      {{ plan.tripDate[1] }} / {{ plan.tripDate[2] }}
+    </div>
+    <v-row>
+      <time-table-card
+        v-for="(timeTable, i) in plan.timetableList"
+        :key="i"
+        :timeTable="timeTable"
+        :startTime="startTime[i]"
+        :endTime="endTime[i]"
+      ></time-table-card>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import TimeTableCard from "@/components/completetemp/TimeTableCard.vue";
+import TimeTableCard from "@/components/complete/TimeTableCard.vue";
 export default {
   name: "PlanCard",
-  mounted() {
-    this.calculateStartTime();
-  },
   data: () => {
     return {
       startTime: [],
@@ -46,6 +46,9 @@ export default {
         );
       }
     },
+  },
+  created() {
+    this.calculateStartTime();
   },
 };
 </script>

@@ -64,8 +64,9 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     public List<Festival> findFestival() {
-        LocalDate targetDate = LocalDate.now().plusMonths(1);
-        List<Festival> festivalList = festivalRepository.findAllByEndDateBefore(targetDate);
+        LocalDate today = LocalDate.now();
+        LocalDate monthLater = today.plusMonths(1);
+        List<Festival> festivalList = festivalRepository.findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(today, monthLater);
 
         return festivalList;
     }

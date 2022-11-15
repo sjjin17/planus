@@ -290,6 +290,11 @@ const API = {
     const response = await this.instance.get("/mytrip/all");
     return response.data;
   },
+
+  async getComplete(tripUrl) {
+    const response = await this.instance.get("/complete/" + tripUrl);
+    return response.data;
+  },
 };
 
 export default API;

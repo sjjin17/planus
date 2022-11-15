@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-1">
-    <v-card color="#B8DBC6" class="mx-0 my-1" @click="addMarker">
+    <v-card outlined flat class="mx-0 my-1" @click="addMarker">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mb-1">
@@ -22,14 +22,15 @@
             v-show="memberOrAdmin == 2"
             @planSubmit="planSubmit"
             :fromBucket="false"
-            class="mx-1 col-5"
+            class="col-6"
           ></plan-modal>
           <v-spacer></v-spacer>
           <v-col class="col-6">
             <v-btn
               small
+              width="100%"
               color="#4A8072"
-              class="white--text ma-0 pa-1"
+              class="white--text"
               @click="bucketClick"
               >버킷리스트 추가</v-btn
             >
@@ -102,4 +103,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.theme--light.v-sheet--outlined {
+  border: solid 1px #4a8072;
+}
+</style>
