@@ -178,7 +178,6 @@
           range
           no-title
           scrollable
-          @input="dateSort"
         >
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="dateMenu = false"> 취소 </v-btn>
@@ -284,16 +283,29 @@ export default {
     },
     disablePastDates(val) {
       let today = new Date();
-      return (
-        val >=
-        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
-          .toISOString()
-          .substr(0, 10)
-      );
-    },
-    dateSort() {
-      if (this.dates.length > 1) {
-        this.dates.sort();
+      if (this.dates.length > 0) {
+        let now = new Date(this.dates[0]);
+        let today = new Date(this.dates[0]);
+        let monthLater = new Date(now.setMonth(now.getMonth() + 1));
+        return (
+          val >=
+            new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+              .toISOString()
+              .substr(0, 10) &&
+          val <
+            new Date(
+              monthLater.getTime() - monthLater.getTimezoneOffset() * 60000
+            )
+              .toISOString()
+              .substr(0, 10)
+        );
+      } else {
+        return (
+          val >=
+          new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+            .toISOString()
+            .substr(0, 10)
+        );
       }
     },
   },
