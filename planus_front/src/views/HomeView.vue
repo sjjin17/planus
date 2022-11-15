@@ -16,8 +16,26 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <create-trip class="mainTripDiv" @alert="change"></create-trip>
-    <festival-list class="mainFestivalDiv"></festival-list>
+    <create-trip
+      ref="createTripMenu"
+      class="mainTripDiv"
+      @alert="change"
+    ></create-trip>
+    <festival-list
+      class="mainFestivalDiv"
+      @getAddArea="getAddArea"
+    ></festival-list>
+    <v-dialog v-model="dialog" persistent max-width="300">
+      <v-card>
+        <v-card-title>{{ siName }}</v-card-title>
+        <v-card-text>이 지역을 여행지에 추가하시겠습니까?</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn outlined color="#4a8072" @click="dialog = false">취소</v-btn>
+          <v-btn outlined color="#ff1744" @click="addArea()">추가</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -36,6 +54,9 @@ export default {
   data: () => {
     return {
       alert: false,
+      areaId: 0,
+      siName: "",
+      dialog: false,
     };
   },
   methods: {
@@ -51,6 +72,15 @@ export default {
     },
     change() {
       this.alert = !this.alert;
+    },
+    getAddArea(areaId, siName) {
+      this.areaId = areaId;
+      this.siName = siName;
+      this.dialog = true;
+    },
+    addArea() {
+      this.$refs.createTripMenu.addArea2(this.areaId, this.siName);
+      this.dialog = false;
     },
   },
 };

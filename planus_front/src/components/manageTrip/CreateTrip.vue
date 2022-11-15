@@ -17,7 +17,6 @@
             allow-overflow
             multiple
             chips
-            dense
             solo
             clearable
             readonly
@@ -49,8 +48,10 @@
           <v-card-text
             ><v-tabs-items v-model="tabs"
               ><v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup1"
                     :key="i"
                     :area="area"
@@ -61,8 +62,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup2"
                     :key="i"
                     :area="area"
@@ -73,8 +76,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup3"
                     :key="i"
                     :area="area"
@@ -85,8 +90,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup4"
                     :key="i"
                     :area="area"
@@ -97,8 +104,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup5"
                     :key="i"
                     :area="area"
@@ -109,8 +118,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup6"
                     :key="i"
                     :area="area"
@@ -121,8 +132,10 @@
                 </v-chip-group>
               </v-tab-item>
               <v-tab-item>
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group column>
                   <v-chip
+                    color="#4a8072"
+                    text-color="white"
                     v-for="(area, i) in areaGroup7"
                     :key="i"
                     :area="area"
@@ -153,7 +166,6 @@
             label="여행 일정 선택"
             multiple
             chips
-            dense
             solo
             clearable
             readonly
@@ -267,6 +279,12 @@ export default {
         this.areas.push(area.siName);
       }
     },
+    addArea2(areaId, siName) {
+      if (!this.areaId.includes(areaId)) {
+        this.areaId.push(areaId);
+        this.areas.push(siName);
+      }
+    },
     clearArea() {
       if (!this.areaMenu) {
         this.areaId = [];
@@ -303,7 +321,7 @@ export default {
   width: 30%;
 }
 .createTripBtn {
-  height: 40px !important;
+  height: 48px !important;
   background-color: #ff1744 !important;
   color: white !important;
   font-size: 1.4rem !important;

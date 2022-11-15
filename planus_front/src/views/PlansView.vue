@@ -19,7 +19,9 @@
         :tripUrl="tripUrl"
         :admin="admin"
         :connector="connector"
+        :userId="parseInt(userId)"
         @getConnector="getConnector"
+        @changeAdmin="changeAdmin"
       ></invite-dialog>
       <complete-dialog
         :tripId="tripId"
@@ -384,6 +386,16 @@ export default {
             this.$router.push("/complete/" + this.tripUrl);
           }
           break;
+        case 9:
+          console.log("권한변경 수신");
+          console.log(content);
+          this.admin = content.newAdminId;
+          if (content.newAdminId == this.userId) {
+            this.memberOrAdmin = 2;
+          } else {
+            this.memberOrAdmin = 1;
+          }
+          break;
       }
     },
     getConnector() {
@@ -527,6 +539,13 @@ export default {
     },
     changeTimetableList(timtableList) {
       this.timetableList = timtableList;
+    },
+    changeAdmin(newAdminId) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.changeAdmin(this.tripId, newAdminId, this.admin);
+        }
+      }
     },
     completeTrip() {
       let completed = true;
