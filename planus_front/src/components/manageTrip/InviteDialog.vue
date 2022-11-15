@@ -32,7 +32,14 @@
               v-if="admin == member.userId"
               >방장</v-btn
             >
-            <v-btn depressed rounded white--text v-else>방장변경</v-btn>
+            <v-btn
+              depressed
+              rounded
+              white--text
+              v-else-if="admin == userId"
+              @click="changeAdmin(member.userId)"
+              >방장변경</v-btn
+            >
           </v-col>
           <v-col>
             <div class="memberName">{{ member.name }}</div>
@@ -78,6 +85,7 @@ export default {
   },
   props: {
     tripId: Number,
+    userId: Number,
     tripUrl: String,
     admin: Number,
     connector: Array,
@@ -95,6 +103,9 @@ export default {
       navigator.clipboard.writeText(window.location.href).then(() => {
         window.alert("링크가 복사되었습니다! 친구를 초대해보세요!");
       });
+    },
+    changeAdmin(newAdminId) {
+      this.$emit("changeAdmin", newAdminId);
     },
   },
 };

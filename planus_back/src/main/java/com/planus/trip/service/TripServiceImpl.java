@@ -8,6 +8,7 @@ import com.planus.trip.dto.TripResDTO;
 import com.planus.util.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -169,5 +170,20 @@ public class TripServiceImpl implements TripService {
                 .build();
         tripRepository.save(trip);
         return true;
+    }
+
+    @Override
+    public Trip findByTripId(long tripId) {
+        return tripRepository.findByTripId(tripId);
+    }
+
+    @Override
+    @Transactional
+    public long changeAdminForWebSocket(Trip trip, long userId) {
+        System.out.println("서비스단 호출");
+        trip.changeAdmin(userId);
+        System.out.println("=========================="+trip.getAdmin());
+        tripRepository.save(trip);
+        return userId;
     }
 }
