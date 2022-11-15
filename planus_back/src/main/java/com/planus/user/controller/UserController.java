@@ -21,23 +21,20 @@ public class UserController {
 
     private final UserService userService;
     private final CommentService commentService;
-    private final TokenProvider tokenProvider;
     private final ArticleService articleService;
 
     public UserController(UserService userService, CommentService commentService, TokenProvider tokenProvider, ArticleService articleService) {
         this.userService = userService;
         this.commentService = commentService;
-        this.tokenProvider = tokenProvider;
         this.articleService = articleService;
     }
 
     @GetMapping
     public ResponseEntity myInfo(@RequestHeader String Authorization){
-        String token = Authorization.substring(7);
-        long userId = tokenProvider.getUserId(token);
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            UserInfoResDTO userInfo = userService.findUserInfo(userId);
+            String token = Authorization.substring(7);
+            UserInfoResDTO userInfo = userService.findUserInfo(token);
             resultMap.put("result", userInfo);
             resultMap.put("message", "success");
             return new ResponseEntity(resultMap, HttpStatus.OK);
@@ -70,8 +67,6 @@ public class UserController {
             return new ResponseEntity(resultMap, HttpStatus.OK);
         }catch(Exception e){
             resultMap.put("message", "회원정보 수정에서 에러");
-            System.out.println("회원정보 수정에서 에러");
-            e.printStackTrace();
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
     }

@@ -123,4 +123,9 @@ public class MemberServiceImpl implements MemberService{
     public Member findMember(long memberId) {
         return memberRepository.findOneByMemberId(memberId);
     }
+
+    @Override
+    public boolean isMemberOfTrip(long tripId, long userId) {
+        return memberRepository.existsByTripTripIdAndUserUserId(tripId, userId);
+    }
 }
