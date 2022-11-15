@@ -17,6 +17,8 @@ const WSAPI = {
       () => {
         this.stomp.subscribe("/topic/planus/" + tripId, callback);
         this.enter({ tripId, token });
+        console.log("readyState 테스트 출력..?");
+        console.log(this.socket);
       },
       (error) => {
         console.log(error);
@@ -138,6 +140,13 @@ const WSAPI = {
       fromBucket: fromBucket,
     };
     this.stomp.send("/app/setTimetable", JSON.stringify(timetable));
+  },
+  completeTrip(tripId, completed) {
+    let complete = {
+      tripId: tripId,
+      completed: completed,
+    };
+    this.stomp.send("/app/completeTrip", JSON.stringify(complete));
   },
 };
 

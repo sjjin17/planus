@@ -1,6 +1,8 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
+import com.planus.db.entity.Plan;
+import com.planus.db.repository.PlanRepository;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
 import com.planus.util.TokenProvider;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/ws")
 @RequiredArgsConstructor
@@ -29,6 +33,8 @@ public class WebSocketController {
     private final BucketService bucketService;
     private final PlanService planService;
     private final MemberService memberService;
+
+    private final PlanRepository planRepository;
 
 
     @MessageMapping("/enter")
@@ -123,6 +129,12 @@ public class WebSocketController {
         sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
     }
 
+    @MessageMapping("/completeTrip")
+    public void completeTrip(WebSocketComplete complete) {
+        complete.setAction(9);
+        sendingOperations.convertAndSend(ROOT_URL+complete.getTripId(),complete);
+    }
+
     @EventListener
     public void exit(SessionDisconnectEvent event) {
         //연결된 모든 클라이언트에게 사용자 퇴장 이벤트 처리
@@ -141,8 +153,15 @@ public class WebSocketController {
             e.printStackTrace();
         }
 
+        // 웹소켓에서 한 명이 퇴장할 때마다 redis에 있는 값을 mysql에 저장
+        List<Plan> planIdList = planRepository.findByTripTripId((long)headerAccessor.getSessionAttributes().get("tripId")).orElseThrow();
+        for (Plan p:planIdList) {
+            planService.savePlan(p.getPlanId(), false);
+            planService.saveTimetable(p.getPlanId(), false);
+        }
+        bucketService.createBucketList((long)headerAccessor.getSessionAttributes().get("tripId"));
+
         //웹소켓세션 비우기
         headerAccessor.getSessionAttributes().clear();
-        //System.out.println(headerAccessor.getSessionAttributes().size() + "Quest");
     }
 }
