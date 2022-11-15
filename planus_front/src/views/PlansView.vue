@@ -27,11 +27,19 @@
         :tripId="tripId"
         :tripUrl="tripUrl"
         :planIdList="planIdList"
+        :memberOrAdmin="memberOrAdmin"
+        @completeTrip="completeTrip"
         class="mr-3"
       ></complete-dialog>
     </v-container>
     <div>
-      <v-tabs v-model="planTabs" fixed-tabs>
+      <v-tabs
+        v-model="planTabs"
+        fixed-tabs
+        slider-color="#4a8072"
+        color="#4a8072"
+        show-arrows
+      >
         <v-tab
           v-for="plan in planIdList"
           :key="plan.planId"
@@ -45,7 +53,12 @@
         class="ma-0 pt-0"
         style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
-        <v-tabs v-model="tabs" fixed-tabs>
+        <v-tabs
+          v-model="tabs"
+          fixed-tabs
+          slider-color="#4a8072"
+          color="#4a8072"
+        >
           <v-tab style="padding: 0">버킷리스트</v-tab>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
@@ -223,7 +236,6 @@ export default {
       if (oldVal == 0) {
         return;
       }
-      console.log("oldVal:" + oldVal);
       //탭 변경이므로 false
       let complete = false;
       api.savePlan(this.tripId, [oldVal], complete);
@@ -376,6 +388,13 @@ export default {
             this.memberOrAdmin = 2;
           } else {
             this.memberOrAdmin = 1;
+          }
+          break;
+        case 10:
+          console.log(content);
+          // 완료페이지로 이동
+          if (content.completed) {
+            this.$router.push("/complete/" + this.tripUrl);
           }
           break;
       }
@@ -547,17 +566,25 @@ export default {
       }
       return true;
     },
+    completeTrip() {
+      let completed = true;
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.completeTrip(this.tripId, completed);
+        }
+      }
+    },
   },
 };
 </script>
 
 <style>
-.v-slide-group__prev {
+/* .v-slide-group__prev {
   display: none !important;
 }
 .v-slide-group__next {
   display: none !important;
-}
+} */
 #leftTab {
   overflow-y: scroll;
   height: calc(85vh - 150px);
@@ -588,10 +615,10 @@ export default {
   border: 2px solid transparent;
   border-color: #00000000;
 }
-.v-tabs-slider {
+/* .v-tabs-slider {
   color: #4a8072;
 }
 .v-tab--active {
   color: #4a8072 !important;
-}
+} */
 </style>

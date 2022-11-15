@@ -148,6 +148,13 @@ const WSAPI = {
     };
     this.stomp.send("/app/changeAdmin", JSON.stringify(admin));
   },
+  completeTrip(tripId, completed) {
+    let complete = {
+      tripId: tripId,
+      completed: completed,
+    };
+    this.stomp.send("/app/completeTrip", JSON.stringify(complete));
+  },
 };
 
 export default WSAPI;

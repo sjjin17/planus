@@ -1,6 +1,8 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
+import com.planus.db.entity.Plan;
+import com.planus.db.repository.PlanRepository;
 import com.planus.db.entity.Trip;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
@@ -34,6 +36,8 @@ public class WebSocketController {
     private final MemberService memberService;
 
     private final TripService tripService;
+
+    private final PlanRepository planRepository;
 
 
     @MessageMapping("/enter")
@@ -146,6 +150,12 @@ public class WebSocketController {
         }
     }
 
+    @MessageMapping("/completeTrip")
+    public void completeTrip(WebSocketComplete complete) {
+        complete.setAction(10);
+        sendingOperations.convertAndSend(ROOT_URL+complete.getTripId(),complete);
+    }
+
     @EventListener
     public void exit(SessionDisconnectEvent event) {
         //연결된 모든 클라이언트에게 사용자 퇴장 이벤트 처리
@@ -164,8 +174,15 @@ public class WebSocketController {
             e.printStackTrace();
         }
 
+        // 웹소켓에서 한 명이 퇴장할 때마다 redis에 있는 값을 mysql에 저장
+        List<Plan> planIdList = planRepository.findByTripTripId((long)headerAccessor.getSessionAttributes().get("tripId")).orElseThrow();
+        for (Plan p:planIdList) {
+            planService.savePlan(p.getPlanId(), false);
+            planService.saveTimetable(p.getPlanId(), false);
+        }
+        bucketService.createBucketList((long)headerAccessor.getSessionAttributes().get("tripId"));
+
         //웹소켓세션 비우기
         headerAccessor.getSessionAttributes().clear();
-        //System.out.println(headerAccessor.getSessionAttributes().size() + "Quest");
     }
 }
