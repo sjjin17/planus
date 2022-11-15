@@ -51,13 +51,7 @@
         <div class="img-center">
           <img :src="article.trip.imageUrl" alt="여행사진" />
         </div>
-        <p
-          style="
-            white-space: pre-line;
-            word-wrap: break-word;
-            table-layout: fixed;
-          "
-        >
+        <p>
           {{ article.content }}
         </p>
       </v-sheet>
@@ -162,9 +156,7 @@ hr {
 .bottomm-button {
   row-gap: 20px;
 }
-/* .my-container {
-  position: relative;
-} */
+
 .like-see {
   position: absolute;
   right: 0px;
@@ -172,5 +164,12 @@ hr {
 }
 .v-icon.v-icon:after {
   background-color: transparent;
+}
+p {
+  white-space: pre-line;
+  word-wrap: break-word;
+  table-layout: fixed;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>
