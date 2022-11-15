@@ -1,4 +1,4 @@
-package com.planus.complete;
+package com.planus.complete.controller;
 
 import com.planus.complete.dto.CompleteResDTO;
 import com.planus.complete.service.CompleteService;

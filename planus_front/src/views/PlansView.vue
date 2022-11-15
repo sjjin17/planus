@@ -429,9 +429,9 @@ export default {
       this.nickname = decode.nickname;
       this.userId = decode.userId;
     },
-    getCenter(lat, lng) {
-      this.lat = lat;
-      this.lng = lng;
+    getCenter(nowCenter) {
+      this.lat = nowCenter.lat;
+      this.lng = nowCenter.lng;
     },
     recommendClick() {
       this.isRecommendClick = !this.isRecommendClick;
