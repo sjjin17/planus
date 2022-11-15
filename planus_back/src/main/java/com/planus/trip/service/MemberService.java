@@ -1,5 +1,6 @@
 package com.planus.trip.service;
 
+import com.planus.db.entity.Member;
 import com.planus.trip.dto.MemberResDTO;
 import com.planus.websocket.model.WebSocketMember;
 
@@ -11,4 +12,6 @@ public interface MemberService {
     void addConnector(WebSocketMember member);
     void delConnector(WebSocketMember member);
     Object[] getConnector(WebSocketMember member);
+
+    Member findMember(long memberId);
 }

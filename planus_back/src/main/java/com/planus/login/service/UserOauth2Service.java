@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.Map;
 
@@ -20,7 +19,6 @@ import java.util.Map;
 @Service
 public class UserOauth2Service extends DefaultOAuth2UserService {
 
-    private final HttpSession httpSession;
     private final UserService userService;
 
     @Override

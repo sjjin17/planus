@@ -1,9 +1,10 @@
 package com.planus.websocket.controller;
 
 import com.planus.bucket.service.BucketService;
+import com.planus.db.entity.Trip;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
-import com.planus.util.TokenProvider;
+import com.planus.trip.service.TripService;
 import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class WebSocketController {
     private final BucketService bucketService;
     private final PlanService planService;
     private final MemberService memberService;
+
+    private final TripService tripService;
 
 
     @MessageMapping("/enter")
@@ -121,6 +124,20 @@ public class WebSocketController {
         Timetable.setAction(8);
         planService.setTimetable(Timetable.getPlanId(), Timetable);
         sendingOperations.convertAndSend(ROOT_URL+Timetable.getTripId(),Timetable);
+    }
+
+
+    //TODO: 이상한 요청에 대한 처리 추가할것
+    @MessageMapping("/changeAdmin")
+    public void changeAdmin(WebSocketAdmin admin){
+        System.out.println("changeAdmin 호출");
+        admin.setAction(9);
+        Trip trip = tripService.findByTripId(admin.getTripId());
+        tripService.changeAdminForWebSocket(trip,admin.getNewAdminId());
+//        long newAdminUserId = memberService.findMember(admin.getNewAdminId()).getUser().getUserId();
+//        tripService.changeAdminForWebSocket(trip, newAdminUserId);
+        sendingOperations.convertAndSend(ROOT_URL+admin.getTripId(), admin);
+
     }
 
     @EventListener

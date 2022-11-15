@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Long countByTripTripId(long tripId);
     void deleteByTripTripIdAndUserUserId(long tripId, long userId);
     Member findTop1ByTripTripId(long tripId);
+
+    Member findOneByMemberId(long memberId);
 }

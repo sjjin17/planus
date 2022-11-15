@@ -139,6 +139,15 @@ const WSAPI = {
     };
     this.stomp.send("/app/setTimetable", JSON.stringify(timetable));
   },
+
+  changeAdmin(tripId, newAdminId, originAdminId) {
+    let admin = {
+      tripId: tripId,
+      newAdminId: newAdminId,
+      originAdminId: originAdminId,
+    };
+    this.stomp.send("/app/changeAdmin", JSON.stringify(admin));
+  },
 };
 
 export default WSAPI;
