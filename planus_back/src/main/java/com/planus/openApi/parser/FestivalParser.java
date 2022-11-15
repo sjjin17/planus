@@ -27,9 +27,9 @@ public class FestivalParser {
         this.festivalRepository = festivalRepository;
     }
 
-    @Scheduled(cron = "0 0 0/1 * * *") //한시간마다 실행
-//    @Scheduled(cron = "0 0 0 * * ?") //자정마다 실행 "초 분 시 일 월 주 (년)"
-//    @Scheduled(cron = "0 25 5 * * ?")
+//    @Scheduled(cron = "0 0 0/1 * * *") //한시간마다 실행
+    @Scheduled(cron = "0 0 0 * * ?") //자정마다 실행 "초 분 시 일 월 주 (년)"
+//    @Scheduled(cron = "0 5 13 * * ?")
     public void getFestival(){
         try{
 //            URL url = new URL("http://apis.data.go.kr/B551011/KorService/searchFestival?serviceKey=uC7oHJwGi%2FOBB070p2RKZ%2Fz9sCPt8z59HFwDdx5bta5Jky5pSo0pSF8etCED%2BF%2Fyc6cSGJR%2BLZ0qWBcZqdsufQ%3D%3D&numOfRows=10000&MobileOS=ETC&MobileApp=Planus&_type=json&eventStartDate=00000000");

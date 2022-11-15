@@ -8,6 +8,7 @@ import com.planus.db.repository.FestivalRepository;
 import com.planus.db.repository.TripAreaRepository;
 import com.planus.trip.dto.AreaResDTO;
 import com.planus.trip.dto.BestTripAreaDTO;
+import com.planus.trip.dto.FestivalResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,11 +64,25 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public List<Festival> findFestival() {
+    public List<FestivalResDTO> findFestival() {
         LocalDate today = LocalDate.now();
         LocalDate monthLater = today.plusMonths(1);
+        List<FestivalResDTO> festivalResDTOList = new ArrayList<>();
         List<Festival> festivalList = festivalRepository.findAllByEndDateAfterAndStartDateBeforeOrderByEndDate(today, monthLater);
+        for(Festival festival : festivalList){
+            FestivalResDTO festivalResDTO = FestivalResDTO.builder()
+                    .title(festival.getTitle())
+                    .address(festival.getAddress())
+                    .imageUrl(festival.getImageUrl())
+                    .startDate(festival.getStartDate().toString())
+                    .endDate(festival.getEndDate().toString())
+                    .areaId(festival.getArea().getAreaId())
+                    .siName(festival.getArea().getSiName())
+                    .build();
 
-        return festivalList;
+            festivalResDTOList.add(festivalResDTO);
+        }
+
+        return festivalResDTOList;
     }
 }
