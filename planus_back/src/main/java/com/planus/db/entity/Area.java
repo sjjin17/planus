@@ -35,15 +35,18 @@ public class Area {
     @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
     private List<TripArea> tripAreaList;
 
+    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+    private List<Festival> festivalList;
 
     @Builder
-    public Area(long areaId, String doName, String siName, String imageUrl, double lat, double lng, List<TripArea> tripAreaList){
+    public Area(long areaId, String doName, String siName, String imageUrl, double lat, double lng, List<TripArea> tripAreaList, List<Festival> festivalList) {
         this.areaId = areaId;
         this.doName = doName;
         this.siName = siName;
         this.imageUrl = imageUrl;
-        this. lat = lat;
+        this.lat = lat;
         this.lng = lng;
         this.tripAreaList = tripAreaList;
+        this.festivalList = festivalList;
     }
 }

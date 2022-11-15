@@ -19,17 +19,27 @@
         :tripUrl="tripUrl"
         :admin="admin"
         :connector="connector"
+        :userId="parseInt(userId)"
         @getConnector="getConnector"
+        @changeAdmin="changeAdmin"
       ></invite-dialog>
       <complete-dialog
         :tripId="tripId"
         :tripUrl="tripUrl"
         :planIdList="planIdList"
+        :memberOrAdmin="memberOrAdmin"
+        @completeTrip="completeTrip"
         class="mr-3"
       ></complete-dialog>
     </v-container>
     <div>
-      <v-tabs v-model="planTabs" fixed-tabs>
+      <v-tabs
+        v-model="planTabs"
+        fixed-tabs
+        slider-color="#4a8072"
+        color="#4a8072"
+        show-arrows
+      >
         <v-tab
           v-for="plan in planIdList"
           :key="plan.planId"
@@ -43,7 +53,12 @@
         class="ma-0 pt-0"
         style="width: 20%; min-width: 300px; height: 85vh; position: relative"
       >
-        <v-tabs v-model="tabs" fixed-tabs>
+        <v-tabs
+          v-model="tabs"
+          fixed-tabs
+          slider-color="#4a8072"
+          color="#4a8072"
+        >
           <v-tab style="padding: 0">버킷리스트</v-tab>
           <v-tab style="padding: 0">장소검색</v-tab>
           <v-tab style="padding: 0" @click="recommendClick">추천장소 </v-tab>
@@ -220,7 +235,6 @@ export default {
       if (oldVal == 0) {
         return;
       }
-      console.log("oldVal:" + oldVal);
       //탭 변경이므로 false
       let complete = false;
       api.savePlan(this.tripId, [oldVal], complete);
@@ -365,6 +379,23 @@ export default {
             planId: content.planId,
           };
           break;
+        case 9:
+          console.log("권한변경 수신");
+          console.log(content);
+          this.admin = content.newAdminId;
+          if (content.newAdminId == this.userId) {
+            this.memberOrAdmin = 2;
+          } else {
+            this.memberOrAdmin = 1;
+          }
+          break;
+        case 10:
+          console.log(content);
+          // 완료페이지로 이동
+          if (content.completed) {
+            this.$router.push("/complete/" + this.tripUrl);
+          }
+          break;
       }
     },
     getConnector() {
@@ -417,9 +448,9 @@ export default {
       this.nickname = decode.nickname;
       this.userId = decode.userId;
     },
-    getCenter(lat, lng) {
-      this.lat = lat;
-      this.lng = lng;
+    getCenter(nowCenter) {
+      this.lat = nowCenter.lat;
+      this.lng = nowCenter.lng;
     },
     recommendClick() {
       this.isRecommendClick = !this.isRecommendClick;
@@ -509,17 +540,32 @@ export default {
     changeTimetableList(timtableList) {
       this.timetableList = timtableList;
     },
+    changeAdmin(newAdminId) {
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.changeAdmin(this.tripId, newAdminId, this.admin);
+        }
+      }
+    },
+    completeTrip() {
+      let completed = true;
+      if (this.token) {
+        if (ws.stomp && ws.stomp.connected) {
+          ws.completeTrip(this.tripId, completed);
+        }
+      }
+    },
   },
 };
 </script>
 
 <style>
-.v-slide-group__prev {
+/* .v-slide-group__prev {
   display: none !important;
 }
 .v-slide-group__next {
   display: none !important;
-}
+} */
 #leftTab {
   overflow-y: scroll;
   height: calc(85vh - 150px);
@@ -550,10 +596,10 @@ export default {
   border: 2px solid transparent;
   border-color: #00000000;
 }
-.v-tabs-slider {
+/* .v-tabs-slider {
   color: #4a8072;
 }
 .v-tab--active {
   color: #4a8072 !important;
-}
+} */
 </style>

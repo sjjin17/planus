@@ -118,4 +118,9 @@ public class MemberServiceImpl implements MemberService{
 
         return array;
     }
+
+    @Override
+    public Member findMember(long memberId) {
+        return memberRepository.findOneByMemberId(memberId);
+    }
 }

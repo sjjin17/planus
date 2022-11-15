@@ -8,6 +8,9 @@ import com.planus.trip.service.TripService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +76,17 @@ public class TripController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("areaList", areaService.findBestArea());
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/festival")
+    public ResponseEntity getFestival(@PageableDefault(size = 4, sort = "endDate", direction = Sort.Direction.ASC) Pageable pageable){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            resultMap.put("festivalPage", areaService.findFestival(pageable));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
