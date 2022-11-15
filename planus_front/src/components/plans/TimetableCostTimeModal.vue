@@ -13,6 +13,7 @@
             outlined
             hide-details
             v-model="costHour"
+            color="#4A8072"
           ></v-text-field>
         </v-col>
         <v-col class="ma-0 pa-0" cols="2" style="align-self: center"
@@ -26,6 +27,7 @@
             outlined
             hide-details
             v-model="costMin"
+            color="#4A8072"
           ></v-text-field>
         </v-col>
         <v-col class="ma-0 pa-0" style="align-self: center"><h3>분</h3></v-col>

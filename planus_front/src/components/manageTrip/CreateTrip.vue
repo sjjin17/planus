@@ -30,7 +30,12 @@
         </template>
         <v-card v-model="areaMenu" style="width: 700px">
           <v-card-title>
-            <v-tabs v-model="tabs" fixed-tabs>
+            <v-tabs
+              v-model="tabs"
+              fixed-tabs
+              slider-color="#4a8072"
+              color="#4a8072"
+            >
               <v-tab style="padding: 0">서울/인천</v-tab>
               <v-tab>경기도</v-tab>
               <v-tab>강원도</v-tab>
@@ -169,6 +174,7 @@
             clear-icon="mdi-close-circle"
             v-bind="attrs"
             v-on="on"
+            color="#4a8072"
           >
           </v-combobox>
         </template>
@@ -179,10 +185,13 @@
           no-title
           scrollable
           @input="dateSort"
+          color="#4a8072"
         >
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="dateMenu = false"> 취소 </v-btn>
-          <v-btn text color="primary" @click="$refs.dateMenu.save(dates)">
+          <v-btn outlined color="#4a8072" @click="dateMenu = false">
+            취소
+          </v-btn>
+          <v-btn outlined color="#4a8072" @click="$refs.dateMenu.save(dates)">
             선택
           </v-btn>
         </v-date-picker>
