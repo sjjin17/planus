@@ -88,9 +88,10 @@ export default {
       this.completeList = this.res.result.planResDTOList;
     },
     captureImg() {
-      html2canvas(document.getElementById("capture")).then((canvas) => {
-        // var base64image = canvas.toDataURL("image/png");
-        // window.open(base64image, "_blank");
+      html2canvas(document.getElementById("capture"), {
+        backgroundColor: null,
+        useCORS: true,
+      }).then((canvas) => {
         this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
       });
     },
