@@ -22,6 +22,7 @@
             readonly
             appendIcon=""
             clear-icon="mdi-close-circle"
+            style="z-index: 1"
             v-bind="attrs"
             v-on="on"
             @click:clear="clearArea"
@@ -184,6 +185,8 @@
           range
           no-title
           scrollable
+          locale="ko-KR"
+          :day-format="getDay"
           color="#4a8072"
         >
           <v-spacer></v-spacer>
@@ -244,7 +247,9 @@ export default {
       this.areaGroup7 = res.slice(160);
     },
     async createTrip() {
-      this.isLogin();
+      if (this.isLogin()) {
+        return;
+      }
 
       if (this.areaId.length == 0 || this.dates.length == 0) {
         window.alert("여행지와 여행 일정을 선택해주세요!");
@@ -270,18 +275,27 @@ export default {
     isLogin() {
       if (!this.$cookies.get("refresh")) {
         this.$emit("alert");
+        return true;
       }
     },
     addArea(area) {
       if (!this.areaId.includes(area.areaId)) {
-        this.areaId.push(area.areaId);
-        this.areas.push(area.siName);
+        if (this.areaId.length < 10) {
+          this.areaId.push(area.areaId);
+          this.areas.push(area.siName);
+        } else {
+          window.alert("여행지는 10개까지 선택 가능합니다.");
+        }
       }
     },
     addArea2(areaId, siName) {
       if (!this.areaId.includes(areaId)) {
-        this.areaId.push(areaId);
-        this.areas.push(siName);
+        if (this.areaId.length < 10) {
+          this.areaId.push(areaId);
+          this.areas.push(siName);
+        } else {
+          window.alert("여행지는 10개까지 선택 가능합니다.");
+        }
       }
     },
     clearArea() {
@@ -316,6 +330,10 @@ export default {
             .substr(0, 10)
         );
       }
+    },
+    getDay(day) {
+      let arr = day.split("-");
+      return Number(arr[arr.length - 1]);
     },
   },
 };
