@@ -207,6 +207,7 @@ export default {
 
       bucketList: [],
       timetableList: [],
+      tempAddBucket: {},
     };
   },
   async created() {
@@ -401,7 +402,13 @@ export default {
       }
     },
     addBucket(place, address, lat, lng) {
-      if (this.token) {
+      this.tempAddBucket = {
+        place: place,
+        address: address,
+        lat: lat,
+        lng: lng,
+      };
+      if (this.token && this.checkDuplicateBucket()) {
         if (ws.stomp && ws.stomp.connected) {
           ws.addBucket(this.tripId, place, address, lat, lng);
         }
@@ -527,6 +534,18 @@ export default {
           ws.changeAdmin(this.tripId, newAdminId, this.admin);
         }
       }
+    },
+    checkDuplicateBucket() {
+      for (const idx of this.bucketList.keys()) {
+        if (
+          JSON.stringify(this.bucketList[idx]) ==
+          JSON.stringify(this.tempAddBucket)
+        ) {
+          window.alert("이미 추가한 장소입니다.");
+          return false;
+        }
+      }
+      return true;
     },
   },
 };
