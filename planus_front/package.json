@@ -18,6 +18,7 @@
     "vue-chat-scroll": "^1.4.0",
     "vue-cookies": "^1.8.1",
     "vue-infinite-loading": "^2.4.5",
+    "vue-kakao-sdk": "^0.2.5",
     "vue-router": "^3.5.1",
     "vue2-google-maps": "0.10.7",
     "vuedraggable": "^2.24.3",

@@ -35,4 +35,8 @@ public class CompleteController {
 
     }
 
+    @PostMapping("/copy")
+    ResponseEntity<String> copyTrip(@RequestHeader String Authorization, Long tripId, String startDate) {
+        return ResponseEntity.ok().body(completeService.copyTrip(Authorization, tripId, startDate));
+    }
 }

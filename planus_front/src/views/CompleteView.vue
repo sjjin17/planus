@@ -1,20 +1,56 @@
 <template>
   <v-container>
-    <h1>완료페이지</h1>
-    <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
-      <complete-map
-        :tripArea="tripInfo.tripArea"
-        :completeList="completeList"
-      ></complete-map>
-      <complete-page :completeList="completeList"></complete-page>
-    </v-sheet>
+    <h1><v-icon @click="goHome">mdi-home</v-icon>완료페이지</h1>
+    <div id="parentDiv" style="overflow: hidden">
+      <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
+        <complete-map
+          :tripArea="tripInfo.tripArea"
+          :completeList="completeList"
+        ></complete-map>
+        <complete-page :completeList="completeList"></complete-page>
+      </v-sheet>
+    </div>
     <v-container class="d-flex justify-center">
       <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
         >저장</v-btn
       >
-      <v-btn outlined large class="mx-4" color="#4a8072">공유</v-btn>
-      <v-btn outlined large class="mx-4" color="#4a8072">복사</v-btn>
+      <v-btn outlined large class="mx-4" color="#4a8072" @click="shareTrip"
+        >공유</v-btn
+      >
+      <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
+        >복사</v-btn
+      >
     </v-container>
+
+    <v-dialog v-model="alert" max-width="450">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="modal" max-width="450">
+      <v-card>
+        <v-card-title class="d-flex justify-center"
+          >여행 시작일을 입력해주세요</v-card-title
+        >
+        <v-spacer></v-spacer>
+        <v-date-picker
+          class="d-flex justify-center"
+          v-html="newStartDate"
+          no-title
+          scrollable
+          color="#4a8072"
+        ></v-date-picker>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="modal = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -60,6 +96,9 @@ export default {
         },
       ],
       completeList: [],
+      alert: false,
+      modal: false,
+      newStartDate: "2022-11-15",
     };
   },
   async created() {
@@ -88,12 +127,15 @@ export default {
       this.completeList = this.res.result.planResDTOList;
     },
     captureImg() {
-      html2canvas(document.getElementById("capture"), {
+      const el = document.getElementById("capture");
+      el.style.height = el.scrollHeight + "px";
+      html2canvas(el, {
         backgroundColor: null,
         useCORS: true,
       }).then((canvas) => {
         this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
       });
+      el.style.height = "75vh";
     },
     saveAs(uri, filename) {
       let link = document.createElement("a");
@@ -107,13 +149,59 @@ export default {
         window.open(uri);
       }
     },
+    shareTrip() {
+      let imgUrl = this.tripInfo.imageUrl;
+      let pgUrl = window.location.href;
+
+      if (this.tripInfo.imageUrl == null) {
+        imgUrl =
+          "http://img.segye.com/content/image/2022/02/23/20220223514051.jpg";
+      }
+
+      this.$kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "Planus",
+          description: "Planus에서 완성된 여행 일정을 확인해 보세요!",
+          imageUrl: imgUrl,
+          link: {
+            mobileWebUrl: imgUrl,
+            webUrl: imgUrl,
+          },
+        },
+        buttons: [
+          {
+            title: "일정 확인하기",
+            link: {
+              mobileWebUrl: pgUrl,
+              webUrl: pgUrl,
+            },
+          },
+        ],
+      });
+    },
+    modalOn() {
+      if (!this.$cookies.get("refresh")) {
+        this.alert = true;
+        return;
+      }
+      this.modal = true;
+    },
+    async copyTrip(startDate) {
+      this.res = await api.copyTrip(this.tripId, startDate);
+      if (this.res == "success") {
+        this.$router.push("/plans/" + this.tripUrl);
+      }
+    },
+    goHome() {
+      this.$router.push("/");
+    },
   },
-  // mounted() {
-  //   html2canvas(document.getElementById("capture")).then((canvas) => {
-  //     // var base64image = canvas.toDataURL("image/png");
-  //     // window.open(base64image, "_blank");
-  //     this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
-  //   });
+  // beforeDestroy() {
+  //   console.log("asl;dfj");
+  //   console.log(this.tripUrl);
+  //   console.log(document.getElementById("capture").style.height);
+  //   this.captureImg();
   // },
 };
 </script>
@@ -124,7 +212,7 @@ export default {
   border-width: 5px;
   border-color: #4a8072;
   border-radius: 10px;
-  overflow-y: scroll;
+  overflow: auto;
 }
 .content::-webkit-scrollbar {
   color: #544c4c;
