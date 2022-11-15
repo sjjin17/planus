@@ -83,7 +83,7 @@ public class TripController {
     }
 
     @GetMapping("/festival")
-    public ResponseEntity getFestival(@PageableDefault(size = 4, sort = "endDate", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity getFestival(@PageableDefault(size = 4, sort = "endDate", direction = Sort.Direction.ASC) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("festivalPage", areaService.findFestival(pageable));
