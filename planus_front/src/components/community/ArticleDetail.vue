@@ -1,36 +1,79 @@
 <template>
-  <v-container v-if="article.trip != undefined">
-    <v-icon v-if="isLike === false" @click="likeArticle"
-      >mdi-cards-heart-outline</v-icon
-    >
-    <v-icon v-if="isLike" @click="likeArticle">mdi-heart</v-icon>
-    {{ likeCount }}
-
-    <v-sheet color="white" elevation="1" height="auto" rounded width="1000">
-      <div class="d-flex justify-space-between title">
-        <p>{{ article.title }}</p>
-        <p>{{ article.regDate }}</p>
+  <v-container align="center" justify="center" v-if="article.trip != undefined">
+    <v-row class="d-flex">
+      <v-btn outlined color="#4A8072" @click="goToCommunity" class="mr-auto"
+        >목록으로</v-btn
+      >
+      <div>
+        <v-btn outlined color="#4A8072">복사하기</v-btn>
       </div>
-      <hr />
+    </v-row>
+    <br />
+    <v-row>
+      <v-sheet
+        color="white"
+        elevation="1"
+        height="auto"
+        rounded
+        width="1200"
+        class="my-3"
+      >
+        <v-col>
+          <div class="title" style="position: relative">
+            {{ article.title }}
+            <div class="like-see">
+              <v-icon v-if="isLike === false" @click="likeArticle"
+                >mdi-cards-heart-outline</v-icon
+              >
 
-      <div class="img-center">
-        <img :src="article.trip.imageUrl" alt="여행사진" />
-      </div>
-      <p style="white-space: pre-line">
-        {{ article.content }}
-      </p>
-    </v-sheet>
-    <div class="d-flex justify-center">
-      <v-btn v-if="article.user.userId === userId" @click="goToEditArticle"
+              <v-icon v-else @click="likeArticle">mdi-heart</v-icon>
+              {{ likeCount }}
+
+              <v-icon>mdi-eye</v-icon>
+              {{ article.hits }}
+            </div>
+          </div>
+        </v-col>
+
+        <hr />
+        <div class="d-flex flex-row-reverse">
+          <h5>
+            {{
+              nickname +
+              " " +
+              article.regDate.split("T")[0] +
+              " " +
+              article.regDate.split("T")[1].split(".")[0]
+            }}
+          </h5>
+        </div>
+
+        <div class="img-center">
+          <img :src="article.trip.imageUrl" alt="여행사진" />
+        </div>
+        <p style="white-space: pre-line">
+          {{ article.content }}
+        </p>
+      </v-sheet>
+    </v-row>
+
+    <v-row class="d-flex justify-center my-10">
+      <v-btn
+        outlined
+        color="#4A8072"
+        v-if="article.user.userId === userId"
+        @click="goToEditArticle"
+        class="mx-4"
         >수정</v-btn
       >
-      <v-btn v-if="article.user.userId === userId" @click="deleteArticle"
+      <v-btn
+        outlined
+        color="#4A8072"
+        v-if="article.user.userId === userId"
+        @click="deleteArticle"
         >삭제</v-btn
       >
-    </div>
-    <v-btn class="d-flex flex-row-reverse" @click="goToCommunity"
-      >목록으로</v-btn
-    >
+    </v-row>
   </v-container>
 </template>
 
@@ -96,7 +139,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img-center {
   text-align: center;
 }
@@ -105,6 +148,23 @@ hr {
   color: grey;
 }
 .title {
-  height: 40px;
+  text-align: center;
+}
+.top-button {
+  width: 1000px;
+}
+.bottomm-button {
+  row-gap: 20px;
+}
+/* .my-container {
+  position: relative;
+} */
+.like-see {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.v-icon.v-icon:after {
+  background-color: transparent;
 }
 </style>

@@ -1,17 +1,18 @@
 <template>
   <div>
     <v-card outlined color="#b8dbc6" class="my-4">
+      <!-- <i @click="delClick" class="fa-solid fa-xmark d-flex justify-end"></i> -->
       <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
       <v-card-title
         class="text-h5 font-weight-bold box"
         style="color: #544c4c"
         >{{ bucket.place }}</v-card-title
       >
-      <v-card-text>{{ bucket.address }}</v-card-text>
-      <v-row>
+      <v-card-text class="box">{{ bucket.address }}</v-card-text>
+      <v-row class="ma-0 my-0">
         <v-spacer />
         <plan-modal
-          class="d-flex justify-end col-6 mb-2 mr-3"
+          class="d-flex justify-end col-6"
           v-show="memberOrAdmin == 2"
           @planSubmit="planSubmit"
           :fromBucket="true"
@@ -69,5 +70,8 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.v-icon.v-icon:after {
+  background-color: transparent;
 }
 </style>
