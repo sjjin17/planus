@@ -27,8 +27,8 @@
     ></festival-list>
     <v-dialog v-model="dialog" persistent max-width="300">
       <v-card>
-        <v-card-title></v-card-title>
-        <v-card-text>여행지에 추가하시겠습니까?</v-card-text>
+        <v-card-title>{{ siName }}</v-card-title>
+        <v-card-text>이 지역을 여행지에 추가하시겠습니까?</v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn outlined color="#4a8072" @click="dialog = false">취소</v-btn>

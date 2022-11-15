@@ -3,24 +3,18 @@ package com.planus.trip.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class FestivalResDTO {
-    private String title;
-    private String address;
-    private String imageUrl;
-    private String startDate;
-    private String endDate;
-    private long areaId;
-    private String siName;
+    private int currentPage;
+    private int totalPage;
+    private List<FestivalDTO> festivalList;
 
-    public FestivalResDTO(String title, String address, String imageUrl, String startDate, String endDate, long areaId, String siName) {
-        this.title = title;
-        this.address = address;
-        this.imageUrl = imageUrl;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.areaId = areaId;
-        this.siName = siName;
+    public FestivalResDTO(int currentPage, int totalPage, List<FestivalDTO> festivalList) {
+        this.currentPage = currentPage;
+        this.totalPage = totalPage;
+        this.festivalList = festivalList;
     }
 }

@@ -37,6 +37,15 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row justify="center" class="pagenation-bar">
+      <v-pagination
+        v-model="currentPage"
+        class="my-4"
+        :length="totalPage"
+        :total-visible="7"
+        color="#4a8072"
+      ></v-pagination>
+    </v-row>
   </div>
 </template>
 
@@ -47,11 +56,19 @@ const api = API;
 export default {
   data: () => ({
     areaList: [],
+    currentPage: 1,
     festivalList: [],
+    totalPage: 0,
   }),
-  created() {
-    this.getBestArea();
-    this.getFestival();
+  async created() {
+    await this.getBestArea();
+    await this.getFestival(1);
+  },
+  watch: {
+    currentPage(newVal) {
+      this.getFestival(newVal);
+      console.log("페이지: " + newVal);
+    },
   },
   methods: {
     async getBestArea() {
@@ -59,10 +76,10 @@ export default {
       this.areaList = this.res.areaList;
       console.log(this.areaList);
     },
-    async getFestival() {
-      this.res = await api.getFestival();
-      this.festivalList = this.res.festivalList;
-      console.log(this.festivalList);
+    async getFestival(page) {
+      this.res = await api.getFestival(page - 1);
+      this.festivalList = this.res.festivalPage.festivalList;
+      this.totalPage = this.res.festivalPage.totalPage;
     },
     getAddArea(areaId, siName) {
       this.$emit("getAddArea", areaId, siName);
