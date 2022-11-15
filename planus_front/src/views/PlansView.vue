@@ -380,13 +380,6 @@ export default {
           };
           break;
         case 9:
-          console.log(content);
-          // 완료페이지로 이동
-          if (content.completed) {
-            this.$router.push("/complete/" + this.tripUrl);
-          }
-          break;
-        case 9:
           console.log("권한변경 수신");
           console.log(content);
           this.admin = content.newAdminId;
@@ -394,6 +387,13 @@ export default {
             this.memberOrAdmin = 2;
           } else {
             this.memberOrAdmin = 1;
+          }
+          break;
+        case 10:
+          console.log(content);
+          // 완료페이지로 이동
+          if (content.completed) {
+            this.$router.push("/complete/" + this.tripUrl);
           }
           break;
       }

@@ -148,7 +148,7 @@ public class WebSocketController {
 
     @MessageMapping("/completeTrip")
     public void completeTrip(WebSocketComplete complete) {
-        complete.setAction(9);
+        complete.setAction(10);
         sendingOperations.convertAndSend(ROOT_URL+complete.getTripId(),complete);
     }
 
