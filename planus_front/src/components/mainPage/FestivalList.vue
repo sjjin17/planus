@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="mainInfoDiv">
     <div class="mainAreaHeader">인기지역</div>
     <v-row align="center" justify="center">
       <v-col
@@ -9,7 +9,7 @@
         cols="2"
       >
         <v-card @click="getAddArea(area.areaId, area.siName)">
-          <v-img :src="area.imageUrl"> </v-img>
+          <v-img :src="area.imageUrl" height="120px"> </v-img>
           <div class="textCutting bestAreaName">{{ area.siName }}</div>
         </v-card>
       </v-col>
@@ -25,7 +25,7 @@
       >
         <v-card @click="getAddArea(festival.areaId, festival.siName)">
           <v-img :src="festival.imageUrl" height="300px"> </v-img>
-          <v-card-title class="textCutting" style="display: block">{{
+          <v-card-title class="textCutting festivalName">{{
             festival.title
           }}</v-card-title>
           <v-card-subtitle class="textCutting">{{
@@ -96,6 +96,7 @@ export default {
   font-size: 2.2rem;
   font-weight: 700;
   color: white;
+  text-shadow: 1px 2px gray;
 }
 .mainFestivalHeader {
   display: flex;
@@ -104,17 +105,25 @@ export default {
   font-size: 2.2rem;
   font-weight: 700;
   color: white;
+  text-shadow: 1px 2px gray;
 }
 .bestAreaName {
   padding: 4%;
   text-align: center;
   font-size: 1.2rem;
   font-weight: 700;
+  color: #383d3c;
+}
+.festivalName {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #383d3c;
 }
 .mainInfoDivider {
   width: 90%;
-  margin: 3% auto;
-  border: 1px solid;
+  margin: 6% auto 3%;
+  border: 2px solid;
   border-color: white;
   background-color: white;
 }
