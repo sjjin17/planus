@@ -6,6 +6,7 @@
         <complete-map
           :tripArea="tripInfo.tripArea"
           :completeList="completeList"
+          @readyToCapture="captureAndUpload"
         ></complete-map>
         <complete-page :completeList="completeList"></complete-page>
       </v-sheet>
@@ -20,6 +21,7 @@
       <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
         >복사</v-btn
       >
+      <v-btn @click="captureAndUploadTmp">임시</v-btn>
     </v-container>
 
     <v-dialog v-model="alert" max-width="450">
@@ -64,6 +66,8 @@ import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
 const api = API;
+
+// import axios from "axios";
 
 export default {
   name: "CompleteView",
@@ -138,6 +142,104 @@ export default {
         useCORS: true,
       }).then((canvas) => {
         this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
+      });
+      el.style.height = "75vh";
+    },
+    captureAndUpload() {
+      console.log("이미지 업로드");
+      // const el = document.getElementById("capture");
+      // el.style.height = el.scrollHeight + "px";
+      // html2canvas(el, {
+      //   backgroundColor: null,
+      //   useCORS: true,
+      // }).then((canvas) => {
+      //   var myImg = canvas.toDataURL("image/png");
+      // myImg = myImg.replace("data:image/png;base64,", "");
+      // });
+      // el.style.height = "75vh";
+    },
+    captureAndUploadTmp() {
+      const el = document.getElementById("capture");
+      el.style.height = el.scrollHeight + "px";
+      html2canvas(el, {
+        backgroundColor: null,
+        useCORS: true,
+      }).then((canvas) => {
+        let dataUrl = canvas.toDataURL("image/png");
+        console.log(dataUrl);
+
+        // data:image/jpeg;base64,/9j/4AAQSkZJRg...AAAAAB//2Q==
+        // data : <type> <;base64> <data>
+
+        // <data> 부분 뽑아내기
+        // atob = ASCII -> binary
+        // btoa = binary -> ASCII
+        // base64 데이터 디코딩
+        let byteString = window.atob(dataUrl.split(",")[1]);
+        let array = [];
+        // i 에 해당하는 string을 unicode로 변환
+        for (var i = 0; i < byteString.length; i++) {
+          array.push(byteString.charCodeAt(i));
+        }
+        // console.log(array)
+        // (2486) [137, 80, 78, 71, ...]
+        // Blob 생성
+        let myBlob = new Blob([new ArrayBuffer(array)], { type: "image/png" });
+
+        // ** Blob -> File 로 변환**
+        let file = new File([myBlob], this.tripUrl + ".png");
+        // let tripId = { tripId: this.tripInfo.tripId };
+
+        let formData = new FormData();
+        formData.append("file", file);
+        // formData.append(
+        //   "tripId",
+        //   new Blob([JSON.stringify(tripId)], { type: "application/json" })
+        // );
+        formData.append("tripId", this.tripInfo.tripId);
+
+        // const response = axios({
+        //   url: process.env.VUE_APP_API_URL + "/complete/image",
+        //   method: "POST",
+
+        //   data: formData,
+        // })
+        //   .then((res) => {
+        //     console.log(res);
+        //     console.log("완료");
+        //   })
+        //   .catch((err) => {
+        //     alert("실패");
+        //     console.log(err);
+        //   });
+
+        // console.log(response);
+
+        // 버전 1
+        // axios
+        //   .post(process.env.VUE_APP_API_URL + "/complete/image", formData, {
+        //     // headers: {
+        //     //   "Content-Type": "multipart/form-data",
+        //     // },
+        //   })
+        //   .then((res) => {
+        //     console.log(res);
+        //   })
+        //   .catch((err) => {
+        //     alert("실패");
+        //     console.log(err);
+        //   });
+
+        //버전 2
+        // formData.append("file", file);
+        // formData.append(
+        //   "tripId",
+        //   new Blob([JSON.stringify(tripId)], { type: "application/json" })
+        // );
+
+        let imgUrl = api.completeImageUpload(formData);
+        console.log(imgUrl);
+        this.tripInfo.imageUrl = imgUrl;
       });
       el.style.height = "75vh";
     },

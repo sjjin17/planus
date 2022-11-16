@@ -18,40 +18,40 @@ public class Trip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="trip_id")
+    @Column(name = "trip_id")
     private long tripId;
 
-    @Column(name="trip_url")
+    @Column(name = "trip_url")
     private String tripUrl;
 
-    @Column(name="admin")
+    @Column(name = "admin")
     private long admin;
 
-    @Column(name="create_time")
+    @Column(name = "create_time")
     private LocalDateTime createTime;
 
-    @Column(name="start_date")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name="period")
+    @Column(name = "period")
     private long period;
 
-    @Column(name="complete")
+    @Column(name = "complete")
     private boolean complete;
 
-    @Column(name="image_url")
+    @Column(name = "image_url")
     private String imageUrl;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Member> memberList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Bucket> bucketList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<TripArea> tripAreaList;
 
     @JsonManagedReference
@@ -78,7 +78,11 @@ public class Trip {
         this.planList = planList;
     }
 
-    public void changeAdmin(long userId){
+    public void changeAdmin(long userId) {
         this.admin = userId;
+    }
+
+    public void uploadImage(String imgUrl) {
+        this.imageUrl = imgUrl;
     }
 }

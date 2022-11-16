@@ -6,11 +6,15 @@ import com.planus.db.entity.*;
 import com.planus.db.repository.*;
 import com.planus.plan.dto.PlanResDTO;
 import com.planus.plan.dto.TimetableListResDTO;
+import com.planus.util.FileUpload;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +26,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CompleteServiceImpl implements CompleteService {
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
     private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
     private final TripAreaRepository tripAreaRepository;
@@ -29,6 +36,9 @@ public class CompleteServiceImpl implements CompleteService {
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final TimetableRepository timetableRepository;
+    private final FileUpload fileUpload;
+
+    private static final String SUCCESS = "success";
 
     @Override
     public CompleteResDTO getCompleteTrip(String uuid) {
@@ -109,6 +119,15 @@ public class CompleteServiceImpl implements CompleteService {
         return newTrip.getTripUrl();
     }
 
+    @Override
+    public String completeImageUpload(Long tripId, MultipartFile image) throws IOException {
+        String imagePath = fileUpload.fileUpload(image);
+        Trip trip = tripRepository.findByTripId(tripId);
+        trip.uploadImage(imagePath);
+        tripRepository.save(trip);
+        return imagePath;
+    }
+
     public CompleteResDTO tripToCompleteResDTO(Trip trip) {
 
         List<PlanResDTO> planResDTOList = new ArrayList<>();
@@ -155,6 +174,5 @@ public class CompleteServiceImpl implements CompleteService {
                 .moveTime(timetable.getMoveTime())
                 .build();
     }
-
 
 }

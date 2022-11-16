@@ -17,6 +17,7 @@
       style="width: 40%; height: 40vh"
       @zoom_changed="getCurrentZoom"
       @center_changed="getCurrentCenter"
+      @tilesloaded="maploaded"
     >
       <div v-for="(plan, index) in completeList" :key="index + 't'">
         <gmap-marker
@@ -49,7 +50,7 @@
 
 <script>
 export default {
-  name: "PlanMap",
+  name: "CompleteMap",
 
   data() {
     return {
@@ -81,6 +82,9 @@ export default {
         this.nowCenter = loc;
         this.zoom = zoom;
       }, 50);
+    },
+    maploaded() {
+      this.$emit("readyToCapture");
     },
   },
   watch: {
