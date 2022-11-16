@@ -99,20 +99,20 @@ public class TokenProvider {
 
     }
     //TODO: 사용안되고 있는지 확인 후 삭제
-    public boolean validateToken(String token) throws Exception{
-        try{
-            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-            return true;
-        }catch(SecurityException | MalformedJwtException | SignatureException e){
-            throw new SignatureException("JWT 서명 문제");
-        }catch(ExpiredJwtException e){
-            throw new ExpiredJwtException(null, null, "만료된 토큰문제");
-        }catch(UnsupportedJwtException e){
-            throw new UnsupportedJwtException("지원안되는 토큰");
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException();
-        }
-    }
+//    public boolean validateToken(String token) throws Exception{
+//        try{
+//            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//            return true;
+//        }catch(SecurityException | MalformedJwtException | SignatureException e){
+//            throw new SignatureException("JWT 서명 문제");
+//        }catch(ExpiredJwtException e){
+//            throw new ExpiredJwtException(null, null, "만료된 토큰문제");
+//        }catch(UnsupportedJwtException e){
+//            throw new UnsupportedJwtException("지원안되는 토큰");
+//        }catch(IllegalArgumentException e){
+//            throw new IllegalArgumentException();
+//        }
+//    }
 
     public long getUserId(String token){
         try{

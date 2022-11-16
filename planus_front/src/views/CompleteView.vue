@@ -1,13 +1,15 @@
 <template>
   <v-container>
-    <h1>완료페이지</h1>
-    <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
-      <complete-map
-        :tripArea="tripInfo.tripArea"
-        :completeList="completeList"
-      ></complete-map>
-      <complete-page :completeList="completeList"></complete-page>
-    </v-sheet>
+    <h1><v-icon @click="goHome">mdi-home</v-icon>완료페이지</h1>
+    <div id="parentDiv" style="overflow: hidden">
+      <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
+        <complete-map
+          :tripArea="tripInfo.tripArea"
+          :completeList="completeList"
+        ></complete-map>
+        <complete-page :completeList="completeList"></complete-page>
+      </v-sheet>
+    </div>
     <v-container class="d-flex justify-center">
       <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
         >저장</v-btn
@@ -15,8 +17,44 @@
       <v-btn outlined large class="mx-4" color="#4a8072" @click="shareTrip"
         >공유</v-btn
       >
-      <v-btn outlined large class="mx-4" color="#4a8072">복사</v-btn>
+      <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
+        >복사</v-btn
+      >
     </v-container>
+
+    <v-dialog v-model="alert" max-width="450">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="modal" max-width="450">
+      <v-card>
+        <v-card-title class="d-flex justify-center modal-title"
+          >여행 시작일을 선택해주세요</v-card-title
+        >
+        <v-row justify="center" class="ma-0 pa-0">
+          <v-date-picker
+            v-model="newStartDate"
+            :allowed-dates="disablePastDates"
+            no-title
+            scrollable
+            locale="ko-KR"
+            :day-format="getDay"
+            color="#4a8072"
+          ></v-date-picker>
+        </v-row>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="copyTrip">일정생성</v-btn>
+          <v-btn color="#4a8072" outlined @click="modal = false">취소</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -26,12 +64,6 @@ import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
 const api = API;
-
-import Vue from "vue";
-import Kakaosdk from "vue-kakao-sdk";
-
-const apiKey = process.env.VUE_APP_KAKAO_JS_KEY;
-Vue.use(Kakaosdk, { apiKey });
 
 export default {
   name: "CompleteView",
@@ -68,6 +100,9 @@ export default {
         },
       ],
       completeList: [],
+      alert: false,
+      modal: false,
+      newStartDate: null,
     };
   },
   async created() {
@@ -96,12 +131,15 @@ export default {
       this.completeList = this.res.result.planResDTOList;
     },
     captureImg() {
-      html2canvas(document.getElementById("capture"), {
+      const el = document.getElementById("capture");
+      el.style.height = el.scrollHeight + "px";
+      html2canvas(el, {
         backgroundColor: null,
         useCORS: true,
       }).then((canvas) => {
         this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
       });
+      el.style.height = "75vh";
     },
     saveAs(uri, filename) {
       let link = document.createElement("a");
@@ -120,8 +158,7 @@ export default {
       let pgUrl = window.location.href;
 
       if (this.tripInfo.imageUrl == null) {
-        imgUrl =
-          "http://img.segye.com/content/image/2022/02/23/20220223514051.jpg";
+        imgUrl = this.tripInfo.imageUrl;
       }
 
       this.$kakao.Link.sendDefault({
@@ -146,14 +183,44 @@ export default {
         ],
       });
     },
+    modalOn() {
+      if (!this.$cookies.get("refresh")) {
+        this.alert = true;
+        return;
+      }
+      this.modal = true;
+    },
+    async copyTrip() {
+      if (!this.newStartDate) {
+        window.alert("여행 시작일을 선택해주세요");
+        return;
+      }
+      let newTripUrl = await api.copyTrip(
+        this.tripInfo.tripId,
+        this.newStartDate
+      );
+      this.modal = false;
+      if (newTripUrl) {
+        this.$router.push("/plans/" + newTripUrl);
+      }
+    },
+    goHome() {
+      this.$router.push("/");
+    },
+    disablePastDates(val) {
+      let today = new Date();
+      return (
+        val >=
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+          .toISOString()
+          .substr(0, 10)
+      );
+    },
+    getDay(day) {
+      let arr = day.split("-");
+      return Number(arr[arr.length - 1]);
+    },
   },
-  // mounted() {
-  //   html2canvas(document.getElementById("capture")).then((canvas) => {
-  //     // var base64image = canvas.toDataURL("image/png");
-  //     // window.open(base64image, "_blank");
-  //     this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
-  //   });
-  // },
 };
 </script>
 
@@ -163,7 +230,7 @@ export default {
   border-width: 5px;
   border-color: #4a8072;
   border-radius: 10px;
-  overflow-y: scroll;
+  overflow: auto;
 }
 .content::-webkit-scrollbar {
   color: #544c4c;
@@ -172,5 +239,8 @@ export default {
 .content::-webkit-scrollbar-thumb {
   background-color: #544c4c;
   border-radius: 10px;
+}
+.modal-title {
+  color: #4a8072;
 }
 </style>

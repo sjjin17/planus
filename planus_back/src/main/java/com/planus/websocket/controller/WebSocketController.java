@@ -133,17 +133,21 @@ public class WebSocketController {
     }
 
 
-    //TODO: 이상한 요청에 대한 처리 추가할것
     @MessageMapping("/changeAdmin")
     public void changeAdmin(WebSocketAdmin admin){
-        System.out.println("changeAdmin 호출");
         admin.setAction(9);
+        long originAdminId = admin.getOriginAdminId();
         Trip trip = tripService.findByTripId(admin.getTripId());
-        tripService.changeAdminForWebSocket(trip,admin.getNewAdminId());
-//        long newAdminUserId = memberService.findMember(admin.getNewAdminId()).getUser().getUserId();
-//        tripService.changeAdminForWebSocket(trip, newAdminUserId);
-        sendingOperations.convertAndSend(ROOT_URL+admin.getTripId(), admin);
-
+        if(trip.getAdmin()!=originAdminId){
+            System.out.println("방장 아닌 사람이 위임 요청함");
+            return;
+        }else if (!memberService.isMemberOfTrip(admin.getTripId(), admin.getNewAdminId())){
+            System.out.println("여행 멤버 아닌 사람한테 방장 위임 요청 들어옴");
+            return;
+        }else{
+            tripService.changeAdminForWebSocket(trip,admin.getNewAdminId());
+            sendingOperations.convertAndSend(ROOT_URL+admin.getTripId(), admin);
+        }
     }
 
     @MessageMapping("/completeTrip")

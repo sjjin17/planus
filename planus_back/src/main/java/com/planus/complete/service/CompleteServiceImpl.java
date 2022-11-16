@@ -2,29 +2,111 @@ package com.planus.complete.service;
 
 
 import com.planus.complete.dto.CompleteResDTO;
-import com.planus.db.entity.Plan;
-import com.planus.db.entity.Timetable;
-import com.planus.db.entity.Trip;
-import com.planus.db.repository.TripRepository;
+import com.planus.db.entity.*;
+import com.planus.db.repository.*;
 import com.planus.plan.dto.PlanResDTO;
 import com.planus.plan.dto.TimetableListResDTO;
+import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CompleteServiceImpl implements CompleteService {
 
+    private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
+    private final TripAreaRepository tripAreaRepository;
+    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
+    private final PlanRepository planRepository;
+    private final TimetableRepository timetableRepository;
 
     @Override
     public CompleteResDTO getCompleteTrip(String uuid) {
         Trip trip = tripRepository.findByTripUrl(uuid);
         CompleteResDTO completeResDTO = tripToCompleteResDTO(trip);
         return completeResDTO;
+    }
+
+    @Transactional
+    @Override
+    public String copyTrip(String token, Long tripId, String startDate) {
+        Long userId = tokenProvider.getUserId(token.split(" ")[1]);
+
+        // trip 저장
+        Trip completeTrip = tripRepository.findByTripId(tripId);
+        Trip newTrip = Trip.builder()
+                .tripUrl(UUID.randomUUID().toString())
+                .admin(userId)
+                .createTime(LocalDateTime.now())
+                .startDate(LocalDate.parse(startDate))
+                .period(completeTrip.getPeriod())
+                .build();
+        tripRepository.save(newTrip);
+
+        // tripArea 저장
+        List<TripArea> completeTripArea = tripAreaRepository.findByTripTripId(tripId);
+        List<TripArea> newTripArea = new ArrayList<>();
+        for (TripArea ta : completeTripArea) {
+            newTripArea.add(
+                    TripArea.builder()
+                            .trip(newTrip)
+                            .area(ta.getArea())
+                            .build()
+            );
+        }
+        tripAreaRepository.saveAll(newTripArea);
+
+        // member 저장
+        memberRepository.save(
+                Member.builder()
+                        .trip(newTrip)
+                        .user(userRepository.findByUserId(userId))
+                        .build()
+        );
+
+        // plan & timetable 저장
+        List<Plan> completePlan = planRepository.findByTripTripId(tripId).orElseThrow();
+        int plusDay = (int) ChronoUnit.DAYS.between(completeTrip.getStartDate(), LocalDate.parse(startDate));
+        for (Plan p : completePlan) {
+            Plan newPlan = Plan.builder()
+                    .trip(newTrip)
+                    .tripDate(p.getTripDate().plusDays(plusDay))
+                    .startTime(p.getStartTime())
+                    .build();
+
+            planRepository.save(newPlan);
+
+            List<Timetable> completeTimetable = timetableRepository.findByPlanPlanId(p.getPlanId()).orElseThrow();
+            List<Timetable> newTimetable = new ArrayList<>();
+            for (Timetable tt : completeTimetable) {
+                newTimetable.add(
+                        Timetable.builder()
+                                .orders(tt.getOrders())
+                                .place(tt.getPlace())
+                                .lat(tt.getLat())
+                                .lng(tt.getLng())
+                                .costTime(tt.getCostTime())
+                                .transit(tt.getTransit())
+                                .moveTime(tt.getMoveTime())
+                                .moveRoute(tt.getMoveRoute())
+                                .plan(newPlan)
+                                .build()
+                );
+            }
+            timetableRepository.saveAll(newTimetable);
+        }
+
+        return newTrip.getTripUrl();
     }
 
     public CompleteResDTO tripToCompleteResDTO(Trip trip) {

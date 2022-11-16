@@ -7,17 +7,22 @@
           class="mx-10 mt-2"
           @click="goToTrip(trip.tripUrl)"
           height="19vh"
+          style="position: relative"
         >
+          <v-icon
+            @click.stop="deleteTrip(trip.tripId)"
+            style="position: absolute; right: 0; z-index: 1"
+            >mdi-close</v-icon
+          >
           <v-list-item>
             <v-list-item-avatar tile class="my-0 img-avatar"
               ><v-img :src="trip.imageUrl"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <div class="text-overline mb-4 d-flex justify-space-between">
+              <div class="text-overline mb-4">
                 <span class="txt_line"
                   >{{ trip.startDate }} ~ {{ trip.endDate }}</span
                 >
-                <v-icon @click.stop="deleteTrip(trip.tripId)">mdi-close</v-icon>
               </div>
               <v-list-item-title class="text-h5 mb-1">
                 <span>| </span>
@@ -124,5 +129,8 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.v-icon.v-icon:after {
+  background-color: transparent;
 }
 </style>

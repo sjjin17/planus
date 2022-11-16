@@ -14,4 +14,6 @@ public interface MemberService {
     Object[] getConnector(WebSocketMember member);
 
     Member findMember(long memberId);
+
+    boolean isMemberOfTrip(long tripId, long userId);
 }
