@@ -23,6 +23,7 @@
             appendIcon=""
             clear-icon="mdi-close-circle"
             style="z-index: 1"
+            color="#4a8072"
             v-bind="attrs"
             v-on="on"
             @click:clear="clearArea"
