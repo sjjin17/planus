@@ -80,7 +80,9 @@ export default {
   },
   methods: {
     goHome() {
+      this.leaveSession();
       this.$router.push("/");
+      this.$router.go();
     },
     joinBtnClick() {
       this.joinSession();

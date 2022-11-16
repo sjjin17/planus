@@ -14,7 +14,7 @@
     >
       0시 이후의 일정입니다.
     </h5>
-    <v-card outlined color="#ffb4c2" class="my-4 ps-2">
+    <v-card outlined color="#ffb4c2" class="my-4 ps-2" @click="showMarker">
       <v-card-title class="card-title">
         <div class="textCutting">
           {{ this.timetable.place }}
@@ -159,6 +159,8 @@
 <script>
 import TimetableCostTimeModal from "./TimetableCostTimeModal.vue";
 import axios from "axios";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   name: "TimetableCard",
@@ -225,6 +227,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(mapStore, ["spotInfo"]),
     //timetable의 moveRoute 쪼개기..?아마도
     routeList() {
       let list = this.timetable.moveRoute.split("/");
@@ -405,6 +408,15 @@ export default {
           this.newData = result;
           return result;
         });
+    },
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
+    showMarker() {
+      this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO({
+        place: this.timetable.place,
+        lat: this.timetable.lat,
+        lng: this.timetable.lng,
+      });
     },
   },
 };

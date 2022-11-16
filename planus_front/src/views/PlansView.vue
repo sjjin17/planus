@@ -13,7 +13,6 @@
         style="align-items: center"
       ></voice-chat>
       <v-spacer></v-spacer>
-      <h1>{{ this.tripId }}번 방</h1>
       <invite-dialog
         :tripId="tripId"
         :tripUrl="tripUrl"
