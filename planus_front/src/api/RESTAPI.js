@@ -299,7 +299,8 @@ const API = {
   },
   async copyTrip(tripId, startDate) {
     const response = await this.instance.post("/complete/copy", {
-      params: { tripId, startDate },
+      tripId,
+      startDate,
     });
     return response.data;
   },

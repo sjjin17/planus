@@ -34,20 +34,24 @@
     </v-dialog>
     <v-dialog v-model="modal" max-width="450">
       <v-card>
-        <v-card-title class="d-flex justify-center"
-          >여행 시작일을 입력해주세요</v-card-title
+        <v-card-title class="d-flex justify-center modal-title"
+          >여행 시작일을 선택해주세요</v-card-title
         >
-        <v-spacer></v-spacer>
-        <v-date-picker
-          class="d-flex justify-center"
-          v-html="newStartDate"
-          no-title
-          scrollable
-          color="#4a8072"
-        ></v-date-picker>
+        <v-row justify="center" class="ma-0 pa-0">
+          <v-date-picker
+            v-model="newStartDate"
+            :allowed-dates="disablePastDates"
+            no-title
+            scrollable
+            locale="ko-KR"
+            :day-format="getDay"
+            color="#4a8072"
+          ></v-date-picker>
+        </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="#4a8072" outlined @click="modal = false">확인</v-btn>
+          <v-btn color="#4a8072" outlined @click="copyTrip">일정생성</v-btn>
+          <v-btn color="#4a8072" outlined @click="modal = false">취소</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -98,7 +102,7 @@ export default {
       completeList: [],
       alert: false,
       modal: false,
-      newStartDate: "2022-11-15",
+      newStartDate: null,
     };
   },
   async created() {
@@ -154,8 +158,7 @@ export default {
       let pgUrl = window.location.href;
 
       if (this.tripInfo.imageUrl == null) {
-        imgUrl =
-          "http://img.segye.com/content/image/2022/02/23/20220223514051.jpg";
+        imgUrl = this.tripInfo.imageUrl;
       }
 
       this.$kakao.Link.sendDefault({
@@ -187,22 +190,37 @@ export default {
       }
       this.modal = true;
     },
-    async copyTrip(startDate) {
-      this.res = await api.copyTrip(this.tripId, startDate);
-      if (this.res == "success") {
-        this.$router.push("/plans/" + this.tripUrl);
+    async copyTrip() {
+      if (!this.newStartDate) {
+        window.alert("여행 시작일을 선택해주세요");
+        return;
+      }
+      let newTripUrl = await api.copyTrip(
+        this.tripInfo.tripId,
+        this.newStartDate
+      );
+      this.modal = false;
+      if (newTripUrl) {
+        this.$router.push("/plans/" + newTripUrl);
       }
     },
     goHome() {
       this.$router.push("/");
     },
+    disablePastDates(val) {
+      let today = new Date();
+      return (
+        val >=
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+          .toISOString()
+          .substr(0, 10)
+      );
+    },
+    getDay(day) {
+      let arr = day.split("-");
+      return Number(arr[arr.length - 1]);
+    },
   },
-  // beforeDestroy() {
-  //   console.log("asl;dfj");
-  //   console.log(this.tripUrl);
-  //   console.log(document.getElementById("capture").style.height);
-  //   this.captureImg();
-  // },
 };
 </script>
 
@@ -221,5 +239,8 @@ export default {
 .content::-webkit-scrollbar-thumb {
   background-color: #544c4c;
   border-radius: 10px;
+}
+.modal-title {
+  color: #4a8072;
 }
 </style>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +21,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CompleteServiceImpl implements CompleteService {
-
-    private static final String SUCCESS = "success";
 
     private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
@@ -77,7 +76,7 @@ public class CompleteServiceImpl implements CompleteService {
 
         // plan & timetable 저장
         List<Plan> completePlan = planRepository.findByTripTripId(tripId).orElseThrow();
-        int plusDay = LocalDate.parse(startDate).compareTo(completeTrip.getStartDate());
+        int plusDay = (int) ChronoUnit.DAYS.between(completeTrip.getStartDate(), LocalDate.parse(startDate));
         for (Plan p : completePlan) {
             Plan newPlan = Plan.builder()
                     .trip(newTrip)
@@ -107,7 +106,7 @@ public class CompleteServiceImpl implements CompleteService {
             timetableRepository.saveAll(newTimetable);
         }
 
-        return SUCCESS;
+        return newTrip.getTripUrl();
     }
 
     public CompleteResDTO tripToCompleteResDTO(Trip trip) {
