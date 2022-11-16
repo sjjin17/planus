@@ -22,13 +22,17 @@ public class FileUpload {
 
 
     public String fileUpload(MultipartFile file) throws IOException {
-
-        String s3FileName = "trip/"+ file.getOriginalFilename();
+        String s3FileName = "trip/" + file.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(file.getInputStream().available());
 
         amazonS3.putObject(bucket, s3FileName, file.getInputStream(), objMeta);
         return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+
+    public void fileDelete(String fileName) {
+        String key = fileName.substring(fileName.lastIndexOf("/"));
+        amazonS3.deleteObject(bucket + "/trip", key.substring(1));
     }
 }

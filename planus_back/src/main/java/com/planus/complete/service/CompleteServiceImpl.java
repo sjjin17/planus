@@ -38,7 +38,7 @@ public class CompleteServiceImpl implements CompleteService {
     private final TimetableRepository timetableRepository;
     private final FileUpload fileUpload;
 
-    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
 
     @Override
     public CompleteResDTO getCompleteTrip(String uuid) {
@@ -119,10 +119,14 @@ public class CompleteServiceImpl implements CompleteService {
         return newTrip.getTripUrl();
     }
 
+    @Transactional
     @Override
     public String completeImageUpload(Long tripId, MultipartFile image) throws IOException {
-        String imagePath = fileUpload.fileUpload(image);
         Trip trip = tripRepository.findByTripId(tripId);
+        if(!trip.isComplete())
+            return FAIL;
+
+        String imagePath = fileUpload.fileUpload(image);
         trip.uploadImage(imagePath);
         tripRepository.save(trip);
         return imagePath;

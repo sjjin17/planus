@@ -69,7 +69,7 @@ export default {
       axios
         .post(
           process.env.VUE_APP_API_URL + "/google",
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&radius=10000&keyword=${this.keyword}&key=`
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.mapLat},${this.mapLng}&rankby=distance&keyword=${this.keyword}&key=`
         )
         .then((res) => {
           document.getElementById("search-bar").blur();

@@ -3,6 +3,7 @@ package com.planus.complete.controller;
 import com.planus.complete.dto.CompleteReqDTO;
 import com.planus.complete.dto.CompleteResDTO;
 import com.planus.complete.service.CompleteService;
+import com.planus.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class CompleteController {
 
     private final CompleteService completeService;
+    private final FileUpload fileUpload;
 
     @GetMapping("/{uuid}")
     public ResponseEntity getCompleteTrip(@PathVariable(name = "uuid") String uuid) {
@@ -53,5 +55,12 @@ public class CompleteController {
             e.printStackTrace();
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    // S3 파일 삭제 용도(테스트)
+    @DeleteMapping("/image")
+    public ResponseEntity<String> completeImageUpload(String fileUrl) {
+        fileUpload.fileDelete(fileUrl);
+        return ResponseEntity.ok().body("success");
     }
 }

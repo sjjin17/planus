@@ -21,7 +21,6 @@
       <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
         >복사</v-btn
       >
-      <v-btn @click="captureAndUploadTmp">임시</v-btn>
     </v-container>
 
     <v-dialog v-model="alert" max-width="450">
@@ -67,7 +66,7 @@ import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
 const api = API;
 
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "CompleteView",
@@ -107,6 +106,7 @@ export default {
       alert: false,
       modal: false,
       newStartDate: null,
+      // mapCnt: 0,
     };
   },
   async created() {
@@ -134,6 +134,60 @@ export default {
       this.res = await api.getComplete(this.tripUrl);
       this.completeList = this.res.result.planResDTOList;
     },
+    async captureAndUpload() {
+      // image 이미 있으면 return
+      if (this.tripInfo.imageUrl) return;
+      // 방장 아니면 return
+      if (this.tripInfo.memberOrAdmin != 2) return;
+
+      // 요청 2번 오류 지속될경우 적용...!
+      // if (++this.mapCnt != 2) return;
+
+      // 이미지 캡쳐
+      const el = document.getElementById("capture");
+      el.style.height = el.scrollHeight + "px";
+      html2canvas(el, {
+        backgroundColor: null,
+        useCORS: true,
+      }).then((canvas) => {
+        // 이미지 데이터
+        let dataUrl = canvas.toDataURL("image/png");
+
+        // 이미지 데이터 > 이미지 파일 변환
+        let byteString = window.atob(dataUrl.split(",")[1]);
+        let array = [];
+        for (var i = 0; i < byteString.length; i++) {
+          array.push(byteString.charCodeAt(i));
+        }
+        let myBlob = new Blob([new Uint8Array(array)], { type: "image/png" }); // blob 생성
+        let file = new File([myBlob], this.tripUrl + ".png"); // blob > file 변환
+
+        // multipart-formdata
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append(
+          "tripId",
+          new Blob([JSON.stringify(this.tripInfo.tripId)], {
+            type: "application/json",
+          })
+        );
+
+        // upload api
+        axios({
+          url: process.env.VUE_APP_API_URL + "/complete/image",
+          method: "POST",
+          data: formData,
+        })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data != "fail") this.tripInfo.imageUrl = res.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+      el.style.height = "75vh";
+    },
     captureImg() {
       const el = document.getElementById("capture");
       el.style.height = el.scrollHeight + "px";
@@ -141,105 +195,7 @@ export default {
         backgroundColor: null,
         useCORS: true,
       }).then((canvas) => {
-        this.saveAs(canvas.toDataURL("image/png"), "이미지.png");
-      });
-      el.style.height = "75vh";
-    },
-    captureAndUpload() {
-      console.log("이미지 업로드");
-      // const el = document.getElementById("capture");
-      // el.style.height = el.scrollHeight + "px";
-      // html2canvas(el, {
-      //   backgroundColor: null,
-      //   useCORS: true,
-      // }).then((canvas) => {
-      //   var myImg = canvas.toDataURL("image/png");
-      // myImg = myImg.replace("data:image/png;base64,", "");
-      // });
-      // el.style.height = "75vh";
-    },
-    captureAndUploadTmp() {
-      const el = document.getElementById("capture");
-      el.style.height = el.scrollHeight + "px";
-      html2canvas(el, {
-        backgroundColor: null,
-        useCORS: true,
-      }).then((canvas) => {
-        let dataUrl = canvas.toDataURL("image/png");
-        console.log(dataUrl);
-
-        // data:image/jpeg;base64,/9j/4AAQSkZJRg...AAAAAB//2Q==
-        // data : <type> <;base64> <data>
-
-        // <data> 부분 뽑아내기
-        // atob = ASCII -> binary
-        // btoa = binary -> ASCII
-        // base64 데이터 디코딩
-        let byteString = window.atob(dataUrl.split(",")[1]);
-        let array = [];
-        // i 에 해당하는 string을 unicode로 변환
-        for (var i = 0; i < byteString.length; i++) {
-          array.push(byteString.charCodeAt(i));
-        }
-        // console.log(array)
-        // (2486) [137, 80, 78, 71, ...]
-        // Blob 생성
-        let myBlob = new Blob([new ArrayBuffer(array)], { type: "image/png" });
-
-        // ** Blob -> File 로 변환**
-        let file = new File([myBlob], this.tripUrl + ".png");
-        // let tripId = { tripId: this.tripInfo.tripId };
-
-        let formData = new FormData();
-        formData.append("file", file);
-        // formData.append(
-        //   "tripId",
-        //   new Blob([JSON.stringify(tripId)], { type: "application/json" })
-        // );
-        formData.append("tripId", this.tripInfo.tripId);
-
-        // const response = axios({
-        //   url: process.env.VUE_APP_API_URL + "/complete/image",
-        //   method: "POST",
-
-        //   data: formData,
-        // })
-        //   .then((res) => {
-        //     console.log(res);
-        //     console.log("완료");
-        //   })
-        //   .catch((err) => {
-        //     alert("실패");
-        //     console.log(err);
-        //   });
-
-        // console.log(response);
-
-        // 버전 1
-        // axios
-        //   .post(process.env.VUE_APP_API_URL + "/complete/image", formData, {
-        //     // headers: {
-        //     //   "Content-Type": "multipart/form-data",
-        //     // },
-        //   })
-        //   .then((res) => {
-        //     console.log(res);
-        //   })
-        //   .catch((err) => {
-        //     alert("실패");
-        //     console.log(err);
-        //   });
-
-        //버전 2
-        // formData.append("file", file);
-        // formData.append(
-        //   "tripId",
-        //   new Blob([JSON.stringify(tripId)], { type: "application/json" })
-        // );
-
-        let imgUrl = api.completeImageUpload(formData);
-        console.log(imgUrl);
-        this.tripInfo.imageUrl = imgUrl;
+        this.saveAs(canvas.toDataURL("image/png"), "여행일정.png");
       });
       el.style.height = "75vh";
     },
