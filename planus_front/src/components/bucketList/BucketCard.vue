@@ -13,7 +13,7 @@
         <v-spacer />
         <plan-modal
           class="d-flex justify-end col-6"
-          v-show="memberOrAdmin == 2"
+          v-if="memberOrAdmin == 2"
           @planSubmit="planSubmit"
           :fromBucket="true"
         ></plan-modal>
