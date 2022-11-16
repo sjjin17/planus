@@ -232,7 +232,15 @@ export default {
       let last = list[list.length - 2].split(" ");
       list.pop();
       list.pop();
-      list.push("다음위치까지 " + last[last.length - 1]);
+      if (last[last.length - 1].includes("도보"))
+        list.push("다음위치까지 " + last[last.length - 1]);
+      else {
+        let str = "";
+        last.forEach((word) => {
+          str += word + " ";
+        });
+        list.push(str);
+      }
       return list;
     },
     routeToJsonList() {
@@ -351,7 +359,11 @@ export default {
                 "/";
               move += sub;
             } else {
-              move += step.html_instructions + ":" + step.duration.text + "/";
+              if (step.html_instructions) {
+                move += step.html_instructions + ":" + step.duration.text + "/";
+              } else {
+                move += ":" + step.duration.text + "/";
+              }
             }
           });
 

@@ -12,7 +12,9 @@
       <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
         >저장</v-btn
       >
-      <v-btn outlined large class="mx-4" color="#4a8072">공유</v-btn>
+      <v-btn outlined large class="mx-4" color="#4a8072" @click="shareTrip"
+        >공유</v-btn
+      >
       <v-btn outlined large class="mx-4" color="#4a8072">복사</v-btn>
     </v-container>
   </v-container>
@@ -24,6 +26,12 @@ import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
 const api = API;
+
+import Vue from "vue";
+import Kakaosdk from "vue-kakao-sdk";
+
+const apiKey = process.env.VUE_APP_KAKAO_JS_KEY;
+Vue.use(Kakaosdk, { apiKey });
 
 export default {
   name: "CompleteView",
@@ -106,6 +114,37 @@ export default {
       } else {
         window.open(uri);
       }
+    },
+    shareTrip() {
+      let imgUrl = this.tripInfo.imageUrl;
+      let pgUrl = window.location.href;
+
+      if (this.tripInfo.imageUrl == null) {
+        imgUrl =
+          "http://img.segye.com/content/image/2022/02/23/20220223514051.jpg";
+      }
+
+      this.$kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "Planus",
+          description: "Planus에서 완성된 여행 일정을 확인해 보세요!",
+          imageUrl: imgUrl,
+          link: {
+            mobileWebUrl: imgUrl,
+            webUrl: imgUrl,
+          },
+        },
+        buttons: [
+          {
+            title: "일정 확인하기",
+            link: {
+              mobileWebUrl: pgUrl,
+              webUrl: pgUrl,
+            },
+          },
+        ],
+      });
     },
   },
   // mounted() {
