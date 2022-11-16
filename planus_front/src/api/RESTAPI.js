@@ -297,6 +297,13 @@ const API = {
     const response = await this.instance.get("/complete/" + tripUrl);
     return response.data;
   },
+  async copyTrip(tripId, startDate) {
+    const response = await this.instance.post("/complete/copy", {
+      tripId,
+      startDate,
+    });
+    return response.data;
+  },
 };
 
 export default API;

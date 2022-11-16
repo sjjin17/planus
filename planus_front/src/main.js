@@ -5,6 +5,7 @@ import store from "./store";
 import VueCookies from "vue-cookies";
 import vuetify from "./plugins/vuetify";
 import VueChatScroll from "vue-chat-scroll";
+import Kakaosdk from "vue-kakao-sdk";
 
 import * as VueGoogleMaps from "vue2-google-maps"; // Import package
 
@@ -21,6 +22,8 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueCookies);
 
 Vue.use(VueChatScroll);
+
+Vue.use(Kakaosdk, { apiKey: process.env.VUE_APP_KAKAO_JS_KEY });
 
 new Vue({
   router,
