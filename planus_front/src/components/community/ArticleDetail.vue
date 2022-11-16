@@ -3,7 +3,34 @@
     <v-row class="top-button">
       <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
 
-      <v-btn outlined color="#4A8072">복사하기</v-btn>
+      <v-btn v-if="token" outlined color="#4A8072" @click="isModal = true"
+        >복사하기</v-btn
+      >
+      <v-dialog v-model="isModal" max-width="450">
+        <v-card>
+          <v-card-title class="d-flex justify-center modal-title"
+            >여행 시작일을 선택해주세요</v-card-title
+          >
+          <v-row justify="center" class="ma-0 pa-0">
+            <v-date-picker
+              v-model="startDate"
+              :allowed-dates="disablePastDates"
+              no-title
+              scrollable
+              locale="ko-KR"
+              :day-format="getDay"
+              color="#4a8072"
+            ></v-date-picker>
+          </v-row>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#4a8072" outlined @click="createTrip">일정생성</v-btn>
+            <v-btn color="#4a8072" outlined @click="isModal = false"
+              >취소</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
     <br />
     <v-row align="center" justify="center">
@@ -105,6 +132,8 @@ export default {
       userId: 0,
       nickname: "",
       dialog: false,
+      isModal: false,
+      startDate: "",
     };
   },
   props: {
@@ -146,6 +175,13 @@ export default {
     },
     changeDialog() {
       this.dialog = true;
+    },
+    async createTrip() {
+      const newUrl = await api.copyTrip(
+        this.article.trip.tripId,
+        this.startDate
+      );
+      this.$router.push("/plans/" + newUrl);
     },
   },
 
