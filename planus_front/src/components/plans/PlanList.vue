@@ -198,6 +198,13 @@ export default {
         this.timetableList.splice(newVal.orders - 1, 1, newVal);
       }
     },
+    memberOrAdmin() {
+      if (this.memberOrAdmin == 2) {
+        this.enabled = true;
+      } else {
+        this.enabled = false;
+      }
+    },
   },
   computed: {
     timeFlag() {
