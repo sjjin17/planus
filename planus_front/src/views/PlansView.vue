@@ -49,10 +49,22 @@
       </v-tabs>
     </div>
     <v-container d-flex class="ma-0 pt-0" style="max-width: 100%">
+      <div style="height: 24px; width: 2%; min-width: 24px" v-if="isLeftFold">
+        <v-icon class="chatButton" @click="leftFoldBtn"
+          >mdi-chevron-double-right</v-icon
+        >
+      </div>
+
       <v-container
         class="ma-0 pt-0"
         style="width: 20%; min-width: 300px; height: 85vh; position: relative"
+        v-show="!isLeftFold"
       >
+        <div style="height: 24px">
+          <v-icon class="chatButton" style="float: right" @click="leftFoldBtn"
+            >mdi-chevron-double-left</v-icon
+          >
+        </div>
         <v-tabs
           v-model="tabs"
           fixed-tabs
@@ -115,7 +127,8 @@
         />
       </v-container>
       <plan-map
-        style="width: 60%; background-color: blue"
+        :style="planMapWidth"
+        style="background-color: blue"
         :tripArea="tripArea"
         @getCenter="getCenter"
         :bucketList="bucketList"
@@ -221,6 +234,8 @@ export default {
       bucketList: [],
       timetableList: [],
       tempAddBucket: {},
+      isLeftFold: false,
+      planMapWidth: "width: 60%",
     };
   },
   async created() {
@@ -243,6 +258,11 @@ export default {
     },
   },
   methods: {
+    leftFoldBtn() {
+      if (!this.isLeftFold) this.planMapWidth = "width: 78%";
+      else this.planMapWidth = "width: 60%";
+      this.isLeftFold = !this.isLeftFold;
+    },
     async getTripInfo() {
       let data = await api.getTripInfo(this.tripUrl).catch(() => {
         window.alert("존재하지 않는 url입니다!");
