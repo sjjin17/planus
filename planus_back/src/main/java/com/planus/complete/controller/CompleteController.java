@@ -1,5 +1,6 @@
 package com.planus.complete.controller;
 
+import com.planus.complete.dto.CompleteReqDTO;
 import com.planus.complete.dto.CompleteResDTO;
 import com.planus.complete.service.CompleteService;
 import lombok.RequiredArgsConstructor;
@@ -35,4 +36,8 @@ public class CompleteController {
 
     }
 
+    @PostMapping("/copy")
+    ResponseEntity<String> copyTrip(@RequestHeader String Authorization, @RequestBody CompleteReqDTO completeReqDTO) {
+        return ResponseEntity.ok().body(completeService.copyTrip(Authorization, completeReqDTO.getTripId(), completeReqDTO.getStartDate()));
+    }
 }

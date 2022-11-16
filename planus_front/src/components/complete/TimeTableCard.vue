@@ -51,7 +51,7 @@ export default {
         BUS: "대중교통",
         CAR: "자가용",
         WALK: "도보",
-        NONE: "(선택안함)",
+        NONE: "-",
       },
     };
   },
