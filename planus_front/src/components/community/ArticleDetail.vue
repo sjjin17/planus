@@ -147,13 +147,15 @@ export default {
       this.isLike = this.article.like;
     },
     async likeArticle() {
-      if (this.isLike) {
-        this.isLike = false;
-      } else {
-        this.isLike = true;
-      }
+      if (this.token) {
+        if (this.isLike) {
+          this.isLike = false;
+        } else {
+          this.isLike = true;
+        }
 
-      this.likeCount = await api.likeArticle(this.articleId);
+        this.likeCount = await api.likeArticle(this.articleId);
+      }
     },
     goToEditArticle() {
       this.$router.push("/editArticle/" + this.articleId);

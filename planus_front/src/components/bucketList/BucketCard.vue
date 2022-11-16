@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined color="#b8dbc6" class="my-4">
+    <v-card outlined color="#b8dbc6" @click="addMarker" class="my-4">
       <v-card-title class="card-title">
         <div class="box">{{ bucket.place }}</div>
         <v-icon @click="delClick">mdi-close</v-icon>
@@ -22,6 +22,8 @@
 
 <script>
 import PlanModal from "@/components/recommend/PlanModal.vue";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   name: "BucketCard",
@@ -36,6 +38,9 @@ export default {
   props: {
     bucket: Object,
     memberOrAdmin: Number,
+  },
+  computed: {
+    ...mapState(mapStore, ["spotInfo"]),
   },
   methods: {
     delClick() {
@@ -52,6 +57,16 @@ export default {
         fromBucket,
         this.bucket.address
       );
+    },
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
+    addMarker() {
+      this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO({
+        place: this.bucket.place,
+        address: this.bucket.address,
+        lat: this.bucket.lat,
+        lng: this.bucket.lng,
+      });
     },
   },
 };
