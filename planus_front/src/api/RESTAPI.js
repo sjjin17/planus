@@ -299,8 +299,13 @@ const API = {
   },
   async copyTrip(tripId, startDate) {
     const response = await this.instance.post("/complete/copy", {
-      params: { tripId, startDate },
+      tripId,
+      startDate,
     });
+    return response.data;
+  },
+  async completeImageUpload(formData) {
+    const response = await this.instance.post("/complete/image", formData);
     return response.data;
   },
 };

@@ -6,13 +6,18 @@ import com.planus.db.entity.*;
 import com.planus.db.repository.*;
 import com.planus.plan.dto.PlanResDTO;
 import com.planus.plan.dto.TimetableListResDTO;
+import com.planus.util.FileUpload;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +26,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CompleteServiceImpl implements CompleteService {
 
-    private static final String SUCCESS = "success";
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     private final TokenProvider tokenProvider;
     private final TripRepository tripRepository;
@@ -30,6 +36,9 @@ public class CompleteServiceImpl implements CompleteService {
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final TimetableRepository timetableRepository;
+    private final FileUpload fileUpload;
+
+    private static final String SUCCESS = "success";
 
     @Override
     public CompleteResDTO getCompleteTrip(String uuid) {
@@ -77,7 +86,7 @@ public class CompleteServiceImpl implements CompleteService {
 
         // plan & timetable 저장
         List<Plan> completePlan = planRepository.findByTripTripId(tripId).orElseThrow();
-        int plusDay = LocalDate.parse(startDate).compareTo(completeTrip.getStartDate());
+        int plusDay = (int) ChronoUnit.DAYS.between(completeTrip.getStartDate(), LocalDate.parse(startDate));
         for (Plan p : completePlan) {
             Plan newPlan = Plan.builder()
                     .trip(newTrip)
@@ -107,7 +116,16 @@ public class CompleteServiceImpl implements CompleteService {
             timetableRepository.saveAll(newTimetable);
         }
 
-        return SUCCESS;
+        return newTrip.getTripUrl();
+    }
+
+    @Override
+    public String completeImageUpload(Long tripId, MultipartFile image) throws IOException {
+        String imagePath = fileUpload.fileUpload(image);
+        Trip trip = tripRepository.findByTripId(tripId);
+        trip.uploadImage(imagePath);
+        tripRepository.save(trip);
+        return imagePath;
     }
 
     public CompleteResDTO tripToCompleteResDTO(Trip trip) {
@@ -156,6 +174,5 @@ public class CompleteServiceImpl implements CompleteService {
                 .moveTime(timetable.getMoveTime())
                 .build();
     }
-
 
 }
