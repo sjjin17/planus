@@ -1,8 +1,6 @@
 package com.planus.util;
 
 import io.jsonwebtoken.*;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.property.access.internal.PropertyAccessMapImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +22,7 @@ public class TokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    //TODO: property로 빼기
     private static Long accessTokenTime = 1000*60*30L;
     private static Long refreshTokenTime = 2*60*60*24*30*1000L;
 
@@ -99,25 +98,21 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
 
     }
-
-    public boolean validateToken(String token) throws Exception{
-        try{
-            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-            return true;
-        }catch(SecurityException | MalformedJwtException | SignatureException e){
-            System.out.println("JWT 서명 문제");
-            throw new SignatureException("JWT 서명 문제");
-        }catch(ExpiredJwtException e){
-            System.out.println("jwt 만료");
-            throw new ExpiredJwtException(null, null, "만료된 토큰문제");
-        }catch(UnsupportedJwtException e){
-            System.out.println("지원하지 않는 토큰??");
-            throw new UnsupportedJwtException("지원안되는 토큰");
-        }catch(IllegalArgumentException e){
-            System.out.println("JWT 토큰 없나?!");
-            throw new IllegalArgumentException();
-        }
-    }
+    //TODO: 사용안되고 있는지 확인 후 삭제
+//    public boolean validateToken(String token) throws Exception{
+//        try{
+//            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//            return true;
+//        }catch(SecurityException | MalformedJwtException | SignatureException e){
+//            throw new SignatureException("JWT 서명 문제");
+//        }catch(ExpiredJwtException e){
+//            throw new ExpiredJwtException(null, null, "만료된 토큰문제");
+//        }catch(UnsupportedJwtException e){
+//            throw new UnsupportedJwtException("지원안되는 토큰");
+//        }catch(IllegalArgumentException e){
+//            throw new IllegalArgumentException();
+//        }
+//    }
 
     public long getUserId(String token){
         try{
@@ -127,7 +122,6 @@ public class TokenProvider {
             System.out.println("토큰 서명과정에서 에러 발생함(getUserId)");
         }catch (Exception e){
             System.out.println("토큰 파싱과정에서 에러발생(서명아님)(getUserId)");
-            e.printStackTrace();
         }
         return -1;
     }

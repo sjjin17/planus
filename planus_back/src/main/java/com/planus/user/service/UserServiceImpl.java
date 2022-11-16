@@ -4,15 +4,12 @@ import com.planus.db.entity.Member;
 import com.planus.db.entity.Trip;
 import com.planus.db.entity.User;
 import com.planus.db.repository.*;
-import com.planus.mytrip.service.MyTripService;
-import com.planus.plan.dto.PlanResDTO;
 import com.planus.user.dto.UserInfoResDTO;
 import com.planus.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,17 +34,17 @@ public class UserServiceImpl implements UserService{
                     .refreshToken(tokenProvider.createRefreshToken())
                     .imageUrl(imageUrl)
                     .build();
-            userRepository.save(user);
         }else{
             user.setRefreshToken(tokenProvider.createRefreshToken());
             user.setImageUrl(imageUrl);
-            userRepository.save(user);
         }
+        userRepository.save(user);
         return user;
     }
 
     @Override
-    public UserInfoResDTO findUserInfo(long userId) {
+    public UserInfoResDTO findUserInfo(String token) {
+        long userId = tokenProvider.getUserId(token);
         User user = userRepository.findByUserId(userId);
         return new UserInfoResDTO(user.getName(), user.getEmail());
     }
@@ -123,9 +120,7 @@ public class UserServiceImpl implements UserService{
                 trip.changeAdmin(memberRepository.findTop1ByTripTripId(tripId).getUser().getUserId());
                 continue;
             }
-            // 진행중 일정 - 방장 - 잔여 참가자 X (참가자에서 삭제, 전체 일정 삭제)
             tripRepository.deleteById(tripId);
         }
-
     }
 }

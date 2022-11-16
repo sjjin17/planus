@@ -1,12 +1,15 @@
 <template>
   <div>
-    <!-- 시작시간은 자정 이전이지만 끝시간이 자정 이후일 때만 띄우기 -->
-    <!-- 이전 일정은 자정 전에 끝났는데 이동시간 땜에 시작 시간이 자정 이후가 되면 어떡하져..? -->
-    <!-- 일정이 딱 0시에 끝나면 이거 안 띄워짐 -->
+    <!-- 1. 자정 전에 시작해서 자정 이후 끝나는 일정이거나 -->
+    <!-- 2. 이전 일정은 자정에 끝났는데 이동시간 때문에 일정 시작시간이 자정 이후이거나 -->
+    <!-- 3. 딱 자정에 일정이 시작될 때 표시 -->
     <h5
       v-if="
-        this.calTime[this.timetable.orders - 1] < 1440 &&
-        this.calTime[this.timetable.orders - 1] + this.timetable.costTime > 1440
+        (this.calTime[this.timetable.orders - 1] < 1440 &&
+          this.calTime[this.timetable.orders - 1] + this.timetable.costTime >
+            1440) ||
+        checkMidnight[this.timetable.orders - 1] ||
+        this.calTime[this.timetable.orders - 1] == 1440
       "
     >
       0시 이후의 일정입니다.
@@ -26,41 +29,68 @@
             <v-col class="ma-0 pa-0" cols="11">
               <span>
                 {{
-                  Math.floor(this.calTime[this.timetable.orders - 1] / 60) > 24
-                    ? Math.floor(this.calTime[this.timetable.orders - 1] / 60) -
-                      24
+                  Math.floor(this.calTime[this.timetable.orders - 1] / 60) > 23
+                    ? (
+                        Math.floor(
+                          this.calTime[this.timetable.orders - 1] / 60
+                        ) - 24
+                      )
+                        .toString()
+                        .padStart(2, 0)
                     : Math.floor(this.calTime[this.timetable.orders - 1] / 60)
+                        .toString()
+                        .padStart(2, 0)
                 }}
                 :
-                {{ this.calTime[this.timetable.orders - 1] % 60 }}
+                {{
+                  (this.calTime[this.timetable.orders - 1] % 60)
+                    .toString()
+                    .padStart(2, 0)
+                }}
                 ~
                 {{
                   Math.floor(
                     (this.calTime[this.timetable.orders - 1] +
                       this.timetable.costTime) /
                       60
-                  ) > 24
-                    ? Math.floor(
-                        (this.calTime[this.timetable.orders - 1] +
-                          this.timetable.costTime) /
-                          60
-                      ) - 24
+                  ) > 23
+                    ? (
+                        Math.floor(
+                          (this.calTime[this.timetable.orders - 1] +
+                            this.timetable.costTime) /
+                            60
+                        ) - 24
+                      )
+                        .toString()
+                        .padStart(2, 0)
                     : Math.floor(
                         (this.calTime[this.timetable.orders - 1] +
                           this.timetable.costTime) /
                           60
                       )
+                        .toString()
+                        .padStart(2, 0)
                 }}
                 :
                 {{
-                  (this.calTime[this.timetable.orders - 1] +
-                    this.timetable.costTime) %
-                  60
+                  (
+                    (this.calTime[this.timetable.orders - 1] +
+                      this.timetable.costTime) %
+                    60
+                  )
+                    .toString()
+                    .padStart(2, 0)
                 }}
               </span>
               <span>
-                ({{ Math.floor(this.timetable.costTime / 60) }}시간
-                {{ this.timetable.costTime % 60 }}분)
+                (
+                <span v-if="Math.floor(this.timetable.costTime / 60) > 0">
+                  {{ Math.floor(this.timetable.costTime / 60) }}시간
+                </span>
+                <span v-if="this.timetable.costTime % 60 > 0">
+                  {{ this.timetable.costTime % 60 }}분</span
+                >
+                )
               </span>
             </v-col>
             <v-col class="ma-0 pa-0" cols="1">
@@ -79,6 +109,7 @@
     <v-container fluid v-show="nextLat != 0">
       <v-row align="center" style="justify-content: space-between">
         <v-col cols="8" class="pa-0">
+          <!-- color는 박스 테두리, item-color는 선택된 item. 색상코드 말고 material color로 표현해야 함 -->
           <v-select
             v-model="select"
             :items="selectList"
@@ -91,6 +122,8 @@
             outlined
             dense
             hide-details
+            color="#ff1744"
+            item-color="red accent-3"
           ></v-select>
         </v-col>
         <v-col v-show="memberOrAdmin == 2" class="pa-0" cols="3"
@@ -163,6 +196,7 @@ export default {
   props: {
     timetable: Object,
     calTime: Array,
+    checkMidnight: Array,
     memberOrAdmin: Number,
 
     //다음 Timetable의 Lat, Lng
@@ -260,7 +294,6 @@ export default {
         this.newData = ["NONE", "", 0];
       } else if (transit == "transit") {
         await this.googleSearch(transit);
-        // console.log(this.newTransit);
       } else {
         await this.naverSearch();
       }
@@ -394,5 +427,9 @@ h5:after {
   flex: 1 1;
   border-bottom: 2px solid #ff1744;
   margin: auto;
+}
+
+.v-application .primary--text {
+  color: red !important;
 }
 </style>
