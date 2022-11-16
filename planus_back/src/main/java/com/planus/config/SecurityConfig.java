@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,7 +34,7 @@ public class SecurityConfig {
         return http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
             //로컬
-            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://k7a505.p.ssafy.io", "https://k7a505.p.ssafy.io/planus", "https://planus.co.kr", "https://planus.co.kr/planus"));
+            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://planus.co.kr", "https://planus.co.kr/planus"));
             cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD", "PATCH"));
             cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization", "refreshToken"));
             cors.setExposedHeaders(Arrays.asList("token", "refresh"));
@@ -48,15 +49,36 @@ public class SecurityConfig {
                 .and().exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and().authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
-                .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
-                .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
+                    //login
+                    .antMatchers(HttpMethod.PATCH,"/login").permitAll()
+                    .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
+                    //articles
+                    .antMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                    .antMatchers("/articles/**").hasAuthority("ROLE_MEMBER")
+                    //buckets
+                    .antMatchers("/buckets/**").hasAuthority("ROLE_MEMBER")
+                    //comment
+                    .antMatchers(HttpMethod.GET, "/comment/**").permitAll()
+                    .antMatchers("/comment/**").hasAuthority("ROLE_MEMBER")
+                    //complete
+                    .antMatchers("/complete/**").permitAll()
+                    //mytrip
+                    .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
+                    //plans
+                    .antMatchers("/plans/**").hasAuthority("ROLE_MEMBER")
+                    //recommend
+                    .antMatchers("/recommend/**").hasAuthority("ROLE_MEMBER")
+                    //trip
+                    .antMatchers("/trip/member").hasAuthority("ROLE_MEMBER")
+                    .antMatchers("/trip/changeadmin").hasAuthority("ROLE_MEMBER")
+                    .antMatchers(HttpMethod.POST, "/trip").hasAuthority("ROLE_MEMBER")
+                    .antMatchers("/trip/**").permitAll()
+                    //mypage
+                    .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint().userService(userOauth2Service).and()
                 .and().apply(new JwtSecurityConfig(tokenProvider))
                 .and().build();
     }
-
 }
