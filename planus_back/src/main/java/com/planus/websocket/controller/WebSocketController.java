@@ -4,9 +4,11 @@ import com.planus.bucket.service.BucketService;
 import com.planus.db.entity.Plan;
 import com.planus.db.repository.PlanRepository;
 import com.planus.db.entity.Trip;
+import com.planus.db.repository.UserRepository;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.MemberService;
 import com.planus.trip.service.TripService;
+import com.planus.util.TokenProvider;
 import com.planus.websocket.model.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -38,7 +42,10 @@ public class WebSocketController {
     private final TripService tripService;
 
     private final PlanRepository planRepository;
+    private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
+    private static List<String> sessionUsers = Collections.synchronizedList(new ArrayList<>());
 
     @MessageMapping("/enter")
     public void enter(WebSocketMember member, SimpMessageHeaderAccessor headerAccessor){
@@ -49,9 +56,11 @@ public class WebSocketController {
 
             //redis 접속자 목록에 추가
             memberService.addConnector(member);
-
             headerAccessor.getSessionAttributes().put("token",token);
             headerAccessor.getSessionAttributes().put("tripId",tripId);
+
+            sessionUsers.add(userRepository.findByUserId(tokenProvider.getUserId(token.split(" ")[1])).getName());
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -170,17 +179,26 @@ public class WebSocketController {
 
             //redis 접속자 목록에서 삭제
             memberService.delConnector(member);
+
+            String nickname = userRepository.findByUserId(tokenProvider.getUserId(member.getToken().split(" ")[1])).getName();
+            sessionUsers.remove(nickname);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // 웹소켓에서 한 명이 퇴장할 때마다 redis에 있는 값을 mysql에 저장
-        List<Plan> planIdList = planRepository.findByTripTripId((long)headerAccessor.getSessionAttributes().get("tripId")).orElseThrow();
-        for (Plan p:planIdList) {
-            planService.savePlan(p.getPlanId(), false);
-            planService.saveTimetable(p.getPlanId(), false);
+        if (sessionUsers.size() == 0) {
+            // 웹소켓에서 한 명이 퇴장할 때마다 redis에 있는 값을 mysql에 저장
+            List<Plan> planIdList = planRepository.findByTripTripId((long)headerAccessor.getSessionAttributes().get("tripId")).orElseThrow();
+            for (Plan p:planIdList) {
+                planService.savePlan(p.getPlanId(), false);
+                planService.saveTimetable(p.getPlanId(), false);
+            }
+            bucketService.createBucketList((long)headerAccessor.getSessionAttributes().get("tripId"));
         }
-        bucketService.createBucketList((long)headerAccessor.getSessionAttributes().get("tripId"));
+
+
+
 
         //웹소켓세션 비우기
         headerAccessor.getSessionAttributes().clear();
