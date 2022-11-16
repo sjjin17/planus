@@ -29,4 +29,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+/* .articleDetail {
+  height: auto;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 0px 0px 12px 12px;
+} */
+</style>
