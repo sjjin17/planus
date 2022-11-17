@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="article.trip != undefined">
+    <br />
     <v-row class="top-button">
       <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
 
