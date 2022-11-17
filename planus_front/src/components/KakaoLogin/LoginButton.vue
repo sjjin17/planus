@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isLogin">
     <a :href="kakaoUrl">
-      <img src="@/assets/kakao_login_medium_narrow.png" />
+      <img src="@/assets/kakao_login_medium.png" />
     </a>
   </div>
   <v-btn class="mainPageBtn" v-else @click="logout">로그아웃</v-btn>

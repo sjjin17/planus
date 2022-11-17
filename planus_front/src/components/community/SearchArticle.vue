@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-spacer />
     <v-row align="center" justify="center">
       <v-col cols="2">
         <v-select
@@ -9,6 +10,8 @@
           item-value="val"
           return-object
           single-line
+          color="#4a8072"
+          item-color="green"
         ></v-select>
       </v-col>
       <v-col cols="5">

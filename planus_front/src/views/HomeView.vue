@@ -1,9 +1,15 @@
 <template>
   <div>
     <div class="mainHeaderDiv">
+      <div>
+        <button class="mainPageBtn" @click="goToCommunity">
+          <span>커뮤니티</span>
+        </button>
+        <button class="mainPageBtn" @click="goToMypage">
+          <span>마이페이지</span>
+        </button>
+      </div>
       <login-button></login-button>
-      <v-btn class="mainPageBtn" @click="goToCommunity">커뮤니티</v-btn>
-      <v-btn class="mainPageBtn" @click="goToMypage"> 마이페이지 </v-btn>
     </div>
     <div class="mainLogoDiv">Planus</div>
     <v-dialog v-model="alert" max-width="450">
@@ -88,8 +94,10 @@ export default {
 
 <style>
 .mainHeaderDiv {
+  width: 80%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin: 2% auto 0;
 }
 .mainLogoDiv {
   display: flex;
@@ -111,16 +119,55 @@ export default {
   margin: 0 auto;
   border-radius: 0px 0px 12px 12px;
   background-color: #b8dbc6;
+  box-shadow: 0px 5px 10px rgb(91 87 75 / 20%);
 }
 .mainFestivalDiv {
   min-height: 300px;
   width: 80%;
-  margin: 2% auto;
+  margin: 2% auto 6%;
   border-radius: 12px;
   background-color: #88c7af;
+  box-shadow: 0px 5px 10px rgb(91 87 75 / 20%);
 }
 .mainPageBtn {
-  height: 45px !important;
-  width: 120px !important;
+  height: 45px;
+  width: 110px;
+  border-radius: 6px;
+  color: #383d3c;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.mainPageBtn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.mainPageBtn span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.mainPageBtn:hover span {
+  padding-right: 20px;
+}
+.mainPageBtn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+.theme--light.v-pagination .v-pagination__item {
+  font-weight: 600;
+  color: #383d3c;
+}
+.theme--light.v-pagination .v-pagination__item--active {
+  color: white;
+}
+.theme--light.v-chip:not(.v-chip--active) {
+  background-color: #4a8072;
+  color: white;
+  font-weight: 600;
 }
 </style>

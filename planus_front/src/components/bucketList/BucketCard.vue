@@ -1,19 +1,17 @@
 <template>
   <div>
-    <v-card outlined color="#b8dbc6" class="my-4">
-      <!-- <i @click="delClick" class="fa-solid fa-xmark d-flex justify-end"></i> -->
-      <v-icon @click="delClick" class="d-flex justify-end">mdi-close</v-icon>
-      <v-card-title
-        class="text-h5 font-weight-bold box"
-        style="color: #544c4c"
-        >{{ bucket.place }}</v-card-title
-      >
+    <v-card outlined color="#b8dbc6" @click="addMarker" class="my-4">
+      <v-card-title class="card-title">
+        <div class="box">{{ bucket.place }}</div>
+        <v-icon @click="delClick">mdi-close</v-icon>
+      </v-card-title>
+
       <v-card-text class="box">{{ bucket.address }}</v-card-text>
       <v-row class="ma-0 my-0">
         <v-spacer />
         <plan-modal
           class="d-flex justify-end col-6"
-          v-show="memberOrAdmin == 2"
+          v-if="memberOrAdmin == 2"
           @planSubmit="planSubmit"
           :fromBucket="true"
         ></plan-modal>
@@ -24,6 +22,8 @@
 
 <script>
 import PlanModal from "@/components/recommend/PlanModal.vue";
+import { mapState, mapMutations } from "vuex";
+const mapStore = "mapStore";
 
 export default {
   name: "BucketCard",
@@ -38,6 +38,9 @@ export default {
   props: {
     bucket: Object,
     memberOrAdmin: Number,
+  },
+  computed: {
+    ...mapState(mapStore, ["spotInfo"]),
   },
   methods: {
     delClick() {
@@ -55,23 +58,33 @@ export default {
         this.bucket.address
       );
     },
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
+    addMarker() {
+      this.SET_SPOT_INFO(null);
+      this.SET_SPOT_INFO({
+        place: this.bucket.place,
+        address: this.bucket.address,
+        lat: this.bucket.lat,
+        lng: this.bucket.lng,
+      });
+    },
   },
 };
 </script>
 <style scoped>
-.v-card {
-  height: 100%;
-}
-.v-icon {
-  float: right;
-}
 .box {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 80%;
 }
 .v-icon.v-icon:after {
   background-color: transparent;
+}
+.card-title {
+  justify-content: space-between;
+  padding-bottom: 5px;
+  color: #544c4c;
 }
 </style>
