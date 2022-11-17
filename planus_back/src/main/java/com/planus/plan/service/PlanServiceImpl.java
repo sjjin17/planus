@@ -276,6 +276,26 @@ public class PlanServiceImpl implements PlanService {
 
     }
 
+    @Override
+    public List<TimetableListForMapResDTO> getTimetableListForMap(long planId) {
+        List<Timetable> list = timetableRepository.findByPlanPlanId(planId).orElseThrow();
+        List<TimetableListForMapResDTO> timetableList = new ArrayList<>();
+        for (Timetable t:list) {
+            TimetableListForMapResDTO timetableListForMapResDTO = TimetableListForMapResDTO.builder()
+                    .timetableId(t.getTimetableId())
+                    .orders(t.getOrders())
+                    .place(t.getPlace())
+                    .lat(t.getLat())
+                    .lng(t.getLng())
+                    .planId(t.getPlan().getPlanId())
+                    .build();
+
+            timetableList.add(timetableListForMapResDTO);
+        }
+
+        return timetableList;
+    }
+
     //웹소켓 요청 처리
 
     @Override

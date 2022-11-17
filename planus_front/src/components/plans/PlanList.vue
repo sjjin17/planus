@@ -139,8 +139,9 @@ export default {
   watch: {
     WebSocketStartTime(newVal) {
       if (newVal.planId == this.plan.planId) {
+        console.log(newVal.startTime);
         this.startTime = newVal.startTime * 1;
-        this.startHour = this.startTime / 60;
+        this.startHour = Math.floor(this.startTime / 60);
         this.startMin = this.startTime % 60;
       }
     },
@@ -245,7 +246,7 @@ export default {
         this.startTime = res.planList[0].startTime;
         // this.calTime = this.startTime;
         this.startHour = Math.floor(this.startTime / 60);
-        this.startMin = this.startMin % 60;
+        this.startMin = this.startTime % 60;
 
         //timetableList 정렬
         this.sortTimetableList(this.timetableList);
