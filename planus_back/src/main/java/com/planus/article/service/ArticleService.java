@@ -22,7 +22,7 @@ public interface ArticleService {
     // article상세 조회 끝나고 returnType 변경
     long updateArticle(String token, ArticleReqDTO articleReqDTO, long articleId);
 
-    ArticleDetailResDTO findOneArticle(long articleId);
+    ArticleDetailResDTO findOneArticle(String token, long articleId);
 
     SearchResDTO getArticleListByTitle(String token, String title, Pageable pageable);
     List<SearchDTO> getArticleListByArea(String token, int[] area, Pageable pageable);
