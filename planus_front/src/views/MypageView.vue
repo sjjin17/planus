@@ -11,10 +11,7 @@
       </div>
       <login-button @goToHome="goToHome"></login-button>
     </div>
-    <br />
-    <v-divider></v-divider>
-    <v-container>
-      <h1>마이페이지</h1>
+    <v-container class="pb-0">
       <v-container class="d-flex justify-center">
         <v-sheet height="85vh" class="content">
           <router-view style="width: 80vw; max-width: 80vw" />

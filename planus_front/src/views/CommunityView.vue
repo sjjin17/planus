@@ -12,7 +12,6 @@
       <login-button></login-button>
     </div>
     <br />
-    <v-divider></v-divider>
     <v-dialog v-model="alert" max-width="450">
       <v-card>
         <v-card-title></v-card-title>
