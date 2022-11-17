@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <h1>게시글 작성 페이지</h1>
+
     <br />
     <v-row align="center">
       <v-col cols="2" align="center" class="ma-0 box-center font-weight-bold">
@@ -100,7 +101,6 @@ export default {
   methods: {
     async createNewArticle() {
       this.tripId = this.select.tripId;
-      console.log(this.select);
       this.articleId = await api.createArticle(
         this.title,
         this.content,
@@ -110,7 +110,6 @@ export default {
     },
     async getMyAllTrip() {
       this.myAllTrip = await api.getMyAllTrip();
-      console.log(this.myAllTrip);
     },
     goToCommunity() {
       this.$router.push("/community");
