@@ -92,22 +92,37 @@ export default {
       this.areaName = newVal[0].siName;
     },
     completeList(newVal) {
+      // let lat = 0;
+      // let lng = 0;
+      // newVal.forEach((element) => {
+      //   let tmpLat = 0;
+      //   let tmpLng = 0;
+      //   element.timetableList.forEach((e) => {
+      //     tmpLat += e.lat;
+      //     tmpLng += e.lng;
+      //   });
+      //   lat += tmpLat / element.timetableList.length;
+      //   lng += tmpLng / element.timetableList.length;
+      // });
+      // lat /= newVal.length;
+      // lng /= newVal.length;
+
+      // this.center = { lat, lng };
+      // this.nowCenter = this.center;
+
       let lat = 0;
       let lng = 0;
+      let cnt = 0;
       newVal.forEach((element) => {
-        let tmpLat = 0;
-        let tmpLng = 0;
         element.timetableList.forEach((e) => {
-          tmpLat += e.lat;
-          tmpLng += e.lng;
+          lat += e.lat;
+          lng += e.lng;
+          cnt++;
         });
-        lat += tmpLat / element.timetableList.length;
-        lng += tmpLng / element.timetableList.length;
       });
-      lat /= newVal.length;
-      lng /= newVal.length;
-
-      this.center = { lat, lng };
+      if (cnt == 0)
+        this.center = { lat: this.tripArea[0].lat, lng: this.tripArea[0].lng };
+      else this.center = { lat: lat / cnt, lng: lng / cnt };
       this.nowCenter = this.center;
     },
   },

@@ -1,10 +1,12 @@
 package com.planus.plan.controller;
 
+import com.planus.db.entity.Timetable;
 import com.planus.db.entity.Trip;
 import com.planus.db.repository.TripRepository;
 import com.planus.plan.dto.PlanIdResDTO;
 import com.planus.plan.dto.PlanResDTO;
 import com.planus.plan.dto.PlanSaveReqDTO;
+import com.planus.plan.dto.TimetableListForMapResDTO;
 import com.planus.plan.service.PlanService;
 import com.planus.trip.service.TripService;
 import io.swagger.annotations.ApiOperation;
@@ -108,6 +110,24 @@ public class PlanController {
             resultMap.put("message", "일정 저장 오류");
             return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/map/{planId}")
+    public ResponseEntity getTimetableListforMap(@PathVariable long planId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            List<TimetableListForMapResDTO> timetableList = planService.getTimetableListForMap(planId);
+
+            resultMap.put("message", "success");
+            resultMap.put("timetableList", timetableList);
+
+            return new ResponseEntity(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "타임테이블 가져오기 오류");
+            return new ResponseEntity(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }

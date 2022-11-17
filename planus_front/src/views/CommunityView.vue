@@ -12,7 +12,6 @@
       <login-button></login-button>
     </div>
     <br />
-    <v-divider></v-divider>
     <v-dialog v-model="alert" max-width="450">
       <v-card>
         <v-card-title></v-card-title>
@@ -118,12 +117,14 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row style="position: absolute; right: 0">
+        <v-btn class="mx-16" outlined color="#4A8072" @click="goToNewArticle()"
+          >게시글 작성</v-btn
+        >
+      </v-row>
     </v-container>
     <v-spacer></v-spacer>
     <br />
-    <v-btn outlined color="#4A8072" @click="goToNewArticle()"
-      >게시글 작성</v-btn
-    >
     <v-row justify="center" class="pagenation-bar">
       <v-pagination
         v-model="currentPage"
@@ -232,6 +233,7 @@ export default {
   white-space: nowrap;
   width: 80%;
 }
+
 /* .img-avatar {
   height: 100% !important;
   width: 40% !important;

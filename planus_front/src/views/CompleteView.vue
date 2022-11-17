@@ -1,62 +1,79 @@
 <template>
-  <v-container>
-    <h1><v-icon @click="goHome">mdi-home</v-icon>완료페이지</h1>
-    <div id="parentDiv" style="overflow: hidden">
-      <v-sheet id="capture" height="75vh" class="content pa-4" justify="center">
-        <complete-map
-          :tripArea="tripInfo.tripArea"
-          :completeList="completeList"
-          @readyToCapture="captureAndUpload"
-        ></complete-map>
-        <complete-page :completeList="completeList"></complete-page>
-      </v-sheet>
+  <div>
+    <div class="mainHeaderDiv">
+      <div>
+        <button class="mainPageBtn" @click="goToCommunity">
+          <span>커뮤니티</span>
+        </button>
+        <button class="mainPageBtn" @click="goToMypage">
+          <span>마이페이지</span>
+        </button>
+      </div>
+      <login-button></login-button>
     </div>
-    <v-container class="d-flex justify-center">
-      <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
-        >저장</v-btn
-      >
-      <v-btn outlined large class="mx-4" color="#4a8072" @click="shareTrip"
-        >공유</v-btn
-      >
-      <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
-        >복사</v-btn
-      >
-    </v-container>
-
-    <v-dialog v-model="alert" max-width="450">
-      <v-card>
-        <v-card-title></v-card-title>
-        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="modal" max-width="450">
-      <v-card>
-        <v-card-title class="d-flex justify-center modal-title"
-          >여행 시작일을 선택해주세요</v-card-title
+    <v-container>
+      <div id="parentDiv" style="overflow: hidden">
+        <v-sheet
+          id="capture"
+          height="75vh"
+          class="content pa-4"
+          justify="center"
         >
-        <v-row justify="center" class="ma-0 pa-0">
-          <v-date-picker
-            v-model="newStartDate"
-            :allowed-dates="disablePastDates"
-            no-title
-            scrollable
-            locale="ko-KR"
-            :day-format="getDay"
-            color="#4a8072"
-          ></v-date-picker>
-        </v-row>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="#4a8072" outlined @click="copyTrip">일정생성</v-btn>
-          <v-btn color="#4a8072" outlined @click="modal = false">취소</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+          <complete-map
+            :tripArea="tripInfo.tripArea"
+            :completeList="completeList"
+            @readyToCapture="captureAndUpload"
+          ></complete-map>
+          <complete-page :completeList="completeList"></complete-page>
+        </v-sheet>
+      </div>
+      <v-container class="d-flex justify-center">
+        <v-btn outlined large class="mx-4" color="#4a8072" @click="captureImg"
+          >저장</v-btn
+        >
+        <v-btn outlined large class="mx-4" color="#4a8072" @click="shareTrip"
+          >공유</v-btn
+        >
+        <v-btn outlined large class="mx-4" color="#4a8072" @click="modalOn"
+          >복사</v-btn
+        >
+      </v-container>
+
+      <v-dialog v-model="alert" max-width="450">
+        <v-card>
+          <v-card-title></v-card-title>
+          <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="modal" max-width="450">
+        <v-card>
+          <v-card-title class="d-flex justify-center modal-title"
+            >여행 시작일을 선택해주세요</v-card-title
+          >
+          <v-row justify="center" class="ma-0 pa-0">
+            <v-date-picker
+              v-model="newStartDate"
+              :allowed-dates="disablePastDates"
+              no-title
+              scrollable
+              locale="ko-KR"
+              :day-format="getDay"
+              color="#4a8072"
+            ></v-date-picker>
+          </v-row>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#4a8072" outlined @click="copyTrip">일정생성</v-btn>
+            <v-btn color="#4a8072" outlined @click="modal = false">취소</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -64,6 +81,7 @@ import html2canvas from "html2canvas";
 import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
+import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
 const api = API;
 
 import axios from "axios";
@@ -73,6 +91,7 @@ export default {
   components: {
     CompletePage,
     CompleteMap,
+    LoginButton,
   },
   data() {
     return {
@@ -277,6 +296,16 @@ export default {
     getDay(day) {
       let arr = day.split("-");
       return Number(arr[arr.length - 1]);
+    },
+    goToCommunity() {
+      this.$router.push("/community");
+    },
+    goToMypage() {
+      if (this.$cookies.get("refresh") == null) {
+        this.alert = !this.alert;
+      } else {
+        this.$router.push("/mypage");
+      }
     },
   },
 };
