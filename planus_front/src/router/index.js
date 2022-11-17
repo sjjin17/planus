@@ -7,7 +7,6 @@ import getKakaoToken from "../components/KakaoLogin/GetKakaoToken.vue";
 import CompleteView from "../views/CompleteView.vue";
 import CommunityView from "../views/CommunityView.vue";
 import ArticleView from "../views/ArticleView.vue";
-import TokenTestButton from "@/components/KakaoLogin/TokenTestButton";
 import ArticleNewView from "@/views/ArticleNewView";
 import ArticleEditView from "@/views/ArticleEditView";
 
@@ -78,11 +77,6 @@ const routes = [
     path: "/article/:articleId",
     name: "article",
     component: ArticleView,
-  },
-  {
-    path: "/test",
-    name: "test",
-    component: TokenTestButton,
   },
   {
     path: "/newArticle",

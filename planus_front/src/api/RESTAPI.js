@@ -305,7 +305,6 @@ const API = {
   },
   async getTimetableListForMap(planId) {
     const response = await this.instance.get("/plans/map/" + planId);
-    console.log(response.data);
     return response.data;
   },
 };

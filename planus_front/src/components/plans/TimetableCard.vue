@@ -170,9 +170,6 @@ export default {
   data() {
     return {
       endTime: 0,
-      // dialog: false,
-      // costHour: 0,
-      // costMin: 0,
 
       valueEnum: {
         BUS: "transit",

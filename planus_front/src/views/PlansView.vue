@@ -213,7 +213,6 @@ export default {
       isRecommendClick: false,
       deletedBucket: {},
       addedBucket: {},
-      // plan
       addedTimetable: {},
       //삭제된 것을 제외한 timetableList
       deletedTimetableList: {},
