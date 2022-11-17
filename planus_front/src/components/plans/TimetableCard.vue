@@ -19,7 +19,7 @@
         <div class="textCutting">
           {{ this.timetable.place }}
         </div>
-        <v-icon @click="delTimetable" v-show="memberOrAdmin == 2"
+        <v-icon @click.stop="delTimetable" v-show="memberOrAdmin == 2"
           >mdi-close</v-icon
         >
       </v-card-title>
