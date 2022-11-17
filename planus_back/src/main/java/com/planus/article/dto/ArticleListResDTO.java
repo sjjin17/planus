@@ -38,6 +38,7 @@ public class ArticleListResDTO {
         this.trip = trip;
     }
 
+    // article -> articleListResDTO
     public static ArticleListResDTO toResDTO(Article article) {
         return ArticleListResDTO.builder()
                 .articleId(article.getArticleId())
