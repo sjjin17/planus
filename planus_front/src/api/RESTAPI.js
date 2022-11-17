@@ -304,10 +304,6 @@ const API = {
     });
     return response.data;
   },
-  async completeImageUpload(formData) {
-    const response = await this.instance.post("/complete/image", formData);
-    return response.data;
-  },
 };
 
 export default API;
