@@ -1,12 +1,8 @@
 <template>
   <v-container class="my-container">
-    <h1>게시글 작성 페이지</h1>
-
-    <br />
+    <div class="header">게시글 작성</div>
     <v-row align="center">
-      <v-col cols="2" align="center" class="ma-0 box-center font-weight-bold">
-        제목
-      </v-col>
+      <v-col cols="2" align="center" class="mb-7 box-center"> 제목 </v-col>
       <v-col cols="10">
         <v-textarea
           v-model="title"
@@ -15,18 +11,12 @@
           color="#4A8072"
           rows="1"
           row-height="15"
-          hide-details
+          counter="200"
         ></v-textarea>
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        cols="2"
-        align="center"
-        class="ma-0 box-center trip font-weight-bold"
-      >
-        <p>여행</p>
-      </v-col>
+      <v-col cols="2" align="center" class="ma-0 box-center trip"> 여행 </v-col>
       <v-col cols="10">
         <v-select
           v-model="select"
@@ -54,12 +44,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        cols="2"
-        align="center"
-        class="ma-0 box-center content font-weight-bold"
-      >
-        <p>내용</p>
+      <v-col cols="2" align="center" class="ma-0 box-center content">
+        내용
       </v-col>
       <v-col cols="10">
         <v-textarea
@@ -69,7 +55,6 @@
           color="#4A8072"
           rows="3"
           row-height="25"
-          shaped
         ></v-textarea>
       </v-col>
     </v-row>
@@ -100,13 +85,19 @@ export default {
   },
   methods: {
     async createNewArticle() {
-      this.tripId = this.select.tripId;
-      this.articleId = await api.createArticle(
-        this.title,
-        this.content,
-        this.tripId
-      );
-      this.$router.push("/article/" + this.articleId);
+      if (this.title.length > 0 && this.title.length <= 200) {
+        this.tripId = this.select.tripId;
+
+        this.articleId = await api.createArticle(
+          this.title,
+          this.content,
+          this.tripId
+        );
+
+        this.$router.push("/article/" + this.articleId);
+      } else {
+        window.alert("제목은 1자 이상 200자 이하로 적어주세요!");
+      }
     },
     async getMyAllTrip() {
       this.myAllTrip = await api.getMyAllTrip();
@@ -121,7 +112,14 @@ export default {
   },
 };
 </script>
+
 <style scoped>
+.header {
+  margin: 4% 5%;
+  color: #383d3c;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
 .content {
   line-height: 96px;
 }
@@ -130,18 +128,11 @@ export default {
 }
 .box-center {
   text-align: center;
-  color: #544c4c;
-}
-.my-container {
-  overflow: hidden;
+  color: #383d3c;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 .bottom-button {
   justify-content: flex-end;
-}
-.img {
-  width: auto;
-  height: auto;
-  max-width: 1px;
-  max-height: 1px;
 }
 </style>

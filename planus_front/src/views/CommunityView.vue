@@ -163,7 +163,6 @@ export default {
   },
   watch: {
     currentPage(newVal) {
-      console.log("currentPage: " + newVal);
       if (this.isSearchByTitle) {
         this.getArticleListByTitle(newVal);
       } else {
@@ -222,10 +221,10 @@ export default {
 
 <style scoped>
 .made-container {
+  padding-top: 6px !important;
   height: 100%;
   position: relative;
 }
-
 .textCutting {
   display: block;
   overflow: hidden;
@@ -233,16 +232,4 @@ export default {
   white-space: nowrap;
   width: 80%;
 }
-
-/* .img-avatar {
-  height: 100% !important;
-  width: 40% !important;
-} */
-/* .v-chip-group .v-slide-group__content {
-  padding: 0 0;
-}
-.v-chip-group .v-chip {
-  margin-top: 0;
-  margin-bottom: 0;
-} */
 </style>

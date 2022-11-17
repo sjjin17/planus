@@ -1,29 +1,27 @@
 <template>
   <div>
-    <v-row align="center" justify="center" v-if="isLogin">
-      <v-col cols="8">
-        <v-textarea
-          v-model="commentInput"
-          counter="200"
-          placeholder="댓글을 입력하세요"
-          outlined
-          no-resize
-        ></v-textarea>
-      </v-col>
-      <v-col cols="1">
-        <v-btn class="addCommentBtn" @click="goComment()">입력</v-btn>
-      </v-col>
-    </v-row>
+    <div class="writeCommentDiv" v-if="isLogin">
+      <v-textarea
+        v-model="commentInput"
+        counter="200"
+        placeholder="댓글을 입력하세요"
+        outlined
+        auto-grow
+        height="100"
+        color="#4a8072"
+      ></v-textarea>
+      <v-btn class="addCommentBtn" @click="goComment()">입력</v-btn>
+    </div>
     <div v-for="(comment, i) in commentList" :key="i">
       <v-row align="center" justify="center">
         <v-col cols="8">
           <div class="commentNameLine">
             <div>
-              <span style="font-weight: bold">{{ comment.name }}</span
-              ><span style="color: rgb(0, 0, 0, 50%)">
+              {{ comment.name }}
+              <span style="color: rgb(56, 61, 60, 50%); font-weight: 500">
                 ({{ comment.regDate.split("T")[0] }}
-                {{ comment.regDate.split("T")[1].split(".")[0] }})</span
-              >
+                {{ comment.regDate.split("T")[1].split(".")[0] }})
+              </span>
             </div>
             <div v-if="userId == comment.userId">
               <button
@@ -52,7 +50,8 @@
             counter="200"
             value="commentInput2"
             outlined
-            no-resize
+            auto-grow
+            color="#4a8072"
             v-if="isEditing == comment.commentId"
           ></v-textarea>
           <span v-else>{{ comment.content }}</span>
@@ -122,10 +121,14 @@ export default {
     this.decoding();
     await this.getCommentList(1);
   },
+  computed: {
+    refresh() {
+      return this.$cookies.get("refresh");
+    },
+  },
   watch: {
     currentPage(newVal) {
       this.getCommentList(newVal);
-      console.log("페이지: " + newVal);
     },
   },
   methods: {
@@ -133,6 +136,8 @@ export default {
       if (this.commentInput.length > 0 && this.commentInput.length <= 200) {
         this.res = await api.addComment(this.articleId, this.commentInput);
         this.commentInput = "";
+      } else {
+        window.alert("댓글은 1자 이상 200자 이하로 적어주세요!");
       }
     },
     async modifyComment(commentId) {
@@ -141,6 +146,8 @@ export default {
         this.commentInput2 = "";
         this.isEditing = 0;
         this.getCommentList(this.currentPage);
+      } else {
+        window.alert("댓글은 1자 이상 200자 이하로 적어주세요!");
       }
     },
     async getCommentList(page) {
@@ -195,8 +202,8 @@ export default {
 
 <style>
 .addCommentBtn {
-  margin-bottom: 22px;
-  height: 60px !important;
+  height: 100px !important;
+  margin: 0 0 30px 10px;
   background-color: #4a8072 !important;
   font-size: 1.2rem !important;
   font-weight: 700;
@@ -205,5 +212,13 @@ export default {
 .commentNameLine {
   display: flex;
   justify-content: space-between;
+  color: #383d3c;
+  font-weight: 600;
+}
+.writeCommentDiv {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
 </style>

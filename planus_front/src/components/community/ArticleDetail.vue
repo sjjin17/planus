@@ -1,7 +1,58 @@
 <template>
-  <v-container v-if="article.trip != undefined">
-    <br />
-    <v-row class="top-button">
+  <div v-if="article.trip != undefined">
+    <v-sheet class="articleDiv">
+      <div>
+        <div class="articleTitle">
+          {{ article.title }}
+        </div>
+        <div class="articlSubTitle">
+          <div>
+            {{ nickname }}
+            <span style="color: rgb(56, 61, 60, 50%); font-weight: 500">
+              ({{ article.regDate.split("T")[0] }}
+              {{ article.regDate.split("T")[1].split(".")[0] }})
+            </span>
+          </div>
+          <div style="width: 100px">
+            <v-icon v-if="isLike === false" @click="likeArticle"
+              >mdi-cards-heart-outline</v-icon
+            >
+            <v-icon v-else @click="likeArticle">mdi-heart</v-icon>
+            {{ likeCount }}
+            <v-icon>mdi-eye</v-icon>
+            {{ article.hits }}
+          </div>
+        </div>
+      </div>
+      <div style="padding: 4%">
+        <v-img :src="article.trip.imageUrl" alt="여행사진" />
+      </div>
+      <div class="articleContent">
+        {{ article.content }}
+      </div>
+    </v-sheet>
+    <div class="articleBtnDiv">
+      <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
+      <div>
+        <v-btn
+          outlined
+          class="mr-1"
+          color="#4A8072"
+          v-if="article.user.userId === userId"
+          @click="goToEditArticle"
+          >수정</v-btn
+        >
+        <v-btn
+          outlined
+          color="#4A8072"
+          v-if="article.user.userId === userId"
+          @click="changeDialog"
+          >삭제</v-btn
+        >
+      </div>
+      <v-btn v-if="token" outlined color="#4A8072" @click="isModal = true"
+        >복사하기</v-btn
+      >
       <v-dialog v-model="isModal" max-width="450">
         <v-card>
           <v-card-title class="d-flex justify-center modal-title"
@@ -20,7 +71,6 @@
           </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
-
             <v-btn color="#4a8072" outlined @click="createTrip">일정생성</v-btn>
             <v-btn color="#4a8072" outlined @click="isModal = false"
               >취소</v-btn
@@ -28,86 +78,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
-    <br />
-    <v-row align="center" justify="center">
-      <v-sheet
-        color="white"
-        elevation="1"
-        height="auto"
-        rounded
-        width="1200"
-        class="my-3"
-      >
-        <v-col>
-          <div class="title" style="position: relative">
-            {{ article.title }}
-            <div class="like-see">
-              <v-icon v-if="isLike === false" @click="likeArticle"
-                >mdi-cards-heart-outline</v-icon
-              >
-
-              <v-icon v-else @click="likeArticle">mdi-heart</v-icon>
-              {{ likeCount }}
-
-              <v-icon>mdi-eye</v-icon>
-              {{ article.hits }}
-            </div>
-          </div>
-        </v-col>
-
-        <hr />
-        <div class="d-flex flex-row-reverse">
-          <h5>
-            {{
-              nickname +
-              " " +
-              article.regDate.split("T")[0] +
-              " " +
-              article.regDate.split("T")[1].split(".")[0]
-            }}
-          </h5>
-        </div>
-
-        <div class="img-center">
-          <img :src="article.trip.imageUrl" alt="여행사진" />
-        </div>
-        <p>
-          {{ article.content }}
-        </p>
-      </v-sheet>
-    </v-row>
-
-    <v-row class="d-flex justify-center my-10">
-      <v-btn outlined color="#4A8072" @click="goToCommunity" class="mx-4"
-        >목록으로</v-btn
-      >
-
-      <v-btn
-        v-if="token"
-        outlined
-        color="#4A8072"
-        @click="isModal = true"
-        class="mx-4"
-        >복사하기</v-btn
-      >
-      <v-spacer />
-      <v-btn
-        outlined
-        color="#4A8072"
-        v-if="article.user.userId === userId"
-        @click="goToEditArticle"
-        class="mx-4"
-        >수정</v-btn
-      >
-      <v-btn
-        outlined
-        color="#4A8072"
-        v-if="article.user.userId === userId"
-        @click="changeDialog"
-        >삭제</v-btn
-      >
-
       <v-dialog v-model="dialog" max-width="290">
         <v-card>
           <v-card-title></v-card-title>
@@ -123,8 +93,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
-  </v-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -206,36 +176,39 @@ export default {
 </script>
 
 <style scoped>
-.img-center {
-  text-align: center;
+.articleTitle {
+  padding: 4% 4% 2% 4%;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #383d3c;
 }
-hr {
-  width: 100%;
-  color: grey;
+.articlSubTitle {
+  padding: 0 4%;
+  display: flex;
+  justify-content: space-between;
+  color: rgb(56, 61, 60, 80%);
+  font-weight: 600;
 }
-.title {
-  text-align: center;
-}
-.top-button {
+.articleBtnDiv {
+  width: 70%;
+  margin: 2% auto 4%;
+  display: flex;
   justify-content: space-between;
 }
-.bottomm-button {
-  row-gap: 20px;
+.articleDiv {
+  width: 70%;
+  margin: 2% auto 1%;
+  border: 4px solid;
+  border-radius: 12px;
+  border-color: #4a8072;
 }
-
-.like-see {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-.v-icon.v-icon:after {
-  background-color: transparent;
-}
-p {
+.articleContent {
+  padding: 0 4% 4% 4%;
   white-space: pre-line;
   word-wrap: break-word;
   table-layout: fixed;
-  padding-left: 5px;
-  padding-right: 5px;
+}
+.v-icon.v-icon:after {
+  background-color: transparent;
 }
 </style>
