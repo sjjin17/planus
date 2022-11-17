@@ -4,7 +4,7 @@
       <img src="@/assets/kakao_login_medium.png" />
     </a>
   </div>
-  <v-btn class="mainPageBtn" v-else @click="logout">로그아웃</v-btn>
+  <v-btn class="mainPageBtn" v-else @click="logout" height="45">로그아웃</v-btn>
 </template>
 
 <script>
