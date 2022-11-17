@@ -38,7 +38,6 @@ public class ArticleDetailResDTO {
         this.planList = planList;
     }
 
-    // Article -> ArticleDetailResDTO
     public static ArticleDetailResDTO toEntity(Article article, long likeCount, boolean isLike, UserResDTO user, MyTripResDTO trip, List<PlanResDTO> planList) {
         return ArticleDetailResDTO.builder()
                 .articleId(article.getArticleId())

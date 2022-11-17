@@ -23,7 +23,6 @@ public class ArticleReqDTO {
 
 
 
-    // articleReqDTO -> article
     public static Article toEntity(ArticleReqDTO articleReqDTO, Trip trip, User user) {
         return Article.builder()
                 .title(articleReqDTO.getTitle())
