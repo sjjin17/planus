@@ -80,7 +80,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public ArticleDetailResDTO findOneArticle(long articleId) {
+    public ArticleDetailResDTO findOneArticle(String token, long articleId) {
+        long userId = -1;
+        if(token!=null){
+            userId = tokenProvider.getUserId(token.split(" ")[1]);
+        }
         Article article = articleRepository.findById(articleId).orElseThrow(() -> new CustomException("존재하지 않는 게시글입니다."));
         article.addHits();
         int likeCount = articleLikeRepository.countByArticleArticleId(articleId);
@@ -88,7 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
         MyTripResDTO trip = MyTripResDTO.toResDTO(article.getTrip());
         List<Plan> plans = article.getTrip().getPlanList();
         List<PlanResDTO> planList = plans.stream().map(plan -> PlanResDTO.toResDTO(plan)).collect(Collectors.toList());
-        return ArticleDetailResDTO.toEntity(article, likeCount, articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, user.getUserId()), user, trip, planList);
+        return ArticleDetailResDTO.toEntity(article, likeCount, articleLikeRepository.existsByArticleArticleIdAndUserUserId(articleId, userId), user, trip, planList);
 
     }
 
