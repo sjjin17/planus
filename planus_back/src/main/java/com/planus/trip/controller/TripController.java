@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,7 +84,7 @@ public class TripController {
     }
 
     @GetMapping("/festival")
-    public ResponseEntity getFestival(@PageableDefault(size = 4, sort = "endDate", direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity getFestival(@PageableDefault(size = 4)@SortDefault.SortDefaults({@SortDefault(sort = "endDate", direction = Sort.Direction.ASC),@SortDefault(sort = "title",direction = Sort.Direction.ASC)}) Pageable pageable){
         Map<String, Object> resultMap = new HashMap<>();
         try {
             resultMap.put("festivalPage", areaService.findFestival(pageable));
