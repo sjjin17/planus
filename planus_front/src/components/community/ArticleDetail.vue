@@ -2,11 +2,6 @@
   <v-container v-if="article.trip != undefined">
     <br />
     <v-row class="top-button">
-      <v-btn outlined color="#4A8072" @click="goToCommunity">목록으로</v-btn>
-
-      <v-btn v-if="token" outlined color="#4A8072" @click="isModal = true"
-        >복사하기</v-btn
-      >
       <v-dialog v-model="isModal" max-width="450">
         <v-card>
           <v-card-title class="d-flex justify-center modal-title"
@@ -25,6 +20,7 @@
           </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
+
             <v-btn color="#4a8072" outlined @click="createTrip">일정생성</v-btn>
             <v-btn color="#4a8072" outlined @click="isModal = false"
               >취소</v-btn
@@ -83,6 +79,19 @@
     </v-row>
 
     <v-row class="d-flex justify-center my-10">
+      <v-btn outlined color="#4A8072" @click="goToCommunity" class="mx-4"
+        >목록으로</v-btn
+      >
+
+      <v-btn
+        v-if="token"
+        outlined
+        color="#4A8072"
+        @click="isModal = true"
+        class="mx-4"
+        >복사하기</v-btn
+      >
+      <v-spacer />
       <v-btn
         outlined
         color="#4A8072"
@@ -98,6 +107,7 @@
         @click="changeDialog"
         >삭제</v-btn
       >
+
       <v-dialog v-model="dialog" max-width="290">
         <v-card>
           <v-card-title></v-card-title>
