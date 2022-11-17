@@ -244,16 +244,22 @@ export default {
     this.decoding();
     this.lat = this.tripArea[0].lat;
     this.lng = this.tripArea[0].lng;
+
+    this.res = await api.getTimetableListForMap(this.planId);
+    this.timetableList = this.res.timetableList;
+    console.log(this.timetableList);
   },
   watch: {
-    planId(newVal, oldVal) {
+    async planId(newVal, oldVal) {
       if (oldVal == 0) {
         return;
       }
       //탭 변경이므로 false
       let complete = false;
-      api.savePlan(this.tripId, [oldVal], complete);
-      newVal;
+      await api.savePlan(this.tripId, [oldVal], complete);
+      //PlanMap timetableList 변경 api로 mysql의 timetableList를 가져오는 것
+      this.res = await api.getTimetableListForMap(newVal);
+      this.timetableList = this.res.timetableList;
     },
   },
   methods: {
