@@ -32,52 +32,55 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors().configurationSource(request -> {
-            CorsConfiguration cors = new CorsConfiguration();
-            //로컬
-            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://planus.co.kr", "https://planus.co.kr/planus"));
-            cors.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "OPTIONS", "HEAD", "PATCH"));
-            cors.setAllowedHeaders(Arrays.asList("token", "Origin","Accept","X-Requested-With","Content-Type","Access-Control-Request-Method","Access-Control-Request-Headers","Authorization", "refreshToken"));
-            cors.setExposedHeaders(Arrays.asList("token", "refresh"));
-            cors.setAllowCredentials(true);
-            return cors;
-        })
+                    CorsConfiguration cors = new CorsConfiguration();
+                    //로컬
+                    cors.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8081", "https://planus.co.kr", "https://planus.co.kr/planus"));
+                    cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+                    cors.setAllowedHeaders(Arrays.asList("token", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization", "refreshToken"));
+                    cors.setExposedHeaders(Arrays.asList("token", "refresh"));
+                    cors.setAllowCredentials(true);
+                    return cors;
+                })
                 .and()
-                    .csrf().disable().headers().frameOptions().disable()
+                .csrf().disable().headers().frameOptions().disable()
                 .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and().authorizeRequests()
-                    //login
-                    .antMatchers(HttpMethod.PATCH,"/login").permitAll()
-                    .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
-                    //articles
-                    .antMatchers(HttpMethod.GET, "/articles/**").permitAll()
-                    .antMatchers("/articles/**").hasAuthority("ROLE_MEMBER")
-                    //buckets
-                    .antMatchers("/buckets/**").hasAuthority("ROLE_MEMBER")
-                    //comment
-                    .antMatchers(HttpMethod.GET, "/comment/**").permitAll()
-                    .antMatchers("/comment/**").hasAuthority("ROLE_MEMBER")
-                    //complete
-                    .antMatchers("/complete/**").permitAll()
-                    //mytrip
-                    .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
-                    //plans
-                    .antMatchers("/plans/**").hasAuthority("ROLE_MEMBER")
-                    //recommend
-                    .antMatchers("/recommend/**").hasAuthority("ROLE_MEMBER")
-                    //trip
-                    .antMatchers("/trip/member").hasAuthority("ROLE_MEMBER")
-                    .antMatchers("/trip/changeadmin").hasAuthority("ROLE_MEMBER")
-                    .antMatchers(HttpMethod.POST, "/trip").hasAuthority("ROLE_MEMBER")
-                    .antMatchers("/trip/**").permitAll()
-                    //mypage
-                    .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
+                //login
+                .antMatchers(HttpMethod.PATCH, "/login").permitAll()
+                .antMatchers("/login/**").hasAuthority("ROLE_MEMBER")
+                //articles
+                .antMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                .antMatchers("/articles/**").hasAuthority("ROLE_MEMBER")
+                //buckets
+                .antMatchers("/buckets/**").hasAuthority("ROLE_MEMBER")
+                //comment
+                .antMatchers(HttpMethod.GET, "/comment/**").permitAll()
+                .antMatchers("/comment/**").hasAuthority("ROLE_MEMBER")
+                //complete
+                .antMatchers("/complete/**").permitAll()
+                //mytrip
+                .antMatchers("/mytrip/**").hasAuthority("ROLE_MEMBER")
+                //plans
+                .antMatchers("/plans/start/**").hasAuthority("ROLE_MEMBER")
+                .antMatchers(HttpMethod.GET, "/plans/**").permitAll()
+                .antMatchers("/plans/**").hasAuthority("ROLE_MEMBER")
+                //recommend
+                .antMatchers("/recommend/**").hasAuthority("ROLE_MEMBER")
+                //trip
+                .antMatchers(HttpMethod.GET, "/trip/member/**").permitAll()
+                .antMatchers("/trip/member/**").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/trip/changeadmin").hasAuthority("ROLE_MEMBER")
+                .antMatchers(HttpMethod.POST, "/trip").hasAuthority("ROLE_MEMBER")
+                .antMatchers("/trip/**").permitAll()
+                //mypage
+                .antMatchers("/mypage/**").hasAuthority("ROLE_MEMBER")
                 .and().oauth2Login()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .userInfoEndpoint().userService(userOauth2Service).and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .userInfoEndpoint().userService(userOauth2Service).and()
                 .and().apply(new JwtSecurityConfig(tokenProvider))
                 .and().build();
     }
