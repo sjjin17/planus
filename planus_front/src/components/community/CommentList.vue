@@ -6,7 +6,7 @@
         counter="200"
         placeholder="댓글을 입력하세요"
         outlined
-        no-resize
+        auto-grow
         height="100"
         color="#4a8072"
       ></v-textarea>
@@ -50,7 +50,8 @@
             counter="200"
             value="commentInput2"
             outlined
-            no-resize
+            auto-grow
+            color="#4a8072"
             v-if="isEditing == comment.commentId"
           ></v-textarea>
           <span v-else>{{ comment.content }}</span>
@@ -133,6 +134,8 @@ export default {
       if (this.commentInput.length > 0 && this.commentInput.length <= 200) {
         this.res = await api.addComment(this.articleId, this.commentInput);
         this.commentInput = "";
+      } else {
+        window.alert("댓글은 1자 이상 200자 이하로 적어주세요!");
       }
     },
     async modifyComment(commentId) {
@@ -141,6 +144,8 @@ export default {
         this.commentInput2 = "";
         this.isEditing = 0;
         this.getCommentList(this.currentPage);
+      } else {
+        window.alert("댓글은 1자 이상 200자 이하로 적어주세요!");
       }
     },
     async getCommentList(page) {
