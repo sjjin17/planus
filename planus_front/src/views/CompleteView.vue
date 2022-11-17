@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div class="mainHeaderDiv">
-      <div>
-        <button class="mainPageBtn" @click="goToCommunity">
-          <span>커뮤니티</span>
-        </button>
-        <button class="mainPageBtn" @click="goToMypage">
-          <span>마이페이지</span>
-        </button>
-      </div>
-      <login-button></login-button>
-    </div>
+    <navi-bar @isLoginChange="isLoginChange"></navi-bar>
     <v-container>
       <div id="parentDiv" style="overflow: hidden">
         <v-sheet
@@ -77,11 +67,11 @@
 </template>
 
 <script>
+import NaviBar from "@/components/nav/NaviBar.vue";
 import html2canvas from "html2canvas";
 import API from "@/api/RESTAPI";
 import CompletePage from "@/components/complete/CompletePage.vue";
 import CompleteMap from "@/components/complete/CompleteMap.vue";
-import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
 const api = API;
 
 import axios from "axios";
@@ -91,10 +81,11 @@ export default {
   components: {
     CompletePage,
     CompleteMap,
-    LoginButton,
+    NaviBar,
   },
   data() {
     return {
+      isLogin: false,
       tripUrl: "",
       tripInfo: {
         tripId: 0,
@@ -260,7 +251,7 @@ export default {
       });
     },
     modalOn() {
-      if (!this.$cookies.get("refresh")) {
+      if (!this.isLogin) {
         this.alert = true;
         return;
       }
@@ -296,15 +287,8 @@ export default {
       let arr = day.split("-");
       return Number(arr[arr.length - 1]);
     },
-    goToCommunity() {
-      this.$router.push("/community");
-    },
-    goToMypage() {
-      if (this.$cookies.get("refresh") == null) {
-        this.alert = !this.alert;
-      } else {
-        this.$router.push("/mypage");
-      }
+    isLoginChange(isLogin) {
+      this.isLogin = isLogin;
     },
   },
 };

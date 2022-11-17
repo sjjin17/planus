@@ -24,9 +24,14 @@ export default {
   },
   data: () => {
     return {
-      isLogin: true,
+      isLogin: null,
       kakaoUrl: process.env.VUE_APP_API_URL_KAKAO,
     };
+  },
+  watch: {
+    isLogin(newVal) {
+      this.$emit("isLoginChange", newVal);
+    },
   },
   methods: {
     checkLogin() {
@@ -40,7 +45,6 @@ export default {
       this.$cookies.remove("token");
       this.$cookies.remove("refresh");
       this.isLogin = false;
-      this.$emit("goToHome");
     },
   },
 };

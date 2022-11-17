@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div class="mainHeaderDiv">
-      <div>
-        <button class="mainPageBtn" @click="goToCommunity">
-          <span>커뮤니티</span>
-        </button>
-        <button class="mainPageBtn" @click="goToMypage">
-          <span>마이페이지</span>
-        </button>
-      </div>
-      <login-button></login-button>
-    </div>
+    <navi-bar @isLoginChange="isLoginChange"></navi-bar>
     <br />
     <v-dialog v-model="alert" max-width="450">
       <v-card>
@@ -137,15 +127,15 @@
 </template>
 
 <script>
+import NaviBar from "@/components/nav/NaviBar.vue";
 import API from "@/api/RESTAPI";
 import SearchArticle from "@/components/community/SearchArticle.vue";
-import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
 const api = API;
 export default {
   name: "CommunityView",
   components: {
     SearchArticle,
-    LoginButton,
+    NaviBar,
   },
   data() {
     return {
@@ -156,6 +146,7 @@ export default {
       totalPage: 0,
       token: this.$cookies.get("refresh"),
       alert: false,
+      isLogin: false,
     };
   },
   async created() {
@@ -199,21 +190,14 @@ export default {
       }
     },
     goToNewArticle() {
-      if (this.$cookies.get("refresh") == null) {
+      if (!this.isLogin) {
         this.alert = !this.alert;
       } else {
         this.$router.push("/newArticle");
       }
     },
-    goToCommunity() {
-      this.$router.push("/community");
-    },
-    goToMypage() {
-      if (this.$cookies.get("refresh") == null) {
-        this.alert = !this.alert;
-      } else {
-        this.$router.push("/mypage");
-      }
+    isLoginChange(isLogin) {
+      this.isLogin = isLogin;
     },
   },
 };
