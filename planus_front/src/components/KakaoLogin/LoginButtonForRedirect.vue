@@ -2,7 +2,7 @@
   <div>
     <!-- <a href="http://localhost:8080/planus/oauth2/authorization/kakao"> -->
     <a href="https://planus.co.kr/planus/oauth2/authorization/kakao">
-      <img src="@/assets/kakao_login_medium_narrow.png" />
+      <img src="@/assets/kakao_login_medium.png" />
     </a>
   </div>
 </template>
