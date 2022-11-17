@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     calculateStartTime() {
+      if (!this.plan.timetableList.length) return;
       this.startTime.push(this.plan.startTime);
       this.endTime.push(
         this.plan.startTime + this.plan.timetableList[0].costTime
