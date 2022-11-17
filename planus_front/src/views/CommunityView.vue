@@ -1,5 +1,28 @@
 <template>
   <div>
+    <div class="mainHeaderDiv">
+      <div>
+        <button class="mainPageBtn" @click="goToCommunity">
+          <span>커뮤니티</span>
+        </button>
+        <button class="mainPageBtn" @click="goToMypage">
+          <span>마이페이지</span>
+        </button>
+      </div>
+      <login-button></login-button>
+    </div>
+    <br />
+    <v-divider></v-divider>
+    <v-dialog v-model="alert" max-width="450">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text color="white"> 로그인 후 이용해주세요</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#4a8072" outlined @click="alert = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <search-article @goSearch="goSearch"></search-article>
     <v-container class="made-container">
       <v-row>
@@ -117,12 +140,13 @@
 <script>
 import API from "@/api/RESTAPI";
 import SearchArticle from "@/components/community/SearchArticle.vue";
-
+import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
 const api = API;
 export default {
   name: "CommunityView",
   components: {
     SearchArticle,
+    LoginButton,
   },
   data() {
     return {
@@ -132,6 +156,7 @@ export default {
       articleList: [],
       totalPage: 0,
       token: this.$cookies.get("refresh"),
+      alert: false,
     };
   },
   async created() {
@@ -176,7 +201,21 @@ export default {
       }
     },
     goToNewArticle() {
-      this.$router.push("/newArticle");
+      if (this.$cookies.get("refresh") == null) {
+        this.alert = !this.alert;
+      } else {
+        this.$router.push("/newArticle");
+      }
+    },
+    goToCommunity() {
+      this.$router.push("/community");
+    },
+    goToMypage() {
+      if (this.$cookies.get("refresh") == null) {
+        this.alert = !this.alert;
+      } else {
+        this.$router.push("/mypage");
+      }
     },
   },
 };
