@@ -50,7 +50,6 @@ baseAxios.interceptors.response.use(
   (error) => {
     console.log(error);
     if (error.response.data.status == 403) {
-      console.log("권한인증 실패");
       window.location.href = "/";
     }
   }

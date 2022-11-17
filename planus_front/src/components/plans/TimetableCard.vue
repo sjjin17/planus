@@ -212,7 +212,6 @@ export default {
     this.selectList.forEach((select) => {
       if (select.value == this.valueEnum[this.timetable.transit]) {
         this.select = select;
-        // console.log(this.select);
       }
     });
   },
@@ -231,7 +230,6 @@ export default {
     //timetable의 moveRoute 쪼개기..?아마도
     routeList() {
       let list = this.timetable.moveRoute.split("/");
-      // console.log(list);
       let last = list[list.length - 2].split(" ");
       list.pop();
       list.pop();
@@ -301,7 +299,6 @@ export default {
       let transit = this.select.value;
 
       if (transit == "NONE") {
-        console.log("선택안함");
         this.newData = ["NONE", "", 0];
       } else if (transit == "transit") {
         await this.googleSearch(transit);
@@ -333,7 +330,6 @@ export default {
         )
         .then((res) => {
           if (!res.data.routes[0]) {
-            console.log("결과없음");
             return;
           }
           let data = res.data.routes[0].legs[0];
@@ -393,11 +389,6 @@ export default {
             this.nextLat
         )
         .then((res) => {
-          console.log(res.data.route.traoptimal[0].summary.duration / 60000);
-          console.log(
-            Math.ceil(res.data.route.traoptimal[0].summary.duration / 60000)
-          );
-
           let newMoveTime = Math.ceil(
             res.data.route.traoptimal[0].summary.duration / 60000
           );

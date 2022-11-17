@@ -10,9 +10,7 @@ export default {
   name: "TokenTestButton2.vue",
   methods: {
     test() {
-      // var temp = this;
       axios
-        // .get("http://localhost:8080/planus/login/test2")
         .get("https://k7a505.p.ssafy.io/planus/login/test2")
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
