@@ -1,7 +1,9 @@
 package com.planus.plan.service;
 
+import com.planus.db.entity.Timetable;
 import com.planus.plan.dto.PlanIdResDTO;
 import com.planus.plan.dto.PlanResDTO;
+import com.planus.plan.dto.TimetableListForMapResDTO;
 import com.planus.websocket.model.WebSocketPlan;
 import com.planus.websocket.model.WebSocketTimetable;
 import com.planus.websocket.model.WebSocketTimetableList;
@@ -13,6 +15,7 @@ public interface PlanService {
     List<PlanResDTO> readPlanList(List<Long> planIdList);
     void savePlan(long planId, boolean complete);
     void saveTimetable(long planId, boolean complete);
+    List<TimetableListForMapResDTO> getTimetableListForMap(long planId);
 
     // ws methods
     void setPlan(long planId, WebSocketPlan plan);

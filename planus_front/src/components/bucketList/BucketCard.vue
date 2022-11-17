@@ -3,7 +3,7 @@
     <v-card outlined color="#b8dbc6" @click="addMarker" class="my-4">
       <v-card-title class="card-title">
         <div class="box">{{ bucket.place }}</div>
-        <v-icon @click="delClick">mdi-close</v-icon>
+        <v-icon @click.stop="delClick">mdi-close</v-icon>
       </v-card-title>
 
       <v-card-text class="box">{{ bucket.address }}</v-card-text>
