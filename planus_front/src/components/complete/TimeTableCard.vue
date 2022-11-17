@@ -21,7 +21,7 @@
         </v-card>
       </v-col>
       <v-col class="px-0">
-        <v-card flat>
+        <v-card flat v-if="!isFinish">
           <v-card-subtitle class="py-0 font-weight-black d-flex justify-center">
             <span v-if="timeTable.transit == 'BUS'">{{ move.BUS }}</span>
             <span v-else-if="timeTable.transit == 'CAR'">{{ move.CAR }}</span>
@@ -44,6 +44,7 @@ export default {
     timeTable: Object,
     startTime: Number,
     endTime: Number,
+    isFinish: Boolean,
   },
   data() {
     return {

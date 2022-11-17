@@ -10,6 +10,7 @@
         :timeTable="timeTable"
         :startTime="startTime[i]"
         :endTime="endTime[i]"
+        :isFinish="i == plan.timetableList.length - 1"
       ></time-table-card>
     </v-row>
   </v-container>
@@ -33,6 +34,7 @@ export default {
   },
   methods: {
     calculateStartTime() {
+      if (!this.plan.timetableList.length) return;
       this.startTime.push(this.plan.startTime);
       this.endTime.push(
         this.plan.startTime + this.plan.timetableList[0].costTime
