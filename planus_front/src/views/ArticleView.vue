@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ articleId }}번 게시글
     <article-detail :articleId="articleId"></article-detail>
     <comment-list :articleId="articleId"></comment-list>
   </div>
@@ -29,11 +28,4 @@ export default {
 };
 </script>
 
-<style>
-/* .articleDetail {
-  height: auto;
-  width: 80%;
-  margin: 0 auto;
-  border-radius: 0px 0px 12px 12px;
-} */
-</style>
+<style></style>
