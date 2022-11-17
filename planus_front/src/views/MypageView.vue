@@ -9,7 +9,7 @@
           <span>마이페이지</span>
         </button>
       </div>
-      <login-button></login-button>
+      <login-button @goToHome="goToHome"></login-button>
     </div>
     <br />
     <v-divider></v-divider>
@@ -81,6 +81,9 @@ export default {
       } else {
         this.$router.push("/mypage");
       }
+    },
+    goToHome() {
+      this.$router.push("/");
     },
   },
 };

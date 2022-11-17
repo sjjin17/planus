@@ -33,6 +33,7 @@ export default {
       this.$cookies.remove("token");
       this.$cookies.remove("refresh");
       this.isLogin = false;
+      this.$emit("goToHome");
     },
   },
 };
