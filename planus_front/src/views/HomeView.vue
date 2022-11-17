@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div class="mainHeaderDiv">
-      <div>
-        <button class="mainPageBtn" @click="goToCommunity">
-          <span>커뮤니티</span>
-        </button>
-        <button class="mainPageBtn" @click="goToMypage">
-          <span>마이페이지</span>
-        </button>
-      </div>
-      <login-button></login-button>
-    </div>
+    <navi-bar @isLoginChange="isLoginChange"></navi-bar>
     <div class="mainLogoDiv">Planus</div>
     <v-dialog v-model="alert" max-width="450">
       <v-card>
@@ -46,14 +36,14 @@
 </template>
 
 <script>
-import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
 import CreateTrip from "@/components/manageTrip/CreateTrip.vue";
 import FestivalList from "@/components/mainPage/FestivalList.vue";
+import NaviBar from "@/components/nav/NaviBar.vue";
 
 export default {
   name: "HomeView",
   components: {
-    LoginButton,
+    NaviBar,
     CreateTrip,
     FestivalList,
   },
@@ -63,6 +53,7 @@ export default {
       areaId: 0,
       siName: "",
       dialog: false,
+      isLogin: false,
     };
   },
   methods: {
@@ -70,7 +61,7 @@ export default {
       this.$router.push("/community");
     },
     goToMypage() {
-      if (this.$cookies.get("refresh") == null) {
+      if (!this.isLogin) {
         this.alert = !this.alert;
       } else {
         this.$router.push("/mypage");
@@ -87,6 +78,9 @@ export default {
     addArea() {
       this.$refs.createTripMenu.addArea2(this.areaId, this.siName);
       this.dialog = false;
+    },
+    isLoginChange(isLogin) {
+      this.isLogin = isLogin;
     },
   },
 };

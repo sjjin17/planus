@@ -7,17 +7,15 @@
         </div>
         <div class="articlSubTitle">
           <div>
-            {{ nickname }}
+            {{ article.user.name }}
             <span style="color: rgb(56, 61, 60, 50%); font-weight: 500">
               ({{ article.regDate.split("T")[0] }}
               {{ article.regDate.split("T")[1].split(".")[0] }})
             </span>
           </div>
           <div style="width: 100px">
-            <v-icon v-if="isLike === false" @click="likeArticle"
-              >mdi-cards-heart-outline</v-icon
-            >
-            <v-icon v-else @click="likeArticle">mdi-heart</v-icon>
+            <v-icon v-if="isLike === false">mdi-cards-heart-outline</v-icon>
+            <v-icon v-else>mdi-heart</v-icon>
             {{ likeCount }}
             <v-icon>mdi-eye</v-icon>
             {{ article.hits }}
@@ -29,6 +27,17 @@
       </div>
       <div class="articleContent">
         {{ article.content }}
+      </div>
+      <div class="justify-center d-flex ma-2">
+        <v-icon
+          style="font-size: 60px"
+          v-if="isLike === false"
+          @click="likeArticle"
+          >mdi-cards-heart-outline</v-icon
+        >
+        <v-icon style="font-size: 60px" v-else @click="likeArticle"
+          >mdi-heart</v-icon
+        >
       </div>
     </v-sheet>
     <div class="articleBtnDiv">
@@ -50,7 +59,7 @@
           >삭제</v-btn
         >
       </div>
-      <v-btn v-if="token" outlined color="#4A8072" @click="isModal = true"
+      <v-btn v-if="isLogin" outlined color="#4A8072" @click="isModal = true"
         >복사하기</v-btn
       >
       <v-dialog v-model="isModal" max-width="450">
@@ -109,7 +118,6 @@ export default {
       article: {},
       isLike: "",
       likeCount: 0,
-      token: this.$cookies.get("token"),
       userId: 0,
       nickname: "",
       dialog: false,
@@ -119,6 +127,13 @@ export default {
   },
   props: {
     articleId: Number,
+    isLogin: Boolean,
+  },
+  watch: {
+    isLogin(newVal) {
+      if (!newVal) this.isLike = false;
+      this.decoding();
+    },
   },
   methods: {
     async getArticleDetail() {
@@ -128,7 +143,7 @@ export default {
       this.isLike = this.article.like;
     },
     async likeArticle() {
-      if (this.token) {
+      if (this.isLogin) {
         if (this.isLike) {
           this.isLike = false;
         } else {
@@ -150,10 +165,14 @@ export default {
       await this.goToCommunity();
     },
     decoding() {
-      if (this.token) {
-        let decode = jwt_decode(this.token);
+      let token = this.$cookies.get("token");
+      if (token) {
+        let decode = jwt_decode(token);
         this.nickname = decode.nickname;
         this.userId = Number(decode.userId);
+      } else {
+        this.nickname = null;
+        this.userId = null;
       }
     },
     changeDialog() {

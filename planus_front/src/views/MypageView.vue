@@ -1,16 +1,6 @@
 <template>
   <div>
-    <div class="mainHeaderDiv">
-      <div>
-        <button class="mainPageBtn" @click="goToCommunity">
-          <span>커뮤니티</span>
-        </button>
-        <button class="mainPageBtn" @click="goToMypage">
-          <span>마이페이지</span>
-        </button>
-      </div>
-      <login-button @goToHome="goToHome"></login-button>
-    </div>
+    <navi-bar @isLoginChange="isLoginChange"></navi-bar>
     <v-container class="pb-0">
       <v-container class="d-flex justify-center">
         <v-sheet height="84vh" class="content">
@@ -45,10 +35,12 @@
 </template>
 
 <script>
-import LoginButton from "@/components/KakaoLogin/LoginButton.vue";
+import NaviBar from "@/components/nav/NaviBar.vue";
 export default {
   name: "MypageView",
-  components: { LoginButton },
+  components: {
+    NaviBar,
+  },
   data() {
     return {
       items: [
@@ -60,6 +52,7 @@ export default {
         { title: "내가 쓴 댓글", link: "/mypage/mycomment" },
       ],
       tab: null,
+      isLogin: false,
     };
   },
   watch: {
@@ -73,7 +66,7 @@ export default {
       this.$router.push("/community");
     },
     goToMypage() {
-      if (this.$cookies.get("refresh") == null) {
+      if (!this.isLogin) {
         this.alert = !this.alert;
       } else {
         this.$router.push("/mypage");
@@ -81,6 +74,12 @@ export default {
     },
     goToHome() {
       this.$router.push("/");
+    },
+    isLoginChange(isLogin) {
+      this.isLogin = isLogin;
+      if (!isLogin) {
+        this.goToHome();
+      }
     },
   },
 };

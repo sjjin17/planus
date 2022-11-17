@@ -99,10 +99,10 @@ export default {
   components: {},
   props: {
     articleId: Number,
+    isLogin: Boolean,
   },
   data() {
     return {
-      isLogin: false,
       nickname: "",
       userId: 0,
       currentPage: 1,
@@ -120,14 +120,12 @@ export default {
     this.decoding();
     await this.getCommentList(1);
   },
-  computed: {
-    refresh() {
-      return this.$cookies.get("refresh");
-    },
-  },
   watch: {
     currentPage(newVal) {
       this.getCommentList(newVal);
+    },
+    isLogin() {
+      this.decoding();
     },
   },
   methods: {
@@ -156,15 +154,18 @@ export default {
       await this.getCommentList(1);
     },
     decoding() {
-      if (this.$cookies.get("refresh")) {
-        this.isLogin = true;
-        let decode = jwt_decode(this.$cookies.get("token"));
+      let token = this.$cookies.get("token");
+      if (token) {
+        let decode = jwt_decode(token);
         this.nickname = decode.nickname;
         this.userId = decode.userId;
+      } else {
+        this.nickname = "";
+        this.userId = 0;
       }
     },
     goEdit(commentId, content) {
-      if (this.$cookies.get("refresh")) {
+      if (this.isLogin) {
         this.isEditing = commentId;
         this.commentInput2 = content;
       } else {
@@ -172,7 +173,7 @@ export default {
       }
     },
     deleteCommentPop(commentId) {
-      if (this.$cookies.get("refresh")) {
+      if (this.isLogin) {
         this.dialog = true;
         this.delCommentId = commentId;
       } else {
@@ -180,7 +181,7 @@ export default {
       }
     },
     async goComment() {
-      if (this.$cookies.get("refresh")) {
+      if (this.isLogin) {
         await this.addComment();
         this.getCommentList(1);
       } else {
