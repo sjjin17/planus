@@ -10,6 +10,7 @@
         :timeTable="timeTable"
         :startTime="startTime[i]"
         :endTime="endTime[i]"
+        :isFinish="i == plan.timetableList.length - 1"
       ></time-table-card>
     </v-row>
   </v-container>
