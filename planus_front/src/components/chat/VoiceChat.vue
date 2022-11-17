@@ -1,6 +1,13 @@
 <template>
   <div style="position: relative; display: flex">
-    <v-icon @click="goHome">mdi-home</v-icon>
+    <div>
+      <img
+        src="@/assets/home.png"
+        @click="goHome"
+        width="40px"
+        style="cursor: pointer; margin: 4px 5px 0 5px"
+      />
+    </div>
     <v-btn
       color="#4A8072"
       outlined

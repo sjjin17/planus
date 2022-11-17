@@ -1,6 +1,9 @@
 <template>
   <div>
-    <navi-bar @isLoginChange="isLoginChange"></navi-bar>
+    <navi-bar
+      @isLoginChange="isLoginChange"
+      style="margin-right: 120px"
+    ></navi-bar>
     <v-container class="pb-0">
       <v-container class="d-flex justify-center">
         <v-sheet height="84vh" class="content">

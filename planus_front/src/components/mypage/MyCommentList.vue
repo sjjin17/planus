@@ -6,7 +6,7 @@
           <thead>
             <tr>
               <th class="text-left" style="width: 20vw">게시글 제목</th>
-              <th class="text-left" style="width: 45vw">댓글</th>
+              <th class="text-left" style="width: 40vw">댓글</th>
               <th class="text-left">등록(수정)시간</th>
               <th class="text-left" style="width: 60px">삭제</th>
             </tr>

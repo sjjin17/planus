@@ -2,13 +2,24 @@
   <div>
     <div class="mainHeaderDiv">
       <div>
+        <img
+          src="@/assets/home.png"
+          @click="goToHome"
+          width="40px"
+          style="cursor: pointer"
+        />
+      </div>
+      <div>
         <button class="mainPageBtn" @click="goToCommunity">
           <span>커뮤니티</span>
         </button>
+      </div>
+      <div>
         <button class="mainPageBtn" @click="goToMypage">
           <span>마이페이지</span>
         </button>
       </div>
+      <v-spacer />
       <login-button @isLoginChange="isLoginChange"></login-button>
     </div>
     <v-dialog v-model="alert" max-width="450">
@@ -49,6 +60,9 @@ export default {
     isLoginChange(isLogin) {
       this.isLogin = isLogin;
       this.$emit("isLoginChange", isLogin);
+    },
+    goToHome() {
+      this.$router.push("/");
     },
   },
 };
