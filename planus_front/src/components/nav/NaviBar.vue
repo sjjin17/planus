@@ -5,7 +5,7 @@
         <img
           src="@/assets/home.png"
           @click="goToHome"
-          width="40px"
+          width="45px"
           style="cursor: pointer"
         />
       </div>
