@@ -47,7 +47,7 @@
           <v-col class="col-6 pa-2">
             <v-btn
               width="100%"
-              @click="bucketClick"
+              @click.stop="bucketClick"
               small
               color="#4A8072"
               class="white--text ma-0 pa-1"
@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     bucketClick() {
+      this.SET_SPOT_INFO(null);
       this.$emit(
         "addBucket",
         this.recommendPlace.place,

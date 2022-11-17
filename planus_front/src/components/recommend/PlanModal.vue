@@ -67,6 +67,9 @@
   </v-col>
 </template>
 <script>
+import { mapMutations } from "vuex";
+const mapStore = "mapStore";
+
 export default {
   data: () => ({
     dialog: false,
@@ -114,10 +117,12 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     submit() {
       let costTime = this.hours * 60 + this.minutes * 1;
       this.$emit("planSubmit", costTime, this.fromBucket);
       this.dialog = false;
+      this.SET_SPOT_INFO(null);
     },
   },
 };

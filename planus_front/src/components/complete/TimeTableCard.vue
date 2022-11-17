@@ -27,9 +27,11 @@
             <span v-else-if="timeTable.transit == 'CAR'">{{ move.CAR }}</span>
             <span v-else>{{ move.NONE }}</span>
           </v-card-subtitle>
-          <v-card-text class="py-0 text-caption d-flex justify-center">{{
-            timeTable.moveTime
-          }}</v-card-text>
+          <v-card-text class="py-0 text-caption d-flex justify-center">
+            <span v-if="Math.floor(timeTable.moveTime / 60) > 0"
+              >{{ Math.floor(timeTable.moveTime / 60) }}시간 </span
+            >&nbsp; <span>{{ timeTable.moveTime % 60 }}분</span></v-card-text
+          >
         </v-card>
       </v-col>
     </v-row>

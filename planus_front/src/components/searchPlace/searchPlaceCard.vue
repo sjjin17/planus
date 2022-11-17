@@ -31,7 +31,7 @@
               width="100%"
               color="#4A8072"
               class="white--text"
-              @click="bucketClick"
+              @click.stop="bucketClick"
               >버킷리스트 추가</v-btn
             >
           </v-col>
@@ -67,7 +67,7 @@ export default {
   methods: {
     ...mapMutations(mapStore, ["SET_SPOT_INFO"]),
     bucketClick() {
-      console.log(this.searchedPlace);
+      this.SET_SPOT_INFO(null);
       this.$emit(
         "addBucket",
         this.searchedPlace.place,
@@ -75,8 +75,6 @@ export default {
         this.searchedPlace.lat,
         this.searchedPlace.lng
       );
-
-      this.SET_SPOT_INFO(null);
     },
     planSubmit(costTime, fromBucket) {
       this.$emit(
