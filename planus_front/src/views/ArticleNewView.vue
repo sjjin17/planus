@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="my-container">
     <h1>게시글 작성 페이지</h1>
 
     <br />
@@ -50,7 +50,7 @@
           hide-details
           return-object
         ></v-select>
-        <img :src="select.imageUrl" alt="" />
+        <v-img :src="select.imageUrl" alt="" />
       </v-col>
     </v-row>
     <v-row>
@@ -133,9 +133,15 @@ export default {
   color: #544c4c;
 }
 .my-container {
-  position: relative;
+  overflow: hidden;
 }
 .bottom-button {
   justify-content: flex-end;
+}
+.img {
+  width: auto;
+  height: auto;
+  max-width: 1px;
+  max-height: 1px;
 }
 </style>
