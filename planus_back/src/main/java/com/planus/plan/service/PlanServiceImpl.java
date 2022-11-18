@@ -266,19 +266,48 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public List<TimetableListForMapResDTO> getTimetableListForMap(long planId) {
-        List<Timetable> list = timetableRepository.findByPlanPlanId(planId).orElseThrow();
-        List<TimetableListForMapResDTO> timetableList = new ArrayList<>();
-        for (Timetable t:list) {
-            TimetableListForMapResDTO timetableListForMapResDTO = TimetableListForMapResDTO.builder()
-                    .timetableId(t.getTimetableId())
-                    .orders(t.getOrders())
-                    .place(t.getPlace())
-                    .lat(t.getLat())
-                    .lng(t.getLng())
-                    .planId(t.getPlan().getPlanId())
-                    .build();
+        String key = "timetableList::" + planId;
 
-            timetableList.add(timetableListForMapResDTO);
+        List<TimetableListForMapResDTO> timetableList = new ArrayList<>();
+        //redis에 값이 있으면 redis 없으면 mysql에서 값을 가져옴
+        if(redisUtil.isExists(key)) {
+            List list = redisUtil.getListData(key);
+
+            try {
+                JSONParser parser = new JSONParser();
+                for (int i = 0; i < list.size(); i++) {
+                    JSONObject jsonObject = (JSONObject) parser.parse((String) list.get(i));
+                    TimetableListForMapResDTO timetableListForMapResDTO = TimetableListForMapResDTO.builder()
+                            .orders((int) (long) jsonObject.get("orders"))
+                            .place(jsonObject.get("place").toString())
+                            .lat((double) jsonObject.get("lat"))
+                            .lng((double) jsonObject.get("lng"))
+                            .planId(planRepository.findByPlanId(planId).orElseThrow().getPlanId())
+                            .build();
+
+                    timetableList.add(timetableListForMapResDTO);
+                }
+
+            } catch (Exception e) {
+
+            }
+
+        } else {
+            List<Timetable> list = timetableRepository.findByPlanPlanId(planId).orElseThrow();
+
+            for (Timetable t:list) {
+                TimetableListForMapResDTO timetableListForMapResDTO = TimetableListForMapResDTO.builder()
+//                        .timetableId(t.getTimetableId())
+                        .orders(t.getOrders())
+                        .place(t.getPlace())
+                        .lat(t.getLat())
+                        .lng(t.getLng())
+                        .planId(t.getPlan().getPlanId())
+                        .build();
+
+                timetableList.add(timetableListForMapResDTO);
+            }
+
         }
 
         return timetableList;

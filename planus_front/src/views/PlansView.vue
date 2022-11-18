@@ -127,7 +127,6 @@
       </v-container>
       <plan-map
         :style="planMapWidth"
-        style="background-color: blue"
         :tripArea="tripArea"
         @getCenter="getCenter"
         :bucketList="bucketList"
