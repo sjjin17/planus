@@ -129,6 +129,10 @@ export default {
     articleId: Number,
     isLogin: Boolean,
   },
+  async created() {
+    await this.getArticleDetail();
+    this.decoding();
+  },
   watch: {
     isLogin(newVal) {
       if (!newVal) this.isLike = false;
@@ -185,11 +189,19 @@ export default {
       );
       this.$router.push("/plans/" + newUrl);
     },
-  },
-
-  async created() {
-    await this.getArticleDetail();
-    this.decoding();
+    disablePastDates(val) {
+      let today = new Date();
+      return (
+        val >=
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+          .toISOString()
+          .substr(0, 10)
+      );
+    },
+    getDay(day) {
+      let arr = day.split("-");
+      return Number(arr[arr.length - 1]);
+    },
   },
 };
 </script>
