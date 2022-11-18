@@ -19,7 +19,7 @@ public interface ArticleService {
 
     Map<String, String> deleteArticle(String token, long articleId);
 
-    // article상세 조회 끝나고 returnType 변경
+
     long updateArticle(String token, ArticleReqDTO articleReqDTO, long articleId);
 
     ArticleDetailResDTO findOneArticle(String token, long articleId);

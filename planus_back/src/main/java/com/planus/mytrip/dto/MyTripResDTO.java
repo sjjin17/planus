@@ -23,9 +23,8 @@ public class MyTripResDTO {
     private List<String> areaList;
 
 
-    // entity -> ResDTO
-    public static MyTripResDTO toResDTO(Trip trip) {
 
+    public static MyTripResDTO toResDTO(Trip trip) {
         return MyTripResDTO.builder()
                 .tripId(trip.getTripId())
                 .tripUrl(trip.getTripUrl())
