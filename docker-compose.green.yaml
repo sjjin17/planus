@@ -13,9 +13,9 @@ services:
     ports:
       - "8090:8080"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-container:3306/planus"
-      SPRING_DATASOURCE_USERNAME: "ssafy"
-      SPRING_DATASOURCE_PASSWORD: "ssafyA505!"
+      SPRING_DATASOURCE_URL: ${mysql_url}
+      SPRING_DATASOURCE_USERNAME: ${mysql_username}
+      SPRING_DATASOURCE_PASSWORD: ${mysql_password}
       TZ: "Asia/Seoul"
 
   planus_front:
@@ -37,10 +37,10 @@ services:
     volumes:
       - "/home/ubuntu/mysql:/var/lib/mysql"
     environment:
-      MYSQL_ROOT_PASSWORD: "planusA505!"
-      MYSQL_DATABASE: "planus"
-      MYSQL_USER: "ssafy"
-      MYSQL_PASSWORD: "ssafyA505!"
+      MYSQL_ROOT_PASSWORD: ${mysql_root_password}
+      MYSQL_DATABASE: ${mysql_dbname}
+      MYSQL_USER: ${mysql_username}
+      MYSQL_PASSWORD: ${mysql_password}
       TZ: "Asia/Seoul"
     command:
       - "--character-set-server=utf8mb4"
@@ -49,7 +49,7 @@ services:
   redis:
     image: redis
     container_name: redis-container
-    command: redis-server --requirepass Tkvlvmffosjtm --port 6379
+    command: redis-server --requirepass ${redis_password} --port 6379
     restart: always
     ports:
       - "6379:6379"
