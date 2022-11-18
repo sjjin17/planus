@@ -60,6 +60,9 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-shadow: unset !important;
+}
 .theme--light.v-card > .v-card__subtitle {
   color: #544c4c;
 }

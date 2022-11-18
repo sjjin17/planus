@@ -296,6 +296,9 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-shadow: unset !important;
+}
 .content {
   border: solid;
   border-width: 5px;
