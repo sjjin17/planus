@@ -101,8 +101,8 @@ export default {
 
         await api.updateArticle(
           this.articleId,
-          this.article.title,
-          this.article.content,
+          this.title,
+          this.content,
           this.tripId
         );
 

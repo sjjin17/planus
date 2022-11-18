@@ -277,7 +277,7 @@ export default {
       this.memberOrAdmin = result.memberOrAdmin;
       this.tripArea = result.tripArea;
       if (result.complete) {
-        this.$router.push("/complete/" + this.tripUrl);
+        this.$router.replace("/complete/" + this.tripUrl);
       } else {
         switch (this.memberOrAdmin) {
           case -1:
