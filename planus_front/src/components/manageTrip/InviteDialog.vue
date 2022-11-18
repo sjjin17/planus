@@ -19,14 +19,33 @@
       </v-card-actions>
       <v-card-title class="dialogtitle">
         <v-row>
-          <v-col>참가자 목록 </v-col>
+          <v-col cols="10">참가자 목록 </v-col>
           <v-spacer></v-spacer>
-          <v-col align="end">
+
+          <!-- <v-col cols="1">
             <v-btn depressed color="#4A8072" outlined @click="copyUrl"
               >링크 복사</v-btn
-            ></v-col
-          ></v-row
-        >
+            >
+          </v-col> -->
+          <v-col>
+            <span>
+              <v-img
+                class="share"
+                src="@/assets/kakaoLogo.png"
+                @click="kakaoShare"
+              ></v-img>
+            </span>
+          </v-col>
+          <v-col>
+            <span>
+              <v-img
+                class="share"
+                src="@/assets/link_icon.png"
+                @click="copyUrl"
+              ></v-img>
+            </span>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-card-text v-for="(member, i) in memberList" :key="i" :member="member">
         <v-row align="center">
@@ -118,8 +137,42 @@ export default {
     changeAdmin(newAdminId) {
       this.$emit("changeAdmin", newAdminId);
     },
+    kakaoShare() {
+      let imgUrl =
+        "https://cdn.pixabay.com/photo/2017/12/15/13/51/polynesia-3021072_960_720.jpg";
+      let pgUrl = window.location.href;
+      this.$kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "planus",
+          description: "친구와 함께 여행일정 계획하러가기!!",
+          imageUrl: imgUrl,
+          link: {
+            mobileWebUrl: imgUrl,
+            webUrl: imgUrl,
+          },
+        },
+        buttons: [
+          {
+            title: "일정 짜러가기",
+            link: {
+              mobileWebUrl: pgUrl,
+              webUrl: pgUrl,
+            },
+          },
+        ],
+      });
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.share {
+  object-fit: cover;
+  border-radius: 24px;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+</style>
