@@ -62,8 +62,7 @@
       <v-btn class="mr-2" outlined color="#4A8072" @click="goToCommunity"
         >목록으로</v-btn
       >
-
-      <v-btn outlined color="#4A8072" @click="createNewArticle">제출</v-btn>
+      <v-btn outlined color="#4A8072" @click="createNewArticle">등록</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -133,6 +132,7 @@ export default {
   font-weight: 700;
 }
 .bottom-button {
+  margin-bottom: 4%;
   justify-content: flex-end;
 }
 </style>

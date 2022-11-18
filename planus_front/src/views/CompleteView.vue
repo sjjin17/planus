@@ -6,6 +6,7 @@
         <v-sheet
           id="capture"
           height="75vh"
+          width="100%"
           class="content pa-4"
           justify="center"
         >

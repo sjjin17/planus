@@ -18,27 +18,30 @@
         <v-col v-for="(article, i) in articleList" :key="i" cols="6">
           <v-card
             outlined
-            class="mx-10 mt-2"
+            width="100%"
+            class="mt-2"
             @click="goToArticle(article.articleId)"
             style="border-color: #4a8072"
           >
             <v-list-item class="pa-0">
               <v-list-item-avatar tile class="my-0 img-avatar" size="50%">
-                <v-img :src="article.imageUrl"></v-img>
+                <v-img height="200" :src="article.imageUrl"></v-img>
               </v-list-item-avatar>
               <v-list-item-content class="pa-2">
                 <div>
                   <v-list-item-title>
-                    <v-card-title class="pa-0 textCutting">
+                    <v-card-title class="pa-0 textCutting articleTitle">
                       {{ article.title }}
                     </v-card-title>
                   </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <v-icon small color="#ff1744">mdi-heart</v-icon>
-                    <span> {{ article.likes }}</span>
-                    <v-icon small color="#4a8072">mdi-eye</v-icon>
-                    <span> {{ article.hits }}</span>
-                    &nbsp;
+                  <v-list-item-subtitle
+                    style="color: rgb(56, 61, 60, 50%); font-weight: 600"
+                  >
+                    <v-icon small>mdi-heart</v-icon>
+                    <span>{{ article.likes }}</span
+                    >&nbsp;
+                    <v-icon small>mdi-eye</v-icon>
+                    <span>{{ article.hits }}</span>
                   </v-list-item-subtitle>
                 </div>
                 <v-chip-group>
@@ -50,67 +53,24 @@
                     >{{ area }}
                   </v-chip>
                 </v-chip-group>
-                <div class="textCutting" style="text-align: right">
+                <div class="textCutting articleNickName">
                   {{ article.name }}
                 </div>
-                <div class="textCutting" style="text-align: right">
+                <div class="textCutting articleRegDate">
                   ({{ article.regDate.split("T")[0] }}
                   {{ article.regDate.split("T")[1].split(".")[0] }})
                 </div>
               </v-list-item-content>
             </v-list-item>
-            <!-- <v-row class="pa-0">
-            <v-col cols="4">
-              <v-img :src="article.imageUrl" height="100%"> </v-img>
-            </v-col>
-            <v-col cols="8">
-              <v-row class="pa-0">
-                <v-col cols="6">
-                  <v-card-title>{{ article.title }}</v-card-title>
-                </v-col>
-                <v-col
-                  cols="6"
-                  class="d-flex"
-                  style="align-self: center; justify-content: end"
-                >
-                  <v-icon>mdi-eye</v-icon>
-                  {{ article.hits }}
-                  &nbsp;
-                  <v-icon>mdi-heart</v-icon>
-                  {{ article.likes }}
-                </v-col>
-              </v-row>
-              <v-row class="pa-0">
-                <v-col>
-                  <v-chip-group column>
-                    <v-chip
-                      v-for="(area, idx) in article.areaList"
-                      :key="idx + 'a'"
-                      >{{ area }}
-                    </v-chip>
-                  </v-chip-group>
-                </v-col>
-              </v-row>
-              <v-row class="pa-0">
-                <v-col cols="6">
-                  {{ article.period }}박 {{ article.period + 1 }}일
-                </v-col>
-              </v-row>
-              <v-row class="pa-0">
-                <v-col>
-                  {{ article.name }} ({{ article.regDate.split("T")[0] }}
-                  {{ article.regDate.split("T")[1].split(".")[0] }})
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row> -->
           </v-card>
         </v-col>
       </v-row>
-      <v-row style="position: absolute; right: 0">
-        <v-btn class="mx-16" outlined color="#4A8072" @click="goToNewArticle()"
-          >게시글 작성</v-btn
-        >
+      <v-row>
+        <v-col class="text-right">
+          <v-btn outlined color="#4A8072" @click="goToNewArticle()"
+            >게시글 작성</v-btn
+          >
+        </v-col>
       </v-row>
     </v-container>
     <v-spacer></v-spacer>
@@ -215,5 +175,21 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 80%;
+}
+.articleTitle {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #383d3c;
+}
+.articleNickName {
+  text-align: right;
+  color: rgb(56, 61, 60, 80%);
+  font-weight: 600;
+}
+.articleRegDate {
+  text-align: right;
+  color: rgb(56, 61, 60, 50%);
+  font-weight: 500;
 }
 </style>

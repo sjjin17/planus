@@ -19,31 +19,21 @@
       </v-card-actions>
       <v-card-title class="dialogtitle">
         <v-row>
-          <v-col cols="10">참가자 목록 </v-col>
-          <v-spacer></v-spacer>
-
-          <!-- <v-col cols="1">
-            <v-btn depressed color="#4A8072" outlined @click="copyUrl"
-              >링크 복사</v-btn
-            >
-          </v-col> -->
-          <v-col>
-            <span>
-              <v-img
+          <v-col style="font-size: 1.2rem; font-weight: 700; color: #383d3c"
+            >참가자 목록
+          </v-col>
+          <v-col class="text-right" cols="2">
+            <v-btn icon large>
+              <img
                 class="share"
                 src="@/assets/kakaoLogo.png"
                 @click="kakaoShare"
-              ></v-img>
-            </span>
-          </v-col>
-          <v-col>
-            <span>
-              <v-img
-                class="share"
-                src="@/assets/link_icon.png"
-                @click="copyUrl"
-              ></v-img>
-            </span>
+              />
+            </v-btn>
+            &nbsp;
+            <v-btn icon large>
+              <img class="share" src="@/assets/link.png" @click="copyUrl" />
+            </v-btn>
           </v-col>
         </v-row>
       </v-card-title>
@@ -71,10 +61,21 @@
             >
           </v-col>
           <v-col>
-            <div class="memberName">{{ member.name }}</div>
+            <div
+              style="
+                color: rgb(56, 61, 60, 80%);
+                font-size: 1rem;
+                font-weight: 600;
+              "
+            >
+              {{ member.name }}
+            </div>
           </v-col>
-          <v-col>
-            <div class="memberEmail" v-show="member.email != null">
+          <v-col cols="4">
+            <div
+              style="color: rgb(56, 61, 60, 50%); font-weight: 600"
+              v-show="member.email != null"
+            >
               ({{ member.email }})
             </div>
           </v-col>
@@ -88,7 +89,14 @@
                 >접속</span
               ></v-btn
             >
-            <v-btn depressed rounded outlined color="#4A8072" white--text v-else
+            <v-btn
+              class="font-weight-bold"
+              depressed
+              rounded
+              outlined
+              color="#4A8072"
+              white--text
+              v-else
               >접속안함</v-btn
             >
           </v-col>
@@ -169,10 +177,9 @@ export default {
 
 <style>
 .share {
-  object-fit: cover;
-  border-radius: 24px;
   width: 45px;
   height: 45px;
+  border-radius: 24px;
   cursor: pointer;
 }
 </style>
