@@ -1,7 +1,13 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600">
     <template v-slot:activator="{ on, attrs }">
-      <h5 v-bind="attrs" v-on="on" style="color: #544c4c">
+      <h5
+        v-bind="attrs"
+        v-on="on"
+        style="color: #544c4c"
+        class="signOut"
+        align="right"
+      >
         탈퇴하기&nbsp;&nbsp;&nbsp;
       </h5>
     </template>
@@ -40,4 +46,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.signOut {
+  position: relative;
+  top: -200px;
+}
+</style>
