@@ -19,12 +19,15 @@
               ><v-img :src="trip.imageUrl"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <div class="text-overline mb-4">
-                <span class="txt_line"
+              <div class="mb-4">
+                <span class="textCutting txt_line"
                   >{{ trip.startDate }} ~ {{ trip.endDate }}</span
                 >
               </div>
-              <v-list-item-title class="text-h5 mb-1">
+              <v-list-item-title
+                class="mb-4"
+                style="font-size: 1.4rem; font-weight: 600; color: #383d3c"
+              >
                 <span>| </span>
                 <span v-for="(area, idx) in trip.areaList" :key="idx + 'a'"
                   >{{ area }} |
@@ -38,7 +41,10 @@
                     >mdi-file-check</v-icon
                   >
                   <v-icon v-else color="#4a8072">mdi-file-document-edit</v-icon>
-                  &nbsp;{{ trip.participants }}명
+                  &nbsp;<span
+                    style="color: rgb(56, 61, 60, 80%); font-weight: 500"
+                    >{{ trip.participants }}명</span
+                  >
                 </span>
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -124,11 +130,8 @@ export default {
   height: -webkit-fill-available;
 }
 .txt_line {
-  width: 80%;
-  padding: 0 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: rgb(56, 61, 60, 80%);
+  font-weight: 600;
 }
 .v-icon.v-icon:after {
   background-color: transparent;

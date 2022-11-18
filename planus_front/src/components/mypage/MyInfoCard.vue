@@ -4,16 +4,16 @@
       <img :src="imgUrl" width="160px" height="160px" />
     </v-row>
     <v-row class="d-flex justify-center mt-10">
-      <h3>
-        <span class="font-weight-bold" style="color: #4a8072">닉네임</span>
-      </h3>
+      <span class="font-weight-bold" style="font-size: 1.3rem; color: #4a8072"
+        >닉네임</span
+      >
     </v-row>
     <v-row class="d-flex justify-center">
       <v-col cols="4">
         <v-text-field
           v-model="userNickname"
           rounded
-          outlined
+          solo
           :rules="[rules.special, rules.required, rules.space, rules.maxCount]"
           :readonly="!modify"
           dense
