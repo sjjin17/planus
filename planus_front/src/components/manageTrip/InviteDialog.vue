@@ -19,22 +19,31 @@
       </v-card-actions>
       <v-card-title class="dialogtitle">
         <v-row>
-          <v-col cols="9">참가자 목록 </v-col>
+          <v-col cols="10">참가자 목록 </v-col>
           <v-spacer></v-spacer>
 
-          <v-col cols="1">
+          <!-- <v-col cols="1">
+            <v-btn depressed color="#4A8072" outlined @click="copyUrl"
+              >링크 복사</v-btn
+            >
+          </v-col> -->
+          <v-col>
             <span>
               <v-img
-                class="kakao"
+                class="share"
                 src="@/assets/kakaoLogo.png"
                 @click="kakaoShare"
               ></v-img>
             </span>
           </v-col>
-          <v-col cols="2">
-            <v-btn depressed color="#4A8072" outlined @click="copyUrl"
-              >링크 복사</v-btn
-            >
+          <v-col>
+            <span>
+              <v-img
+                class="share"
+                src="@/assets/link_icon.png"
+                @click="copyUrl"
+              ></v-img>
+            </span>
           </v-col>
         </v-row>
       </v-card-title>
@@ -159,17 +168,11 @@ export default {
 </script>
 
 <style>
-.kakao {
+.share {
   object-fit: cover;
   border-radius: 24px;
   width: 45px;
   height: 45px;
   cursor: pointer;
-}
-.share {
-  position: absolute;
-  right: 0px;
-  top: 1px;
-  bottom: 1px;
 }
 </style>
