@@ -37,7 +37,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row justify="center" class="pagenation-bar">
+    <v-row justify="center">
       <v-pagination
         v-model="currentPage"
         class="my-4"
