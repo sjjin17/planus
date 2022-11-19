@@ -107,7 +107,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 table {
   table-layout: fixed !important;
   border-color: #b8dbc6;

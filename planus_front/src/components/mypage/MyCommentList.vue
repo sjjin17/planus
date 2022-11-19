@@ -90,4 +90,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+table {
+  table-layout: fixed !important;
+  border-color: #b8dbc6;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
+.made-container {
+  height: 100%;
+  position: relative;
+}
+.pagenation-bar {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+</style>
