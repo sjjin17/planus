@@ -75,7 +75,7 @@
     </v-container>
     <v-spacer></v-spacer>
     <br />
-    <v-row justify="center" class="pagenation-bar">
+    <v-row justify="center">
       <v-pagination
         v-model="currentPage"
         class="my-4"

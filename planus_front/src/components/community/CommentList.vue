@@ -59,7 +59,7 @@
       </v-row>
       <v-divider style="margin: 1% auto; width: 80%"></v-divider>
     </div>
-    <v-row justify="center" class="pagenation-bar">
+    <v-row justify="center">
       <v-pagination
         v-model="currentPage"
         class="my-4"
