@@ -2,11 +2,20 @@ package com.planus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.security.Security;
-
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
+@EnableScheduling
+@EnableCaching
+@EnableJpaAuditing
+@PropertySources({
+		@PropertySource("classpath:privateKey.properties"),
+		@PropertySource("classpath:application.properties"),
+})
 public class PlanusApplication {
 
 	public static void main(String[] args) {
