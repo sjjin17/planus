@@ -19,7 +19,7 @@ public class UserResDTO {
         this.email = email;
     }
 
-    // user -> UserResDTO
+
     public static UserResDTO toResDto(User user) {
         return UserResDTO.builder()
                 .userId(user.getUserId())

@@ -126,4 +126,7 @@ export default {
   position: absolute;
   z-index: 1;
 }
+* {
+  box-shadow: unset !important;
+}
 </style>

@@ -127,7 +127,6 @@
       </v-container>
       <plan-map
         :style="planMapWidth"
-        style="background-color: blue"
         :tripArea="tripArea"
         @getCenter="getCenter"
         :bucketList="bucketList"
@@ -240,7 +239,7 @@ export default {
     this.tripUrl = this.$route.params.tripUrl;
     await this.getTripInfo();
     await this.getPlanId(this.tripId);
-    this.decoding();
+    await this.decoding();
     this.lat = this.tripArea[0].lat;
     this.lng = this.tripArea[0].lng;
 
@@ -277,7 +276,7 @@ export default {
       this.memberOrAdmin = result.memberOrAdmin;
       this.tripArea = result.tripArea;
       if (result.complete) {
-        this.$router.push("/complete/" + this.tripUrl);
+        this.$router.replace("/complete/" + this.tripUrl);
       } else {
         switch (this.memberOrAdmin) {
           case -1:
@@ -460,8 +459,8 @@ export default {
         }
       }
     },
-    decoding() {
-      let decode = jwt_decode(this.token);
+    async decoding() {
+      let decode = await jwt_decode(this.token);
       this.nickname = decode.nickname;
       this.userId = decode.userId;
     },

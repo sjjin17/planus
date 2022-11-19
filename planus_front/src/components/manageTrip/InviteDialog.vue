@@ -19,14 +19,23 @@
       </v-card-actions>
       <v-card-title class="dialogtitle">
         <v-row>
-          <v-col>참가자 목록 </v-col>
-          <v-spacer></v-spacer>
-          <v-col align="end">
-            <v-btn depressed color="#4A8072" outlined @click="copyUrl"
-              >링크 복사</v-btn
-            ></v-col
-          ></v-row
-        >
+          <v-col style="font-size: 1.2rem; font-weight: 700; color: #383d3c"
+            >참가자 목록
+          </v-col>
+          <v-col class="text-right" cols="2">
+            <v-btn icon large>
+              <img
+                class="share"
+                src="@/assets/kakaoLogo.png"
+                @click="kakaoShare"
+              />
+            </v-btn>
+            &nbsp;
+            <v-btn icon large>
+              <img class="share" src="@/assets/link.png" @click="copyUrl" />
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-card-text v-for="(member, i) in memberList" :key="i" :member="member">
         <v-row align="center">
@@ -52,10 +61,21 @@
             >
           </v-col>
           <v-col>
-            <div class="memberName">{{ member.name }}</div>
+            <div
+              style="
+                color: rgb(56, 61, 60, 80%);
+                font-size: 1rem;
+                font-weight: 600;
+              "
+            >
+              {{ member.name }}
+            </div>
           </v-col>
-          <v-col>
-            <div class="memberEmail" v-show="member.email != null">
+          <v-col cols="4">
+            <div
+              style="color: rgb(56, 61, 60, 50%); font-weight: 600"
+              v-show="member.email != null"
+            >
               ({{ member.email }})
             </div>
           </v-col>
@@ -69,7 +89,14 @@
                 >접속</span
               ></v-btn
             >
-            <v-btn depressed rounded outlined color="#4A8072" white--text v-else
+            <v-btn
+              class="font-weight-bold"
+              depressed
+              rounded
+              outlined
+              color="#4A8072"
+              white--text
+              v-else
               >접속안함</v-btn
             >
           </v-col>
@@ -118,8 +145,41 @@ export default {
     changeAdmin(newAdminId) {
       this.$emit("changeAdmin", newAdminId);
     },
+    kakaoShare() {
+      let imgUrl =
+        "https://cdn.pixabay.com/photo/2017/12/15/13/51/polynesia-3021072_960_720.jpg";
+      let pgUrl = window.location.href;
+      this.$kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "planus",
+          description: "친구와 함께 여행일정 계획하러가기!!",
+          imageUrl: imgUrl,
+          link: {
+            mobileWebUrl: imgUrl,
+            webUrl: imgUrl,
+          },
+        },
+        buttons: [
+          {
+            title: "일정 짜러가기",
+            link: {
+              mobileWebUrl: pgUrl,
+              webUrl: pgUrl,
+            },
+          },
+        ],
+      });
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.share {
+  width: 45px;
+  height: 45px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+</style>

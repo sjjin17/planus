@@ -5,7 +5,7 @@
         <img
           src="@/assets/home.png"
           @click="goToHome"
-          width="40px"
+          width="45px"
           style="cursor: pointer"
         />
       </div>
@@ -48,13 +48,13 @@ export default {
   components: { LoginButton },
   methods: {
     goToCommunity() {
-      this.$router.push("/community");
+      this.$router.push("/community").catch(() => {});
     },
     goToMypage() {
       if (!this.isLogin) {
         this.alert = !this.alert;
       } else {
-        this.$router.push("/mypage");
+        this.$router.push("/mypage").catch(() => {});
       }
     },
     isLoginChange(isLogin) {
@@ -62,7 +62,7 @@ export default {
       this.$emit("isLoginChange", isLogin);
     },
     goToHome() {
-      this.$router.push("/");
+      this.$router.push("/").catch(() => {});
     },
   },
 };

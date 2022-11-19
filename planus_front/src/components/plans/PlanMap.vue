@@ -31,12 +31,16 @@
           color: '#4A8072',
           fontWeight: 'bold',
         }"
-        @click="clickLocation(m, 15), clickBucketMarker(index)"
+        @click="
+          clickLocation(m, 15),
+            bucketInfo.splice(index, 1, !bucketInfo[index]),
+            clickBucketMarker(index)
+        "
         id="bucket"
         ><gmap-info-window
           v-if="bucketInfo[index]"
           :opened="bucketInfo[index]"
-          @closeclick="bucketInfo[index] = false"
+          @closeclick="bucketInfo.splice(index, 1, false)"
         >
           <h3>{{ bucketList[index].place }}</h3>
           <h6>{{ bucketList[index].address }}</h6>
@@ -133,10 +137,10 @@ export default {
       this.zoom = zoom;
     },
     clickBucketMarker(index) {
+      this.SET_SPOT_INFO(null);
       for (let i = 0; i < this.bucketInfo.length; i++) {
-        if (this.bucketInfo[i]) this.bucketInfo[i] = false;
+        if (this.bucketInfo[i] && i != index) this.bucketInfo[i] = false;
       }
-      this.bucketInfo[index] = true;
     },
   },
   watch: {
@@ -144,6 +148,9 @@ export default {
       if (!newVal) {
         this.isInfo = false;
         return;
+      }
+      for (let i = 0; i < this.bucketInfo.length; i++) {
+        if (this.bucketInfo[i]) this.bucketInfo[i] = false;
       }
       this.bucketList.forEach((bucket) => {
         if (bucket.lat == newVal.lat && bucket.lng == newVal.lng) {
@@ -169,6 +176,13 @@ export default {
     },
     nowCenter(newVal) {
       this.$emit("getCenter", newVal);
+    },
+    bucketList(newVal) {
+      let tmpArr = [];
+      for (let i = 0; i < newVal.length; i++) {
+        tmpArr.push(false);
+      }
+      this.bucketInfo = tmpArr;
     },
   },
   destroyed() {

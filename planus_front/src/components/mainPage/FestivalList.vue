@@ -28,10 +28,15 @@
           <v-card-title class="textCutting festivalName">{{
             festival.title
           }}</v-card-title>
-          <v-card-subtitle class="textCutting">{{
-            festival.address
-          }}</v-card-subtitle>
-          <v-card-text class="textCutting">
+          <v-card-subtitle
+            class="textCutting"
+            style="color: rgb(56, 61, 60, 50%); font-weight: 600"
+            >{{ festival.address }}</v-card-subtitle
+          >
+          <v-card-text
+            class="textCutting"
+            style="color: rgb(56, 61, 60, 50%); font-weight: 600"
+          >
             시작: {{ festival.startDate }}<br />종료: {{ festival.endDate }}
           </v-card-text>
         </v-card>

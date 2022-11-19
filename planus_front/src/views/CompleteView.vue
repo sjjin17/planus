@@ -6,6 +6,7 @@
         <v-sheet
           id="capture"
           height="75vh"
+          width="100%"
           class="content pa-4"
           justify="center"
         >
@@ -295,6 +296,9 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-shadow: unset !important;
+}
 .content {
   border: solid;
   border-width: 5px;

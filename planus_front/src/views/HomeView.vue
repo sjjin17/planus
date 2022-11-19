@@ -106,6 +106,7 @@ export default {
   font-weight: 800;
   color: white;
   text-shadow: 1px 2px gray;
+  box-shadow: 0px 5px 5px rgb(91 87 75 / 20%);
 }
 .mainTripDiv {
   height: 140px;
@@ -113,7 +114,7 @@ export default {
   margin: 0 auto;
   border-radius: 0px 0px 12px 12px;
   background-color: #b8dbc6;
-  box-shadow: 0px 5px 10px rgb(91 87 75 / 20%);
+  box-shadow: 0px 5px 5px rgb(91 87 75 / 20%);
 }
 .mainFestivalDiv {
   min-height: 300px;
@@ -121,7 +122,7 @@ export default {
   margin: 2% auto 6%;
   border-radius: 12px;
   background-color: #88c7af;
-  box-shadow: 0px 5px 10px rgb(91 87 75 / 20%);
+  box-shadow: 0px 5px 5px rgb(91 87 75 / 20%);
 }
 .mainPageBtn {
   height: 45px;
