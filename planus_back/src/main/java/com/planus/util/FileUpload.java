@@ -25,6 +25,8 @@ public class FileUpload {
         String s3FileName = "trip/" + file.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentType("image/png");
+        objMeta.setContentDisposition("inline");
         objMeta.setContentLength(file.getInputStream().available());
 
         amazonS3.putObject(bucket, s3FileName, file.getInputStream(), objMeta);
