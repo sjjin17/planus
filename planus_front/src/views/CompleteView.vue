@@ -224,9 +224,8 @@ export default {
     shareTrip() {
       let imgUrl = this.tripInfo.imageUrl;
       let pgUrl = window.location.href;
-
       if (this.tripInfo.imageUrl == null) {
-        imgUrl = this.tripInfo.imageUrl;
+        imgUrl = pgUrl;
       }
 
       this.$kakao.Link.sendDefault({
