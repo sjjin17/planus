@@ -1,5 +1,7 @@
 # Planus
 
+![자율PJT_서울_5반_A505_UCC경진대회](/uploads/c481ac038a1e230f2e2fabdbe14a2aee/자율PJT_서울_5반_A505_UCC경진대회.mp4)
+
 공동 작업이 가능한 여행 스케줄러 서비스
 
 ## 기획 배경
@@ -154,6 +156,7 @@
     - Vue2
     - Vuetify
 - WebSocket : SockJS
+- WebRTC : OpenVidu
 
 ### Infra
 
