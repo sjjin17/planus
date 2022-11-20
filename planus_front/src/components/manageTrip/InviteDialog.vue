@@ -156,8 +156,8 @@ export default {
           description: "친구와 함께 여행일정 계획하러가기!!",
           imageUrl: imgUrl,
           link: {
-            mobileWebUrl: imgUrl,
-            webUrl: imgUrl,
+            mobileWebUrl: pgUrl,
+            webUrl: pgUrl,
           },
         },
         buttons: [
