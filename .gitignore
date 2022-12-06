@@ -352,4 +352,7 @@ gradle-app.setting
 privateKey.properties
 application.properties
 
+서울_5반_A505_배포가이드.pdf
+서울_5반_A505_DB덤프파일.sql
+
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java,redis,vuejs,gradle,windows,intellij+all,visualstudiocode
