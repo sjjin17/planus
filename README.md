@@ -1,6 +1,6 @@
 # Planus
 
-![자율PJT_서울_5반_A505_UCC경진대회](/uploads/c481ac038a1e230f2e2fabdbe14a2aee/자율PJT_서울_5반_A505_UCC경진대회.mp4)
+<video src="../../SSAFY/자율 pjt/자율PJT_서울_5반_A505_UCC경진대회.mp4"></video>
 
 공동 작업이 가능한 여행 스케줄러 서비스
 
@@ -38,73 +38,80 @@
 - 버킷리스트
     1. 추천관광지, 장소검색을 통해 버킷리스트 등록
     
-    ![버킷리스트](/uploads/246cf121e2fcbca8906c726f307390b0/버킷리스트.gif)
+    ![버킷리스트](README.assets/버킷리스트.gif)
 
 - 일정
     1. 각 날짜별로 일정을 등록
     2. 일정 간 순서 변경
     3. 경로 검색 기능
 
-    ![일정](/uploads/ffb8f4b6f9e10e2ea85e8336effa816d/일정.gif)
+    ![일정](README.assets/일정.gif)
     
 - 완료일정
     1. 작업이 완료된 여행 일정을 이미지로 저장
     2. SNS 공유
     3. 완료된 일정을 복사하여 새로운 여행 일정 생성
 
-    ![완료일정](/uploads/898304ab4976906bf8c6d03d528737e7/완료일정.gif)
+    ![완료일정](README.assets/완료일정.gif)
 
 - 커뮤니티
     1. 커뮤니티 기능을 통해 사용자가 완료한 일정을 공유
 
-    ![커뮤니티](/uploads/6358038d8935922ffe3c1aea15a75633/커뮤니티.gif)
+    ![커뮤니티](README.assets/커뮤니티.gif)
 
 ### 기술 특장점
 
 - 장소 검색 API
     - Google maps API를 통한 장소 검색 기능을 제공
 
-    ![장소검색](/uploads/fd151c42f8c8c3ce96e018cfb7a40d89/장소검색.gif)
+    ![장소검색](README.assets/장소검색.gif)
 
 - 경로 API
     - Google maps API를 통한 대중교통 길찾기 정보 제공
     - NaverAPI를 통항 자동차 길찾기 소요시간 정보
 
-    ![길찾기](/uploads/9825883b96c26da3571618a8d3fbecb8/길찾기.gif)
+    ![길찾기](README.assets/길찾기.gif)
 
 - 추천관광지, 행사정보
     - 한국관광공사 제공 API를 통한 행사 정보 제공
 
-    ![행사정보](/uploads/333a7084ea4a877d6d6f36139613d7b1/행사정보.gif)
+    ![행사정보](README.assets/행사정보.gif)
 
     - 추천 관광지 정보 제공
 
-    ![추천장소](/uploads/d8d67f8fd8a489476b01e293b68e0c61/추천장소.gif)
+    ![추천장소](README.assets/추천장소.gif)
 
 - 웹소켓, Redis
     - 공동작업을 위한 웹소켓 사용
     - 빠른 데이터 접근을 위한 Redis 사용
     
-
 - 그 외 기능
     - 소셜 로그인(KaKao)
     - 메시지 공유(KaKao)
 
+
+
 ## 기능명세서
 
-![기능명세서](/uploads/c0c5e19ee79398bd3f1c7af32f828f51/기능명세서.png)
+![기능명세서](README.assets/기능명세서.png)
+
+
 
 ## ERD
 
-![erd](/uploads/a0e888e3c17a54e42d9050bc32a5c7f0/erd.png)
+![erd](README.assets/erd.png)
+
+
 
 ## 아키텍처구조
 
-![아키텍처](/uploads/bd83217d140c311538f2f5095e1852bb/아키텍처.png)
+![아키텍처](README.assets/아키텍처.png)
+
+
 
 ## 와이어프레임
 
-![와이어프레임](/uploads/e5189b6a424bb7ed8c4ac72a9982cebf/와이어프레임.png)
+![와이어프레임 (1)](README.assets/와이어프레임 (1).png)
 
 ## 개발 환경 및 기술 스택
 
