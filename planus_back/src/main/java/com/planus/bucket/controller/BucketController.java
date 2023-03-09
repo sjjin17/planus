@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/buckets")
 public class BucketController {
-    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
-
+    
     private final BucketService bucketService;
 
     @GetMapping("/{tripId}")
